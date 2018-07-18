@@ -10,10 +10,9 @@ import {
   List,
   InputItem,
 } from 'antd-mobile-rn';
-// import Icon from 'react-native-vector-icons/Ionicons';
-// import FontAwesome from 'react-native-vector-icons/FontAwesome';
-// import md5 from 'md5';
-// import CIcon from '../../../components/Icon';
+import Icon from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import CIcon from '../../../components/Icon';
 import styles from './styles.scss';
 
 export default class Login extends Component {
@@ -114,16 +113,18 @@ export default class Login extends Component {
         <View style={styles.navbar}>
           <Button onClick={this.login}>
             登陆
-            {/* <CIcon name="bofang" size={25} /> */}
+            <CIcon name="bofang" size={25} />
           </Button>
           <Button onClick={this.getUserInfo}>
-            获取信息
+            获取个人信息
+            <Icon name="ios-settings" size={45} color="red" />
           </Button>
           <Button onClick={this.logout}>
             退出
-            {/* <FontAwesome name="search" size={30} /> */}
+            <FontAwesome name="search" size={30} />
           </Button>
         </View>
+
         <Text>
           {
             JSON.stringify(fetchData)
