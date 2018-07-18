@@ -1,6 +1,7 @@
 package com.cjhms_rn;
 
 import android.app.Application;
+import android.webkit.WebView; 
 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
