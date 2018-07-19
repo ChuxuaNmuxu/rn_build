@@ -35,6 +35,15 @@ class Logo extends Component {
     this.state = {};
   }
 
+  clearToken = () => {
+    console.log('清除');
+    storage.remove({
+      key: 'token',
+    }).then((ret) => {
+      console.log(ret);
+    }).catch(err => console.log(err));
+  }
+
   render() {
     const {
       doTest,
@@ -53,6 +62,11 @@ class Logo extends Component {
         />
         <Button title="go to Login" onPress={() => Actions.account()} />
         <Button title="go to wrongNotes" onPress={() => Actions.wrongNotes()} />
+        <Button
+          onPress={this.clearToken}
+          type="primary"
+          title="清除token"
+        />
       </View>
     );
   }

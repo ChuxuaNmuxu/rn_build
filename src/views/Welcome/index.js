@@ -1,4 +1,5 @@
 import React from 'react';
+import { token } from '../../constants/stroage';
 
 class Welcome extends React.Component {
   componentWillMount() {
@@ -7,7 +8,7 @@ class Welcome extends React.Component {
 
   getToken = () => {
     storage.load({
-      key: 'token',
+      key: token,
       autoSync: true,
       syncInBackground: true,
       syncParams: {
@@ -17,12 +18,24 @@ class Welcome extends React.Component {
         someFlag: true,
       },
     }).then((ret) => {
-      if (ret) {
-        console.log('获取到了');
-        Actions.myHomework();
-      } else {
-        Actions.login();
-        console.log('没获取到');
+      const tokenData = ret.token;
+      const {
+        userinfo,
+      } = ret;
+      if (tokenData) {
+        const {
+          currentSchoolRole,
+        } = JSON.parse(userinfo);
+        switch (currentSchoolRole) {
+          case 'STUDENT':
+            Actions.student();
+            break;
+          case 'TEACHER':
+            Actions.teacher();
+            break;
+          default:
+            console.log('当前帐号不属于学生或教师', currentSchoolRole);
+        }
       }
     }).catch((err) => {
       console.warn('err:', err.message);

@@ -19,7 +19,7 @@ import WrongNotes from './views/Student/WrongNotes';
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
 import Logo from './components/Logo';
-// import Welcome from './views/Welcome';
+import Welcome from './views/Welcome';
 
 const RouteMap = () => (
   <Router>
@@ -27,9 +27,9 @@ const RouteMap = () => (
       hideNavBar
       key="modal"
     >
-      {/* <Stack key="welcome">
+      <Stack key="welcome">
         <Scene title="欢迎页面" hideNavBar key="welcome" component={Welcome} />
-      </Stack> */}
+      </Stack>
       <Stack title="登陆" key="account">
         <Scene key="login" hideNavBar component={Login} />
       </Stack>

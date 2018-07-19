@@ -6,19 +6,19 @@ import {
   Dimensions,
   PixelRatio,
   Platform,
-  Alert,
+  // Alert,
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
 // 项目中的图片可以通过Images.xxx 获取
 // import { Images } from '../Resources/index';
 // 本地存储
-import Storage from './Storage';
+import Storage from './storage';
 
 // 封装的网络请求
-import Fetch from './Fetch';
+import Fetch from './fetch';
 // 配置文件，可以放网络请求等
-import Config from './Config';
+// import Config from './config';
 
 // 通过系统API获得屏幕宽高
 const { height, width } = Dimensions.get('window');
@@ -37,12 +37,12 @@ global.pixel = 1 / PixelRatio;
 // 网络请求
 global.Fetch = Fetch;
 // 配置
-global.Config = Config;
+// global.Config = Config;
 // router跳转的方法
 global.Actions = Actions;
 // 图片加载
 // global.Images = Images;
 // 弹出框
-global.Alert = Alert;
+// global.Alert = Alert;
 // 存储
 global.storage = Storage;

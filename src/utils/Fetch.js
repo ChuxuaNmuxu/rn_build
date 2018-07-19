@@ -5,13 +5,15 @@ import qs from 'qs';
 const errCode = (json) => {
   switch (json.code) {
     case 703:
-      return check703(json);
+      return console.log('登陆过期', json);
     case -1:
       Toast.fail(`${json.code} ${json.message || json.data}`);
       return Promise.reject(new Error(`${json.code} ${json.message || json.data}`));
-    }
-    return json;
-}
+    default:
+      console.log('json.code:', json.code);
+  }
+  return json;
+};
 
 const Fetch = {
   /**
@@ -30,7 +32,7 @@ const Fetch = {
     }
     if (!isEmpty(headerParams)) {
       for (const key in headerParams) {
-       headers[key] = headerParams[key];
+        headers[key] = headerParams[key];
       }
     }
     const options = {
@@ -47,8 +49,9 @@ const Fetch = {
 
     return fetch(url, options)
       .then(res => res.text())
+      .then(text => (text ? JSON.parse(text) : {}))
       .then(errCode)
-      .catch(err => new Error(err))
+      .catch(err => new Error(err));
   },
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;
