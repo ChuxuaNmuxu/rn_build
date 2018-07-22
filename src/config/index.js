@@ -3,7 +3,7 @@
  */
 
 const Config = {
-  baseApi: __DEV__ ? 'http://shitu.leanapp.cn/api' : 'http://shitu.leanapp.cn/api',
+  apiUrl: __DEV__ ? 'https://dev-cjyun-api.ecaicn.com' : 'https://test-cjyun-api.ecaicn.com',
 };
 
 export default Config;

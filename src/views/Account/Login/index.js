@@ -39,7 +39,7 @@ export default class Login extends Component {
       username,
       password,
     } = this.state;
-    Fetch.post('https://test-cjyun-api.ecaicn.com/unlogin/login', {
+    Fetch.post('/unlogin/login', {
       userName: username,
       password: md5(password),
     })
@@ -74,7 +74,7 @@ export default class Login extends Component {
         this.setState({
           fetchData: res,
         });
-      });
+      }).catch(err => console.log(77, err));
   }
 
   clearToken = () => {

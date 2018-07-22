@@ -1,6 +1,16 @@
 import { isEmpty } from 'ramda';
 import { Toast } from 'antd-mobile-rn';
 import qs from 'qs';
+import Config from '../config';
+
+function apiUrl(url) {
+  if (typeof url !== 'string') {
+    console.log('url只能为字符串类型');
+  } else if (url.charAt(0) === '/') {
+    return `${Config.apiUrl}/${url}`;
+  }
+  return Config.apiUrl + url;
+}
 
 const errCode = (json) => {
   switch (json.code) {
@@ -58,16 +68,16 @@ const Fetch = {
     if (!isEmpty(params)) {
       _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
     }
-    return this.fetch(_url, {}, 'get', '', mock, headerParams);
+    return this.fetch(apiUrl(_url), {}, 'get', '', mock, headerParams);
   },
-  post(url, params, type = 'json', mock = false) { return this.fetch(url, params, 'post', type, mock); },
-  put(url, params, type = '') { return this.fetch(url, params, 'put', type); },
+  post(url, params, type = 'json', mock = false) { return this.fetch(apiUrl(url), params, 'post', type, mock); },
+  put(url, params, type = '') { return this.fetch(apiUrl(url), params, 'put', type); },
   delete(url, params) {
     let _url = url;
     if (!isEmpty(params)) {
       _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
     }
-    return this.fetch(_url, params, 'delete');
+    return this.fetch(apiUrl(_url), params, 'delete');
   },
 };
 
