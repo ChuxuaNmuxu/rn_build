@@ -20,13 +20,13 @@ if (process.env.NODE_ENV === 'development') {
 
 
 const configureStore = (preloadedState = {}) => {
-  const store = process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION__
+  const store = process.env.NODE_ENV === 'development' && global.__REDUX_DEVTOOLS_EXTENSION__
     ? createStore(
       rootReducer,
       preloadedState,
       compose(
         applyMiddleware(...middleware),
-        window.__REDUX_DEVTOOLS_EXTENSION__(),
+        global.__REDUX_DEVTOOLS_EXTENSION__(),
       ),
     )
     : createStore(
