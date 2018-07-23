@@ -34,16 +34,20 @@ const RouteMap = () => (
         <Scene key="login" hideNavBar component={Login} />
       </Stack>
       <Stack key="student">
-        <Tabs>
+        {/* <Tabs key="student-tabs">
           <Scene title="Logo" hideNavBar key="logo" component={Logo} />
           <Scene title="我的作业" hideNavBar key="myHomework" component={MyHomework} />
           <Scene title="考试记录" hideNavBar key="examRecords" component={ExamRecords} />
           <Scene title="作业记录" hideNavBar key="homeworkRecords" component={HomeworkRecords} />
-        </Tabs>
+          <Scene title="错题本" hideNavBar key="wrongNotes" component={WrongNotes} />
+        </Tabs> */}
+        <Scene title="我的作业" hideNavBar key="myHomework" component={MyHomework} />
+        <Scene title="考试记录" hideNavBar key="examRecords" component={ExamRecords} />
+        <Scene title="作业记录" hideNavBar key="homeworkRecords" component={HomeworkRecords} />
         <Scene title="错题本" hideNavBar key="wrongNotes" component={WrongNotes} />
       </Stack>
       <Stack key="teacher">
-        <Tabs>
+        <Tabs key="teacher-tabs">
           <Scene title="Logo" hideNavBar key="logo" component={Logo} />
           <Scene title="作业" hideNavBar key="homework" component={Homework} />
         </Tabs>
@@ -51,5 +55,6 @@ const RouteMap = () => (
     </Modal>
   </Router>
 );
+
 
 export default RouteMap;

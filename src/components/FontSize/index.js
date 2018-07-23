@@ -25,7 +25,9 @@ export default class Resolution {
 
     let { height } = Dimensions.get(dim);
     const { width } = Dimensions.get(dim);
+
     if (dim !== 'screen') height -= navHeight;
+
     const w = PixelRatio.getPixelSizeForLayoutSize(width);
     const h = PixelRatio.getPixelSizeForLayoutSize(height);
 
@@ -61,14 +63,14 @@ export default class Resolution {
           width,
           height,
           scale,
-          navHeight,
+          // navHeight,
         },
       } = options;
       return (
         <View
           {...p}
           style={{
-            marginTop: navHeight,
+            // marginTop: navHeight,
             width,
             height,
             backgroundColor: 'transparent',

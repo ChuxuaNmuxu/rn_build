@@ -14,7 +14,7 @@
     "test-build": "cd android && gradlew installRelease",
     "clear-build-cache": "cd android && gradlew clean",
     "clear": "rimraf android/app/build && npm run clear-build-cache",
-    "clear-arr": "yarn cache clean -f && npm cache clean -f && cnpm cache clean -f && npm run clear"
+    "clear-all": "yarn cache clean -f && npm cache clean -f && cnpm cache clean -f && npm run clear"
   },
   "dependencies": {
     "antd-mobile-rn": "^2.2.0",

@@ -4,6 +4,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import Layout from '../../Layout';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,8 +19,27 @@ export default class MyHomework extends Component {
   }
 
   render() {
+    const navbarList = [
+      {
+        text: '我的作业',
+        onClick: Actions.myHomework,
+      },
+      {
+        text: '考试记录',
+        onClick: Actions.examRecords,
+      },
+      {
+        text: '作业记录',
+        onClick: Actions.homeworkRecords,
+      },
+      {
+        text: '错题本',
+        onClick: Actions.wrongNotes,
+      },
+    ];
     return (
       <View style={styles.container}>
+        <Layout navbarList={navbarList} />
         <Text>
 我的作业
         </Text>
