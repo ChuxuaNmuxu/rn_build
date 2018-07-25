@@ -4,6 +4,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { connect } from 'react-redux';
 import Navbar from '../../../components/Navbar';
 
 const styles = StyleSheet.create({
@@ -12,7 +13,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class MyHomework extends Component {
+class MyHomework extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -37,6 +38,8 @@ export default class MyHomework extends Component {
         onClick: Actions.wrongNotes,
       },
     ];
+    console.log(this.props.routes.scene);
+    console.log(this.context.routes);
     return (
       <View style={styles.container}>
         <Navbar navbarList={navbarList} />
@@ -47,3 +50,5 @@ export default class MyHomework extends Component {
     );
   }
 }
+
+export default connect(({ routes }) => ({ routes }))(MyHomework);

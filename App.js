@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import {
   Provider,
+  connect,
 } from 'react-redux';
 // import SplashScreen from 'react-native-splash-screen';
 import Router from './src';
 import store from './src/store';
 
+const RouterWithRedux = connect()(Router);
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +21,9 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Router />
+        <RouterWithRedux>
+          <Router />
+        </RouterWithRedux>
       </Provider>
     );
   }
