@@ -1,0 +1,29 @@
+.container {
+	flex: 1,
+}
+
+.taskBox {
+	margin-bottom: 20px;
+	padding: 20px;
+	background-color: #fff;
+}
+
+.color333 {
+	color: #333333;
+}
+
+.fontSize20 {
+	font-size: 20;
+}
+
+.peerReviewTask {
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.undistributed {}
+
+.distributed {
+	flex: 1;
+	flex-direction: row;
+}

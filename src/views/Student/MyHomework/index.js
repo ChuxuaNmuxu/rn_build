@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
+  WingBlank,
+  Steps,
+} from 'antd-mobile-rn';
+import {
   Text,
   View,
+  ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
-import Navbar from '../../../components/Navbar';
+import CIcon from '../../../components/Icon';
+import Styles from './styles.scss';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+const Step = Steps.Step;
 
 class MyHomework extends Component {
   constructor(props) {
@@ -20,32 +21,37 @@ class MyHomework extends Component {
   }
 
   render() {
-    const navbarList = [
-      {
-        text: '我的作业',
-        onClick: Actions.myHomework,
-      },
-      {
-        text: '考试记录',
-        onClick: Actions.examRecords,
-      },
-      {
-        text: '作业记录',
-        onClick: Actions.homeworkRecords,
-      },
-      {
-        text: '错题本',
-        onClick: Actions.wrongNotes,
-      },
-    ];
     console.log(this.props.routes.scene);
     console.log(this.context.routes);
+    const isTask = false;
     return (
-      <View style={styles.container}>
-        <Navbar navbarList={navbarList} />
-        <Text>
-我的作业
-        </Text>
+      <View style={Styles.container}>
+        <View style={[Styles.taskBox, Styles.peerReviewTask]}>
+          <Text style={[Styles.color333, Styles.fontSize20]}>互批任务</Text>
+          <Text>当前无互批任务</Text>
+        </View>
+        <View style={[Styles.taskBox]}>
+          <Text>计划一下今天完成哪些作业，把它们添加到今日任务吧</Text>
+        </View>
+        {
+          isTask
+            ? (
+              <View style={[Styles.taskBox, Styles.distributed]}>
+                <View>
+                  <Steps>
+                    <Step title="第一步" />
+                    <Step title="第二步" />
+                    <Step title="第三步" />
+                  </Steps>
+                </View>
+                <View>
+                  <Text>右侧</Text>
+                </View>
+              </View>
+            )
+            : <View><Text>暂未任务</Text></View>
+        }
+
       </View>
     );
   }
