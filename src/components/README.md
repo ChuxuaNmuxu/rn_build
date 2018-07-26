@@ -1,0 +1,1 @@
+### 如果 react-native-svg-uri 库有兼容问题，请使用自己封装的svg组件 https://www.jianshu.com/p/7db2bc62c5ed

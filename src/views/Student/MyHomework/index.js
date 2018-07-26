@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   WingBlank,
   Steps,
@@ -9,6 +9,8 @@ import {
   ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
+import SvgUri from '../../../components/Svg';
+// import SvgUri from 'react-native-svg-uri';
 import CIcon from '../../../components/Icon';
 import Styles from './styles.scss';
 
@@ -33,10 +35,12 @@ class MyHomework extends Component {
         <View style={[Styles.taskBox]}>
           <Text>计划一下今天完成哪些作业，把它们添加到今日任务吧</Text>
         </View>
-        {
+
+        <View style={[Styles.taskBox, Styles.distributed]}>
+          {
           isTask
             ? (
-              <View style={[Styles.taskBox, Styles.distributed]}>
+              <Fragment>
                 <View>
                   <Steps>
                     <Step title="第一步" />
@@ -47,11 +51,13 @@ class MyHomework extends Component {
                 <View>
                   <Text>右侧</Text>
                 </View>
-              </View>
+              </Fragment>
             )
-            : <View><Text>暂未任务</Text></View>
-        }
-
+            : (
+              <SvgUri width="300" height="300" source="exam" />
+            )
+          }
+        </View>
       </View>
     );
   }
