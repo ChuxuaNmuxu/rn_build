@@ -17,8 +17,6 @@ const Svg = ({
     throw new Error(`没有"${source}"这个icon，请下载最新的icomoo并 npm run svg-to-js`);
   }
 
-  console.log(20, width, height);
-
   return (
     <SvgUri
       width={width}

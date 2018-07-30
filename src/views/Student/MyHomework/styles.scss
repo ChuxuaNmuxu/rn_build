@@ -2,9 +2,12 @@
 	flex: 1,
 }
 
-.taskBox {
-	margin-bottom: 20px;
-	padding: 20px;
+.task_box {
+	margin-bottom: 20;
+	// padding-top: 20;
+	// padding-right: 20;
+	// padding-bottom: 20;
+	// padding-right: 20;
 	background-color: #fff;
 }
 
@@ -16,14 +19,18 @@
 	font-size: 20;
 }
 
-.peerReviewTask {
+.peer_review_task {
 	flex-direction: row;
 	justify-content: space-between;
 }
 
-.undistributed {}
+.undistributed {
+	justify-content: center;
+	align-items: center;
+}
 
 .distributed {
 	flex: 1;
-	flex-direction: row;
+	// flex-direction: row;
 }
+
