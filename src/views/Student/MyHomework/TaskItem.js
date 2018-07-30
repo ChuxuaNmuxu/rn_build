@@ -29,7 +29,7 @@ class TaskItem extends React.Component {
 
         <View style={Styles.content_wrap}>
           <View style={Styles.content_box}>
-            <View style={[Styles.content]}> {/* { borderColor: 'pink', borderStyle: 'dashed', borderWidth: 1 } */}
+            <View style={[Styles.content]}>
               <View style={Styles.title_box}><Text>生</Text></View>
               <View>
                 <Text>这是一个语文作业</Text>

@@ -3,7 +3,7 @@ import {
   Provider,
   connect,
 } from 'react-redux';
-// import SplashScreen from 'react-native-splash-screen';
+import SplashScreen from 'react-native-splash-screen';
 import Router from './src';
 import store from './src/store';
 
@@ -15,7 +15,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    // SplashScreen.hide();
+    SplashScreen.hide();
   }
 
   render() {
