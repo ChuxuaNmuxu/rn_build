@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { TouchableHighlight } from 'react-native';
+import {
+  TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, Text, View,
+} from 'react-native';
 import SortableListView from 'react-native-sortable-listview';
 import PropTypes from 'prop-types';
 import TaskItem from './TaskItem';
@@ -15,6 +17,13 @@ const datas = {
   ii: { text: 'ii' },
   jj: { text: 'jj' },
   kk: { text: 'kk' },
+
+
+  g: { text: 'gg' },
+  h: { text: 'hh' },
+  i: { text: 'ii' },
+  j: { text: 'jj' },
+  k: { text: 'kk' },
 };
 
 const order = Object.keys(datas); // Array of keys
@@ -29,17 +38,19 @@ const RowComponent = (props) => {
   } = props;
   return (
     <TouchableHighlight
+      activeOpacity={0}
       underlayColor="#eee"
       style={{
         // padding: 20,
-        // backgroundColor: '#F8F8F8',
-        // borderBottomWidth: 1,
-        marginBottom: 0,
-        // borderColor: '#eee',
+        backgroundColor: 'transparent',
+        borderBottomWidth: 1,
+        // marginBottom: 0,
+        borderColor: '#eee',
       }}
       {...sortHandlers}
     >
       <TaskItem text={text} vertical={vertical} />
+      {/* <Text>{text}</Text> */}
     </TouchableHighlight>
   );
 };
@@ -63,9 +74,13 @@ class TodayTask extends Component {
     } = this.props;
     return (
       <SortableListView
-        style={{ flex: 1 }}
+        // style={{ flex: 1, height: 100 }}
+        sortRowStyle={{ backgroundColor: 'pink' }}
         data={datas}
+        activeOpacity={1}
         order={order}
+        // moveOnPressIn
+        onRowActive={e => console.log(e)}
         onRowMoved={(e) => {
           console.log(96, order);
           order.splice(e.to, 0, order.splice(e.from, 1)[0]);
