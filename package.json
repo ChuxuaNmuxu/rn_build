@@ -32,6 +32,7 @@
     "react-native-draftjs-render": "^2.8.2",
     "react-native-i18n": "^2.0.15",
     "react-native-image-crop-picker": "^0.20.3",
+    "react-native-linear-gradient": "^2.4.0",
     "react-native-router-flux": "^4.0.0-beta.31",
     "react-native-splash-screen": "3.0.9",
     "react-native-storage": "^0.2.2",

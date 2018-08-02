@@ -17,7 +17,7 @@ export default class Resolution {
     return useFixWidth ? { ...fixedWidth } : { ...fixedHeight };
   }
 
-  static setDesignSize(dwidth = 800, dheight = 1280, dim = 'window') {
+  static setDesignSize(dwidth = 1920, dheight = 1080, dim = 'window') {
     const designSize = { width: dwidth, height: dheight };
 
     const navHeight = Platform.OS === 'android' ? StatusBar.currentHeight : 64;

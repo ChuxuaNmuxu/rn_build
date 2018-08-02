@@ -1,55 +1,62 @@
 import React from 'react';
 import {
-  Text, View,
+  View,
+  Text,
+  TouchableNativeFeedback,
+  StyleSheet,
 } from 'react-native';
-import PropTypes from 'prop-types';
-import { Button } from 'antd-mobile-rn';
-import Styles from './taskItem.scss';
+import CIcon from '../../../components/Icon';
 
-class TaskItem extends React.Component {
-  componentDidMount() {
-    console.log(111);
-  }
+const Styles = StyleSheet.create({
+  task: {
+    alignItems: 'center',
+    padding: 24,
+    marginLeft: 24,
+    width: 450,
+    height: 168,
+    backgroundColor: '#54cc82',
+    borderRadius: 5,
+  },
+  icon_box: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 24,
+    height: 96,
+    width: 96,
+    backgroundColor: '#fff',
+    borderRadius: 48,
+  },
+  icon: {
+    fontSize: 60,
+    color: '#54cc82',
+  },
+  flex_row: {
+    flexDirection: 'row',
+  },
+  subject: {
+    fontSize: 24,
+    color: '#fff',
+    width: 450 - 96 - 24 * 3,
+  },
+  details: {
+    fontSize: 18,
+    color: '#fff',
+  },
+});
 
-  render() {
-    const {
-      vertical,
-    } = this.props;
-
-    return (
-      <View style={Styles.today_task}>
-        <View style={[vertical === 'top' ? Styles.flex_top : Styles.checkpoint_wrap]}>
-          <View style={[Styles.checkpoint_box]}>
-            <View style={Styles.checkpoint}>
-              <Text style={Styles.checkpoint_text}>今日任务</Text>
-            </View>
-          </View>
-          <View style={Styles.on_line} />
-        </View>
-
-        <View style={Styles.content_wrap}>
-          <View style={Styles.content_box}>
-            <View style={[Styles.content]}>
-              <View style={Styles.title_box}><Text>生</Text></View>
-              <View>
-                <Text>这是一个语文作业</Text>
-                <Text>截止提交时间:07-29 23:59</Text>
-              </View>
-              <Button>添加</Button>
-            </View>
-          </View>
-        </View>
+const TaskItem = () => (
+  <TouchableNativeFeedback>
+    <View style={[Styles.flex_row, Styles.task]}>
+      <View style={Styles.icon_box}>
+        <CIcon style={Styles.icon} name="wendang1" size={25} />
       </View>
-    );
-  }
-}
-
-TaskItem.defaultProps = {
-  vertical: 'center',
-};
-
-TaskItem.propTypes = {
-  vertical: PropTypes.string,
-};
+      <View>
+        <Text style={[Styles.subject]} ellipsizeMode="tail" numberOfLines={1}>6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业</Text>
+        <Text style={Styles.details}>预计耗时：15′</Text>
+        <Text style={Styles.details}>截止提交时间：6-24 24:00</Text>
+      </View>
+    </View>
+  </TouchableNativeFeedback>
+);
 
 export default TaskItem;

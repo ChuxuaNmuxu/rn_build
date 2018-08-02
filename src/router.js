@@ -12,6 +12,7 @@ import {
   Stack,
   // Lightbox,
 } from 'react-native-router-flux';
+import { View, Text } from 'react-native';
 import Styles from './router.scss';
 import MyHomework from './views/Student/MyHomework';
 import ExamRecords from './views/Student/ExamRecords';
@@ -21,6 +22,8 @@ import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
 import Logo from './components/Logo';
 import Welcome from './views/Welcome';
+import CIcon from './components/Icon';
+import docIcon from './public/img/document.png';
 
 const RouteMap = () => (
   <Router>
@@ -39,19 +42,26 @@ const RouteMap = () => (
           key="student-tabs"
           activeBackgroundColor="#2ea460"
           inactiveBackgroundColor="#30bf6c"
-          labelStyle={Styles.labelStyle}
-          tabBarStyle={Styles.tabBarStyle}
+          labelStyle={{ fontSize: 16, color: '#fff' }}
+          tabStyle={{ height: 20 }}
+          tabBarPosition="bottom"
+          tabBarStyle={{ alignItems: 'center', justifyContent: 'center' }}
           lazy
+          swipeEnabled={false}// 是否可以滑动
         >
-          <Scene title="我的作业" key="myHomework" component={MyHomework} hideNavBar titleStyle={{ alignSelf: 'center' }} />
-          <Scene title="考试记录" key="examRecords" component={ExamRecords} hideNavBar />
-          <Scene title="作业记录" key="homeworkRecords" component={HomeworkRecords} hideNavBar />
-          <Scene title="错题本" key="wrongNotes" component={WrongNotes} hideNavBar />
+          <Stack title="我的作业" key="myHomework1" image={docIcon} hideNavBar>
+            <Scene key="myHomework" component={MyHomework} />
+          </Stack>
+          <Stack title="考试记录" key="examRecords1">
+            <Scene key="myHomework" component={ExamRecords} />
+          </Stack>
+          <Stack title="作业记录" key="homeworkRecords1">
+            <Scene key="homeworkRecords" component={HomeworkRecords} />
+          </Stack>
+          <Stack title="错题本" key="wrongNotes1">
+            <Scene key="wrongNotes" component={WrongNotes} />
+          </Stack>
         </Tabs>
-        {/* <Scene title="我的作业" hideNavBar key="myHomework" component={MyHomework} />
-          <Scene title="考试记录" hideNavBar key="examRecords" component={ExamRecords} />
-          <Scene title="作业记录" hideNavBar key="homeworkRecords" component={HomeworkRecords} />
-          <Scene title="错题本" hideNavBar key="wrongNotes" component={WrongNotes} /> */}
       </Stack>
       <Stack key="teacher">
         <Tabs key="teacher-tabs">

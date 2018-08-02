@@ -1,22 +1,26 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import {
-  WingBlank,
-  // Steps,
-  Icon,
   Button,
-  Steps,
 } from 'antd-mobile-rn';
 import {
   Text,
   View,
+  Image,
+  StyleSheet,
+  ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+// import LinearGradient from 'react-native-linear-gradient';
+import { test } from '../../../reducers';
 import SvgUri from '../../../components/Svg';
 import CIcon from '../../../components/Icon';
-import Styles from './styles.scss';
-import TodayTask from './TodayTask';
+import MHStyles from './styles';
+import docIcon from '../../../public/img/document.png';
 import TaskItem from './TaskItem';
+import TimeItem from './TimeItem';
 
+const Styles = StyleSheet.create(MHStyles);
 
 class MyHomework extends Component {
   constructor(props) {
@@ -25,36 +29,41 @@ class MyHomework extends Component {
   }
 
   render() {
-    const isTask = true;
+    // this.props.doTest();
     return (
       <View style={Styles.container}>
-        <View style={[Styles.task_box, Styles.peer_review_task]}>
-          <Text style={[Styles.color333, Styles.fontSize20]}>互批任务</Text>
-          <Text>当前无互批任务</Text>
+        <View style={[Styles.header]}>
+          {/* <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']}> */}
+          <Text style={Styles.title}>待计划任务：10项</Text>
+          <Text style={Styles.small}>请把下列任务安排一个合适的时间段开始吧</Text>
+          {/* </LinearGradient> */}
         </View>
-        <View style={[Styles.task_box]}>
-          <Text>计划一下今天完成哪些作业，把它们添加到今日任务吧</Text>
+        <View style={Styles.task_list_box}>
+          <ScrollView horizontal style={Styles.flex_1}>
+            {
+              [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 34].map(item => <TaskItem key={item} />)
+            }
+          </ScrollView>
+        </View>
+        {/* <Image source={docIcon} style={{ width: 100, height: 100 }} /> */}
+        <View style={Styles.time_list_box}>
+          <ScrollView horizontal>
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+              {
+                [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 34].map(item => <TimeItem key={item} />)
+              }
+            </View>
+          </ScrollView>
         </View>
 
-        <View style={[Styles.task_box, Styles.distributed, !isTask && Styles.undistributed]}>
-          {
-          isTask
-            ? (
-              <Fragment>
-                <View style={{ }}>
-                  <TaskItem text="text" vertical="top" />
-                </View>
-                <TodayTask />
-              </Fragment>
-            )
-            : (
-              <SvgUri width="400" height="400" source="exam" />
-            )
-          }
-        </View>
       </View>
     );
   }
 }
 
-export default connect(({ routes }) => ({ routes }))(MyHomework);
+export default connect(
+  null,
+  dispatch => ({
+    doTest: bindActionCreators(test, dispatch),
+  }),
+)(MyHomework);
