@@ -4,6 +4,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Button } from 'antd-mobile-rn';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,6 +21,7 @@ export default class Test3 extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Button onClick={() => Actions.login({ test: 'mmp' })}>BTN</Button>
         <Text>
 错题本
         </Text>

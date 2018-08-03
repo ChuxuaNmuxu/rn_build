@@ -4,10 +4,12 @@ import {
   connect,
 } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
-import Router from './src';
+import Router from './src/router';
 import store from './src/store';
+import Resolution from './src/components/FontSize';
 
 const RouterWithRedux = connect()(Router);
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -21,9 +23,9 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <RouterWithRedux>
-          <Router />
-        </RouterWithRedux>
+        <Resolution.FixWidthView>
+          <RouterWithRedux />
+        </Resolution.FixWidthView>
       </Provider>
     );
   }
