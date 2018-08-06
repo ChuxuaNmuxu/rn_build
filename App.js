@@ -6,7 +6,7 @@ import {
 import SplashScreen from 'react-native-splash-screen';
 import Router from './src/router';
 import store from './src/store';
-import Resolution from './src/components/FontSize';
+import Resolution from './src/components/Resolution';
 
 const RouterWithRedux = connect()(Router);
 
