@@ -12,7 +12,7 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 // import LinearGradient from 'react-native-linear-gradient';
-import { test } from '../../../reducers';
+import { test } from '../../../actions';
 import SvgUri from '../../../components/Svg';
 import CIcon from '../../../components/Icon';
 import MHStyles from './styles';
@@ -29,7 +29,7 @@ class MyHomework extends Component {
   }
 
   render() {
-    // this.props.doTest();
+    this.props.doTest();
     return (
       <View style={Styles.container}>
         <View style={[Styles.header]}>
