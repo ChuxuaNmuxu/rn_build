@@ -32,6 +32,10 @@ global.SCREEN_WIDTH = width;
 global.SCREEN_HEIGHT = height;
 // 获取屏幕分辨率
 global.PixelRatio = PixelRatio.get();
+// 获取屏幕像素宽度
+global.PX_WIDTH = PixelRatio.getPixelSizeForLayoutSize(width);
+// 获取屏幕像素高度
+global.PX_HEIGHT = PixelRatio.getPixelSizeForLayoutSize(height);
 // 最小线宽
 global.pixel = 1 / PixelRatio;
 // 网络请求

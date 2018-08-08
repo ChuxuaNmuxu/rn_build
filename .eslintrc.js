@@ -14,6 +14,8 @@ module.exports = {
       "Storages": true,
       "Fetch": true,
       "Actions": true,
+      "PX_WIDTH": true,
+      "PX_HEIGHT": true,
     },
     "parser": "babel-eslint",
     "rules": {
