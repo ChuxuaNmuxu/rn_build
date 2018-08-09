@@ -19,6 +19,7 @@ import MHStyles from './styles';
 import docIcon from '../../../public/img/document.png';
 import TaskItem from './TaskItem';
 import TimeItem from './TimeItem';
+import Drag from '../../../components/Drag';
 
 const Styles = StyleSheet.create(MHStyles);
 
@@ -45,8 +46,10 @@ class MyHomework extends Component {
             }
           </ScrollView>
         </View>
-        {/* <Image source={docIcon} style={{ width: 100, height: 100 }} /> */}
-        <View style={Styles.time_list_box}>
+
+        <Drag />
+
+        {/* <View style={Styles.time_list_box}>
           <ScrollView horizontal>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               {
@@ -54,8 +57,7 @@ class MyHomework extends Component {
               }
             </View>
           </ScrollView>
-        </View>
-
+        </View> */}
       </View>
     );
   }

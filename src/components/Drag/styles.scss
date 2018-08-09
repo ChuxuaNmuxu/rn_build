@@ -1,0 +1,43 @@
+$CIRCLE_RADIUS: 20px;
+
+.var {
+  --abc: $CIRCLE_RADIUS;
+}
+
+.mainContainer {
+  flex: 1;
+}
+.dropZone {
+  height: 100;
+  background-color: #000000;
+}
+text {
+  margin-top: 25;
+  margin-left: 5;
+  margin-right: 5;
+  text-align: center;
+  color: #ffffff;
+}
+
+.draggableContainer {
+  position: absolute;
+  border: 6rem pink dashed;
+  // border-width: 5px;
+  // border-color: yellow;
+  // border-style: dashed;
+}
+
+@mixin fuhe ($styleName, $value) {
+
+}
+
+@mixin borderWidth ($value) {
+  @include fuhe('border', $value)
+}
+
+.circle {
+  background-color: #1abc9c;
+  width: $CIRCLE_RADIUS * 2;
+  height: $CIRCLE_RADIUS * 2;
+  // border-radius: $CIRCLE_RADIUS;
+}

@@ -62,6 +62,7 @@ const RouteMap = props => (
           icon={TabBarIcon}
         >
           <Stack
+            initial
             title="我的作业"
             key="myHomework1"
             image={homework}
@@ -93,9 +94,7 @@ const RouteMap = props => (
           </Stack>
         </Tabs>
       </Stack>
-      <Stack
-        initial
-      >
+      <Stack>
         <Scene
           key="arrangeHomework"
           component={ArrangeHomework}
