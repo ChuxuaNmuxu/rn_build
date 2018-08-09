@@ -25,6 +25,7 @@ import Demo from './views/Demo';
 // import SvgUri from './components/Svg';
 import homework from './public/img/homework.png';
 import document from './public/img/document.png';
+import styles from './router.scss';
 
 const RouteMap = props => (
   <Router
@@ -53,7 +54,7 @@ const RouteMap = props => (
           // inactiveTintColor="#aaa" // 未选中tabbar图标的颜色
           // tabStyle={{ height: 20 }}
           tabBarPosition="bottom"
-          tabBarStyle={{ alignItems: 'center', justifyContent: 'center', height: 80 }}
+          tabBarStyle={styles.tabBarStyle}
           lazy
           wrap
           swipeEnabled
@@ -73,12 +74,12 @@ const RouteMap = props => (
           </Stack>
           <Stack
             title="考试记录"
-            key="examRecords1"
+            key="examRecords"
             // image={<SvgUri height="40" width="40" source="examBook" />}
             selectedImage="zuoye"
             image={homework}
-            titleStyle={{ color: '#000', alignSelf: 'center' }}
-            navigationBarStyle={{ backgroundColor: 'green', height: 60 }}
+            titleStyle={styles.examRecords_titleStyle}
+            navigationBarStyle={styles.examRecords_navigationBarStyle}
           >
             <Scene
               key="myHomework"
@@ -98,7 +99,7 @@ const RouteMap = props => (
         <Scene
           key="arrangeHomework"
           component={ArrangeHomework}
-          navigationBarStyle={{ backgroundColor: '#30bf6c', height: 96 }}
+          navigationBarStyle={styles.arrangeHomework_navigationBarStyle}
           back
         />
       </Stack>
@@ -110,10 +111,18 @@ const RouteMap = props => (
       <Stack key="demo">
         <Scene
           // title="demo"
-          renderTitle={<View style={{ flex: 1, alignItems: 'center' }}><Text style={{ color: '#fff' }}>自定义标题</Text></View>}
+          renderTitle={(
+            <View style={styles.demo_renderTitle_titleBox}>
+              <Text style={styles.demo_renderTitle_title}>自定义标题</Text>
+            </View>
+          )}
           key="demo"
           component={Demo}
-          renderLeftButton={<View style={{ flexDirection: 'row' }}><Text>111</Text><Text>222</Text></View>}
+          renderLeftButton={(
+            <View style={styles.demo_renderLeftButton_box}>
+              <Text style={styles.demo_renderLeftButton_text}>111</Text>
+            </View>
+          )}
           leftTitle="回退"
           rightTitle="前进"
           onLeft={() => console.log('onLeft')}
@@ -122,7 +131,7 @@ const RouteMap = props => (
           // back // 显示返回按钮
           backTitle="后退标题"
           navBarButtonColor="#fff" // 设置返回按颜色
-          navigationBarStyle={{ backgroundColor: 'green', height: 60 }}
+          navigationBarStyle={styles.demo_navigationBarStyle}
         />
       </Stack>
     </Modal>

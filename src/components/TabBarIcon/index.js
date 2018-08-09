@@ -19,7 +19,7 @@ const TabBarIcon = (props) => {
     const current = focused ? selectedImage : image;
     switch (typeof current) {
       case 'string':
-        return <CIcon name={current} size={32} />;
+        return <CIcon name={current} size={32} color="#fff" />;
       case 'number':
         return (
           <Image

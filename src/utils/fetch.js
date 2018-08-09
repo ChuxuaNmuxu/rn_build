@@ -1,7 +1,7 @@
 import { isEmpty } from 'ramda';
 import { Toast } from 'antd-mobile-rn';
 import qs from 'qs';
-import Config from '../config';
+import Config from '../configs';
 
 function apiUrl(url) {
   if (typeof url !== 'string') {

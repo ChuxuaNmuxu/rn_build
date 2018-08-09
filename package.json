@@ -13,6 +13,7 @@
     "dev-ios": "react-native run-ios",
     "build": "cd android && gradlew assembleRelease",
     "test-build": "cd android && gradlew installRelease",
+    "test-install": "adb install ./android/app/build/outputs/apk/app-debug.apk",
     "clear-build-cache": "cd android && gradlew clean",
     "clear": "rimraf android/app/build && npm run clear-build-cache",
     "clear-all": "yarn cache clean -f && npm cache clean -f && cnpm cache clean -f && npm run clear",

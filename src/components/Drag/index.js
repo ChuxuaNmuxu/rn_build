@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import styles from './styles';
 
-console.log(12, styles);
-
 export default class Drag extends Component {
   constructor(props) {
     super(props);
@@ -30,8 +28,8 @@ export default class Drag extends Component {
   }
 
   renderDraggable = () => (
-    <View style={[styles.draggableContainer]}>
-      <Animated.View style={[styles.circle]}>
+    <View style={styles.draggableContainer}>
+      <Animated.View style={styles.circle}>
         <Text style={styles.text}>Drag me!</Text>
       </Animated.View>
     </View>

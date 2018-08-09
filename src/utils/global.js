@@ -17,8 +17,6 @@ import Storage from './storage';
 
 // 封装的网络请求
 import Fetch from './fetch';
-// 配置文件，可以放网络请求等
-// import Config from './config';
 
 // 通过系统API获得屏幕宽高
 const { height, width } = Dimensions.get('window');

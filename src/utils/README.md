@@ -1,12 +1,15 @@
-### 说明
-##### 项目中常用的封装都放在app目录下Common文件夹
-1、`FontSize.js`：基于屏幕分辨率封装的字体适配方法，使用方法：`fontSize:FONT_SIZE(14)`
+# 使用说明
+## Common
+> 项目中常用的封装都放在app目录下文件夹
+---
 
-2、`Tool.js`：封装常用的属性方法，比如说判断是否登录，或者其他的方法，在这个方法中，提供了用来做安卓，iOS换算px的方法，使用方法：`width:px2dp(100)`
+## fetch
+> 对 react-native 原生 fetch 的封装
+---
 
-3、`global.js`：全局变量方法，一般我会用来设置全局的方法，比如说：系统判断，屏幕宽高，主题设置，图片初始化。
-具体的详情可以查看`global.js`内部注释。
+## global
+> 全局变量方法，一般用来设置全局的方法，比如：系统判断，屏幕宽高...
+> 具体的详情可以查看`global.js`内部注释。
 
-4、`Config.js`：配置文件，可以用来配置请求网址，配置表等等。
-
-5、`SetTheme.js`：更改主题，`teaset`提供了设置主题和切换主题的能力，但有些时候，有一些颜色需要再手动调整，所以创建了这个文件，通过在里面配置颜色，并在项目的入口中引入，就可以直接使用`Theme.backgroundColor`的方式调用颜色了。
+## storage
+> 配置 react-native-storage 并基于 react-native-storage 对 asyncStorage 进行的封装

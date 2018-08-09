@@ -1,15 +1,42 @@
-.labelStyle {
-  font-size: 16;
-  color: #fff;
-}
-
 .tabBarStyle {
   align-items: center;
   justify-content: center;
+  height: 80px;
 }
 
-.tabStyle {
-  color: #2ea460;
+.examRecords_titleStyle {
+  color: #000;
+  align-self: center;
 }
 
+.examRecords_navigationBarStyle {
+  background-color: green; 
+  height: 60px;
+}
 
+.arrangeHomework_navigationBarStyle {
+  background-color: #30bf6c;
+  height: 96px; 
+}
+
+.demo_renderTitle_titleBox {
+  flex: 1;
+  align-items: center;
+}
+
+.demo_renderTitle_title {
+  color: #fff;
+} 
+
+.demo_renderLeftButton_box {
+  flex-direction: row;
+}
+
+.demo_renderLeftButton_text {
+  color: #fff;
+}
+
+.demo_navigationBarStyle {
+  background-color: green;
+  height: 60
+}
