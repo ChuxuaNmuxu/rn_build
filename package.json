@@ -5,8 +5,10 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "lint": "eslint --ext .js ./src --fix",
-    "svg-to-js": "cd src/tools && node ./svgToJs.js",
+    "lint": "eslint --ext .js ./src --fix",  
+     "svg-to-xml": "cd src/scripts && node ./svgToXml.js",
+    "iconfontMap-linux": "cd ./src/scripts && python iconfontMap.py ../public/icon/iconfont.ttf iconfont.js && mv ./iconfont.js ../public/icon/",
+    "iconfontMap-win": "cd ./src/scripts && python iconfontMap.py ../public/icon/iconfont.ttf iconfont.js && move ./iconfont.js ../public/icon/",
     "dev-menu": "adb shell input keyevent 82",
     "devtools": "react-devtools",
     "dev-android": "react-native run-android",
