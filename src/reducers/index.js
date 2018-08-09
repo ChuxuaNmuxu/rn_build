@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import {
   TEST,
-} from '../actions/constant';
+} from '../constants/action';
 import routes from './routes';
 
 export function test(state, action) {

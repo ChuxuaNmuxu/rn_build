@@ -5,7 +5,7 @@ import {
 } from 'redux-saga/effects';
 import {
   TEST,
-} from '../actions/constant';
+} from '../constants/action';
 
 function* test() {
   yield setTimeout(() => {
