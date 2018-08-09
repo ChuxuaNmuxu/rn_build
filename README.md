@@ -55,6 +55,7 @@
 - 执行 `npm run devtools` 命令即可
 > 建议安装使用 react-native-debugger 一个软件可以实现 react-devtools 和 debugger-ui 所有功能，并且还能查看 store。
 > [安装使用教程](http://beansoft.biz/2017/05/17/react-native-debugger-%E7%8B%AC%E7%AB%8B%E8%B0%83%E8%AF%95%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/) 
+
 ---
 
 ## 项目介绍
