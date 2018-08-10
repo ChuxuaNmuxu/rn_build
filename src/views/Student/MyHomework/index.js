@@ -8,6 +8,7 @@ import {
   Image,
   StyleSheet,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -20,6 +21,7 @@ import docIcon from '../../../public/img/document.png';
 import TaskItem from './TaskItem';
 import TimeItem from './TimeItem';
 import Drag from '../../../components/Drag';
+import launch_screen from '../../../../android/app/src/main/res/drawable-xhdpi/launch_screen.png';
 
 const Styles = StyleSheet.create(MHStyles);
 
@@ -32,7 +34,10 @@ class MyHomework extends Component {
   render() {
     this.props.doTest();
     return (
-      <View style={Styles.container}>
+      <ImageBackground
+        source={launch_screen}
+        style={Styles.container}
+      >
         <View style={[Styles.header]}>
           {/* <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']}> */}
           <Text style={Styles.title}>待计划任务：10项</Text>
@@ -58,7 +63,7 @@ class MyHomework extends Component {
             </View>
           </ScrollView>
         </View> */}
-      </View>
+      </ImageBackground>
     );
   }
 }

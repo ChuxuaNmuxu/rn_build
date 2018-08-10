@@ -5,7 +5,7 @@ $CIRCLE_RADIUS: 36px;
 }
 .dropZone {
   height: 100;
-  background-color: #000000;
+  background-color: pink;
 }
 text {
   margin-top: 25;
@@ -17,6 +17,7 @@ text {
 
 .draggableContainer {
   position: absolute;
+  top: 300px;
 }
 
 .circle {
