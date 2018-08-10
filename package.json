@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "lint": "eslint --ext .js ./src --fix",  
-     "svg-to-xml": "cd src/scripts && node ./svgToXml.js",
+    "lint": "eslint --ext .js ./src --fix",
+    "svg-to-xml": "cd src/scripts && node ./svgToXml.js",
     "iconfontMap-linux": "cd ./src/scripts && python iconfontMap.py ../public/icon/iconfont.ttf iconfont.js && mv ./iconfont.js ../public/icon/",
     "iconfontMap-win": "cd ./src/scripts && python iconfontMap.py ../public/icon/iconfont.ttf iconfont.js && move ./iconfont.js ../public/icon/",
     "dev-menu": "adb shell input keyevent 82",
@@ -42,6 +42,7 @@
     "react-native-storage": "^0.2.2",
     "react-native-svg": "^6.4.1",
     "react-native-svg-uri": "^1.2.3",
+    "react-native-swipeout": "^2.3.6",
     "react-native-uploader": "^0.0.10",
     "react-native-vector-icons": "^4.6.0",
     "react-redux": "^5.0.7",

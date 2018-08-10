@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { StatusBar } from 'react-native';
 import {
   Provider,
   connect,
@@ -24,6 +25,12 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <Resolution.FixWidthView>
+          <StatusBar
+            backgroundColor="blue"
+            translucent
+            hidden
+            animated
+          />
           <RouterWithRedux />
         </Resolution.FixWidthView>
       </Provider>
