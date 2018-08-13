@@ -1,0 +1,43 @@
+.container {
+  flex: 1;
+  background-color: #fafafa;
+}
+
+.header {
+  flex-direction: row;
+  align-items: center;
+  padding-left: 24px;
+  background-color: #30bf6c;
+  height: 96px;
+}
+
+.title {
+  margin-right: 20px;
+  color: #fff;
+  font-size: 30px;
+}
+
+.small {
+  color: #fff;
+  font-size: 21px;
+};
+
+.task_list_box {
+  margin-bottom: 12px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  height: 218px;
+  background-color: #fff;
+}
+
+.flex_1 {
+  flex: 1;
+}
+
+.time_list_box {
+  flex: 1;
+  justify-content: center;
+  padding-bottom: 20px;
+  margin-bottom: 12px;
+  background-color: #fff;
+};
