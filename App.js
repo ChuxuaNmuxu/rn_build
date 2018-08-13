@@ -26,10 +26,7 @@ export default class App extends Component {
       <Provider store={store}>
         <Resolution.FixWidthView>
           <StatusBar
-            backgroundColor="blue"
-            translucent
             hidden
-            animated
           />
           <RouterWithRedux />
         </Resolution.FixWidthView>

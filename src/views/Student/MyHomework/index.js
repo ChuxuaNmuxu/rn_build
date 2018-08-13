@@ -9,6 +9,8 @@ import {
   StyleSheet,
   ScrollView,
   ImageBackground,
+  Modal,
+  Alert,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -28,7 +30,9 @@ const Styles = StyleSheet.create(MHStyles);
 class MyHomework extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      modalVisible: false,
+    };
   }
 
   render() {
@@ -53,6 +57,17 @@ class MyHomework extends Component {
         </View>
 
         <Drag />
+        <Button onClick={() => { this.setState({ modalVisible: true }); }}>open modal</Button>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert('Modal has been closed.');
+          }}
+        >
+          <Button onClick={() => { this.setState({ modalVisible: false }); }}>close modal</Button>
+        </Modal>
 
         {/* <View style={Styles.time_list_box}>
           <ScrollView horizontal>

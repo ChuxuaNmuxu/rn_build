@@ -1,9 +1,30 @@
 import React from 'react';
+import { Immersive } from 'react-native-immersive';
 import { token } from '../../constants/stroage';
 
 class Welcome extends React.Component {
-  componentWillMount() {
+  constructor(props) {
+    super(props);
+    // 全屏组件，只支持Android
+    if (Android) {
+      this.restoreImmersive = () => {
+        Immersive.on();
+        Immersive.setImmersive(true);
+      };
+    }
+  }
+
+  componentDidMount() {
+    if (Android) {
+      Immersive.addImmersiveListener(this.restoreImmersive);
+    }
     this.getToken();
+  }
+
+  componentWillUnmount() {
+    if (Android) {
+      Immersive.removeImmersiveListener(this.restoreImmersive);
+    }
   }
 
   getToken = () => {

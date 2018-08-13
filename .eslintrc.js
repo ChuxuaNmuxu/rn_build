@@ -11,11 +11,11 @@ module.exports = {
       "SCREEN_WIDTH": true,
       "SCREEN_HEIGHT": true,
       "storage": true,
-      "Storages": true,
       "Fetch": true,
       "Actions": true,
       "PX_WIDTH": true,
       "PX_HEIGHT": true,
+      "Android": true,
     },
     "parser": "babel-eslint",
     "rules": {

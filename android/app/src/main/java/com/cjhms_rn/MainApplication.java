@@ -5,6 +5,7 @@ import android.webkit.WebView;
 import com.horcrux.svg.SvgPackage;
 
 import com.facebook.react.ReactApplication;
+import com.rnimmersive.RNImmersivePackage;
 import com.beefe.picker.PickerViewPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.facebook.react.ReactNativeHost;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNImmersivePackage(),
             new PickerViewPackage(),
             new SplashScreenReactPackage(),
           new VectorIconsPackage(),

@@ -3,6 +3,7 @@ package com.cjhms_rn;
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen;
+import com.rnimmersive.RNImmersiveModule;
 
 public class MainActivity extends ReactActivity {
 
@@ -19,5 +20,14 @@ public class MainActivity extends ReactActivity {
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.show(this, true);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus && RNImmersiveModule.getInstance() != null) {
+            RNImmersiveModule.getInstance().emitImmersiveStateChangeEvent();
+        }
     }
 }
