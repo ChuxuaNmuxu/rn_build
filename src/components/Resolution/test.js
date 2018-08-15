@@ -3,9 +3,7 @@ import {
   Dimensions,
   PixelRatio,
   View,
-  Platform,
 } from 'react-native';
-import Orientation from 'react-native-orientation';
 
 export default class Resolution extends Component {
   constructor(props) {

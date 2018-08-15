@@ -17,25 +17,25 @@ export default class App extends Component {
     super(props);
     this.state = {};
     // 全屏组件，只支持Android
-    // if (Android) {
-    //   this.restoreImmersive = () => {
-    //     Immersive.on();
-    //     Immersive.setImmersive(true);
-    //   };
-    // }
+    if (Android) {
+      this.restoreImmersive = () => {
+        Immersive.on();
+        Immersive.setImmersive(true);
+      };
+    }
   }
 
   componentDidMount() {
-    // if (Android) {
-    //   Immersive.addImmersiveListener(this.restoreImmersive);
-    // }
+    if (Android) {
+      Immersive.addImmersiveListener(this.restoreImmersive);
+    }
     SplashScreen.hide();
   }
 
   componentWillUnmount() {
-    // if (Android) {
-    //   Immersive.removeImmersiveListener(this.restoreImmersive);
-    // }
+    if (Android) {
+      Immersive.removeImmersiveListener(this.restoreImmersive);
+    }
   }
 
   render() {
