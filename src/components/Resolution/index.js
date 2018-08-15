@@ -17,16 +17,19 @@ export default class Resolution {
     return useFixWidth ? { ...fixedWidth } : { ...fixedHeight };
   }
 
-  static setDesignSize(dwidth = 1920, dheight = 1080, dim = 'window') {
+  // Dimensions.get(); window 获取可视区宽高 screen。获取整个屏幕宽高，包含虚拟按键和状态栏部分
+  static setDesignSize(dwidth = 1920, dheight = 1080, dim = 'screen') {
+    console.log(22);
+    const { height } = Dimensions.get(dim);
+    const { width } = Dimensions.get(dim);
+
     const designSize = { width: dwidth, height: dheight };
 
     const navHeight = Platform.OS === 'android' ? StatusBar.currentHeight : 64;
     const pxRatio = PixelRatio.get(dim);
 
-    let { height } = Dimensions.get(dim);
-    const { width } = Dimensions.get(dim);
 
-    if (dim !== 'screen') height -= navHeight;
+    // if (dim !== 'screen') height += navHeight;
 
     const w = PixelRatio.getPixelSizeForLayoutSize(width);
     const h = PixelRatio.getPixelSizeForLayoutSize(height);
@@ -57,61 +60,61 @@ export default class Resolution {
     };
   }
 
-    static FixWidthView = (p) => {
-      const {
-        fixedWidth: {
+  static FixWidthView = (p) => {
+    Resolution.setDesignSize(1920, 1080);
+    const {
+      fixedWidth: {
+        width,
+        height,
+        scale,
+        // navHeight,
+      },
+    } = options;
+    return (
+      <View
+        {...p}
+        style={{
+          // marginTop: navHeight,
           width,
           height,
-          scale,
-          // navHeight,
-        },
-      } = options;
-      return (
-        <View
-          {...p}
-          style={{
-            // marginTop: navHeight,
-            width,
-            height,
-            backgroundColor: 'transparent',
-            transform: [{ translateX: -width * 0.5 },
-              { translateY: -height * 0.5 },
-              { scale },
-              { translateX: width * 0.5 },
-              { translateY: height * 0.5 }],
-          }}
-        />
-      );
-    };
+          backgroundColor: 'transparent',
+          transform: [{ translateX: -width * 0.5 },
+            { translateY: -height * 0.5 },
+            { scale },
+            { translateX: width * 0.5 },
+            { translateY: height * 0.5 }],
+        }}
+      />
+    );
+  };
 
-    static FixHeightView = (p) => {
-      const {
-        fixedWidth: {
+  static FixHeightView = (p) => {
+    Resolution.setDesignSize(1080, 1920);
+    const {
+      fixedWidth: {
+        width,
+        height,
+        scale,
+        // navHeight,
+      },
+    } = options;
+    return (
+      <View
+        {...p}
+        style={{
+          // marginTop: navHeight,
           width,
           height,
-          scale,
-          navHeight,
-        },
-      } = options;
-      return (
-        <View
-          {...p}
-          style={{
-            marginTop: navHeight,
-            width,
-            height,
-            backgroundColor: 'transparent',
-            transform: [{ translateX: -width * 0.5 },
-              { translateY: -height * 0.5 },
-              { scale },
-              { translateX: width * 0.5 },
-              { translateY: height * 0.5 }],
-          }}
-        >
-          {p.children}
-        </View>
-      );
-    };
+          backgroundColor: 'transparent',
+          transform: [{ translateX: -width * 0.5 },
+            { translateY: -height * 0.5 },
+            { scale },
+            { translateX: width * 0.5 },
+            { translateY: height * 0.5 }],
+        }}
+      >
+        {p.children}
+      </View>
+    );
+  };
 }
-// init
-Resolution.setDesignSize();

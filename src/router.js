@@ -45,7 +45,7 @@ const RouteMap = props => (
       <Stack title="登陆" key="account">
         <Scene key="login" hideNavBar component={Login} />
       </Stack>
-      <Stack key="student" hideNavBar>
+      <Stack key="student" hideNavBar initial>
         <Tabs
           key="student-tabs"
           activeBackgroundColor="#2ea460" // 选中tabbar的背景色
@@ -63,7 +63,6 @@ const RouteMap = props => (
           icon={TabBarIcon}
         >
           <Stack
-            initial
             title="我的作业"
             key="myHomework1"
             image={homework}
