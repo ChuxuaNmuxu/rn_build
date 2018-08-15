@@ -46,16 +46,14 @@ const storage = new Storage({
 const fail = (err) => {
   // 如果没有找到数据且没有sync方法，
   // 或者有其他异常，则在catch中返回
-  // console.warn('storage 操作有误:', err);
   switch (err.name) {
     case 'NotFoundError':
-      // TODO;
-      break;
+      throw new Error(err);
     case 'ExpiredError':
-      // TODO
+      console.error(err.name);
       break;
     default:
-        // TODO
+      console.error(err);
   }
 };
 
@@ -102,7 +100,7 @@ storage.Load = ({
  * 你只能在then这个方法内继续处理ret数据
  */
     .then(ret => ret)
-    .catch(err => fail(err));
+    .catch(fail);
 };
 
 /**
@@ -135,7 +133,7 @@ storage.Save = ({
   if (id) datas.id = id;
   return storage
     .save(datas)
-    .catch(err => fail(err));
+    .catch(fail);
 };
 
 /**
@@ -145,7 +143,7 @@ storage.Save = ({
 storage.GetIdsForKey = key => storage
   .getIdsForKey(key)
   .then(ids => ids)
-  .catch(err => fail(err));
+  .catch(fail);
 
 /**
  * 获取某个key下的所有数据(仅key-id数据)
@@ -154,7 +152,7 @@ storage.GetIdsForKey = key => storage
 storage.GetAllDataForKey = key => storage
   .getAllDataForKey(key)
   .then(users => users)
-  .catch(err => fail(err));
+  .catch(fail);
 
 /**
  * 注意：清除某个key下的所有数据(仅key-id数据)
@@ -162,7 +160,7 @@ storage.GetAllDataForKey = key => storage
  */
 storage.ClearMapForKey = key => storage
   .clearMapForKey(key)
-  .catch(err => fail(err));
+  .catch(fail);
 
 /**
  * 删除单个数据
@@ -176,7 +174,7 @@ storage.Remove = (key, id) => {
   if (id) datas.id = id;
   return storage
     .remove(datas)
-    .catch(err => fail(err));
+    .catch(fail);
 };
 
 export default storage;

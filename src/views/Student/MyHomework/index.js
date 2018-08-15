@@ -12,9 +12,6 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { test } from '../../../actions';
 import SvgUri from '../../../components/Svg';
 import CIcon from '../../../components/Icon';
 import styles from './style.scss';
@@ -23,6 +20,7 @@ import TaskItem from './TaskItem';
 import TimeItem from './TimeItem';
 import Drag from '../../../components/Drag';
 import launchScreen from '../../../../android/app/src/main/res/drawable-xhdpi/launch_screen.png';
+import Demo from '../../Demo';
 
 class MyHomework extends Component {
   constructor(props) {
@@ -31,7 +29,6 @@ class MyHomework extends Component {
   }
 
   render() {
-    this.props.doTest();
     return (
       <ImageBackground
         source={launchScreen}
@@ -49,6 +46,7 @@ class MyHomework extends Component {
           </ScrollView>
         </View>
 
+        <Demo />
         <Drag />
         {/* <View style={styles.time_list_box}>
           <ScrollView horizontal>
@@ -64,9 +62,4 @@ class MyHomework extends Component {
   }
 }
 
-export default connect(
-  null,
-  dispatch => ({
-    doTest: bindActionCreators(test, dispatch),
-  }),
-)(MyHomework);
+export default MyHomework;

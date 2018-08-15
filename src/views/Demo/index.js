@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
+import Theme from '../../components/Theme';
+import Language from '../../components/Language';
 
 const styles = StyleSheet.create({
   container: {
@@ -11,7 +14,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class HomeworkList extends Component {
+export default class Demo extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -20,9 +23,13 @@ export default class HomeworkList extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>
-Demo
-        </Text>
+        <TouchableOpacity
+          onPress={Actions.TabsStack}
+        >
+          <Text>跳回首页</Text>
+        </TouchableOpacity>
+        <Theme />
+        <Language />
       </View>
     );
   }

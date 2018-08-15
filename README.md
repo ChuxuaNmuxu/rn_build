@@ -5,6 +5,9 @@
 2. 请务必安装 eslint 插件，保证代码风格一致性 
 3. 请务必使用 yarn 安装依赖，可以避免很多稀奇古怪的报错
 4. 打包时需要在电脑中配置密钥
+5. 使用v16.4以后的生命周期 getDerivedStateFromProps、getSnapshotBeforeUpdate，不再使用 componentWillReceiveProps、componentWillMount、componentWillUpdate 用 getDerivedStateFromProps代替。
+ - getDerivedStateFromProps 是个静态方法(纯函数)里面不能访问this,只能根据nextProps和prevState计算出预期的状态改变，通过return将结果送给setState。 getDerivedStateFromProps 的结果相当于给了setState，并不是真的调用setState。[最新生命周期图](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+ - getSnapshotBeforeUpdate 不是一个静态方法但也要尽量使用它去返回一个值。这个值会随后被传入到 componentDidUpdate (第三参 snapshot)中，然后在 componentDidUpdate (prevProps, prevState, snapshot) 中去更新组件的状态，而不是在 getSnapshotBeforeUpdate 中直接更新组件状态。
 ---
 
 ## 说明
@@ -60,7 +63,7 @@
  - 执行 `npm run svg-to-xml` 命令即可
 
 ### iconfont映射
- - win 执行 `npm run iconfontMap-win`、 linux 执行 `npm run iconfontMap-linux` 命令即可
+ - win 执行 `npm run move-iconfontMap`、 linux 执行 `npm run mv-iconfontMap` 命令即可
 
 ---
 

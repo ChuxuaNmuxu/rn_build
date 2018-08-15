@@ -5,6 +5,8 @@ import android.webkit.WebView;
 import com.horcrux.svg.SvgPackage;
 
 import com.facebook.react.ReactApplication;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.rnimmersive.RNImmersivePackage;
 import com.beefe.picker.PickerViewPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -30,6 +32,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNI18nPackage(),
+            new RNDeviceInfo(),
             new RNImmersivePackage(),
             new PickerViewPackage(),
             new SplashScreenReactPackage(),
