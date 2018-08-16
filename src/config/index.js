@@ -3,11 +3,11 @@
  */
 
 import Api from './api';
-import Theme from './theme';
+// import Theme from './theme';
 import Language from './language';
 
 export default {
   Api,
-  Theme,
+  // Theme,
   Language,
 };

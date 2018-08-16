@@ -50,10 +50,10 @@ const fail = (err) => {
     case 'NotFoundError':
       throw new Error(err);
     case 'ExpiredError':
-      console.error(err.name);
+      console.error(err);
       break;
     default:
-      console.error(err);
+      console.warn(err);
   }
 };
 

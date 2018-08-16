@@ -1,21 +1,21 @@
 import { handleActions } from 'redux-actions';
 import {
   InitialConfog,
-  ChangeTheme,
+  // ChangeTheme,
   ChangeLanguage,
 } from '../actions/config';
 
 const initialState = {
-  theme: {},
+  // theme: {},
   language: '',
 };
 export default handleActions({
-  [ChangeTheme](state, action) {
-    return {
-      ...state,
-      theme: action.payload,
-    };
-  },
+  // [ChangeTheme](state, action) {
+  //   return {
+  //     ...state,
+  //     theme: action.payload,
+  //   };
+  // },
   [ChangeLanguage](state, action) {
     return {
       ...state,
@@ -24,12 +24,12 @@ export default handleActions({
   },
   [InitialConfog](state, action) {
     const {
-      theme,
+      // theme,
       language,
     } = action.payload;
     return {
       ...state,
-      theme,
+      // theme,
       language,
     };
   },

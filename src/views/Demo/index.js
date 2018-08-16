@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import Theme from '../../components/Theme';
+// import Theme from '../../components/Theme';
 import Language from '../../components/Language';
 
 const styles = StyleSheet.create({
@@ -28,7 +28,7 @@ export default class Demo extends Component {
         >
           <Text>跳回首页</Text>
         </TouchableOpacity>
-        <Theme />
+        {/* <Theme /> */}
         <Language />
       </View>
     );

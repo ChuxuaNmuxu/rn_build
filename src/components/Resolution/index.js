@@ -26,8 +26,7 @@ export default class Resolution extends Component {
   }
 
   onLayout = () => {
-    const { width: SWidth } = Dimensions.get('screen');
-    const { height: SHeight } = Dimensions.get('screen');
+    const { width: SWidth, height: SHeight } = Dimensions.get('screen');
     let width;
     let height;
     let scale;
@@ -37,7 +36,7 @@ export default class Resolution extends Component {
         width,
         height,
         scale,
-      } = this.rotatingScreen(1920, 1080));
+      } = this.rotatingScreen());
     } else {
       ({
         width,
@@ -58,21 +57,33 @@ export default class Resolution extends Component {
 
 
   rotatingScreen = (dwidth = 1920, dheight = 1080, dim = 'screen') => {
-    const { width } = Dimensions.get(dim);
-    const { height } = Dimensions.get(dim);
+    const { width, height } = Dimensions.get(dim);
     const designSize = { width: dwidth, height: dheight };
     const pxRatio = PixelRatio.get(dim);
 
     const w = PixelRatio.getPixelSizeForLayoutSize(width);
     const h = PixelRatio.getPixelSizeForLayoutSize(height);
 
-    const fixedWidthDesignScale = designSize.width / w;
-    const fixedWidthWidth = designSize.width;
-    const fixedWidthHeight = h * fixedWidthDesignScale;
-    const fixedWidthScale = 1 / pxRatio / fixedWidthDesignScale;
+    // 竖屏时横向铺满
+    if (dwidth < dheight) {
+      const fixedWidthDesignScale = designSize.width / w;
+      const fixedWidthWidth = designSize.width;
+      const fixedWidthHeight = h * fixedWidthDesignScale;
+      const fixedWidthScale = 1 / pxRatio / fixedWidthDesignScale;
+
+      return {
+        width: fixedWidthWidth, height: fixedWidthHeight, scale: fixedWidthScale,
+      };
+    }
+
+    // 横屏事件纵向铺满
+    const fixedHeightDesignScale = designSize.height / h;
+    const fixedHeightWidth = w * fixedHeightDesignScale;
+    const fixedHeightHeight = designSize.height;
+    const fixedHeightScale = 1 / pxRatio / fixedHeightDesignScale;
 
     return {
-      width: fixedWidthWidth, height: fixedWidthHeight, scale: fixedWidthScale,
+      width: fixedHeightWidth, height: fixedHeightHeight, scale: fixedHeightScale,
     };
   }
 

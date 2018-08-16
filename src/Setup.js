@@ -7,13 +7,13 @@ import {
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import SplashScreen from 'react-native-splash-screen';
-import Theme from './config/theme';
+// import Theme from './config/theme';
 import Language from './config/language';
 import { InitialConfog } from './actions/config';
 
 @connect(
   state => ({
-    theme: state.config.theme,
+    // theme: state.config.theme,
     language: state.config.language,
   }),
   dispatch => ({
@@ -23,8 +23,9 @@ import { InitialConfog } from './actions/config';
 export default class Setup extends Component {
   constructor(props) {
     super(props);
-    this.theme = new Theme();
+    // this.theme = new Theme();
     this.language = new Language();
+
     // 全屏组件，只支持Android
     if (Android) {
       this.restoreImmersive = () => {
@@ -57,27 +58,28 @@ export default class Setup extends Component {
     const { doInitialConfog } = this.props;
     return (
       Promise.all([
-        this.initialTheme(),
+        // this.initialTheme(),
         this.initialLanguage(),
       ])
         .then((arr) => {
-          const [theme, language] = arr;
-          doInitialConfog({ theme, language });
+          // theme,
+          const [language] = arr;
+          doInitialConfog({ language });
         })
         .catch(e => console.log('初始化配置失败：', e))
     );
   }
 
-  initialTheme = () => this.theme.getTheme().then(res => res)
+  // initialTheme = () => this.theme.getTheme().then(res => res)
 
   initialLanguage = () => this.language.getLanguage().then(res => res)
 
   render() {
     const {
       children,
-      theme: {
-        brandPrimary,
-      },
+      // theme: {
+      //   brandPrimary,
+      // },
     } = this.props;
     return (
       <Fragment>
@@ -94,13 +96,13 @@ export default class Setup extends Component {
 
 Setup.defaultProps = {
   doInitialConfog: () => {},
-  theme: {
-    brandPrimary: 'transparent',
-  },
+  // theme: {
+  //   brandPrimary: 'transparent',
+  // },
 };
 
 Setup.propTypes = {
   doInitialConfog: PropTypes.func,
-  theme: PropTypes.object,
+  // theme: PropTypes.object,
   children: PropTypes.element.isRequired,
 };

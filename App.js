@@ -8,7 +8,8 @@ import store from './src/store';
 import Resolution from './src/components/Resolution';
 import Setup from './src/Setup';
 
-const RouterWithRedux = connect(state => ({ theme: state.config.theme }))(Router);
+// state => ({ theme: state.config.theme })
+const RouterWithRedux = connect()(Router);
 
 const App = () => (
   <Provider store={store}>

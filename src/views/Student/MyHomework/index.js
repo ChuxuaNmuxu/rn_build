@@ -47,7 +47,7 @@ class MyHomework extends Component {
         </View>
 
         <Demo />
-        <Drag />
+        {/* <Drag /> */}
         {/* <View style={styles.time_list_box}>
           <ScrollView horizontal>
             <View style={{ flex: 1, flexDirection: 'row' }}>

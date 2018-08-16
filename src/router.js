@@ -39,7 +39,7 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
-      <Stack key="welcome">
+      <Stack key="welcome1">
         <Scene title="欢迎页面" hideNavBar key="welcome" component={Welcome} />
       </Stack>
       <Stack title="登陆" key="account">
@@ -81,7 +81,7 @@ const RouteMap = props => (
             navigationBarStyle={styles.examRecords_navigationBarStyle}
           >
             <Scene
-              key="myHomework"
+              key="examRecords"
               component={ExamRecords}
               title="选择日期范围"
             />
