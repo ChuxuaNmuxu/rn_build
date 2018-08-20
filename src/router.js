@@ -20,7 +20,6 @@ import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
 import TabBarIcon from './components/TabBarIcon';
 import Welcome from './views/Welcome';
-import ArrangeHomework from './views/Student/ArrangeHomework';
 import Demo from './views/Demo';
 // import SvgUri from './components/Svg';
 import homework from './public/img/homework.png';
@@ -93,14 +92,6 @@ const RouteMap = props => (
             <Scene key="wrongNotes" component={WrongNotes} />
           </Stack>
         </Tabs>
-      </Stack>
-      <Stack>
-        <Scene
-          key="arrangeHomework"
-          component={ArrangeHomework}
-          navigationBarStyle={styles.arrangeHomework_navigationBarStyle}
-          back
-        />
       </Stack>
       <Stack key="teacher">
         <Tabs key="teacher-tabs">

@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  TouchableOpacity,
-  Text,
 } from 'react-native';
 // import Theme from '../../components/Theme';
 import Language from '../../components/Language';
@@ -23,11 +21,6 @@ export default class Demo extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity
-          onPress={Actions.TabsStack}
-        >
-          <Text>跳回首页</Text>
-        </TouchableOpacity>
         {/* <Theme /> */}
         <Language />
       </View>

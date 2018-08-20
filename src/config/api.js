@@ -1,4 +1,4 @@
 
 export default {
-  baseApi: __DEV__ ? 'http://shitu.leanapp.cn/api' : 'http://shitu.leanapp.cn/api',
+  baseApi: __DEV__ ? 'dev-cjhms-api.ecaicn.com/api' : 'test-cjhms-api.ecaicn.com/api',
 };
