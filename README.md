@@ -18,9 +18,11 @@
 
 ## 环境安装与基础配置
 #### 1、RN配置（windows）
-- 参照官方文档： [中文](https://reactnative.cn/) [英文](https://facebook.github.io/react-native/)
+
+- 参照官方文档：[中文](https://reactnative.cn/) 、[英文](https://facebook.github.io/react-native/)
 - 工具：[Android Studio](https://developer.android.google.cn/studio/)
-#### 注意：
+
+###### 注意：
   > * 1、请严格按照文档流程配置每一步，否则运行项目时会出现很多问题
   > * 2、如果 [Genymotion](https://www.genymotion.com/download/) 模拟器安装报错或使用公司台式机，可以选择安装 [BlueStacks](http://www.bluestacks.cn/)。
   > * 安装完 BlueStacks 之后请执行：
