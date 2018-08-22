@@ -13,7 +13,8 @@
 
 ## 说明
  - eslint 继承 Airbnb 规范
----
+
+-----
 
 ## 环境安装与基础配置
 #### 1、RN配置（windows）
@@ -25,6 +26,7 @@
   > * 安装完 BlueStacks 之后请执行：
   > * 1、adb devices 如果没有查询到设备，请执行 adb connect 本机ip:5555。例如:10.0.3.117:5555
   > * 2、运行项目之后请用BlueStacks的浏览器访问 本机ip:8081如果能访问，而又报“<span style="color: red">Unable to load script from assets index. android bundle Make sure your bundle is packaged correctly or you're running a packager server</span>”错误，请按ctrl与window中间那个按键打开菜单，选择Dev Settings -> Debug server host & port for device 输入本机ip+8081端口
+
 #### 2、调试
 - 真机调试：终端执行： adb shell input keyevent 82 可以调出“开发者菜单”而不需要摇晃设备
 - [使用 React Native Debugger](http://beansoft.biz/2017/05/17/react-native-debugger-%E7%8B%AC%E7%AB%8B%E8%B0%83%E8%AF%95%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/) 查看RN dom树结构、redux和控制台
@@ -41,6 +43,7 @@
 - 执行 `npm run dev-ios` 命令即可
 
 ---
+
 ## npm命令说明
 #### 打开模拟器调试菜单
 - 执行 `npm run dev-menu` 命令即可
