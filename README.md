@@ -26,8 +26,8 @@
   > * 1、请严格按照文档流程配置每一步，否则运行项目时会出现很多问题
   > * 2、如果 [Genymotion](https://www.genymotion.com/download/) 模拟器安装报错或使用公司台式机，可以选择安装 [BlueStacks](http://www.bluestacks.cn/)。
   > * 安装完 BlueStacks 之后请执行：
-  > * 1、adb devices 如果没有查询到设备，请执行 adb connect 本机ip:5555。例如:10.0.3.117:5555
-  > * 2、运行项目之后请用BlueStacks的浏览器访问 本机ip:8081如果能访问，而又报“<span style="color: red">Unable to load script from assets index. android bundle Make sure your bundle is packaged correctly or you're running a packager server</span>”错误，请按ctrl与window中间那个按键打开菜单，选择Dev Settings -> Debug server host & port for device 输入本机ip+8081端口
+  > * 1、adb devices 如果没有查询到设备，请执行 ```adb connect 本机ip:5555```。例如:10.0.3.117:5555
+  > * 2、运行项目之后请用BlueStacks的浏览器访问```本机ip:8081```(如：10.0.3.117:8081)，若不能访问请访问```10.0.2.2:8081```若能访问而又报“```Unable to load script from assets index. android bundle Make sure your bundle is packaged correctly or you're running a packager server```”错误，请按ctrl与window中间那个按键打开菜单，选择Dev Settings -> Debug server host & port for device 输入本机ip+8081端口
 
 #### 2、调试
 - 真机调试：终端执行： adb shell input keyevent 82 可以调出“开发者菜单”而不需要摇晃设备
