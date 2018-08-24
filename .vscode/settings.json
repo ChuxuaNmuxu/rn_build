@@ -1,0 +1,15 @@
+{
+    "files.autoSave": "afterDelay",
+    "window.zoomLevel": 0,
+    "search.followSymlinks": false,
+    "gitlens.advanced.messages": {
+        "suppressShowKeyBindingsNotice": true
+    },
+    "eslint.autoFixOnSave": true,
+    "git.confirmSync": false,
+    "gitlens.historyExplorer.enabled": true,
+    "editor.minimap.enabled": false,
+    "explorer.confirmDelete": false,
+    "workbench.startupEditor": "newUntitledFile",
+    "files.eol": "\n",
+}
