@@ -12,4 +12,37 @@
     "explorer.confirmDelete": false,
     "workbench.startupEditor": "newUntitledFile",
     "files.eol": "\n",
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        {
+            "language": "html",
+            "autoFix": true
+        },
+        {
+            "language": "jsx",
+            "autoFix": true
+        },
+        {
+            "language": "js",
+            "autoFix": true
+        },
+        {
+            "language": "css",
+            "autoFix": true
+        },
+        {
+            "language": "scss",
+            "autoFix": true
+        },
+        {
+            "language": "sass",
+            "autoFix": true
+        },
+        {
+            "language": "less",
+            "autoFix": true
+        }
+    ],
+    "editor.tabSize": 2,
 }
