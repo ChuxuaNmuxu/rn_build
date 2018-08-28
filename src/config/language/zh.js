@@ -6,7 +6,12 @@ export default {
   wrongNotes: '错题本',
 
   // home
-  home_header_title: '任务',
+  home: {
+    header: {
+      title: '待计划任务：{{count}}项',
+    },
+    tip: '请把下列任务安排一个合适的时间段开始吧',
+  },
 
   // test
   changeToEnglish: '切换到英文',

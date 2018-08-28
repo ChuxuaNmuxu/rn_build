@@ -36,8 +36,8 @@ class MyHomework extends Component {
         style={styles.container}
       >
         <View style={[styles.header]}>
-          <I18nText style={styles.title}>home_header_title</I18nText>
-          <Text style={styles.small}>请把下列任务安排一个合适的时间段开始吧</Text>
+          <I18nText style={styles.title} option={{ count: 10 }}>home.header.title</I18nText>
+          <I18nText style={styles.small}>home.tip</I18nText>
         </View>
         <View style={styles.task_list_box}>
           <ScrollView horizontal style={styles.flex_1}>

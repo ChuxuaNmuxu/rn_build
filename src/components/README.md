@@ -42,3 +42,24 @@
 
 ---
 
+### I18nText 国际化
+1. 使用方法1使用封装的 I18nText
+ - 引入 import I18nText from 'xxx/components/I18nText';
+ - 使用 ```<I18nText style={styles.title} option={{ count: 10 }}>home.header.title</I18nText>```
+    - style：样式
+    - option：{ placeholder , defaultValue , defaults , locale , ... } 
+        - placeholder：变量，与翻译文件中的变量名相同。变量只能用```{{}}```或者```%{}```包裹。
+        ```
+        home: {
+            header: {
+                title: '待计划任务：{{count}}项',
+            }
+        }
+        ```
+        - 更多参数请查看[文档](https://github.com/fnando/i18n-js#setting-up)
+    - children：定义好的翻译文件对象，比如：home.header.title
+
+2. 使用方法2直接使用 react-native-i18n，引入初始化的 I18n 对象
+ - 引入 import I18n from 'xxx/config/language/I18n';
+ - 使用 ```<Text style={{styles.title}}>{I18n.t(home.header.title, {count: 10})}</Text>```
+
