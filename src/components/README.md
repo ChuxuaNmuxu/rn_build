@@ -51,9 +51,9 @@
         - placeholder：变量，与翻译文件中的变量名相同。变量只能用```{{}}```或者```%{}```包裹。
         ```
         home: {
-            header: {
-                title: '待计划任务：{{count}}项',
-            }
+                header: {
+                    title: '待计划任务：{{count}}项',
+                }
         }
         ```
         - 更多参数请查看[文档](https://github.com/fnando/i18n-js#setting-up)
