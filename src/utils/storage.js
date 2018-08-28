@@ -122,7 +122,7 @@ storage.Save = ({
   key,
   data,
   id,
-  expires = 1000 * 3600,
+  expires = null,
 }) => {
   const datas = {
     key, // 注意:请不要在key中使用_下划线符号!
