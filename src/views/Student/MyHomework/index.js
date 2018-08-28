@@ -21,6 +21,7 @@ import TimeItem from './TimeItem';
 import Drag from '../../../components/Drag';
 import launchScreen from '../../../../android/app/src/main/res/drawable-xhdpi/launch_screen.png';
 import Demo from '../../Demo';
+import I18nText from '../../../components/I18nText';
 
 class MyHomework extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class MyHomework extends Component {
         style={styles.container}
       >
         <View style={[styles.header]}>
-          <Text style={styles.title}>待计划任务：10项</Text>
+          <I18nText style={styles.title}>home_header_title</I18nText>
           <Text style={styles.small}>请把下列任务安排一个合适的时间段开始吧</Text>
         </View>
         <View style={styles.task_list_box}>

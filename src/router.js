@@ -39,9 +39,9 @@ const RouteMap = props => (
       key="modal"
     >
       <Stack key="welcome1">
-        <Scene title="欢迎页面" hideNavBar key="welcome" component={Welcome} />
+        <Scene title="welcome" hideNavBar key="welcome" component={Welcome} />
       </Stack>
-      <Stack title="登陆" key="account">
+      <Stack title="login" key="account">
         <Scene key="login" hideNavBar component={Login} />
       </Stack>
       <Stack key="student" hideNavBar>
@@ -62,7 +62,7 @@ const RouteMap = props => (
           icon={TabBarIcon}
         >
           <Stack
-            title="我的作业"
+            title="myHomework"
             key="myHomework1"
             image={homework}
             selectedImage="zuoye"
@@ -71,7 +71,7 @@ const RouteMap = props => (
             <Scene key="myHomework" component={MyHomework} />
           </Stack>
           <Stack
-            title="考试记录"
+            title="examRecords"
             key="examRecords"
             // image={<SvgUri height="40" width="40" source="examBook" />}
             selectedImage="zuoye"
@@ -85,10 +85,10 @@ const RouteMap = props => (
               title="选择日期范围"
             />
           </Stack>
-          <Stack title="作业记录" key="homeworkRecords1">
+          <Stack title="homeworkRecords" key="homeworkRecords1">
             <Scene key="homeworkRecords" component={HomeworkRecords} />
           </Stack>
-          <Stack title="错题本" key="wrongNotes1">
+          <Stack title="wrongNotes" key="wrongNotes1">
             <Scene key="wrongNotes" component={WrongNotes} />
           </Stack>
         </Tabs>
