@@ -14,12 +14,14 @@ const TabBarIcon = (props) => {
     selectedImage,
     image,
   } = props;
+  const color = focused ? '#30bf6c' : '#bfbfbf';
 
   const renderIcon = () => {
     const current = focused ? selectedImage : image;
+    console.log(20, current);
     switch (typeof current) {
       case 'string':
-        return <CIcon name={current} size={32} color="#fff" />;
+        return <CIcon name={current} size={46} color={color} />;
       case 'number':
         return (
           <Image
@@ -44,7 +46,7 @@ const TabBarIcon = (props) => {
       }
       <I18nText
         style={{
-          color: focused ? '#ffffff' : '#000000',
+          color,
           fontSize: 22,
         }}
       >

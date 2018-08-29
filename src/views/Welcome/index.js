@@ -21,18 +21,17 @@ class Welcome extends React.Component {
         } = JSON.parse(userinfo);
         switch (currentSchoolRole) {
           case 'STUDENT':
-            Actions.student();
+            Actions.Student();
             break;
           case 'TEACHER':
-            Actions.teacher();
+            Actions.Teacher();
             break;
           default:
             console.log('当前帐号不属于学生或教师', currentSchoolRole);
         }
       }
     }).catch(() => {
-      // Actions.login();
-      Actions.student();
+      Actions.Login();
     });
   }
 
