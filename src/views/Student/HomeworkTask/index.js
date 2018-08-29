@@ -46,7 +46,7 @@ class MyHomework extends Component {
             }
           </ScrollView>
         </View>
-
+        <View><CIcon name="zuoye2" size={32} color="red" /></View>
         <Demo />
         {/* <Drag /> */}
         {/* <View style={styles.time_list_box}>
