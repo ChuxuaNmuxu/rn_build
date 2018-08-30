@@ -41,7 +41,7 @@ const RouteMap = props => (
       <Stack key="Account">
         <Scene key="Login" hideNavBar component={Login} />
       </Stack>
-      <Stack key="Student" hideNavBar initial>
+      <Stack key="Student" hideNavBar>
         <Tabs
           key="StudentTabs"
           activeBackgroundColor="#fafafa" // 选中tabbar的背景色
@@ -105,7 +105,7 @@ const RouteMap = props => (
           <Scene title="作业" key="homework" component={Homework} />
         </Tabs>
       </Stack>
-      <Stack key="Demo1">
+      <Stack key="Demo1" initial>
         <Scene
           // title="demo"
           renderTitle={(
@@ -121,9 +121,9 @@ const RouteMap = props => (
             </View>
           )}
           leftTitle="回退"
-          rightTitle="前进"
+          rightTitle="前进到首页"
           onLeft={() => console.log('onLeft')}
-          onRight={() => console.log('onRight')}
+          onRight={Actions.HomeworkTask}
           titleStyle={{ color: 'white' }}
           // back // 显示返回按钮
           backTitle="后退标题"
