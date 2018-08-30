@@ -1,7 +1,14 @@
+.tabStyle{
+  border-top-color: red;
+  border-top-width: 1px;
+}
+
 .tabBarStyle {
   align-items: center;
   justify-content: center;
   height: 96px;
+  border-top-color: #e8e8e8;
+  border-top-width: 1px;
 }
 
 .problemRecords_titleStyle {
