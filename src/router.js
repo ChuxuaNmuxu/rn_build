@@ -48,9 +48,10 @@ const RouteMap = props => (
           inactiveBackgroundColor="#ffffff" // 未选中tabbar的背景色
           // activeTintColor="#4ECBFC" // 选中tabbar图标的颜色
           // inactiveTintColor="#aaa" // 未选中tabbar图标的颜色
-          // tabStyle={{ height: 20 }}
+          // tabStyle={styles.tabStyle} // 单个选项卡的样式
           tabBarPosition="bottom"
-          tabBarStyle={styles.tabBarStyle}
+          tabBarStyle={styles.tabBarStyle} // 标签栏样式，可以修改tabBarPosition为bottom时默认下划线样式
+          // animationEnabled={false} // 切换动画
           lazy
           wrap
           swipeEnabled
