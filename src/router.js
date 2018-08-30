@@ -21,9 +21,6 @@ import Homework from './views/Teacher/Homework';
 import TabBarIcon from './components/TabBarIcon';
 import Welcome from './views/Welcome';
 import Demo from './views/Demo';
-// import SvgUri from './components/Svg';
-import homework from './public/img/homework.png';
-import document from './public/img/document.png';
 import styles from './router.scss';
 
 const RouteMap = props => (

@@ -18,10 +18,9 @@ const TabBarIcon = (props) => {
 
   const renderIcon = () => {
     const current = focused ? selectedImage : image;
-    console.log(20, current);
     switch (typeof current) {
       case 'string':
-        return <CIcon name={current} size={46} color={color} />;
+        return <CIcon name={current} size={56} color={color} />;
       case 'number':
         return (
           <Image
