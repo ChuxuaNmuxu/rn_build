@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   ScrollView,
+  TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import styles from './style.scss';
 import TaskItem from './TaskItem';
@@ -18,8 +20,15 @@ class MyHomework extends Component {
     return (
       <View style={styles.container}>
         <View style={[styles.header]}>
-          <I18nText style={styles.title} option={{ count: 10 }}>home.header.title</I18nText>
-          <I18nText style={styles.small}>home.tip</I18nText>
+          <View style={styles.headle_left}>
+            <I18nText style={styles.title} option={{ count: 10 }}>home.header.title</I18nText>
+            <I18nText style={styles.small}>home.header.tip</I18nText>
+          </View>
+          <TouchableOpacity
+            onPress={BackHandler.exitApp}
+          >
+            <I18nText style={styles.headle}>home.header.headle</I18nText>
+          </TouchableOpacity>
         </View>
         <View style={styles.task_list_box}>
           <ScrollView horizontal style={styles.flex_1}>

@@ -6,9 +6,14 @@
 .header {
   flex-direction: row;
   align-items: center;
-  padding-left: 24px;
+  justify-content: space-between;
+  padding: 0 24px;
   background-color: #30bf6c;
   height: 96px;
+}
+
+.headle_left {
+  flex-direction: row;
 }
 
 .title {
@@ -21,6 +26,12 @@
   color: #fff;
   font-size: 21px;
 };
+
+.headle {
+  margin-right: 20px;
+  color: #fff;
+  font-size: 30px;
+}
 
 .task_list_box {
   margin-bottom: 12px;
