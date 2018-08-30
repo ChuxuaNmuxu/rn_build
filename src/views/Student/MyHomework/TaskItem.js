@@ -45,7 +45,7 @@ const Styles = StyleSheet.create({
 });
 
 const TaskItem = () => (
-  <TouchableNativeFeedback>
+  <TouchableNativeFeedback onPress={() => Actions.DoHomework()}>
     <View style={[Styles.flex_row, Styles.task]}>
       <View style={Styles.icon_box}>
         <CIcon style={Styles.icon} name="wendang1" size={25} />

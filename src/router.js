@@ -16,6 +16,8 @@ import MyHomework from './views/Student/MyHomework';
 import ExamRecords from './views/Student/ExamRecords';
 import HomeworkRecords from './views/Student/HomeworkRecords';
 import WrongNotes from './views/Student/WrongNotes';
+import DoHomework from './views/Student/DoHomework';
+
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
 import TabBarIcon from './components/TabBarIcon';
@@ -23,7 +25,7 @@ import Welcome from './views/Welcome';
 import Demo from './views/Demo';
 // import SvgUri from './components/Svg';
 import homework from './public/img/homework.png';
-import document from './public/img/document.png';
+// import document from './public/img/document.png';
 import styles from './router.scss';
 
 const RouteMap = props => (
@@ -92,6 +94,8 @@ const RouteMap = props => (
             <Scene key="wrongNotes" component={WrongNotes} />
           </Stack>
         </Tabs>
+
+        <Scene title="DoHomework" key="DoHomework" component={DoHomework} />
       </Stack>
       <Stack key="teacher">
         <Tabs key="teacher-tabs">

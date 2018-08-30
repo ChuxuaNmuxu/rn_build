@@ -1,0 +1,59 @@
+import React from 'react';
+import { View, Text } from 'react-native';
+import PropTypes from 'prop-types';
+import { handleFormattingTime } from '../../../../utils/help';
+import styles from './Timer.scss';
+
+class Timer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentTime: 0,
+    };
+    this.timeSetInterval = null;
+  }
+
+  componentDidMount() {
+    this.timeSetInterval = setInterval(() => {
+      const { currentTime } = this.state;
+      this.setState({
+        currentTime: currentTime + 1,
+      });
+    }, 1000);
+  }
+
+  componentWillUnmount() { // 离开页面时清除计时器
+    global.clearInterval(this.timeSetInterval);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    console.log(111, prevState.startTime);
+    console.log(222, nextProps.startTime);
+    if (nextProps.startTime !== prevState.startTime) {
+      return {
+        currentTime: nextProps.startTime,
+      };
+    }
+    return null;
+  }
+
+
+  getTimer = () => { // 供父组件调用 返回当前计时
+    const { currentTime } = this.state;
+    return currentTime;
+  }
+
+  render() {
+    const { currentTime } = this.state;
+    console.log(789, currentTime);
+    return (
+      <Text style={styles.doHomeworkTime}>计时{ handleFormattingTime(currentTime) }</Text>
+    );
+  }
+}
+
+Timer.propTypes = {
+  startTime: PropTypes.number.isRequired,
+};
+
+export default Timer;
