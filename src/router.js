@@ -2,6 +2,7 @@ import React from 'react';
 import {
   View,
   Text,
+  // TouchableOpacity,
 } from 'react-native';
 import {
   Scene,
@@ -107,26 +108,35 @@ const RouteMap = props => (
       </Stack>
       <Stack key="Demo1" initial>
         <Scene
-          // title="demo"
+          key="Demo"
+          component={Demo}
           renderTitle={(
             <View style={styles.demo_renderTitle_titleBox}>
               <Text style={styles.demo_renderTitle_title}>自定义标题</Text>
             </View>
           )}
-          key="Demo"
-          component={Demo}
-          renderLeftButton={(
-            <View style={styles.demo_renderLeftButton_box}>
-              <Text style={styles.demo_renderLeftButton_text}>111</Text>
-            </View>
-          )}
-          leftTitle="回退"
-          rightTitle="前进到首页"
+          // renderLeftButton={(
+          //   <TouchableOpacity onPress={() => console.log('左边自定义')}>
+          //     <View style={styles.demo_renderLeftButton_box}>
+          //       <Text style={styles.demo_renderLeftButton_text}>左边自定义</Text>
+          //     </View>
+          //   </TouchableOpacity>
+          // )}
+          // renderRightButton={(
+          //   <TouchableOpacity onPress={() => console.log('右边自定义')}>
+          //     <View style={styles.demo_renderLeftButton_box}>
+          //       <Text style={styles.demo_renderLeftButton_text}>右边自定义</Text>
+          //     </View>
+          //   </TouchableOpacity>
+          // )}
+          // title="标题"
+          leftTitle="左边 -> 回退"
+          rightTitle="右边 -> 前进到首页"
           onLeft={() => console.log('onLeft')}
-          onRight={Actions.HomeworkTask}
+          onRight={() => Actions.Student()}
           titleStyle={{ color: 'white' }}
           // back // 显示返回按钮
-          backTitle="后退标题"
+          // backTitle="后退标题"
           navBarButtonColor="#fff" // 设置返回按颜色
           navigationBarStyle={styles.demo_navigationBarStyle}
         />
