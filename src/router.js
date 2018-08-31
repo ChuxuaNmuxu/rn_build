@@ -12,9 +12,9 @@ import {
   Reducer,
 } from 'react-native-router-flux';
 import PropTypes from 'prop-types';
-import MyHomework from './views/Student/MyHomework';
-import ExamRecords from './views/Student/ExamRecords';
-import HomeworkRecords from './views/Student/HomeworkRecords';
+import HomeworkTask from './views/Student/HomeworkTask';
+import ProblemRecords from './views/Student/ProblemRecords';
+import My from './views/Student/My';
 import WrongNotes from './views/Student/WrongNotes';
 import DoHomework from './views/Student/DoHomework';
 
@@ -23,9 +23,6 @@ import Homework from './views/Teacher/Homework';
 import TabBarIcon from './components/TabBarIcon';
 import Welcome from './views/Welcome';
 import Demo from './views/Demo';
-// import SvgUri from './components/Svg';
-import homework from './public/img/homework.png';
-// import document from './public/img/document.png';
 import styles from './router.scss';
 
 const RouteMap = props => (
@@ -40,22 +37,23 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
-      <Stack key="welcome1">
-        <Scene title="welcome" hideNavBar key="welcome" component={Welcome} />
+      <Stack key="Welcome1">
+        <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
       </Stack>
-      <Stack title="login" key="account">
-        <Scene key="login" hideNavBar component={Login} />
+      <Stack key="Account">
+        <Scene key="Login" hideNavBar component={Login} />
       </Stack>
-      <Stack key="student" hideNavBar>
+      <Stack key="Student" hideNavBar initial>
         <Tabs
-          key="student-tabs"
-          activeBackgroundColor="#2ea460" // 选中tabbar的背景色
-          inactiveBackgroundColor="#30bf6c" // 未选中tabbar的背景色
+          key="StudentTabs"
+          activeBackgroundColor="#fafafa" // 选中tabbar的背景色
+          inactiveBackgroundColor="#ffffff" // 未选中tabbar的背景色
           // activeTintColor="#4ECBFC" // 选中tabbar图标的颜色
           // inactiveTintColor="#aaa" // 未选中tabbar图标的颜色
-          // tabStyle={{ height: 20 }}
+          // tabStyle={styles.tabStyle} // 单个选项卡的样式
           tabBarPosition="bottom"
-          tabBarStyle={styles.tabBarStyle}
+          tabBarStyle={styles.tabBarStyle} // 标签栏样式，可以修改tabBarPosition为bottom时默认下划线样式
+          // animationEnabled={false} // 切换动画
           lazy
           wrap
           swipeEnabled
@@ -64,45 +62,54 @@ const RouteMap = props => (
           icon={TabBarIcon}
         >
           <Stack
-            title="myHomework"
-            key="myHomework1"
-            image={homework}
-            selectedImage="zuoye"
+            title="homeworkTask"
+            key="HomeworkTask1"
+            image="zuoye2"
+            selectedImage="zuoye2"
             hideNavBar
           >
-            <Scene key="myHomework" component={MyHomework} />
+            <Scene key="HomeworkTask" component={HomeworkTask} />
           </Stack>
           <Stack
-            title="examRecords"
-            key="examRecords"
-            // image={<SvgUri height="40" width="40" source="examBook" />}
-            selectedImage="zuoye"
-            image={homework}
-            titleStyle={styles.examRecords_titleStyle}
-            navigationBarStyle={styles.examRecords_navigationBarStyle}
+            title="problemRecords"
+            key="ProblemRecords1"
+            image="jilu"
+            selectedImage="jilu"
+            hideNavBar
           >
             <Scene
-              key="examRecords"
-              component={ExamRecords}
-              title="选择日期范围"
+              key="ProblemRecords"
+              component={ProblemRecords}
             />
           </Stack>
-          <Stack title="homeworkRecords" key="homeworkRecords1">
-            <Scene key="homeworkRecords" component={HomeworkRecords} />
+          <Stack
+            title="wrongNotes"
+            key="WrongNotes1"
+            image="cuotiben1"
+            selectedImage="cuotiben1"
+            hideNavBar
+          >
+            <Scene key="WrongNotes" component={WrongNotes} />
           </Stack>
-          <Stack title="wrongNotes" key="wrongNotes1">
-            <Scene key="wrongNotes" component={WrongNotes} />
+          <Stack
+            title="my"
+            key="My1"
+            image="wodedangxuan"
+            selectedImage="wodedangxuan"
+            hideNavBar
+          >
+            <Scene key="My" component={My} />
           </Stack>
         </Tabs>
 
-        <Scene title="DoHomework" key="DoHomework" component={DoHomework} />
+        <Scene key="DoHomework" component={DoHomework} />
       </Stack>
-      <Stack key="teacher">
-        <Tabs key="teacher-tabs">
+      <Stack key="Teacher">
+        <Tabs key="TeacherTabs">
           <Scene title="作业" key="homework" component={Homework} />
         </Tabs>
       </Stack>
-      <Stack key="demo">
+      <Stack key="Demo1">
         <Scene
           // title="demo"
           renderTitle={(
@@ -110,7 +117,7 @@ const RouteMap = props => (
               <Text style={styles.demo_renderTitle_title}>自定义标题</Text>
             </View>
           )}
-          key="demo"
+          key="Demo"
           component={Demo}
           renderLeftButton={(
             <View style={styles.demo_renderLeftButton_box}>

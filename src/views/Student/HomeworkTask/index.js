@@ -1,26 +1,11 @@
 import React, { Component } from 'react';
 import {
-  Button,
-} from 'antd-mobile-rn';
-import {
-  Text,
   View,
-  Image,
-  stylesheet,
   ScrollView,
-  ImageBackground,
-  Modal,
-  Alert,
 } from 'react-native';
-import SvgUri from '../../../components/Svg';
-import CIcon from '../../../components/Icon';
 import styles from './style.scss';
-import docIcon from '../../../public/img/document.png';
 import TaskItem from './TaskItem';
 import TimeItem from './TimeItem';
-import Drag from '../../../components/Drag';
-import launchScreen from '../../../../android/app/src/main/res/drawable-xhdpi/launch_screen.png';
-import Demo from '../../Demo';
 import I18nText from '../../../components/I18nText';
 
 class MyHomework extends Component {
@@ -31,10 +16,7 @@ class MyHomework extends Component {
 
   render() {
     return (
-      <ImageBackground
-        source={launchScreen}
-        style={styles.container}
-      >
+      <View style={styles.container}>
         <View style={[styles.header]}>
           <I18nText style={styles.title} option={{ count: 10 }}>home.header.title</I18nText>
           <I18nText style={styles.small}>home.tip</I18nText>
@@ -46,10 +28,8 @@ class MyHomework extends Component {
             }
           </ScrollView>
         </View>
-
-        <Demo />
         {/* <Drag /> */}
-        {/* <View style={styles.time_list_box}>
+        <View style={styles.time_list_box}>
           <ScrollView horizontal>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               {
@@ -57,8 +37,8 @@ class MyHomework extends Component {
               }
             </View>
           </ScrollView>
-        </View> */}
-      </ImageBackground>
+        </View>
+      </View>
     );
   }
 }

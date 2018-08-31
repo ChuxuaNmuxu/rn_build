@@ -27,8 +27,6 @@ class Timer extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log(111, prevState.startTime);
-    console.log(222, nextProps.startTime);
     if (nextProps.startTime !== prevState.startTime) {
       return {
         currentTime: nextProps.startTime,
@@ -45,7 +43,6 @@ class Timer extends React.Component {
 
   render() {
     const { currentTime } = this.state;
-    console.log(789, currentTime);
     return (
       <Text style={styles.doHomeworkTime}>计时{ handleFormattingTime(currentTime) }</Text>
     );

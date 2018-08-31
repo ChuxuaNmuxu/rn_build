@@ -1,15 +1,22 @@
+.tabStyle{
+  border-top-color: red;
+  border-top-width: 1px;
+}
+
 .tabBarStyle {
   align-items: center;
   justify-content: center;
-  height: 80px;
+  height: 96px;
+  border-top-color: #e8e8e8;
+  border-top-width: 1px;
 }
 
-.examRecords_titleStyle {
+.problemRecords_titleStyle {
   color: #000;
   align-self: center;
 }
 
-.examRecords_navigationBarStyle {
+.problemRecords_navigationBarStyle {
   background-color: green; 
   height: 60px;
 }

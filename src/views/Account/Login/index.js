@@ -13,7 +13,6 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fetchData: {},
       password: '',
       username: '',
     };
@@ -24,6 +23,7 @@ export default class Login extends Component {
     const {
       userInfo,
     } = res;
+    console.log(res);
     return storage.save({
       key: token,
       data: {
@@ -45,10 +45,9 @@ export default class Login extends Component {
     })
       .then((res) => {
         const {
-          code,
           data,
         } = res;
-        if (!(code === 0)) return;
+        console.log('data', res);
         const {
           userInfo: {
             currentSchoolRole,
@@ -61,7 +60,7 @@ export default class Login extends Component {
         switch (currentSchoolRole) {
           case 'STUDENT':
             this.savaToken(data).then(() => {
-              Actions.student();
+              Actions.Student();
             });
             break;
           case 'TEACHER':
@@ -70,10 +69,6 @@ export default class Login extends Component {
           default:
             console.log('请使用学生或老师账号登陆');
         }
-
-        this.setState({
-          fetchData: res,
-        });
       }).catch(err => console.log(77, err));
   }
 
@@ -84,9 +79,6 @@ export default class Login extends Component {
   }
 
   render() {
-    const {
-      fetchData,
-    } = this.state;
     return (
       <Fragment>
         <View>
@@ -124,22 +116,8 @@ export default class Login extends Component {
               登陆
               </Button>
             </List.Item>
-
-            <List.Item>
-              <Button
-                onClick={this.clearToken}
-                type="primary"
-              >
-                清除token
-              </Button>
-            </List.Item>
           </List>
         </View>
-        <Text>
-          {
-            JSON.stringify(fetchData)
-          }
-        </Text>
       </Fragment>
     );
   }

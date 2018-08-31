@@ -1,9 +1,9 @@
 export default {
   // tab导航
-  myHomework: '我的作业',
-  examRecords: '考试记录',
-  homeworkRecords: '作业记录',
+  homeworkTask: '作业任务',
+  problemRecords: '做题记录',
   wrongNotes: '错题本',
+  my: '我的',
 
   // home
   home: {

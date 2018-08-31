@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 // import { PropTypes } from 'prop-types';
-import { Button } from 'antd-mobile-rn';
 import styles from './doHomework.scss';
 import CIcon from '../../../components/Icon';
+import { Button } from '../../../components/Icon';
 import Timer from './Components/Timer';
 
 class DoHomework extends React.Component {
@@ -34,7 +34,7 @@ class DoHomework extends React.Component {
       <View>
         <View style={styles.doHomeworkHeader}>
           <View style={{ width: '20%', height: '100%' }}>
-            <CIcon style={styles.icon} name="jiantou-copy-copy" onPress={() => Actions.myHomework()} />
+            <CIcon style={styles.icon} name="jiantou-copy-copy" onPress={() => Actions.HomeworkTask()} />
           </View>
           <View style={{ width: '60%', height: '100%' }}>
             <Text style={styles.doHomeworkTitle}>作业名称</Text>
@@ -46,10 +46,12 @@ class DoHomework extends React.Component {
         <View style={styles.questionOrder}>
           <Text style={styles.totalQuestion}>
             <Text style={styles.currentIndex}>1</Text>
-              /12
+            /12
           </Text>
           <View style={styles.submitBox}>
-            <Button style={styles.submitBtn}>提交</Button>
+            <Button style={styles.submitBtn}>
+              <Text style={styles.btnText}>提交</Text>
+            </Button>
           </View>
         </View>
         <View style={styles.doHomeworkMain}>
