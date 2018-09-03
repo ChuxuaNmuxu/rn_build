@@ -1,0 +1,49 @@
+.tabStyle{
+  border-top-color: red;
+  border-top-width: 1px;
+}
+
+.tabBarStyle {
+  align-items: center;
+  justify-content: center;
+  height: 96px;
+  border-top-color: #e8e8e8;
+  border-top-width: 1px;
+}
+
+.problemRecords_titleStyle {
+  color: #000;
+  align-self: center;
+}
+
+.problemRecords_navigationBarStyle {
+  background-color: green; 
+  height: 60px;
+}
+
+.arrangeHomework_navigationBarStyle {
+  background-color: #30bf6c;
+  height: 96px; 
+}
+
+.demo_renderTitle_titleBox {
+  flex: 1;
+  align-items: center;
+}
+
+.demo_renderTitle_title {
+  color: #fff;
+} 
+
+.demo_renderLeftButton_box {
+  flex-direction: row;
+}
+
+.demo_renderLeftButton_text {
+  color: #fff;
+}
+
+.demo_navigationBarStyle {
+  background-color: green;
+  height: 60
+}

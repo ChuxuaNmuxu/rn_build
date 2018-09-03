@@ -1,0 +1,48 @@
+{
+    "files.autoSave": "afterDelay",
+    "window.zoomLevel": 0,
+    "search.followSymlinks": false,
+    "gitlens.advanced.messages": {
+        "suppressShowKeyBindingsNotice": true
+    },
+    "eslint.autoFixOnSave": true,
+    "git.confirmSync": false,
+    "gitlens.historyExplorer.enabled": true,
+    "editor.minimap.enabled": false,
+    "explorer.confirmDelete": false,
+    "workbench.startupEditor": "newUntitledFile",
+    "files.eol": "\r\n",
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        {
+            "language": "html",
+            "autoFix": true
+        },
+        {
+            "language": "jsx",
+            "autoFix": true
+        },
+        {
+            "language": "js",
+            "autoFix": true
+        },
+        {
+            "language": "css",
+            "autoFix": true
+        },
+        {
+            "language": "scss",
+            "autoFix": true
+        },
+        {
+            "language": "sass",
+            "autoFix": true
+        },
+        {
+            "language": "less",
+            "autoFix": true
+        }
+    ],
+    "editor.tabSize": 2,
+}
