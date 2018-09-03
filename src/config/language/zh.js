@@ -9,8 +9,9 @@ export default {
   home: {
     header: {
       title: '待计划任务：{{count}}项',
+      tip: '请把下列任务安排一个合适的时间段开始吧',
+      headle: '退出',
     },
-    tip: '请把下列任务安排一个合适的时间段开始吧',
   },
 
   // test
