@@ -3,7 +3,7 @@ import {
   InitialConfog,
   // ChangeTheme,
   ChangeLanguage,
-} from '../actions/config';
+} from '../../actions/config';
 
 const initialState = {
   // theme: {},
