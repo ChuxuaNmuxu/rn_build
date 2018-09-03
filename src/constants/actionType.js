@@ -14,3 +14,4 @@ export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
  * ---------------公共组件ACTIONS-----------------------
  */
 export const COMMON_MODAL_OPPEN_OR_CLOSE = 'COMMON_MODAL_OPPEN_OR_CLOSE';
+export const COMMON_MODAL_OPPEN_OR_CLOSE_ = 'COMMON_MODAL_OPPEN_OR_CLOSE';
