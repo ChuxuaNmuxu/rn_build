@@ -1,127 +1,103 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   Text,
   View,
-  Animated,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
-import Swiper from 'react-native-swiper';
-// import * as Animatable from 'react-native-animatable';
+import styles from './index.scss';
+// import Swiper from 'react-native-swiper';
+import FilterBox from './Components/filterBox';
+import RecordCard from './Components/recordCard';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  wrapper: {
-  },
-  slide1: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#9DD6EB',
-  },
-  slide2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#97CAE5',
-  },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
-  },
-  text: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-});
-
-export default class Test3 extends Component {
+class ProblemRecords extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      anim: new Animated.Value(0),
-      // animation: 'shake',
+      currentRecordType: 0, // 默认为作业记录
+      recordData: [{ // 记录的数据
+        id: '0',
+        subjectName: '语文',
+        title: '语文作业',
+        accuracy: '0.5882',
+        resultRead: '0',
+        publishTime: '2018-08-16T11:27:09+08:00',
+      }, {
+        id: '1',
+        subjectName: '生物',
+        title: '生物作业',
+        accuracy: '0.4555',
+        resultRead: '1',
+        publishTime: '2018-08-16T11:27:09+08:00',
+      }, {
+        id: '2',
+        subjectName: '化学',
+        title: '化学作业',
+        accuracy: '0.9866',
+        resultRead: '0',
+        publishTime: '2018-08-16T11:27:09+08:00',
+      }, {
+        id: '3',
+        subjectName: '英语',
+        title: '英语作业',
+        accuracy: '0.2323',
+        resultRead: '1',
+        publishTime: '2018-09-03T11:27:09+08:00',
+      }, {
+        id: '4',
+        subjectName: '音乐',
+        title: '音乐作业',
+        accuracy: '1',
+        resultRead: '1',
+        publishTime: '2018-09-03T11:27:09+08:00',
+      }],
     };
-    this.total = 0;
   }
 
   componentDidMount() {
-    this.shake();
   }
 
-  onIndexChanged = (e) => {
-    console.log(54, e);
-    // if (e === 1) {
-    //   this.setState({
-    //     animation: 'shake',
-    //   });
-    // }
+  // 切换作业记录和考试记录
+  switchRecord = (type) => {
+    this.setState({
+      currentRecordType: type,
+    });
   }
-
-  onPageScrollStateChanged = (e) => {
-    console.log(e);
-  }
-
-  onAnimationEnd = (e) => {
-    console.log(62, e);
-    // this.setState({
-    //   animation: null,
-    // });
-  }
-
-  shake = () => {
-    Animated.sequence([
-      Animated.timing(this.state.anim, { toValue: 5, duration: 5 }),
-      Animated.timing(this.state.anim, { toValue: -5, duration: 5 }),
-      Animated.timing(this.state.anim, { toValue: 0, duration: 5 }),
-    ]).start(
-      () => {
-        if (this.total < 40) {
-          this.total += 1;
-          this.shake();
-        } else {
-          this.total = 0;
-        }
-      },
-    );
-  };
 
   render() {
+    const { currentRecordType, recordData } = this.state;
     return (
-      <View style={styles.container}>
-        <Swiper
-          loop={false}
-          showsPagination={false}
-          // scrollEnabled={false}
-          onIndexChanged={this.onIndexChanged}
-          onPageScrollStateChanged={this.onPageScrollStateChanged}
-        >
-          <Animated.View
-            // animation={this.state.animation}
-            // onAnimationEnd={this.onAnimationEnd}
-            style={[{ flex: 1 }, { left: this.state.anim }]}
+      <View style={styles.recordsContainer}>
+        <View style={styles.recordsSwitch}>
+          <TouchableOpacity
+            style={[styles.recordBox, styles.homeWorkRecord, (currentRecordType === 0 && styles.currentRecord)]}
+            onPress={() => this.switchRecord(0)}
           >
-            <View style={styles.slide1}>
-              <TouchableOpacity onPress={this.shake}>
-                <Text style={styles.text}>Hello Swiper</Text>
-              </TouchableOpacity>
-            </View>
-          </Animated.View>
-
-          <View style={styles.slide2}>
-            <Text style={styles.text}>Beautiful</Text>
-          </View>
-
-          <View style={styles.slide3}>
-            <Text style={styles.text}>And simple</Text>
-          </View>
-        </Swiper>
+            <Text style={[styles.recordText, styles.homeWorkText, (currentRecordType === 0 && styles.currentText)]}>
+              作业记录
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.recordBox, styles.examRecord, (currentRecordType === 1 && styles.currentRecord)]}
+            onPress={() => this.switchRecord(1)}
+          >
+            <Text style={[styles.recordText, styles.examText, (currentRecordType === 1 && styles.currentText)]}>
+              考试记录
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <FilterBox />
+        <View style={styles.cardBox}>
+          <ScrollView overScrollMode="auto">
+            {
+              recordData.map(item => <RecordCard key={item.id} datas={item} />)
+            }
+            <Text>加载完成</Text>
+          </ScrollView>
+        </View>
       </View>
     );
   }
 }
+
+export default ProblemRecords;

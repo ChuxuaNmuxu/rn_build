@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 // import { PropTypes } from 'prop-types';
 import styles from './doHomework.scss';
 import CIcon from '../../../components/Icon';
 import Timer from './Components/Timer';
 
-class DoHomework extends React.Component {
+class DoHomework extends Component {
   constructor(props) {
     super(props);
     this.state = {
