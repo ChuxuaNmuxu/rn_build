@@ -5,7 +5,7 @@ import {
   INITIAL_CONFIG,
   // CHANGE_THEME,
   CHANGE_LANGUAGE,
-} from '../constants/action';
+} from '../constants/actionType';
 
 export const InitialConfog = createAction(INITIAL_CONFIG);
 // export const ChangeTheme = createAction(CHANGE_THEME);

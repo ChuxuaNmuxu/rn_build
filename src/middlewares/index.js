@@ -1,7 +1,7 @@
-import saga from './redux-saga';
+import rootSaga from './sagas';
 import logger from './redux-logger';
 
 export {
-  saga,
+  rootSaga,
   logger,
 };
