@@ -1,6 +1,6 @@
 {
     "files.autoSave": "afterDelay",
-    "window.zoomLevel": 0,
+    "window.zoomLevel": 2,
     "search.followSymlinks": false,
     "gitlens.advanced.messages": {
         "suppressShowKeyBindingsNotice": true
