@@ -29,6 +29,7 @@ module.exports = {
       "no-underscore-dangle": 0,
       "guard-for-in": 0,
       "react/jsx-one-expression-per-line": 0,
-      "linebreak-style": 0
+      "linebreak-style": 0,
+      "no-plusplus": 0,
     }
   }
