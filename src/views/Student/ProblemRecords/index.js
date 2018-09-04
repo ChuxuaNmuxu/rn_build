@@ -3,7 +3,7 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ScrollView,
+  FlatList,
 } from 'react-native';
 import styles from './index.scss';
 // import Swiper from 'react-native-swiper';
@@ -87,14 +87,14 @@ class ProblemRecords extends Component {
           </TouchableOpacity>
         </View>
         <FilterBox />
-        <View style={styles.cardBox}>
-          <ScrollView overScrollMode="auto">
+        <FlatList>
+          <View style={styles.cardBox}>
             {
               recordData.map(item => <RecordCard key={item.id} datas={item} />)
             }
-            <Text>加载完成</Text>
-          </ScrollView>
-        </View>
+            <Text style={styles.loadedText}>加载完成111</Text>
+          </View>
+        </FlatList>
       </View>
     );
   }

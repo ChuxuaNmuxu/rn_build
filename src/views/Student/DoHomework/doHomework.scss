@@ -7,6 +7,11 @@
   height: 72px;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
+
+.headerItem {
+  justify-content: center;
 }
 
 .icon {
@@ -14,14 +19,12 @@
   color: #fff;
   text-align: left;
   margin-left: 24px;
-  line-height: 72px;
 }
 
 .doHomeworkTitle {
   color: #fff;
   font-size: 24px;
   text-align: center;
-  line-height: 72px;
 }
 
 .questionOrder {
@@ -53,13 +56,13 @@
   border-radius: 50px;
   margin-right: 24px;
   margin-top: 16px;
+  justify-content: center;
+  align-items: center;
 }
 
 .btnText {
-  text-align: center;
   font-size: 24px;
   color: #30bf6c;
-  line-height: 54px;
 }
 
 .doHomeworkMain {

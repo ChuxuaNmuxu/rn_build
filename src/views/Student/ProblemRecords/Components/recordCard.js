@@ -71,23 +71,29 @@ class RecordCard extends Component {
   render() {
     const { datas } = this.props;
     const accuracyData = `${Math.round(parseInt(datas.accuracy) * 100)}%`;
+    const randomNum = Math.random();
     return (
       <View style={[styles.recordCard]}>
         <View style={styles.cardLeft}>
           <View style={styles.subjectPic}>
             <CIcon style={styles.subjectIcon} name={getIconNameFun(datas.subjectName)} />
           </View>
-          <View>
+          <View style={styles.subjectInfo}>
             <Text style={[styles.subjectName]} ellipsizeMode="tail" numberOfLines={1}>{datas.title}</Text>
             <Text style={styles.otherInfo}>正确率：{accuracyData}</Text>
             <Text style={styles.otherInfo}>{formatTimeToshow(datas.publishTime)}</Text>
           </View>
         </View>
         <View style={styles.cardRight}>
-          <TouchableOpacity style={styles.filterMoreBox} onPress={() => this.toReviseFun()}>
-            <Text style={styles.filterMoreText}>
-              去订正
-            </Text>
+          <TouchableOpacity
+            disabled={randomNum > 0.5}
+            onPress={() => this.toReviseFun()}
+          >
+            <View style={[styles.toReviseBox, randomNum > 0.5 && styles.disabledBox]}>
+              <Text style={[styles.toReviseText, randomNum > 0.5 && styles.disabledText]}>
+                去订正
+              </Text>
+            </View>
           </TouchableOpacity>
           {
             datas.resultRead === '1' && (

@@ -37,13 +37,13 @@ class DoHomework extends Component {
     return (
       <View style={styles.containers}>
         <View style={styles.doHomeworkHeader}>
-          <View style={{ width: '20%', height: '100%' }}>
+          <View style={styles.headerItem}>
             <CIcon style={styles.icon} name="jiantou-copy-copy" onPress={() => Actions.HomeworkTask()} />
           </View>
-          <View style={{ width: '60%', height: '100%' }}>
+          <View style={styles.headerItem}>
             <Text style={styles.doHomeworkTitle}>作业名称</Text>
           </View>
-          <View style={{ width: '20%', height: '100%' }}>
+          <View style={styles.headerItem}>
             <Timer startTime={startTime} />
           </View>
         </View>

@@ -16,6 +16,8 @@
 
 .subjectItem {
   width: 10%;
+  justify-content: center;
+  align-items: center;
 }
 
 .currentItem {
@@ -25,8 +27,6 @@
 }
 
 .filterText {
-  text-align: center;
-  line-height: 70px;
   font-size: 24px;
   color: #999;
 }
@@ -37,18 +37,18 @@
 
 .filterMoreBox {
   display: flex;
+  flex-direction: row;
   margin-right: 24px;
+  justify-content: center;
+  align-items: center;
 }
 
 .filterMoreText {
-  line-height: 70px;
   font-size: 24px;
   color: #30bf6c;
-  flex: 4;
 }
 
 .icon {
   width: 50%;
-  flex: 1;
   font-size: 24px;
 }
