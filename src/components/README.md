@@ -63,3 +63,56 @@
  - 引入 import I18n from 'xxx/config/language/I18n';
  - 使用 ```<Text style={{styles.title}}>{I18n.t(home.header.title, {count: 10})}</Text>```
 
+
+### 下拉刷新功能
+##### 下拉刷新组件自己封装的不太好用，决定还是使用gitHub上的一个下拉刷新/上拉加载组件，目前可以暂时满足需求
+
+###### 注意：虽然该插件库提供了PullView和PullList两个可以实现下拉刷新的组件，但是PullList是针对listView进行封装的，现在的react native版本已经没有这个标签了，固只能使用PullView组件，它是基于ScrollView封装的组件，且它支持refreshcontrol的相关属性，另外PullView的外层容器要加上 ``` flex:1 ``` 才不容易出问题
+- ``` onRefresh ```: 开始刷新时调用的方法
+- ``` refreshing ```:  指示是否正在刷新
+
+1. 使用方法
+ - 引入 ``` import { PullView } from 'react-native-pull'; ```
+ - 使用例子 ```
+        onPullRelease(resolve) {
+            // 比如请求数据的操作，请求到之后执行resolve()即可
+            setTimeout(() => {
+                // 回到原始状态
+                resolve();
+            }, 3000);
+        }
+        topIndicatorRender(pulling, pullok, pullrelease) {
+            // 在下拉到完成时，此方法是不停地调用的
+            // 下拉：pulling=true,pullok=false,pullrelease=false
+            // 到达临界点：pulling=false,pullok=true,pullrelease=false
+            // 释放：pulling=false,pullok=false,pullrelease=true
+        }
+        topIndicatorRender = (pulling, pullok, pullrelease) => {
+            return (
+            <View style={{
+                flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 60,
+            }}
+            >
+                <ActivityIndicator size="small" color="gray" />
+                <Text>正在刷新</Text>
+            </View>
+            );
+        }
+        <PullView
+            style={} 
+            onPullRelease={this.onPullRelease}
+            onPullOk={this.onPullOk}
+            onPulling={this.onPulling}
+            topIndicatorRender={this.topIndicatorRender}
+        >
+            需要被下拉刷新的盒子放这
+        </PullView>
+
+        ```
+    - style：样式
+    - onPulling （只要拉倒那个临界点，就会调用该方法）处于pulling状态时执行的方法
+    - onPullOk （下拉时调用）处于pullok状态时执行的方法
+    - onPullRelease （松开手指刷新调用的函数）处于pullrelease状态时执行的方法，接受一个参数：resolve，最后执行完操作后应该调用resolve()来回到原始状态，即刷新完毕隐藏loading
+    - topIndicatorRender 顶部刷新指示组件的渲染方法, 接受4个参数: pulling, pullok, pullrelease，gesturePosition，你可以使用gesturePosition定义动画头部  
+    - topIndicatorHeight 顶部刷新指示组件的高度, 若定义了topIndicatorRender则同时需要此属性，即临界点的高度
+         - 更多参数请查看[文档](https://github.com/greatbsky/react-native-pull/wiki)      
