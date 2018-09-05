@@ -11,10 +11,16 @@ $checkedColor: #30bf6c;
   align-items: center;
 }
 
-.icon {
+.icon_wrap {
   margin-right: 10px;
   @include circular(22px);
   border: 2px solid #333333;
+}
+
+.icon {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 }
 
 .text {
@@ -22,7 +28,7 @@ $checkedColor: #30bf6c;
   color: #999999;
 }
 
-.checked_view {
+.checked_icon_wrap {
   justify-content: center;
   align-items: center;
   border-color: $checkedColor;
@@ -32,7 +38,7 @@ $checkedColor: #30bf6c;
   color: $checkedColor;
 }
 
-.checked_view_child {
+.checked_icon {
   @include circular(14px);
   background-color: $checkedColor;
 }
