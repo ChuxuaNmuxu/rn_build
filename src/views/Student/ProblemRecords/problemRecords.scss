@@ -1,5 +1,6 @@
 .recordsContainer {
   background-color: #fafafa;
+  flex: 1;
 }
 .recordsSwitch {
   width: 100%;
@@ -51,15 +52,4 @@
 }
 .examText {
 
-}
-
-.cardBox {
-  padding-bottom: 220px;
-}
-
-.loadedText {
-  font-size: 24px;
-  color: #999;
-  line-height: 60px;
-  text-align: center;
 }

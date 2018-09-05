@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   View,
   TouchableOpacity,
 } from 'react-native';
@@ -10,12 +9,6 @@ import PropTypes from 'prop-types';
 import { ChangeLanguage } from '../../actions/config';
 import LanguageClass from '../../config/language';
 import I18nText from '../I18nText';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 @connect(null, dispatch => ({
   doChangeLanguage: bindActionCreators(ChangeLanguage, dispatch),
@@ -30,7 +23,7 @@ export default class Language extends Component {
   render() {
     const { doChangeLanguage } = this.props;
     return (
-      <View style={styles.container}>
+      <View>
         <TouchableOpacity onPress={() => {
           this.language.setAndSaveLanguage('en')
             .then(doChangeLanguage);

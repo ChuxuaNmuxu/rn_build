@@ -5,7 +5,8 @@ import {
 } from 'redux-saga/effects';
 import {
   TEST,
-} from '../constants/action';
+} from '../../constants/actionType';
+
 
 function* test() {
   yield setTimeout(() => {
@@ -13,15 +14,7 @@ function* test() {
   }, 0);
 }
 
-function* saga() {
+export default function* commonSaga() {
   yield takeLatest(TEST, test);
   // yield test();
 }
-
-// function* rootSaga() {
-//   yield all([
-//     fork(saga),
-//   ]);
-// }
-
-export default saga;

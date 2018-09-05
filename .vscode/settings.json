@@ -11,7 +11,7 @@
     "editor.minimap.enabled": false,
     "explorer.confirmDelete": false,
     "workbench.startupEditor": "newUntitledFile",
-    "files.eol": "\n",
+    "files.eol": "\r\n",
     "eslint.validate": [
         "javascript",
         "javascriptreact",

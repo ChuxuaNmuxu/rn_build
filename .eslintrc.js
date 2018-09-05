@@ -30,6 +30,6 @@ module.exports = {
       "guard-for-in": 0,
       "react/jsx-one-expression-per-line": 0,
       "linebreak-style": 0,
-      "radix": 0
+      "no-plusplus": 0,
     }
   }

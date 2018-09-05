@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import {
   logger,
-  saga,
+  rootSaga,
 } from '../middlewares';
 import rootReducer from '../reducers';
 
@@ -35,7 +35,7 @@ const configureStore = (preloadedState = {}) => {
       applyMiddleware(...middleware),
     );
 
-  sagaMiddleware.run(saga);
+  sagaMiddleware.run(rootSaga);
 
   return store;
 };
