@@ -25,6 +25,7 @@ import TabBarIcon from './components/TabBarIcon';
 import Welcome from './views/Welcome';
 import Demo from './views/Demo';
 import styles from './router.scss';
+import TaskDetail from './views/Student/TaskDetail';
 
 const RouteMap = props => (
   <Router
@@ -38,6 +39,9 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
+      <Stack key="yellowfrog" initial>
+        <Scene title="yellowfrog" hideNavBar key="yellowfrog" component={TaskDetail} />
+      </Stack>
       <Stack key="Welcome1">
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
       </Stack>

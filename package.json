@@ -12,6 +12,7 @@
     "move-iconfontMap": "npm run iconfontMap && cd ./src/scripts && move ./iconfont.js ../public/icon/ && cd ../public/icon && move ./iconfont.ttf ../../../android/app/src/main/assets/fonts/",
     "dev-menu": "adb shell input keyevent 82",
     "devtools": "react-devtools",
+    "dev": "react-native run-android",
     "dev-android": "react-native run-android",
     "dev-ios": "react-native run-ios",
     "build": "cd android && gradlew assembleRelease",
