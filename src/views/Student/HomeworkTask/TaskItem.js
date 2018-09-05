@@ -44,19 +44,28 @@ const Styles = StyleSheet.create({
   },
 });
 
-const TaskItem = () => (
-  <TouchableNativeFeedback>
-    <View style={[Styles.flex_row, Styles.task]}>
-      <View style={Styles.icon_box}>
-        <CIcon style={Styles.icon} name="wendang1" size={25} />
-      </View>
-      <View>
-        <Text style={[Styles.subject]} ellipsizeMode="tail" numberOfLines={1}>6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业</Text>
-        <Text style={Styles.details}>预计耗时：15′</Text>
-        <Text style={Styles.details}>截止提交时间：6-24 24:00</Text>
-      </View>
-    </View>
-  </TouchableNativeFeedback>
-);
+class TaskItem extends React.Component {
+  openTaskDetail = () => {
+    console.log('打开任务详情页！');
+  }
+  render () {
+    return (
+      <TouchableNativeFeedback
+        onPress={this.openTaskDetail}
+      >
+        <View style={[Styles.flex_row, Styles.task]}>
+          <View style={Styles.icon_box}>
+            <CIcon style={Styles.icon} name="wendang1" size={25} />
+          </View>
+          <View>
+            <Text style={[Styles.subject]} ellipsizeMode="tail" numberOfLines={1}>6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业</Text>
+            <Text style={Styles.details}>预计耗时：15′</Text>
+            <Text style={Styles.details}>截止提交时间：6-24 24:00</Text>
+          </View>
+        </View>
+      </TouchableNativeFeedback>
+    )
+  } 
+}
 
 export default TaskItem;
