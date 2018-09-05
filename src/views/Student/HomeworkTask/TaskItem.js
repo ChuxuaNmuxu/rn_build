@@ -47,6 +47,7 @@ const Styles = StyleSheet.create({
 class TaskItem extends React.Component {
   openTaskDetail = () => {
     console.log('打开任务详情页！');
+    Actions.HomeworkTask()
   }
   render () {
     return (
