@@ -21,7 +21,7 @@ export default class Test3 extends Component {
     return (
       <View style={styles.container}>
         <Text>
-作业记录
+          我的
         </Text>
       </View>
     );

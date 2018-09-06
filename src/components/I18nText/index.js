@@ -16,7 +16,10 @@ I18nText.defaultProps = {
 };
 
 I18nText.propTypes = {
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]),
   children: PropTypes.string.isRequired,
   option: PropTypes.object,
 };

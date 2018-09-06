@@ -2,7 +2,7 @@ import React from 'react';
 import {
   View,
   Text,
-  // TouchableOpacity,
+  TouchableOpacity,
 } from 'react-native';
 import {
   Scene,
@@ -12,17 +12,21 @@ import {
   Stack,
   Reducer,
 } from 'react-native-router-flux';
+import Entypo from 'react-native-vector-icons/Entypo';
 import PropTypes from 'prop-types';
 import HomeworkTask from './views/Student/HomeworkTask';
 import ProblemRecords from './views/Student/ProblemRecords';
 import My from './views/Student/My';
 import WrongNotes from './views/Student/WrongNotes';
+import DoHomework from './views/Student/DoHomework';
+
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
 import TabBarIcon from './components/TabBarIcon';
 import Welcome from './views/Welcome';
 import Demo from './views/Demo';
 import styles from './router.scss';
+import TaskDetail from './views/Student/TaskDetail';
 
 const RouteMap = props => (
   <Router
@@ -36,13 +40,32 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
+      <Stack key="TaskDetail">
+        <Scene
+          // title="TaskDetail" // 会自动在props加入一个 title="TaskDetail"
+          back
+          // backButtonTintColor='white' // 返回按钮的颜色
+          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
+          renderBackButton={() => (
+            <View>
+              <TouchableOpacity onPress={Actions.pop}>
+                <Entypo name="chevron-thin-left" size={40} color="white" />
+              </TouchableOpacity>
+            </View>
+          )}
+          // hideNavBar // 是否隐藏返回按键
+          key="TaskDetail1"
+          component={TaskDetail}
+          initial
+        />
+      </Stack>
       <Stack key="Welcome1">
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
       </Stack>
       <Stack key="Account">
         <Scene key="Login" hideNavBar component={Login} />
       </Stack>
-      <Stack key="Student" hideNavBar>
+      <Stack key="Student" hideNavBar initial>
         <Tabs
           key="StudentTabs"
           activeBackgroundColor="#fafafa" // 选中tabbar的背景色
@@ -67,7 +90,10 @@ const RouteMap = props => (
             selectedImage="zuoye2"
             hideNavBar
           >
-            <Scene key="HomeworkTask" component={HomeworkTask} />
+            <Scene
+              key="HomeworkTask"
+              component={HomeworkTask}
+            />
           </Stack>
           <Stack
             title="problemRecords"
@@ -75,6 +101,7 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
+            initial
           >
             <Scene
               key="ProblemRecords"
@@ -101,12 +128,15 @@ const RouteMap = props => (
           </Stack>
         </Tabs>
       </Stack>
+      <Stack key="HomeworkTaskAll" hideNavBar>
+        <Scene key="DoHomework" component={DoHomework} />
+      </Stack>
       <Stack key="Teacher">
         <Tabs key="TeacherTabs">
           <Scene title="作业" key="homework" component={Homework} />
         </Tabs>
       </Stack>
-      <Stack key="Demo1" initial>
+      <Stack key="Demo1">
         <Scene
           key="Demo"
           component={Demo}
