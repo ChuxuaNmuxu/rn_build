@@ -5,15 +5,18 @@ import Radio from './Radio';
 import styles from './button.scss';
 
 const RadioButton = (props) => {
-  const { children, ...rest } = props;
+  const {
+    children, ...rest
+  } = props;
   const renderIcon = () => <Text style={styles.default_text}>{children}</Text>;
+
   return (
     <Radio
       iconWrapStyle={styles.iconWrap_style}
       type="button"
       {...rest}
       icon={renderIcon()}
-      checkedIcon={null}
+      checkedIcon={renderIcon()}
     />
   );
 };

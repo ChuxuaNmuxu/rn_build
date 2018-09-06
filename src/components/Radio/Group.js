@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { type, mergeAll } from 'ramda';
+import Radio from './Radio';
 
 class GroupRadio extends Component {
   constructor(props) {
@@ -10,8 +11,6 @@ class GroupRadio extends Component {
       defaultValue, value,
     } = this.props;
 
-    if (value && type(value) !== 'Number') throw 'value可不传，如传只能为number型';
-    if (defaultValue && type(defaultValue) !== 'Number') throw 'defaultValue可不传，如传只能为number型';
     const checked = value || defaultValue || false;
 
     this.state = {
@@ -21,25 +20,61 @@ class GroupRadio extends Component {
 
   onChangeGroup = (value) => {
     const { onChange } = this.props;
+    console.log(23, value);
     this.setState({
       checked: value,
     }, onChange(value));
   };
 
-  render() {
+  renderOptions = () => {
     const {
-      children, defaultValue, value, style, onChange, ...rest
+      children, defaultValue, value, style, onChange, horizontal, options, ...rest
     } = this.props;
     const { checked } = this.state;
+    return options.map((v, i) => {
+      let child;
+      let val;
+      let disabled;
 
+      if (type(v) === 'Object') {
+        ({ value: val, label: child, disabled } = v);
+      } else {
+        val = child = v;
+      }
+      if (!val) throw '使用Radio.Group或者Checkbox.Group时value为必传属性';
+      return (
+        <Radio
+          key={val || i}
+          {...mergeAll([rest, v.props, {
+            checked,
+            onChange: this.onChangeGroup,
+            style: mergeAll({ marginRight: 39 }, v.props),
+            value: val,
+            disabled,
+            type: 'group',
+          }])}
+        >{child}
+        </Radio>
+      );
+    });
+  }
+
+  render() {
+    const {
+      children, defaultValue, value, style, onChange, horizontal, options, ...rest
+    } = this.props;
+    const { checked } = this.state;
     return (
-      <View style={style}>
-        {
-          React.Children.map(children,
+      <View style={[{ flexDirection: horizontal ? 'row' : 'column' }, style]}>
+        {options
+          ? this.renderOptions()
+          : React.Children.map(children,
             child => React.cloneElement(child,
               mergeAll([rest, child.props, {
                 checked,
                 onChange: this.onChangeGroup,
+                style: mergeAll({ marginRight: 39 }, child.props),
+                type: 'group',
               }])))
         }
       </View>
@@ -48,7 +83,10 @@ class GroupRadio extends Component {
 }
 
 GroupRadio.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
   style: PropTypes.object,
 
   defaultValue: PropTypes.any, // 默认选中的值
@@ -56,6 +94,7 @@ GroupRadio.propTypes = {
   options: PropTypes.array, // 以配置形式设置子元素
   value: PropTypes.any, // 用于设置当前选中的值
   onChange: PropTypes.func,
+  horizontal: PropTypes.bool,
 };
 
 GroupRadio.defaultProps = {
@@ -65,6 +104,8 @@ GroupRadio.defaultProps = {
   options: null,
   value: null,
   onChange: () => {},
+  horizontal: false,
+  children: [],
 };
 
 export default GroupRadio;

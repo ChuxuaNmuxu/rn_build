@@ -12,6 +12,7 @@ class Radio extends Component {
   // 如果有自定义样式则使用自定义样式`
   customStyle = (custemStyle, defaultStyle) => (isEmpty(custemStyle) ? defaultStyle : custemStyle)
 
+
   // 如果选中且有自定义样式则使用自定义，如果选中没有自定义样式则使用默认
   checkedStyle = (checked, custemStyle, defaultStyle) => {
     if (checked) {
@@ -28,9 +29,19 @@ class Radio extends Component {
     onChange(value);
   }
 
+  isChecked = () => {
+    const { checked, type, value } = this.props;
+    console.log(34, checked, type, value);
+    if (type !== 'group' && checked) {
+      return true;
+    } if (value && checked === value) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     const {
-      checked,
       children,
       textStyle,
       iconWrapStyle,
@@ -40,26 +51,24 @@ class Radio extends Component {
       disabled,
       icon,
       checkedIcon,
-      // type,
+      style,
     } = this.props;
 
     return (
       <TouchableOpacity onPress={() => this.handleClick(value)} disabled={disabled}>
-        <View style={[styles.wrapper]}>
+        <View style={[styles.wrapper, style]}>
           <View style={[
             this.customStyle(iconWrapStyle, styles.icon_wrap),
-            this.checkedStyle(checked === value, checkedIconWrapStyle, styles.checked_icon_wrap),
+            this.checkedStyle(this.isChecked(), checkedIconWrapStyle, styles.checked_icon_wrap),
           ]}
           >{
-            checked === value
-              ? (checkedIcon || <View style={styles.checked_icon} />)
-              : <View style={styles.icon}>{icon}</View>
+            <View style={styles.icon}>{this.isChecked() ? checkedIcon : icon}</View>
           }
           </View>
           <Text
             style={[
               this.customStyle(textStyle, styles.text),
-              this.checkedStyle(checked === value, checkedTextStyle, styles.checked_text),
+              this.checkedStyle(this.isChecked(), checkedTextStyle, styles.checked_text),
             ]}
             ref={(e) => { this.test = e; }}
           >{children}
@@ -72,14 +81,26 @@ class Radio extends Component {
 
 Radio.propTypes = {
   children: PropTypes.any, // 文本
-  textStyle: PropTypes.object, // 自定义文本默认样式
-  checkedTextStyle: PropTypes.object, // 自定义选中文本样式
+  textStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]), // 自定义文本默认样式
+  checkedTextStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]), // 自定义选中文本样式
 
   icon: PropTypes.any, // 自定义icon
   checkedIcon: PropTypes.any, // 自定义选中icon
 
-  iconWrapStyle: PropTypes.any, // 自定义icon外层默认样式
-  checkedIconWrapStyle: PropTypes.any, // 自定义选中icon外层样式
+  iconWrapStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]), // 自定义icon外层默认样式
+  checkedIconWrapStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]), // 自定义选中icon外层样式
 
   checked: PropTypes.oneOfType([
     PropTypes.number,
@@ -93,7 +114,11 @@ Radio.propTypes = {
     PropTypes.bool,
   ]), // 索引
   disabled: PropTypes.bool, // 不可点击
-  // type: PropTypes.string, // 类型radio、checkbox、button、radioButton、checkboxButton，默认为radio
+  style: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]),
+  type: PropTypes.string, // 类型： group组
 };
 
 Radio.defaultProps = {
@@ -108,7 +133,8 @@ Radio.defaultProps = {
   onChange: () => {},
   value: null,
   disabled: false,
-  // type: 'radio',
+  style: {},
+  type: null,
 };
 
 export default Radio;

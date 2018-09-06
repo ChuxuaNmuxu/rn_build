@@ -38,7 +38,7 @@ $checkedColor: #30bf6c;
   color: $checkedColor;
 }
 
-.checked_icon {
-  @include circular(14px);
-  background-color: $checkedColor;
-}
+// .checked_icon {
+//   @include circular(14px);
+//   background-color: $checkedColor;
+// }
