@@ -47,9 +47,10 @@ const Styles = StyleSheet.create({
 class TaskItem extends React.Component {
   openTaskDetail = () => {
     console.log('打开任务详情页！');
-    Actions.HomeworkTask()
+    Actions.TaskDetail();
   }
-  render () {
+
+  render() {
     return (
       <TouchableNativeFeedback
         onPress={this.openTaskDetail}
@@ -65,8 +66,8 @@ class TaskItem extends React.Component {
           </View>
         </View>
       </TouchableNativeFeedback>
-    )
-  } 
+    );
+  }
 }
 
 export default TaskItem;
