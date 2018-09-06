@@ -18,6 +18,8 @@ import HomeworkTask from './views/Student/HomeworkTask';
 import ProblemRecords from './views/Student/ProblemRecords';
 import My from './views/Student/My';
 import WrongNotes from './views/Student/WrongNotes';
+import DoHomework from './views/Student/DoHomework';
+
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
 import TabBarIcon from './components/TabBarIcon';
@@ -63,7 +65,7 @@ const RouteMap = props => (
       <Stack key="Account">
         <Scene key="Login" hideNavBar component={Login} />
       </Stack>
-      <Stack key="Student" hideNavBar>
+      <Stack key="Student" hideNavBar initial>
         <Tabs
           key="StudentTabs"
           activeBackgroundColor="#fafafa" // 选中tabbar的背景色
@@ -99,6 +101,7 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
+            initial
           >
             <Scene
               key="ProblemRecords"
@@ -124,6 +127,9 @@ const RouteMap = props => (
             <Scene key="My" component={My} />
           </Stack>
         </Tabs>
+      </Stack>
+      <Stack key="HomeworkTaskAll" hideNavBar>
+        <Scene key="DoHomework" component={DoHomework} />
       </Stack>
       <Stack key="Teacher">
         <Tabs key="TeacherTabs">
