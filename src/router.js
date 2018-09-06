@@ -40,32 +40,13 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
-      <Stack key="TaskDetail">
-        <Scene
-          // title="TaskDetail" // 会自动在props加入一个 title="TaskDetail"
-          back
-          // backButtonTintColor='white' // 返回按钮的颜色
-          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
-          renderBackButton={() => (
-            <View>
-              <TouchableOpacity onPress={Actions.pop}>
-                <Entypo name="chevron-thin-left" size={40} color="white" />
-              </TouchableOpacity>
-            </View>
-          )}
-          // hideNavBar // 是否隐藏返回按键
-          key="TaskDetail1"
-          component={TaskDetail}
-          initial
-        />
-      </Stack>
-      <Stack key="Welcome1">
+      <Stack key="WelcomeStack">
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
       </Stack>
       <Stack key="Account">
         <Scene key="Login" hideNavBar component={Login} />
       </Stack>
-      <Stack key="Student" hideNavBar initial>
+      <Stack key="Student" hideNavBar>
         <Tabs
           key="StudentTabs"
           activeBackgroundColor="#fafafa" // 选中tabbar的背景色
@@ -85,7 +66,7 @@ const RouteMap = props => (
         >
           <Stack
             title="homeworkTask"
-            key="HomeworkTask1"
+            key="HomeworkTaskStack"
             image="zuoye2"
             selectedImage="zuoye2"
             hideNavBar
@@ -97,7 +78,7 @@ const RouteMap = props => (
           </Stack>
           <Stack
             title="problemRecords"
-            key="ProblemRecords1"
+            key="ProblemRecordsStack"
             image="jilu"
             selectedImage="jilu"
             hideNavBar
@@ -110,7 +91,7 @@ const RouteMap = props => (
           </Stack>
           <Stack
             title="wrongNotes"
-            key="WrongNotes1"
+            key="WrongNotesStack"
             image="cuotiben1"
             selectedImage="cuotiben1"
             hideNavBar
@@ -119,7 +100,7 @@ const RouteMap = props => (
           </Stack>
           <Stack
             title="my"
-            key="My1"
+            key="MyStack"
             image="wodedangxuan"
             selectedImage="wodedangxuan"
             hideNavBar
@@ -128,15 +109,30 @@ const RouteMap = props => (
           </Stack>
         </Tabs>
       </Stack>
-      <Stack key="HomeworkTaskAll" hideNavBar>
-        <Scene key="DoHomework" component={DoHomework} />
-      </Stack>
       <Stack key="Teacher">
         <Tabs key="TeacherTabs">
           <Scene title="作业" key="homework" component={Homework} />
         </Tabs>
       </Stack>
-      <Stack key="Demo1">
+      <Stack key="StudentAll" hideNavBar>
+        <Scene key="DoHomework" component={DoHomework} />
+        <Scene
+          back
+          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
+          renderBackButton={() => (
+            <View>
+              <TouchableOpacity onPress={Actions.pop}>
+                <Entypo name="chevron-thin-left" size={40} color="white" />
+              </TouchableOpacity>
+            </View>
+          )}
+          key="TaskDetail"
+          component={TaskDetail}
+          initial
+        />
+      </Stack>
+      <Stack key="TeacherAll" hideNavBar />
+      <Stack key="DemoStack">
         <Scene
           key="Demo"
           component={Demo}
@@ -160,6 +156,7 @@ const RouteMap = props => (
           //   </TouchableOpacity>
           // )}
           // title="标题"
+          // backButtonTintColor='white' // 返回按钮的颜色
           leftTitle="左边 -> 回退"
           rightTitle="右边 -> 前进到首页"
           onLeft={() => console.log('onLeft')}
