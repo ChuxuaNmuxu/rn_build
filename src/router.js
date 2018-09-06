@@ -2,7 +2,7 @@ import React from 'react';
 import {
   View,
   Text,
-  // TouchableOpacity,
+  TouchableOpacity,
 } from 'react-native';
 import {
   Scene,
@@ -12,6 +12,7 @@ import {
   Stack,
   Reducer,
 } from 'react-native-router-flux';
+import Entypo from 'react-native-vector-icons/Entypo';
 import PropTypes from 'prop-types';
 import HomeworkTask from './views/Student/HomeworkTask';
 import ProblemRecords from './views/Student/ProblemRecords';
@@ -39,8 +40,24 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
-      <Stack key="yellowfrog" initial>
-        <Scene title="yellowfrog" hideNavBar key="yellowfrog" component={TaskDetail} />
+      <Stack key="TaskDetail">
+        <Scene
+          // title="TaskDetail" // 会自动在props加入一个 title="TaskDetail"
+          back
+          // backButtonTintColor='white' // 返回按钮的颜色
+          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
+          renderBackButton={() => (
+            <View>
+              <TouchableOpacity onPress={Actions.pop}>
+                <Entypo name="chevron-thin-left" size={40} color="white" />
+              </TouchableOpacity>
+            </View>
+          )}
+          // hideNavBar // 是否隐藏返回按键
+          key="TaskDetail1"
+          component={TaskDetail}
+          initial
+        />
       </Stack>
       <Stack key="Welcome1">
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
@@ -73,7 +90,10 @@ const RouteMap = props => (
             selectedImage="zuoye2"
             hideNavBar
           >
-            <Scene key="HomeworkTask" component={HomeworkTask} />
+            <Scene
+              key="HomeworkTask"
+              component={HomeworkTask}
+            />
           </Stack>
           <Stack
             title="problemRecords"
