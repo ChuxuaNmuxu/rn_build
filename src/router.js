@@ -19,7 +19,6 @@ import ProblemRecords from './views/Student/ProblemRecords';
 import My from './views/Student/My';
 import WrongNotes from './views/Student/WrongNotes';
 import DoHomework from './views/Student/DoHomework';
-
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
 import TabBarIcon from './components/TabBarIcon';
@@ -82,7 +81,6 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
-            initial
           >
             <Scene
               key="ProblemRecords"
@@ -114,24 +112,26 @@ const RouteMap = props => (
           <Scene title="作业" key="homework" component={Homework} />
         </Tabs>
       </Stack>
-      <Stack key="StudentAll" hideNavBar>
-        <Scene key="DoHomework" component={DoHomework} />
+      <Stack key="StudentAll" initial>
+        <Scene key="DoHomework" component={DoHomework} hideNavBar />
         <Scene
-          back
+          initial
+          // back
           navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
           renderBackButton={() => (
             <View>
-              <TouchableOpacity onPress={Actions.pop}>
+              <TouchableOpacity onPress={Actions.Student}>
                 <Entypo name="chevron-thin-left" size={40} color="white" />
               </TouchableOpacity>
             </View>
           )}
           key="TaskDetail"
           component={TaskDetail}
-          initial
         />
       </Stack>
-      <Stack key="TeacherAll" hideNavBar />
+      <Stack key="TeacherAll" hideNavBar>
+        <Scene title="作业" key="homework" component={Homework} />
+      </Stack>
       <Stack key="DemoStack">
         <Scene
           key="Demo"
