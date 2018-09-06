@@ -34,5 +34,6 @@ FAILURE: Build failed with an exception.
 Execution failed for task ':react-native-image-picker:processReleaseResources'.
 > com.android.ide.common.process.ProcessException: Failed to execute aapt
 `
+
 #### 问题2：[解决方案](https://github.com/react-community/react-native-image-picker/issues/882)
 ![图片](./img/androidkeyboardNavigationCluster.jpg)
