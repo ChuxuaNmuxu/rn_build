@@ -47,7 +47,14 @@ const Styles = StyleSheet.create({
 class TaskItem extends React.Component {
   openTaskDetail = () => {
     console.log('打开任务详情页！');
-    Actions.TaskDetail();
+    Actions.TaskDetail({
+      // 跳转的时候把下面这些传给我，我的props那边设置了 isRequired 不传的话会报错
+      // title: '6-22物理作业',
+      // useTime: '15分钟',
+      // endTime: '6-24 24:00',
+      // beginTime: '今天',
+      // waitReadOver: false,
+    });
   }
 
   render() {
@@ -60,7 +67,9 @@ class TaskItem extends React.Component {
             <CIcon style={Styles.icon} name="wendang1" size={25} />
           </View>
           <View>
-            <Text style={[Styles.subject]} ellipsizeMode="tail" numberOfLines={1}>6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业</Text>
+            <Text style={[Styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
+              6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业
+            </Text>
             <Text style={Styles.details}>预计耗时：15′</Text>
             <Text style={Styles.details}>截止提交时间：6-24 24:00</Text>
           </View>

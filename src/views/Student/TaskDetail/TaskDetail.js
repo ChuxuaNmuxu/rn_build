@@ -47,7 +47,7 @@ TaskDetail.propTypes = {
 TaskDetail.defaultProps = {
   title: '6-22物理作业',
   useTime: '15分钟',
-  endTime: '6-24 24:00',
+  endTime: '9-20 24:00',
   beginTime: '今天',
   waitReadOver: false,
 };
