@@ -31,6 +31,8 @@ module.exports = {
       "react/jsx-one-expression-per-line": 0,
       "linebreak-style": 0,
       "no-plusplus": 0,
+      "no-throw-literal": 0,
+      "no-multi-assign": 0,
       "class-methods-use-this": 0
     }
   }
