@@ -26,6 +26,7 @@ import Welcome from './views/Welcome';
 import Demo from './views/Demo';
 import styles from './router.scss';
 import TaskDetail from './views/Student/TaskDetail';
+import ProblemOverview from './views/Student/ProblemOverview';
 
 const RouteMap = props => (
   <Router
@@ -39,13 +40,44 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
+      {/* 错题本 */}
+      <Stack key="ProblemOverview">
+        <Scene
+          title="错题本"
+          titleStyle={styles.navigationBarStyle_title}
+          navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
+          // hideNavBar // 是否隐藏整个导航条
+          key="ProblemOverview1"
+          component={ProblemOverview}
+          initial
+        />
+      </Stack>
+      {/* 任务详情 */}
+      <Stack key="TaskDetail">
+        <Scene
+          // title="TaskDetail" // 会自动在props加入一个 title="TaskDetail"
+          back
+          // backButtonTintColor='white' // 返回按钮的颜色
+          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
+          renderBackButton={() => (
+            <View>
+              <TouchableOpacity onPress={Actions.pop}>
+                <Entypo name="chevron-thin-left" size={40} color="white" />
+              </TouchableOpacity>
+            </View>
+          )}
+          // hideNavBar // 是否隐藏整个导航条
+          key="TaskDetail1"
+          component={TaskDetail}
+        />
+      </Stack>
       <Stack key="WelcomeStack">
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
       </Stack>
       <Stack key="Account">
         <Scene key="Login" hideNavBar component={Login} />
       </Stack>
-      <Stack key="Student" hideNavBar initial>
+      <Stack key="Student" hideNavBar>
         <Tabs
           key="StudentTabs"
           activeBackgroundColor="#fafafa" // 选中tabbar的背景色
@@ -88,7 +120,6 @@ const RouteMap = props => (
             />
           </Stack>
           <Stack
-            initial
             title="wrongNotes"
             key="WrongNotesStack"
             image="cuotiben1"
@@ -116,7 +147,7 @@ const RouteMap = props => (
       <Stack key="StudentAll">
         <Scene key="DoHomework" component={DoHomework} hideNavBar />
         <Scene
-          initial
+          // initial
           // back
           navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
           renderBackButton={() => (
@@ -170,8 +201,7 @@ const RouteMap = props => (
         />
       </Stack>
     </Modal>
-  </Router>
-);
+  </Router>);
 
 RouteMap.propTypes = {
   dispatch: PropTypes.func.isRequired,
