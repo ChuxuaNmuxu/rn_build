@@ -1,80 +1,61 @@
 import React, { Component } from 'react';
-import {
-  Text,
-  View,
-  ActivityIndicator,
-} from 'react-native';
 import PropTypes from 'prop-types';
-import { PullView } from 'react-native-pull';
+import { View } from 'react-native';
+import RefreshListView from '../../../components/RefreshListView';
+import RefreshState from '../../../components/RefreshListView/RefreshState';
 import RecordCard from './Components/recordCard';
-import styles from './recordList.scss';
 
 class RecordList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loadText: '',
     };
   }
 
-  onPullOk = () => {
-    // 只要拉倒那个临界点，就会调用该方法
-    this.setState({
-      loadText: '释放刷新',
-    });
-  }
+  _keyExtractor = (item, index) => item.id;
 
-  onPulling = () => {
-    // 下拉时调用
-    this.setState({
-      loadText: '下拉刷新',
-    });
-  }
+  // 渲染子组件
+  _renderItem = ({ item, index }) => (
+    <RecordCard
+      key={index}
+      id={item.id}
+      datas={item}
+    />
+  );
 
-  onPullRelease = (resolve) => {
-    // 松开手指刷新调用
-    this.setState({
-      loadText: '正在刷新',
-    });
+   // 渲染一个空白页，当列表无数据的时候显示。这里简单写成一个View控件
+   _renderEmptyView = item => <View />;
+
+  // 上拉加载更多
+  loadMoreFun = () => {
     setTimeout(() => {
-      // 请求数据
-      this.setState({
-        loadText: '下拉刷新',
-      });
-      // 回到原始状态
-      resolve();
+      this.listView.endRefreshing(RefreshState.NoMoreData);
     }, 2000);
   }
 
-  topIndicatorRender = (pulling, pullok, pullrelease) => {
-    const { loadText } = this.state;
-    return (
-      <View style={{
-        flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 60,
-      }}
-      >
-        <ActivityIndicator size="large" color="#30bf6c" />
-        <Text style={styles.loadTextStyle}>{loadText}</Text>
-      </View>
-    );
+  // 下拉刷新
+  RefreshListFunc = () => {
+    setTimeout(() => {
+      this.listView.endHeaderRefreshing(RefreshState.Failure);
+      // 刷新成功后隐藏提示
+      // setTimeout(() => {
+      //   this.listView.endHeaderRefreshing(RefreshState.Idle);
+      // }, 1000);
+    }, 2000);
   }
 
   render() {
     const { dataList } = this.props;
     return (
-      <PullView
-        style={styles.recordList}
-        onPullRelease={this.onPullRelease}
-        onPullOk={this.onPullOk}
-        onPulling={this.onPulling}
-        topIndicatorRender={this.topIndicatorRender}
-      >
-        {
-          dataList.map(item => (
-            <RecordCard key={item.id} datas={item} />
-          ))
-        }
-      </PullView>
+      <RefreshListView
+        ref={(ref) => { this.listView = ref; }}
+        data={dataList}
+        renderItem={this._renderItem}
+        keyExtractor={this._keyExtractor}
+        ListEmptyComponent={this._renderEmptyView}
+        onHeaderRefresh={() => this.RefreshListFunc()}
+        onFooterRefresh={() => this.loadMoreFun()}
+      />
     );
   }
 }
