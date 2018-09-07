@@ -27,6 +27,7 @@ import Welcome from './views/Welcome';
 import Demo from './views/Demo';
 import styles from './router.scss';
 import TaskDetail from './views/Student/TaskDetail';
+import ProblemOverview from './views/Student/ProblemOverview';
 
 const RouteMap = props => (
   <Router
@@ -40,6 +41,17 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
+      {/* 错题本 */}
+      <Stack key="ProblemOverview">
+        <Scene
+          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
+          hideNavBar // 是否隐藏返回按键
+          key="ProblemOverview1"
+          component={ProblemOverview}
+          initial
+        />
+      </Stack>
+      {/* 任务详情 */}
       <Stack key="TaskDetail">
         <Scene
           // title="TaskDetail" // 会自动在props加入一个 title="TaskDetail"
@@ -56,7 +68,6 @@ const RouteMap = props => (
           // hideNavBar // 是否隐藏返回按键
           key="TaskDetail1"
           component={TaskDetail}
-          initial
         />
       </Stack>
       <Stack key="Welcome1">
@@ -65,7 +76,7 @@ const RouteMap = props => (
       <Stack key="Account">
         <Scene key="Login" hideNavBar component={Login} />
       </Stack>
-      <Stack key="Student" hideNavBar initial>
+      <Stack key="Student" hideNavBar>
         <Tabs
           key="StudentTabs"
           activeBackgroundColor="#fafafa" // 选中tabbar的背景色
@@ -101,7 +112,6 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
-            initial
           >
             <Scene
               key="ProblemRecords"
