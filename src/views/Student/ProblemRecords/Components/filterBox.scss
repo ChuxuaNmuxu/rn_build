@@ -1,0 +1,54 @@
+.filterContainer {
+  width: 100%;
+  background-color: #fff;
+}
+.filterBox {
+  width: 100%;
+  display: flex;
+  padding-left: 24px;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 71px;
+  border-bottom-width: 1px;
+  border-style: solid;
+  border-bottom-color: #e8e8e8;
+}
+
+.subjectItem {
+  width: 10%;
+  justify-content: center;
+  align-items: center;
+}
+
+.currentItem {
+  border-bottom-width: 4px;
+  border-style: solid;
+  border-bottom-color: #30bf6c;
+}
+
+.filterText {
+  font-size: 24px;
+  color: #999;
+}
+
+.currentText {
+  color: #30bf6c;
+}
+
+.filterMoreBox {
+  display: flex;
+  flex-direction: row;
+  margin-right: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+.filterMoreText {
+  font-size: 24px;
+  color: #30bf6c;
+}
+
+.icon {
+  width: 50%;
+  font-size: 24px;
+}

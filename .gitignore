@@ -55,5 +55,9 @@ buck-out/
 # Bundle artifact
 *.jsbundle
 
-./android/build.gradle
-./android/gradle/wrapper/gradle-wrapper.properties
+# 根据Android版本配置相应文件
+# android/build.gradle
+# android/gradle/wrapper/gradle-wrapper.properties
+
+# 配置.vscode
+.vscode/
