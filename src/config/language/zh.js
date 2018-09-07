@@ -14,6 +14,15 @@ export default {
     },
   },
 
+  // TaskDetail
+  TaskDetail: {
+    useTime: '预计耗时:',
+    endTime: '截止时间:',
+    beginTime: '执行日期:',
+    reviewHomework: '预览作业',
+    beginHomework: '开始作业',
+  },
+
   // test
   changeToEnglish: '切换到英文',
   changeToChinese: '切换到中文',
