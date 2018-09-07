@@ -16,7 +16,7 @@ I18nText.defaultProps = {
 };
 
 I18nText.propTypes = {
-  style: PropTypes.object,
+  style: PropTypes.any,
   children: PropTypes.string.isRequired,
   option: PropTypes.object,
 };
