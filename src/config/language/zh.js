@@ -28,4 +28,11 @@ export default {
   changeToChinese: '切换到中文',
   jump: '跳转',
 
+  // 做题记录页面
+  ProblemRecords: {
+    header: {
+      homeworkRecord: '作业记录',
+      exanRecord: '考试记录',
+    },
+  },
 };

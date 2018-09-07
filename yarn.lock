@@ -5346,10 +5346,6 @@ react-native-menu@^0.23.0:
     prop-types "^15.5.10"
     react-timer-mixin "^0.13.3"
 
-react-native-pull@^2.0.2:
-  version "2.0.2"
-  resolved "http://registry.npm.taobao.org/react-native-pull/download/react-native-pull-2.0.2.tgz#15264a737bcf56debd4bacaa2705254d9ef1b345"
-
 react-native-router-flux@^4.0.0-beta.31:
   version "4.0.0-beta.31"
   resolved "http://registry.npm.taobao.org/react-native-router-flux/download/react-native-router-flux-4.0.0-beta.31.tgz#edea28cbac705fbb324ae8f5eb136dc0bef1e1e8"
