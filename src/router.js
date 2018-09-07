@@ -44,8 +44,10 @@ const RouteMap = props => (
       {/* 错题本 */}
       <Stack key="ProblemOverview">
         <Scene
-          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
-          hideNavBar // 是否隐藏返回按键
+          title="错题本"
+          titleStyle={styles.navigationBarStyle_title}
+          navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
+          // hideNavBar // 是否隐藏整个导航条
           key="ProblemOverview1"
           component={ProblemOverview}
           initial
@@ -65,7 +67,7 @@ const RouteMap = props => (
               </TouchableOpacity>
             </View>
           )}
-          // hideNavBar // 是否隐藏返回按键
+          // hideNavBar // 是否隐藏整个导航条
           key="TaskDetail1"
           component={TaskDetail}
         />

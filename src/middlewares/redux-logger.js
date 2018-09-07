@@ -5,10 +5,20 @@ import {
 //   Iterable,
 //   fromJS,
 // } from 'immutable';
+function titleFormatter(action, time, took) {
+  const parts = [];
+  if (action.info) parts.push(`${String(action.info)}`);
+  parts.push(`${String(action.type)}`);
+  // 暂时先用不着下面这两个
+  // if (time) parts.push(`触发时间:${String(time)}`);
+  // if (took) parts.push(`(耗时: ${took.toFixed(3)} ms)`);
+  return parts.join('    ');
+}
 
 export default createLogger({
   duration: true,
   collapsed: true,
+  titleFormatter,
   // stateTransformer: (state) => {
   //   const newState = {};
 

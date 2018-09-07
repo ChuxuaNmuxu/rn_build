@@ -31,7 +31,7 @@ export default function actionCreator(type, info) {
           newInfo = `${info}~~loading了~~`;
           break;
         default:
-          newInfo = `${info}~~你传入的后缀是无效的~~`;
+          newInfo = info;
       }
       newType = `${type}_${extendType}`;
     }
