@@ -9,8 +9,9 @@ import {
 import styles from './style.scss';
 
 class Radio extends Component {
-  // 如果有自定义样式则使用自定义样式
+  // 如果有自定义样式则使用自定义样式`
   customStyle = (custemStyle, defaultStyle) => (isEmpty(custemStyle) ? defaultStyle : custemStyle)
+
 
   // 如果选中且有自定义样式则使用自定义，如果选中没有自定义样式则使用默认
   checkedStyle = (checked, custemStyle, defaultStyle) => {
@@ -23,37 +24,51 @@ class Radio extends Component {
     return {};
   }
 
-  handleClick = (index) => {
-    const { onChange, checked } = this.props;
-    onChange(index, checked);
+  handleClick = (value) => {
+    const { onChange } = this.props;
+    onChange(value);
+  }
+
+  isChecked = () => {
+    const { checked, type, value } = this.props;
+    console.log(34, checked, type, value);
+    if (type !== 'group' && checked) {
+      return true;
+    } if (value && checked === value) {
+      return true;
+    }
+    return false;
   }
 
   render() {
     const {
-      checked,
       children,
       textStyle,
-      iconStyle,
+      iconWrapStyle,
       checkedTextStyle,
-      checkedIconStyle,
-      checkedViewChildStyle,
-      index,
+      checkedIconWrapStyle,
+      value,
       disabled,
+      icon,
+      checkedIcon,
+      style,
     } = this.props;
+
     return (
-      <TouchableOpacity onPress={() => this.handleClick(index)} disabled={disabled}>
-        <View style={[styles.wrapper]}>
+      <TouchableOpacity onPress={() => this.handleClick(value)} disabled={disabled}>
+        <View style={[styles.wrapper, style]}>
           <View style={[
-            this.customStyle(iconStyle, styles.icon),
-            this.checkedStyle(checked, checkedIconStyle, styles.checked_view),
+            this.customStyle(iconWrapStyle, styles.icon_wrap),
+            this.checkedStyle(this.isChecked(), checkedIconWrapStyle, styles.checked_icon_wrap),
           ]}
-          >
-            {checked && <View style={this.customStyle(checkedViewChildStyle, styles.checked_view_child)} />}
+          >{
+            <View style={styles.icon}>{this.isChecked() ? checkedIcon : icon}</View>
+          }
           </View>
           <Text
             style={[
               this.customStyle(textStyle, styles.text),
-              this.checkedStyle(checked, checkedTextStyle, styles.checked_text),
+              this.checkedStyle(this.isChecked(), checkedTextStyle, styles.checked_text),
             ]}
             ref={(e) => { this.test = e; }}
           >{children}
@@ -66,28 +81,60 @@ class Radio extends Component {
 
 Radio.propTypes = {
   children: PropTypes.any, // 文本
-  textStyle: PropTypes.object, // 自定义文本默认样式
-  iconStyle: PropTypes.any, // 自定义icon默认样式
-  checked: PropTypes.bool, // 选中标签
-  checkedTextStyle: PropTypes.object, // 自定义选中文本样式
-  checkedIconStyle: PropTypes.any, // 自定义选中icon样式
-  checkedViewChildStyle: PropTypes.object, // 自定义icon选中的字样式
+  textStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]), // 自定义文本默认样式
+  checkedTextStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]), // 自定义选中文本样式
+
+  icon: PropTypes.any, // 自定义icon
+  checkedIcon: PropTypes.any, // 自定义选中icon
+
+  iconWrapStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]), // 自定义icon外层默认样式
+  checkedIconWrapStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]), // 自定义选中icon外层样式
+
+  checked: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+    PropTypes.bool,
+  ]), // 选中状态
   onChange: PropTypes.func, // 点击之后的回掉函数
-  index: PropTypes.number, // 索引
+  value: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+    PropTypes.bool,
+  ]), // 索引
   disabled: PropTypes.bool, // 不可点击
+  style: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]),
+  type: PropTypes.string, // 类型： group组
 };
 
 Radio.defaultProps = {
   children: null,
   textStyle: {},
-  iconStyle: {},
-  checked: false,
   checkedTextStyle: {},
-  checkedIconStyle: {},
-  checkedViewChildStyle: {},
+  icon: null,
+  checkedIcon: null,
+  iconWrapStyle: {},
+  checkedIconWrapStyle: {},
+  checked: false,
   onChange: () => {},
-  index: null,
+  value: null,
   disabled: false,
+  style: {},
+  type: null,
 };
 
 export default Radio;

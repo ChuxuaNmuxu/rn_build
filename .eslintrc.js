@@ -35,5 +35,8 @@ module.exports = {
       "react/no-array-index-key": 0,
       "no-prototype-builtins": 0,
       "no-use-before-define": 0,
+      "no-throw-literal": 0,
+      "no-multi-assign": 0,
+      "class-methods-use-this": 0
     }
   }

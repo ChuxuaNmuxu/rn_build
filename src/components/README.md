@@ -63,56 +63,82 @@
  - 引入 import I18n from 'xxx/config/language/I18n';
  - 使用 ```<Text style={{styles.title}}>{I18n.t(home.header.title, {count: 10})}</Text>```
 
+### RefreshListView：基于FlatList封装的上拉加载/下拉刷新组件
 
-### 下拉刷新功能
-##### 下拉刷新组件自己封装的不太好用，决定还是使用gitHub上的一个下拉刷新/上拉加载组件，目前可以暂时满足需求
+###### 注意：它是基于FlatList封装的组件，继承了FlatList的所有方法和属性，其中下拉刷新也是基于react native自带的RefreshControl进行封装的
 
-###### 注意：虽然该插件库提供了PullView和PullList两个可以实现下拉刷新的组件，但是PullList是针对listView进行封装的，现在的react native版本已经没有这个标签了，固只能使用PullView组件，它是基于ScrollView封装的组件，且它支持refreshcontrol的相关属性，另外PullView的外层容器要加上 ``` flex:1 ``` 才不容易出问题
-- ``` onRefresh ```: 开始刷新时调用的方法
-- ``` refreshing ```:  指示是否正在刷新
-
+ - ``` RefreshHeader ``` 是下拉刷新时展示的头部组件，``` RefreshFooter ``` 是上拉加载的尾部组件，均在 ``` RefreshListView ``` 组件中引入了，若要修改图标或样式可自行去对应组件中设置更改
 1. 使用方法
- - 引入 ``` import { PullView } from 'react-native-pull'; ```
- - 使用例子 ```
-        onPullRelease(resolve) {
-            // 比如请求数据的操作，请求到之后执行resolve()即可
+ - 引入该组件 ``` import RefreshListView from 'xxx/components/RefreshListView'; ```
+ - 引入封装的几种状态，状态统一放在此文件下，方便调用和管理 ``` import RefreshState from 'xxx/components/RefreshListView/RefreshState'; ```
+2. 方法和状态讲解
+ - RefreshState.js文件用于统一放置各状态，主要是以下几种，可自行添加修改
+
+ ```
+    Idle: 'Idle', // 初始状态，无刷新/无加载的情况
+    CanLoadMore: 'CanLoadMore', // 可以加载更多，表示列表还有数据可以继续加载
+    Refreshing: 'Refreshing', // 正在刷新中/正在加载
+    NoMoreData: 'NoMoreData', // 加载完成，没有更多数据了
+    Failure: 'Failure', // 刷新失败/加载失败
+    RefreshSuccess: 'RefreshSuccess', // 刷新成功
+
+ ```
+ - 主要方法
+    > *  ``` onHeaderRefresh  ```  下拉刷新执行的方法，刷新成功或者失败时在里面直接调用停止刷新的方法 ``` endHeaderRefreshing ```，调用方式：
+    ```
+    // RefreshState.RefreshSuccess 传入此时要展示的状态
+    this.RefreshListView.endHeaderRefreshing(RefreshState.RefreshSuccess);
+
+    ```
+
+    > * onFooterRefresh 上拉加载执行的方法，加载成功或者失败时直接在里面调用停止加载的方法 ``` endRefreshing ```，调用方式：
+    ```
+    // RefreshState.NoMoreData 传入此时要展示的状态
+    this.RefreshListView.endRefreshing(RefreshState.NoMoreData);
+
+    ``` 
+
+ - 使用范例 
+```
+         _keyExtractor = (item, index) => item.id;
+
+        // 渲染子组件
+        _renderItem = ({ item, index }) => <Text>{item.key}</Text>;
+
+        // 渲染一个空白页，当列表无数据的时候显示。这里简单写成一个View控件
+
+        _renderEmptyView = item => <View />;
+
+        // 上拉加载更多
+        loadMoreFun = () => {
+            // 请求数据，这里用延时器来改变状态
             setTimeout(() => {
-                // 回到原始状态
-                resolve();
-            }, 3000);
+            this.listView.endRefreshing(RefreshState.NoMoreData);
+            }, 2000);
         }
-        topIndicatorRender(pulling, pullok, pullrelease) {
-            // 在下拉到完成时，此方法是不停地调用的
-            // 下拉：pulling=true,pullok=false,pullrelease=false
-            // 到达临界点：pulling=false,pullok=true,pullrelease=false
-            // 释放：pulling=false,pullok=false,pullrelease=true
+
+        // 下拉刷新
+        RefreshListFunc = () => {
+            // 请求数据，这里用延时器来改变状态
+            setTimeout(() => {
+            this.listView.endHeaderRefreshing(RefreshState.Failure);
+            }, 2000);
         }
-        topIndicatorRender = (pulling, pullok, pullrelease) => {
+
+        render() {
+            // dataList请求到的列表数据
+            const { dataList } = this.props;
             return (
-            <View style={{
-                flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 60,
-            }}
-            >
-                <ActivityIndicator size="small" color="gray" />
-                <Text>正在刷新</Text>
-            </View>
+            <RefreshListView
+                ref={(ref) => { this.listView = ref; }}
+                data={dataList}
+                renderItem={this._renderItem}
+                keyExtractor={this._keyExtractor}
+                ListEmptyComponent={this._renderEmptyView}
+                onHeaderRefresh={() => this.RefreshListFunc()}
+                onFooterRefresh={() => this.loadMoreFun()}
+            />
             );
         }
-        <PullView
-            style={} 
-            onPullRelease={this.onPullRelease}
-            onPullOk={this.onPullOk}
-            onPulling={this.onPulling}
-            topIndicatorRender={this.topIndicatorRender}
-        >
-            需要被下拉刷新的盒子放这
-        </PullView>
-
-        ```
-    - style：样式
-    - onPulling （只要拉倒那个临界点，就会调用该方法）处于pulling状态时执行的方法
-    - onPullOk （下拉时调用）处于pullok状态时执行的方法
-    - onPullRelease （松开手指刷新调用的函数）处于pullrelease状态时执行的方法，接受一个参数：resolve，最后执行完操作后应该调用resolve()来回到原始状态，即刷新完毕隐藏loading
-    - topIndicatorRender 顶部刷新指示组件的渲染方法, 接受4个参数: pulling, pullok, pullrelease，gesturePosition，你可以使用gesturePosition定义动画头部  
-    - topIndicatorHeight 顶部刷新指示组件的高度, 若定义了topIndicatorRender则同时需要此属性，即临界点的高度
-         - 更多参数请查看[文档](https://github.com/greatbsky/react-native-pull/wiki)      
+        }
+```

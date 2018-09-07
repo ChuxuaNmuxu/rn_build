@@ -1,0 +1,25 @@
+.TouchableOpacity {
+  flex: 1;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+}
+
+.transparentTwo {
+  z-index: 1;
+  background-color: rgba(0,0,0,0.5)
+}
+
+.content {
+  background-color: #ffffff;
+  z-index: 2;
+  width: 100%;
+  height: 164px;
+}
+
+// .modalContent {
+//   flex: 1;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }

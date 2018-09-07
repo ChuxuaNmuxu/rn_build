@@ -19,7 +19,6 @@ import ProblemRecords from './views/Student/ProblemRecords';
 import My from './views/Student/My';
 import WrongNotes from './views/Student/WrongNotes';
 import DoHomework from './views/Student/DoHomework';
-
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
 import TabBarIcon from './components/TabBarIcon';
@@ -72,7 +71,7 @@ const RouteMap = props => (
           component={TaskDetail}
         />
       </Stack>
-      <Stack key="Welcome1">
+      <Stack key="WelcomeStack">
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
       </Stack>
       <Stack key="Account">
@@ -98,7 +97,7 @@ const RouteMap = props => (
         >
           <Stack
             title="homeworkTask"
-            key="HomeworkTask1"
+            key="HomeworkTaskStack"
             image="zuoye2"
             selectedImage="zuoye2"
             hideNavBar
@@ -110,7 +109,7 @@ const RouteMap = props => (
           </Stack>
           <Stack
             title="problemRecords"
-            key="ProblemRecords1"
+            key="ProblemRecordsStack"
             image="jilu"
             selectedImage="jilu"
             hideNavBar
@@ -122,7 +121,7 @@ const RouteMap = props => (
           </Stack>
           <Stack
             title="wrongNotes"
-            key="WrongNotes1"
+            key="WrongNotesStack"
             image="cuotiben1"
             selectedImage="cuotiben1"
             hideNavBar
@@ -131,7 +130,7 @@ const RouteMap = props => (
           </Stack>
           <Stack
             title="my"
-            key="My1"
+            key="MyStack"
             image="wodedangxuan"
             selectedImage="wodedangxuan"
             hideNavBar
@@ -140,15 +139,32 @@ const RouteMap = props => (
           </Stack>
         </Tabs>
       </Stack>
-      <Stack key="HomeworkTaskAll" hideNavBar>
-        <Scene key="DoHomework" component={DoHomework} />
-      </Stack>
       <Stack key="Teacher">
         <Tabs key="TeacherTabs">
           <Scene title="作业" key="homework" component={Homework} />
         </Tabs>
       </Stack>
-      <Stack key="Demo1">
+      <Stack key="StudentAll">
+        <Scene key="DoHomework" component={DoHomework} hideNavBar />
+        <Scene
+          // initial
+          // back
+          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
+          renderBackButton={() => (
+            <View>
+              <TouchableOpacity onPress={Actions.Student}>
+                <Entypo name="chevron-thin-left" size={40} color="white" />
+              </TouchableOpacity>
+            </View>
+          )}
+          key="TaskDetail"
+          component={TaskDetail}
+        />
+      </Stack>
+      <Stack key="TeacherAll" hideNavBar>
+        <Scene title="作业" key="homework" component={Homework} />
+      </Stack>
+      <Stack key="DemoStack">
         <Scene
           key="Demo"
           component={Demo}
@@ -172,6 +188,7 @@ const RouteMap = props => (
           //   </TouchableOpacity>
           // )}
           // title="标题"
+          // backButtonTintColor='white' // 返回按钮的颜色
           leftTitle="左边 -> 回退"
           rightTitle="右边 -> 前进到首页"
           onLeft={() => console.log('onLeft')}
@@ -184,8 +201,7 @@ const RouteMap = props => (
         />
       </Stack>
     </Modal>
-  </Router>
-);
+  </Router>);
 
 RouteMap.propTypes = {
   dispatch: PropTypes.func.isRequired,

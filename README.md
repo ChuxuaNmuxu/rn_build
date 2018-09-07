@@ -12,6 +12,7 @@
 7. RN样式是web样式的子级，详情请[查看](https://github.com/doyoe/react-native-stylesheet-guide)文档
 8. 本项目已做自适应和scss转RN原生样式处理，编写RN样式和web样式体验一致
 9. RN原生Modal组件是直接调用Android原生方法，不受自适应约束，需要引入`Resolution`组件做自适应。
+10. [常见问题](./doc/FAQ.md)
 
 ---
 
@@ -28,7 +29,7 @@
 
 ###### 注意：
   > * 1、请严格按照文档流程配置每一步，否则运行项目时会出现很多问题
-  > * 2、如果 [Genymotion](https://www.genymotion.com/download/) 模拟器安装报错或使用公司台式机，可以选择安装 [BlueStacks](http://www.bluestacks.cn/)。
+  > * 2、如果 [Genymotion](https://www.genymotion.com/download/) 模拟器安装报错或使用genymotion无法访问网络，可以选择安装 [BlueStacks](http://www.bluestacks.cn/)。
   > * 安装完 BlueStacks 之后请执行：
   > * 1、adb devices 如果没有查询到设备，请执行 ```adb connect 本机ip:5555```。例如:10.0.3.117:5555
   > * 2、运行项目之后请用BlueStacks的浏览器访问```本机ip:8081```(如：10.0.3.117:8081)，若不能访问请访问```10.0.2.2:8081```若能访问而又报“```Unable to load script from assets index. android bundle Make sure your bundle is packaged correctly or you're running a packager server```”错误，请按ctrl与window中间那个按键打开菜单，选择Dev Settings -> Debug server host & port for device 输入本机ip+8081端口

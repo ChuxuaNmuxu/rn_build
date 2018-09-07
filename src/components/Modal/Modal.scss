@@ -1,0 +1,56 @@
+.TouchableOpacity {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.transparentTwo {
+  z-index: 1;
+  background-color: rgba(0,0,0,0.5)
+}
+
+.content {
+  background-color: #ffffff;
+  width: 620;
+  height: 374;
+  border-radius: 8px;
+  z-index: 2;
+}
+
+.buttonComponent {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  height: 120px;
+  // padding: 24px;
+  // box-sizing: border-box;
+  // border-top: 1px salmon solid;
+}
+
+.footerBtn {
+  border: 1px solid #30bf6c;
+  // border-bottom: 1px solid #30bf6c;
+  border-radius: 50px;
+  width: 272px;
+  height: 70px;
+  // background-color: transparent;
+}
+
+.footerBtnText {
+  width: 99%;
+  height: 99%;
+  line-height: 70px;
+  text-align: center;
+  font-family:PingFangSC-Regular;
+  font-size: 24px;
+  color: #30bf6c;
+  letter-spacing: 0;
+}
+
+.TipsModal {
+  flex: 1;
+}
+
