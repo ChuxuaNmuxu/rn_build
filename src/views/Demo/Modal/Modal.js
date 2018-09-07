@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 import Modal from '../../../components/Modal';
-import Style from './WrongNotes.scss';
+import Style from './Modal.scss';
 
 export default class Test3 extends Component {
   leftFn=() => {
@@ -13,12 +13,12 @@ export default class Test3 extends Component {
   }
 
   rightFn=() => {
-    this.pressF();
+    this.AnimationsModal();
 
-    setTimeout(() => this.pressT(), 6000);
+    setTimeout(() => this.TipsModal(), 6000);
   }
 
-  press=() => {
+  ButtomModal=() => {
     const data = {
       lCallbakFn: this.leftFn,
       rCallbakFn: this.rightFn,
@@ -31,7 +31,7 @@ export default class Test3 extends Component {
     Modal.method.onOppen('ButtomModal', data);
   }
 
-  pressT=() => {
+  TipsModal=() => {
     const data = {
       tipsContent: this.tipsContent(),
       bottomTips: '自动关闭',
@@ -39,7 +39,7 @@ export default class Test3 extends Component {
     Modal.method.onOppen('TipsModal', data);
   }
 
-  pressF=() => {
+  AnimationsModal=() => {
     const data = {
       // tipsContent: this.svgContent(),
       svgName: 'finger',
@@ -50,10 +50,9 @@ export default class Test3 extends Component {
     Modal.method.onOppen('AnimationsModal', data);
   }
 
-  pressK=() => {
+  CustomModal=() => {
     const data = {
       customContent: this.customContent(),
-      top: 700,
     };
     Modal.method.onOppen('CustomModal', data);
   }
@@ -92,7 +91,7 @@ export default class Test3 extends Component {
           width: 200, height: 100, borderWidth: 2, borderColor: 'salmon', borderRadius: 50,
         }}
         >
-          <TouchableOpacity onPress={this.press} style={{ flex: 1, backgroundColor: '#333' }}>
+          <TouchableOpacity onPress={this.ButtomModal} style={{ flex: 1, backgroundColor: '#333' }}>
             <Text>wocaonima</Text>
           </TouchableOpacity>
         </View>
@@ -100,7 +99,7 @@ export default class Test3 extends Component {
           width: 200, height: 100, borderWidth: 2, borderColor: 'salmon', borderRadius: 50,
         }}
         >
-          <TouchableOpacity onPress={this.pressT} style={{ flex: 1, backgroundColor: '#333' }}>
+          <TouchableOpacity onPress={this.TipsModal} style={{ flex: 1, backgroundColor: '#333' }}>
             <Text>wocaonima</Text>
           </TouchableOpacity>
         </View>
@@ -108,7 +107,7 @@ export default class Test3 extends Component {
           width: 200, height: 100, borderWidth: 2, borderColor: 'salmon', borderRadius: 50,
         }}
         >
-          <TouchableOpacity onPress={this.pressF} style={{ flex: 1, backgroundColor: '#333' }}>
+          <TouchableOpacity onPress={this.AnimationsModal} style={{ flex: 1, backgroundColor: '#333' }}>
             <Text>wocaonima</Text>
           </TouchableOpacity>
         </View>
@@ -116,7 +115,7 @@ export default class Test3 extends Component {
           width: 200, height: 100, borderWidth: 2, borderColor: 'salmon', borderRadius: 50,
         }}
         >
-          <TouchableOpacity onPress={this.pressK} style={{ flex: 1, backgroundColor: '#333' }}>
+          <TouchableOpacity onPress={this.CustomModal} style={{ flex: 1, backgroundColor: '#333' }}>
             <Text>wocaonima</Text>
           </TouchableOpacity>
         </View>

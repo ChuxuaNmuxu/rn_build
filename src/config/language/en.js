@@ -13,4 +13,12 @@ export default {
   changeToEnglish: 'change to english',
   changeToChinese: 'change to chinese',
   jump: 'Jump',
+
+  // 做题记录页面
+  ProblemRecords: {
+    header: {
+      homeworkRecord: 'homework record',
+      exanRecord: 'exan record',
+    },
+  },
 };

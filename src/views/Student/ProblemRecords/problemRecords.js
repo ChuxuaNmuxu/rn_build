@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  Text,
   View,
   TouchableOpacity,
 } from 'react-native';
@@ -8,6 +7,7 @@ import styles from './problemRecords.scss';
 // import Swiper from 'react-native-swiper';
 import FilterBox from './Components/filterBox';
 import RecordList from './recordList';
+import I18nText from '../../../components/I18nText';
 
 class ProblemRecords extends Component {
   constructor(props) {
@@ -49,6 +49,13 @@ class ProblemRecords extends Component {
         accuracy: '1',
         resultRead: '1',
         publishTime: '2018-09-03T11:27:09+08:00',
+      }, {
+        id: '5',
+        subjectName: '物理',
+        title: '物理作业',
+        accuracy: '1',
+        resultRead: '1',
+        publishTime: '2018-09-03T11:27:09+08:00',
       }],
     };
   }
@@ -72,17 +79,17 @@ class ProblemRecords extends Component {
             style={[styles.recordBox, styles.homeWorkRecord, (currentRecordType === 0 && styles.currentRecord)]}
             onPress={() => this.switchRecord(0)}
           >
-            <Text style={[styles.recordText, styles.homeWorkText, (currentRecordType === 0 && styles.currentText)]}>
-              作业记录
-            </Text>
+            <I18nText style={[styles.recordText, styles.homeWorkText, (currentRecordType === 0 && styles.currentText)]}>
+              ProblemRecords.header.homeworkRecord
+            </I18nText>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.recordBox, styles.examRecord, (currentRecordType === 1 && styles.currentRecord)]}
             onPress={() => this.switchRecord(1)}
           >
-            <Text style={[styles.recordText, styles.examText, (currentRecordType === 1 && styles.currentText)]}>
-              考试记录
-            </Text>
+            <I18nText style={[styles.recordText, styles.examText, (currentRecordType === 1 && styles.currentText)]}>
+              ProblemRecords.header.exanRecord
+            </I18nText>
           </TouchableOpacity>
         </View>
         <FilterBox />
