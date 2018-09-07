@@ -29,17 +29,6 @@ class Radio extends Component {
     onChange(value);
   }
 
-  isChecked = () => {
-    const { checked, type, value } = this.props;
-    console.log(34, checked, type, value);
-    if (type !== 'group' && checked) {
-      return true;
-    } if (value && checked === value) {
-      return true;
-    }
-    return false;
-  }
-
   render() {
     const {
       children,
@@ -52,6 +41,7 @@ class Radio extends Component {
       icon,
       checkedIcon,
       style,
+      checked,
     } = this.props;
 
     return (
@@ -59,16 +49,16 @@ class Radio extends Component {
         <View style={[styles.wrapper, style]}>
           <View style={[
             this.customStyle(iconWrapStyle, styles.icon_wrap),
-            this.checkedStyle(this.isChecked(), checkedIconWrapStyle, styles.checked_icon_wrap),
+            this.checkedStyle(checked === value, checkedIconWrapStyle, styles.checked_icon_wrap),
           ]}
           >{
-            <View style={styles.icon}>{this.isChecked() ? checkedIcon : icon}</View>
+            <View style={styles.icon}>{checked === value ? checkedIcon : icon}</View>
           }
           </View>
           <Text
             style={[
               this.customStyle(textStyle, styles.text),
-              this.checkedStyle(this.isChecked(), checkedTextStyle, styles.checked_text),
+              this.checkedStyle(checked === value, checkedTextStyle, styles.checked_text),
             ]}
             ref={(e) => { this.test = e; }}
           >{children}
@@ -118,7 +108,6 @@ Radio.propTypes = {
     PropTypes.object,
     PropTypes.array,
   ]),
-  type: PropTypes.string, // 类型： group组
 };
 
 Radio.defaultProps = {
@@ -134,7 +123,6 @@ Radio.defaultProps = {
   value: null,
   disabled: false,
   style: {},
-  type: null,
 };
 
 export default Radio;
