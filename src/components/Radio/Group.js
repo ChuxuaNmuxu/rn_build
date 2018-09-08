@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { type, mergeAll } from 'ramda';
 import Radio from './Radio';
 
@@ -18,14 +18,46 @@ class GroupRadio extends Component {
     };
   }
 
+  // 重写 onChange 方法
   onChangeGroup = (value) => {
     const { onChange } = this.props;
-    console.log(23, value);
     this.setState({
       checked: value,
     }, onChange(value));
   };
 
+  renderDom = () => {
+    const { children, options } = this.props;
+    if (!children) return null;
+
+    if (type(children) === 'String') {
+      return <Text>{children}</Text>;
+    }
+
+    if (options) {
+      return this.renderOptions();
+    }
+
+    return this.renderCloneChild();
+  }
+
+  // Group嵌套Checkbox模式
+  renderCloneChild = () => {
+    const { checked } = this.state;
+    const {
+      children, defaultValue, value, style, onChange, horizontal, options, ...rest
+    } = this.props;
+    return React.Children.map(children,
+      child => React.cloneElement(child,
+        mergeAll([rest, child.props, {
+          checked,
+          onChange: this.onChangeGroup,
+          style: mergeAll({ marginRight: 39 }, child.props),
+          type: 'group',
+        }])));
+  }
+
+  // 通过 options 快速生成模式，options是个数组里面的每个值是个对象或者字符串，为对象时value属性为必填项
   renderOptions = () => {
     const {
       children, defaultValue, value, style, onChange, horizontal, options, ...rest
@@ -60,22 +92,11 @@ class GroupRadio extends Component {
   }
 
   render() {
-    const {
-      children, defaultValue, value, style, onChange, horizontal, options, ...rest
-    } = this.props;
-    const { checked } = this.state;
+    const { horizontal, style } = this.props;
     return (
       <View style={[{ flexDirection: horizontal ? 'row' : 'column' }, style]}>
-        {options
-          ? this.renderOptions()
-          : React.Children.map(children,
-            child => React.cloneElement(child,
-              mergeAll([rest, child.props, {
-                checked,
-                onChange: this.onChangeGroup,
-                style: mergeAll({ marginRight: 39 }, child.props),
-                type: 'group',
-              }])))
+        {
+          this.renderDom()
         }
       </View>
     );
@@ -83,10 +104,7 @@ class GroupRadio extends Component {
 }
 
 GroupRadio.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-  ]),
+  children: PropTypes.any,
   style: PropTypes.object,
 
   defaultValue: PropTypes.any, // 默认选中的值

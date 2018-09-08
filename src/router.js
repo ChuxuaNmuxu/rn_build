@@ -26,6 +26,7 @@ import Welcome from './views/Welcome';
 import Demo from './views/Demo';
 import styles from './router.scss';
 import TaskDetail from './views/Student/TaskDetail';
+import ProblemOverview from './views/Student/ProblemOverview';
 
 const RouteMap = props => (
   <Router
@@ -113,9 +114,9 @@ const RouteMap = props => (
         </Tabs>
       </Stack>
       <Stack key="StudentAll" initial>
-        <Scene key="DoHomework" component={DoHomework} hideNavBar />
+        <Scene key="DoHomework" component={DoHomework} hideNavBar initial />
         <Scene
-          initial
+          // initial
           // back
           navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
           renderBackButton={() => (
@@ -125,6 +126,32 @@ const RouteMap = props => (
               </TouchableOpacity>
             </View>
           )}
+          key="TaskDetail"
+          component={TaskDetail}
+        />
+        {/* 错题本 */}
+        <Scene
+          title="错题本"
+          titleStyle={styles.navigationBarStyle_title}
+          navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
+          // hideNavBar // 是否隐藏整个导航条
+          key="ProblemOverview"
+          component={ProblemOverview}
+        />
+        {/* 任务详情 */}
+        <Scene
+        // title="TaskDetail" // 会自动在props加入一个 title="TaskDetail"
+          back
+        // backButtonTintColor='white' // 返回按钮的颜色
+          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
+          renderBackButton={() => (
+            <View>
+              <TouchableOpacity onPress={Actions.pop}>
+                <Entypo name="chevron-thin-left" size={40} color="white" />
+              </TouchableOpacity>
+            </View>
+          )}
+        // hideNavBar // 是否隐藏整个导航条
           key="TaskDetail"
           component={TaskDetail}
         />
@@ -169,8 +196,7 @@ const RouteMap = props => (
         />
       </Stack>
     </Modal>
-  </Router>
-);
+  </Router>);
 
 RouteMap.propTypes = {
   dispatch: PropTypes.func.isRequired,

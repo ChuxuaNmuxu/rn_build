@@ -14,3 +14,8 @@ export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
  * ---------------公共组件ACTIONS-----------------------
  */
 export const COMMON_MODAL_OPPEN_OR_CLOSE = 'COMMON_MODAL_OPPEN_OR_CLOSE';
+
+/**
+ * 错题本
+ */
+export const FETCH_PROBLEM_OVERVIEW = 'FETCH_PROBLEM_OVERVIEW';

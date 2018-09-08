@@ -1,0 +1,58 @@
+.modalContent {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContentText {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#999999;
+  letter-spacing:-1px;
+  line-height:46px;
+  text-align:center;
+}
+
+.customContent {
+  width: 100%;
+  height: 164px;
+  // background-color: blue;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 19px 24px;
+}
+
+.title {
+  flex: 1;
+  // align-self: flex-start;
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666666;
+  letter-spacing:0;
+  text-align:left;
+  // background-color: red;
+  width: 100%;
+}
+
+.customContentItem {
+  flex: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  // background-color: aqua;
+}
+
+.btn {
+  border:1px solid #dbdbdb;
+  border-radius:50px;
+  width:208px;
+  height:70px;
+  line-height: 70px;
+  text-align: center;
+  margin-right: 30px;
+}

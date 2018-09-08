@@ -8,17 +8,14 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 
-.headerItem {
-  justify-content: center;
-}
-
-.icon {
+.buttonStyle {
   font-size: 24px;
   color: #fff;
-  text-align: left;
-  margin-left: 24px;
+  text-align: center;
+  width: 60px;
 }
 
 .doHomeworkTitle {
@@ -33,13 +30,23 @@
   flex-direction: row;
   justify-content: space-between;
   background-color: #fafafa;
+  padding-left: 24px;
+}
+.order_left {
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.quanbu {
+  font-size: 32px;
+  color: #30bf6c;
 }
 
 .totalQuestion {
   font-size: 24px;
   color: #bfbfbf;
   text-align: left;
-  margin-left: 24px;
+  margin-left: 20px;
   margin-top: 30px;
   margin-bottom: 30px;
 }
@@ -54,7 +61,7 @@
   border: 1px solid #30bf6c;
   border-radius: 50px;
   margin-right: 24px;
-  margin-top: 16px;
+  margin-top: 8px;
   justify-content: center;
   align-items: center;
 }

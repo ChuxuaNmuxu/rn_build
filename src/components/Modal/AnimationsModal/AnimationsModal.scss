@@ -1,0 +1,55 @@
+.TouchableOpacity {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.transparentTwo {
+  z-index: 1;
+}
+
+.content {
+  background-color: rgba(0,0,0,0.5);
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  padding: 40px;
+  z-index: 2;
+  width: 480px;
+  height: 360px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContentText {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#ffffff;
+  letter-spacing:0;
+  line-height:42px;
+  text-align:justify;
+  margin-top: 15px;
+}
+
+.Animatable {
+  position: absolute;
+}
+
+.loadingComponent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80;
+  height: 60;
+  flex-direction: row;
+  position: relative;
+}

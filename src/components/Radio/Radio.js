@@ -6,28 +6,26 @@ import Opt from '../Opt';
 class Radio extends Component {
   constructor(props) {
     super(props);
-    const { checked } = props;
+    const { checked, type } = props;
     this.state = {
-      stateChecked: checked,
+      // checked全等于true表示默认选中，则将checked设置为type，与value为空设为type原理类似
+      stateChecked: checked === true ? type : checked,
     };
   }
 
 
   onChange = (value) => {
     const { onChange, type } = this.props;
-    if (type === 'group') {
-      onChange(value);
-    } else {
+    if (type === 'radio' || type === 'button') {
       this.setState({
-        stateChecked: true,
+        stateChecked: value,
       }, onChange(true));
+    } else {
+      onChange(value);
     }
   }
 
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   console.log(nextProps, prevState);
-  // }
-
+  // Radio 默认icon结构、样式
   checkedIcon = () => {
     const { checkedIcon } = this.props;
     if (checkedIcon) return checkedIcon;
@@ -45,30 +43,28 @@ class Radio extends Component {
       children,
       checked,
       type,
+      value,
       ...rest
     } = this.props;
 
-    Reflect.deleteProperty(rest, 'checkedIcon');
-    Reflect.deleteProperty(rest, 'onChange');
-    Reflect.deleteProperty(rest, 'checked');
     let newChecked = null;
-    // console.log(55, type, checked);
-    if (type === 'group') {
-      newChecked = checked;
-    } else {
-      newChecked = stateChecked;
-      Reflect.deleteProperty(rest, 'checked');
-    }
 
+    if (type === 'radio' || type === 'button') {
+      newChecked = stateChecked;
+    } else {
+      newChecked = checked;
+    }
 
     return (
       <Opt
+        {...rest}
         checked={newChecked}
         onChange={this.onChange}
         renderLabel={this.renderLabel}
         checkedIcon={this.checkedIcon()}
         type={type}
-        {...rest}
+        value={value || type} // 只有单独使用Radio、Radio.Button时会没有value，在group中value为必传，没有则默认为type
+
       >{children}
       </Opt>
     );
@@ -107,7 +103,7 @@ Radio.defaultProps = {
   checked: null,
   children: null,
   value: null,
-  type: null,
+  type: 'radio',
   checkedIcon: null,
 };
 

@@ -13,7 +13,6 @@ const RadioButton = (props) => {
   return (
     <Radio
       iconWrapStyle={styles.iconWrap_style}
-      type="button"
       {...rest}
       icon={renderIcon()}
       checkedIcon={renderIcon()}
@@ -23,6 +22,11 @@ const RadioButton = (props) => {
 
 RadioButton.propTypes = {
   children: PropTypes.any.isRequired,
+  type: PropTypes.string,
+};
+
+RadioButton.defaultProps = {
+  type: 'button',
 };
 
 export default RadioButton;

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import {
-  Text, View, TouchableOpacity, ScrollView,
+  Text, View, ScrollView,
 } from 'react-native';
 // import { PropTypes } from 'prop-types';
+import { Actions } from 'react-native-router-flux';
 import styles from './doHomework.scss';
-import CIcon from '../../../components/Icon';
+import { CustomButton } from '../../../components/Icon';
 import Timer from './Components/Timer';
 import QuestionCard from './Components/QuestionCard';
 import AnswerCard from './Components/AnswerCard';
@@ -36,38 +37,33 @@ class DoHomework extends Component {
     console.log(111, '提交函数');
   }
 
+  // 点击该图标展示各题号的作答情况
+  showQuestionOrderFun = () => {
+    console.log(13, '点击图标啦');
+  }
+
   render() {
     const startTime = 1;
     return (
       <View style={styles.containers}>
         <View style={styles.doHomeworkHeader}>
-          <View style={styles.headerItem}>
-            <CIcon style={styles.icon} name="jiantou-copy-copy" onPress={() => Actions.HomeworkTaskStack()} />
-          </View>
-          <View style={styles.headerItem}>
-            <Text style={styles.doHomeworkTitle}>作业名称</Text>
-          </View>
-          <View style={styles.headerItem}>
-            <Timer startTime={startTime} />
-          </View>
+          <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.HomeworkTask} />
+          <Text style={styles.doHomeworkTitle}>作业名称</Text>
+          <Timer startTime={startTime} />
         </View>
         <View style={styles.questionOrder}>
-          <View>
-            <Text style={styles.totalQuestion}>
-              <Text style={styles.currentIndex}>1</Text>
-              /12
-            </Text>
-          </View>
-          <View>
-            <TouchableOpacity
-              style={styles.submitBtn}
-              onPress={() => this.submitFun()}
-            >
-              <Text style={styles.btnText}>
-                提交
+          <View style={styles.order_left}>
+            <CustomButton style={styles.quanbu} name="quanbu" onPress={this.showQuestionOrderFun} />
+            <View>
+              <Text style={styles.totalQuestion}>
+                <Text style={styles.currentIndex}>1</Text>
+                /12
               </Text>
-            </TouchableOpacity>
+            </View>
           </View>
+          <CustomButton warpStyle={styles.submitBtn} style={styles.btnText} onPress={() => this.submitFun()}>
+            提交
+          </CustomButton>
         </View>
         <ScrollView style={styles.main_content}>
           <View>
