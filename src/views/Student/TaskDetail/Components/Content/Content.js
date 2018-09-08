@@ -7,6 +7,7 @@ import {
   DatePickerAndroid,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { Actions } from 'react-native-router-flux';
 import I18nText from '../../../../../components/I18nText';
 import styles from './Content.scss';
 
@@ -97,7 +98,7 @@ class Content extends Component {
             </I18nText>
           </TouchableOpacity>
           {/* 开始作业 */}
-          <TouchableOpacity onPress={() => console.log('开始作业')}>
+          <TouchableOpacity onPress={() => Actions.DoHomework()}>
             <I18nText style={[styles.content_child_btn_normal, styles.content_child_btn_color]}>
               TaskDetail.beginHomework
             </I18nText>

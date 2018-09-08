@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import {
+  Text, View, TouchableOpacity, ScrollView,
+} from 'react-native';
 // import { PropTypes } from 'prop-types';
 import styles from './doHomework.scss';
 import CIcon from '../../../components/Icon';
 import Timer from './Components/Timer';
+import QuestionCard from './Components/QuestionCard';
+import AnswerCard from './Components/AnswerCard';
 
 class DoHomework extends Component {
   constructor(props) {
@@ -38,7 +42,7 @@ class DoHomework extends Component {
       <View style={styles.containers}>
         <View style={styles.doHomeworkHeader}>
           <View style={styles.headerItem}>
-            <CIcon style={styles.icon} name="jiantou-copy-copy" onPress={() => Actions.HomeworkTask()} />
+            <CIcon style={styles.icon} name="jiantou-copy-copy" onPress={() => Actions.HomeworkTaskStack()} />
           </View>
           <View style={styles.headerItem}>
             <Text style={styles.doHomeworkTitle}>作业名称</Text>
@@ -65,9 +69,12 @@ class DoHomework extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.doHomeworkMain}>
-          <Text style={styles.questionText}>做作业页面</Text>
-        </View>
+        <ScrollView style={styles.main_content}>
+          <View>
+            <QuestionCard />
+            <AnswerCard />
+          </View>
+        </ScrollView>
       </View>
     );
   }

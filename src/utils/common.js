@@ -87,6 +87,32 @@ export const formatTimeToshow = (timeData) => {
   return finalTime;
 };
 
+// 各类题型
+export const subjectType = ['单选题', '多选题', '判断题', '对应题', '填空题', '主观题', '综合题'];
+
+/**
+ * 根据小题类型转成对应的题型名称
+ * @param {number} type
+ */
+export const getQuestionTypeName = (type) => {
+  switch (type) {
+    case 1:
+      return subjectType[0];
+    case 2:
+      return subjectType[1];
+    case 3:
+      return subjectType[2];
+    case 4:
+      return subjectType[3];
+    case 10:
+      return subjectType[4];
+    case 11:
+      return subjectType[5];
+    default:
+      return subjectType[6];
+  }
+};
+
 /**
  * 渲染同类型元素不带key只会产生性能问题，如果渲染的是不同类型的状态性组件，组件将会被替换，状态丢失。
  * @param {string} fnName
