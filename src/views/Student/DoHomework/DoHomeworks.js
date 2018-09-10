@@ -4,13 +4,13 @@ import {
 } from 'react-native';
 // import { PropTypes } from 'prop-types';
 import { Actions } from 'react-native-router-flux';
-import styles from './doHomework.scss';
+import styles from './DoHomeworks.scss';
 import { CustomButton } from '../../../components/Icon';
 import Timer from './Components/Timer';
 import QuestionCard from './Components/QuestionCard';
 import AnswerCard from './Components/AnswerCard';
 
-class DoHomework extends Component {
+class DoHomeworks extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -76,4 +76,4 @@ class DoHomework extends Component {
   }
 }
 
-export default DoHomework;
+export default DoHomeworks;

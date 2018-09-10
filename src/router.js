@@ -18,6 +18,7 @@ import HomeworkTask from './views/Student/HomeworkTask';
 import ProblemRecords from './views/Student/ProblemRecords';
 import My from './views/Student/My';
 import WrongNotes from './views/Student/WrongNotes';
+import PreviewHomework from './views/Student/PreviewHomework';
 import DoHomework from './views/Student/DoHomework';
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
@@ -114,7 +115,8 @@ const RouteMap = props => (
         </Tabs>
       </Stack>
       <Stack key="StudentAll" initial>
-        <Scene key="DoHomework" component={DoHomework} hideNavBar initial />
+        <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar initial />
+        <Scene key="DoHomework" component={DoHomework} hideNavBar />
         <Scene
           // initial
           // back

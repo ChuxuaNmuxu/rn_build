@@ -54,8 +54,14 @@ class FilterBox extends Component {
         <View style={styles.filterBox}>
           {
             subjectData.map(item => (
-              <TouchableOpacity key={item.subjectId} style={[styles.subjectItem, (currentId === item.subjectId && styles.currentItem)]} onPress={() => this.filterSubjectFun(item.subjectId)}>
-                <Text style={[styles.filterText, (currentId === item.subjectId && styles.currentText)]}>{item.subjectName}</Text>
+              <TouchableOpacity
+                key={item.subjectId}
+                style={[styles.subjectItem, (currentId === item.subjectId && styles.currentItem)]}
+                onPress={() => this.filterSubjectFun(item.subjectId)}
+              >
+                <Text style={[styles.filterText, (currentId === item.subjectId && styles.currentText)]}>
+                  {item.subjectName}
+                </Text>
               </TouchableOpacity>
             ))
           }

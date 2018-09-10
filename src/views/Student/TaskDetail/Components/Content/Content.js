@@ -92,7 +92,7 @@ class Content extends Component {
         </View>
         <View style={[styles.content_child_btn]}>
           {/* 预览作业 */}
-          <TouchableOpacity onPress={() => console.log('预览作业')}>
+          <TouchableOpacity onPress={() => Actions.PreviewHomework()}>
             <I18nText style={styles.content_child_btn_normal}>
               TaskDetail.reviewHomework
             </I18nText>
