@@ -41,13 +41,13 @@ const RouteMap = props => (
       key="modal"
     >
       {/* 错题本 */}
-      <Stack key="ProblemOverview">
+      <Stack key="ProblemOverviewStack">
         <Scene
           title="错题本"
           titleStyle={styles.navigationBarStyle_title}
           navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
           // hideNavBar // 是否隐藏整个导航条
-          key="ProblemOverview1"
+          key="ProblemOverview"
           component={ProblemOverview}
           initial
         />

@@ -143,7 +143,10 @@ class GroupCheckbox extends Component {
 
 GroupCheckbox.propTypes = {
   children: PropTypes.any,
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]),
 
   defaultValue: PropTypes.any, // 默认选中的值
   disabled: PropTypes.bool, // 禁选所有子单选器
@@ -154,7 +157,7 @@ GroupCheckbox.propTypes = {
 };
 
 GroupCheckbox.defaultProps = {
-  style: {},
+  style: null,
   defaultValue: null,
   disabled: false,
   options: null,
