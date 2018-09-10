@@ -108,7 +108,7 @@ export default class LineTo extends Component {
     const { value } = this.state;
     const svg = new Path();
     svg.reset();
-    console.log(104, value);
+
     for (const k in value) {
       const startX = this.abscissa(Number(k));
       const endX = this.abscissa(letterMapNum(value[k]));
