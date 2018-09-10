@@ -9,7 +9,7 @@ import {
 import Language from '../../components/Language';
 import Radio from '../../components/Radio';
 import Checkbox from '../../components/Checkbox';
-import LineTo from '../../components/LineTo/LineTo';
+import LineTo from '../../components/LineTo';
 import BoolSubject from '../../components/BoolSubject';
 
 const styles = StyleSheet.create({
