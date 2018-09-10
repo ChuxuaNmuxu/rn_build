@@ -3,11 +3,13 @@ import {
   StyleSheet,
   View,
   Text,
+  ScrollView,
 } from 'react-native';
 // import Theme from '../../components/Theme';
 import Language from '../../components/Language';
 import Radio from '../../components/Radio';
 import Checkbox from '../../components/Checkbox';
+import LineTo from '../../components/LineTo/LineTo';
 import BoolSubject from '../../components/BoolSubject';
 
 const styles = StyleSheet.create({
@@ -36,10 +38,14 @@ export default class Demo extends Component {
       { label: 'Apple3', value: 'Apple3' },
     ];
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         {/* <Theme /> */}
         <Language />
-        <Text style={{ fontSize: 100 }}>单选</Text>
+
+        <Text style={{ fontSize: 100 }}>对应题</Text>
+        <LineTo />
+
+        {/* <Text style={{ fontSize: 100 }}>单选</Text>
         <Text>分组</Text>
         <Radio.Group>
           <Radio value={1}>A</Radio>
@@ -56,7 +62,6 @@ export default class Demo extends Component {
         <Text>未分组</Text>
 
         <Radio checked onChange={this.onChangeRadio}>未分组默认选中</Radio>
-
 
         <Radio onChange={this.onChangeRadio}>未分组不选中</Radio>
         <Radio.Button>B</Radio.Button>
@@ -75,9 +80,10 @@ export default class Demo extends Component {
         </Checkbox.Group>
         <Checkbox.Group options={plainOptions} checkbox onChange={this.onChangeCheckbox} value={['Apple1', 'Apple2']} />
         <Checkbox.Group />
-        <Checkbox.Group>哈哈哈哈</Checkbox.Group>
+        <Checkbox.Group>哈哈哈哈</Checkbox.Group> */}
 
-      </View>
+
+      </ScrollView>
     );
   }
 }

@@ -1,0 +1,63 @@
+$baseColor: #30bf6c;
+
+.line-to {
+    font-size: 14px;
+    overflow-y: auto;
+    position: relative;
+
+    :global {
+        .conent {
+            display: inline-block;
+            margin-left: 20px;
+
+            .common {
+                display: inline-block;
+                text-align: center;
+                border-radius: 50%;
+                border: 1px solid $baseColor;
+                color: $baseColor;
+                cursor: pointer;
+                user-select: none;
+            }
+
+            .common-selected {
+                background-color: $baseColor;
+                color: #fff;
+            }
+        }
+
+        .operation {
+            display: inline-block;
+            position: relative;
+            bottom: 32px;
+
+            span {
+                font-size: 16px;
+                margin-right: 13px;
+            }
+
+            .ant-btn.ant-btn-icon-only {
+                width: 28px;
+                height: 28px;
+                border: 1px solid #dbdbdb;
+                margin-right: 10px;
+                padding: 0;
+
+                i {
+                    margin-left: 0;
+                    margin-right: 0;
+                }
+            }
+
+            .ant-btn:hover {
+                border-color: $baseColor;
+            }
+
+            .ant-btn:focus {
+                i {
+                    color: rgba(0, 0, 0, 0.65);
+                }
+            }
+        }
+    }
+}
