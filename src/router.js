@@ -17,7 +17,7 @@ import PropTypes from 'prop-types';
 import HomeworkTask from './views/Student/HomeworkTask';
 import ProblemRecords from './views/Student/ProblemRecords';
 import My from './views/Student/My';
-import WrongNotes from './views/Student/WrongNotes';
+// import WrongNotes from './views/Student/WrongNotes'; // 项目人员 hqh 注释掉了，因为错题本是hqh写的！
 import DoHomework from './views/Student/DoHomework';
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
@@ -40,44 +40,13 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
-      {/* 错题本 */}
-      <Stack key="ProblemOverview">
-        <Scene
-          title="错题本"
-          titleStyle={styles.navigationBarStyle_title}
-          navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
-          // hideNavBar // 是否隐藏整个导航条
-          key="ProblemOverview1"
-          component={ProblemOverview}
-          initial
-        />
-      </Stack>
-      {/* 任务详情 */}
-      <Stack key="TaskDetail">
-        <Scene
-          // title="TaskDetail" // 会自动在props加入一个 title="TaskDetail"
-          back
-          // backButtonTintColor='white' // 返回按钮的颜色
-          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
-          renderBackButton={() => (
-            <View>
-              <TouchableOpacity onPress={Actions.pop}>
-                <Entypo name="chevron-thin-left" size={40} color="white" />
-              </TouchableOpacity>
-            </View>
-          )}
-          // hideNavBar // 是否隐藏整个导航条
-          key="TaskDetail1"
-          component={TaskDetail}
-        />
-      </Stack>
       <Stack key="WelcomeStack">
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
       </Stack>
       <Stack key="Account">
         <Scene key="Login" hideNavBar component={Login} />
       </Stack>
-      <Stack key="Student" hideNavBar>
+      <Stack key="Student" hideNavBar initial>
         <Tabs
           key="StudentTabs"
           activeBackgroundColor="#fafafa" // 选中tabbar的背景色
@@ -119,7 +88,24 @@ const RouteMap = props => (
               component={ProblemRecords}
             />
           </Stack>
+          {/* 错题本 */}
           <Stack
+            title="wrongNotes" // 配好在zh.js、en.js那边了
+            key="ProblemOverviewStack"
+            image="cuotiben1"
+            selectedImage="cuotiben1"
+            // titleStyle={styles.navigationBarStyle_title}
+            // navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
+            hideNavBar // 是否隐藏整个导航条
+            initial
+          >
+            <Scene
+              key="ProblemOverview"
+              component={ProblemOverview}
+            />
+          </Stack>
+          {/* hqh 注释掉 */}
+          {/* <Stack
             title="wrongNotes"
             key="WrongNotesStack"
             image="cuotiben1"
@@ -127,7 +113,7 @@ const RouteMap = props => (
             hideNavBar
           >
             <Scene key="WrongNotes" component={WrongNotes} />
-          </Stack>
+          </Stack> */}
           <Stack
             title="my"
             key="MyStack"
@@ -158,6 +144,23 @@ const RouteMap = props => (
             </View>
           )}
           key="TaskDetail"
+          component={TaskDetail}
+        />
+        {/* 任务详情 */}
+        <Scene
+          // title="TaskDetail" // 会自动在props加入一个 title="TaskDetail"
+          back
+          // backButtonTintColor='white' // 返回按钮的颜色
+          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
+          renderBackButton={() => (
+            <View>
+              <TouchableOpacity onPress={Actions.pop}>
+                <Entypo name="chevron-thin-left" size={40} color="white" />
+              </TouchableOpacity>
+            </View>
+          )}
+          // hideNavBar // 是否隐藏整个导航条
+          key="TaskDetail1"
           component={TaskDetail}
         />
       </Stack>
