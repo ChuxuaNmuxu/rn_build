@@ -28,20 +28,20 @@
 }
 
 .content_child_btn_normal {
-  border:1px solid #30bf6c;
-  border-radius:50px;
-  width:268px;
-  height:70px;
-  line-height: 70px; 
-  text-align: center;
+  border: 1px solid #30bf6c;
   border-radius: 50px;
+  // width: 268px;
+  // height: 70px;
+  // line-height: 70px; 
+  // text-align: center;
+  padding: 20px 100px;
   margin: 10px;
-  font-family:PingFangSC-Regular;
-  font-size:24px;
-  color:#30bf6c;
+  font-family: PingFangSC-Regular;
+  font-size: 24px;
+  color: #30bf6c;
 }
 
 .content_child_btn_color {
   background-color: #30bf6c;
-  color:#ffffff;
+  color: #ffffff;
 }

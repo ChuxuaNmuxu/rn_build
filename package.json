@@ -28,7 +28,6 @@
   "dependencies": {
     "antd-mobile-rn": "^2.2.0",
     "dayjs": "^1.7.5",
-    "immutable": "^3.8.2",
     "md5": "^2.2.1",
     "prop-types": "^15.6.2",
     "qs": "^6.5.2",

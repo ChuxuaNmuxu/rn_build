@@ -14,13 +14,22 @@ export default {
     },
   },
 
-  // TaskDetail
+  // TaskDetail 任务详情
   TaskDetail: {
     useTime: '预计耗时:',
     endTime: '截止时间:',
     beginTime: '执行日期:',
     reviewHomework: '预览作业',
     beginHomework: '开始作业',
+  },
+
+  // 批阅作业
+  homeworkCorrecting: {
+    correct: '正确',
+    partOfTheError: '部分正确',
+    error: '错误',
+    finishCorrectingAndNext: '完成批阅,下一题',
+    homeworkCorrecting: '批阅:',
   },
 
   // test
