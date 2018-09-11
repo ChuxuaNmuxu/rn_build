@@ -21,10 +21,19 @@ class ProblemOverview extends Component {
     fetchDataAction(null, 'REQUEST');
   }
 
+  componentWillUnmount() {
+    console.log('离开 ProblemOverview 组件！');
+  }
+
   render() {
     const { data } = this.props;
     return (
       <View style={styles.wrap}>
+        <View style={styles.title_wrap}>
+          <Text style={styles.title_content}>
+            错题本
+          </Text>
+        </View>
         {
           data.map((item, index) => (
             <TouchableOpacity onPress={() => console.log('点击查看错题')} key={index}>
