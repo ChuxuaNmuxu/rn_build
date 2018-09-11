@@ -103,10 +103,16 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
+    // compileSdkVersion 27
+    // buildToolsVersion "27.0.3"
+
     defaultConfig {
         applicationId "com.cjhms_rn"
         minSdkVersion 16
         targetSdkVersion 23
+
+        // minSdkVersion 18
+        // targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         ndk {
