@@ -3,11 +3,13 @@ import {
   StyleSheet,
   View,
   Text,
+  ScrollView,
 } from 'react-native';
 // import Theme from '../../components/Theme';
 import Language from '../../components/Language';
 import Radio from '../../components/Radio';
 import Checkbox from '../../components/Checkbox';
+import LineTo from '../../components/LineTo';
 import BoolSubject from '../../components/BoolSubject';
 
 const styles = StyleSheet.create({
@@ -20,7 +22,9 @@ const styles = StyleSheet.create({
 export default class Demo extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      part1Value: null,
+    };
   }
 
   onChangeRadio = data => console.log(25, data)
@@ -34,10 +38,14 @@ export default class Demo extends Component {
       { label: 'Apple3', value: 'Apple3' },
     ];
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         {/* <Theme /> */}
         <Language />
-        <Text style={{ fontSize: 100 }}>单选</Text>
+
+        <Text style={{ fontSize: 100 }}>对应题</Text>
+        <LineTo />
+
+        {/* <Text style={{ fontSize: 100 }}>单选</Text>
         <Text>分组</Text>
         <Radio.Group>
           <Radio value={1}>A</Radio>
@@ -55,18 +63,27 @@ export default class Demo extends Component {
 
         <Radio checked onChange={this.onChangeRadio}>未分组默认选中</Radio>
 
-
         <Radio onChange={this.onChangeRadio}>未分组不选中</Radio>
+        <Radio.Button>B</Radio.Button>
+        <Radio onChange={this.onChangeRadio}>未分组默认选中</Radio>
+        <Radio.Group>传入字符串</Radio.Group>
+        <Radio.Group />
 
 
         <Text style={{ fontSize: 100 }}>多选</Text>
 
-        {/* <Checkbox checked>多选哈</Checkbox> */}
-        {/* <Radio size={4} onChange={this.onChangeRadio} checked={1} />
-        <Text>多选</Text> */}
-        {/* <Checkbox size={3} checkbox onChange={this.onChangeCheckbox} checked={[{ 0: false }, { 1: true }]} /> */}
-        {/* <BoolSubject /> */}
-      </View>
+        <Checkbox checked>多选哈</Checkbox>
+        <Checkbox.Button>B</Checkbox.Button>
+        <Checkbox.Group horizontal value={[1]} defaultValue={[1]}>
+          <Checkbox.Button value={1}>A</Checkbox.Button>
+          <Checkbox.Button value={2}>B</Checkbox.Button>
+        </Checkbox.Group>
+        <Checkbox.Group options={plainOptions} checkbox onChange={this.onChangeCheckbox} value={['Apple1', 'Apple2']} />
+        <Checkbox.Group />
+        <Checkbox.Group>哈哈哈哈</Checkbox.Group> */}
+
+
+      </ScrollView>
     );
   }
 }

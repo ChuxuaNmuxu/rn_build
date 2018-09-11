@@ -1,17 +1,14 @@
 import React from 'react';
 import { Text } from 'react-native';
 import PropTypes from 'prop-types';
-import Radio from './Radio';
+import Checkbox from './Checkbox';
 import styles from './button.scss';
 
 const RadioButton = (props) => {
-  const {
-    children, ...rest
-  } = props;
+  const { children, ...rest } = props;
   const renderIcon = () => <Text style={styles.default_text}>{children}</Text>;
-
   return (
-    <Radio
+    <Checkbox
       iconWrapStyle={styles.iconWrap_style}
       {...rest}
       icon={renderIcon()}
@@ -22,11 +19,6 @@ const RadioButton = (props) => {
 
 RadioButton.propTypes = {
   children: PropTypes.any.isRequired,
-  type: PropTypes.string,
-};
-
-RadioButton.defaultProps = {
-  type: 'button',
 };
 
 export default RadioButton;
