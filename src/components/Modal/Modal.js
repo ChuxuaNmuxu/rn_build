@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import {
-  Modal, ToastAndroid, StatusBar, View,
+  Modal, ToastAndroid,
 } from 'react-native';
 // import Style from './Modal.scss';
 import Resolution from '../Resolution';
@@ -149,22 +149,17 @@ class MyModal extends Component {
   render() {
     const { visible, type } = this.state;
     return (
-      <React.Fragment>
-        <StatusBar
-          hidden
-          barStyle="default"
-          currentHeight={0}
-        />
-        <Modal
-          transparent
-          onClose={this.onClose}
-          visible={visible}
-          onRequestClose={() => {
-            this.onClose();
-          }}
-        >
-          <Resolution>
-            {
+
+      <Modal
+        transparent
+        onClose={this.onClose}
+        visible={visible}
+        onRequestClose={() => {
+          this.onClose();
+        }}
+      >
+        <Resolution>
+          {
               {
                 ButtomModal: this._ButtomModal(),
                 TipsModal: this._TipsModal(),
@@ -173,9 +168,9 @@ class MyModal extends Component {
                 ImageViewer: this._ImageViewer(),
               }[type]
           }
-          </Resolution>
-        </Modal>
-      </React.Fragment>
+        </Resolution>
+      </Modal>
+
 
     );
   }
