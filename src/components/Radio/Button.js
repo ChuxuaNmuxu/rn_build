@@ -7,7 +7,7 @@ import { mergeStyles } from '../../utils/common';
 
 const RadioButton = (props) => {
   const {
-    children, iconWrapStyle, ...rest
+    children, iconWrapStyle, icon, checkedIcon, ...rest
   } = props;
   const renderIcon = () => <Text style={styles.default_text}>{children}</Text>;
 
@@ -15,8 +15,8 @@ const RadioButton = (props) => {
     <Radio
       {...rest}
       iconWrapStyle={mergeStyles(styles.iconWrap_style, iconWrapStyle)}
-      icon={renderIcon()}
-      checkedIcon={renderIcon()}
+      icon={icon || renderIcon()}
+      checkedIcon={checkedIcon || renderIcon()}
     />
   );
 };
@@ -28,11 +28,15 @@ RadioButton.propTypes = {
     PropTypes.array,
     PropTypes.object,
   ]),
+  icon: PropTypes.element,
+  checkedIcon: PropTypes.element,
 };
 
 RadioButton.defaultProps = {
   type: 'button',
   iconWrapStyle: {},
+  icon: null,
+  checkedIcon: null,
 };
 
 export default RadioButton;

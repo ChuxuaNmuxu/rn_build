@@ -6,14 +6,16 @@ import styles from './button.scss';
 import { mergeStyles } from '../../utils/common';
 
 const CheckboxButton = (props) => {
-  const { children, iconWrapStyle, ...rest } = props;
+  const {
+    children, iconWrapStyle, icon, checkedIcon, ...rest
+  } = props;
   const renderIcon = () => <Text style={styles.default_text}>{children}</Text>;
   return (
     <Checkbox
       iconWrapStyle={mergeStyles(styles.iconWrap_style, iconWrapStyle)}
       {...rest}
-      icon={renderIcon()}
-      checkedIcon={renderIcon()}
+      icon={icon || renderIcon()}
+      checkedIcon={checkedIcon || renderIcon()}
     />
   );
 };
@@ -24,10 +26,14 @@ CheckboxButton.propTypes = {
     PropTypes.array,
     PropTypes.object,
   ]),
+  icon: PropTypes.element,
+  checkedIcon: PropTypes.element,
 };
 
 CheckboxButton.defaultProps = {
   iconWrapStyle: {},
+  icon: null,
+  checkedIcon: null,
 };
 
 export default CheckboxButton;

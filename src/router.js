@@ -137,7 +137,6 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        initial
       >
         <Scene key="DoHomework" component={DoHomework} hideNavBar />
         {/* 任务详情 */}
@@ -178,7 +177,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="DemoStack"
-        // initial
+        initial
       >
         <Scene
           key="Demo"
