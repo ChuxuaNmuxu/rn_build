@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Text, View, ScrollView,
+  Text, View, ScrollView, TouchableOpacity,
 } from 'react-native';
 // import { PropTypes } from 'prop-types';
 import { Actions } from 'react-native-router-flux';
@@ -9,11 +9,13 @@ import { CustomButton } from '../../../components/Icon';
 import Timer from './Components/Timer';
 import QuestionCard from './Components/QuestionCard';
 import AnswerCard from './Components/AnswerCard';
+import ExtendListView from '../../../components/ExtendListView';
 
 class DoHomeworks extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showExtendView: false, // 是否显示该份作业所有题目序号的扩展视图
       // currentIndex: 0,                                    // 当前题目index
       // currentStartTime: moment(new Date()).format(),      // 当前题目的开始时间
       // currentStopTime: 0,                                 // 当前题目的结束时间
@@ -32,45 +34,88 @@ class DoHomeworks extends Component {
     };
   }
 
-  // 点击提交的函数
-  submitFun = () => {
-    console.log(111, '提交函数');
+
+  // 点击做作业头部时隐藏扩列表视图层
+  onTopClickFun = () => {
+    const { showExtendView } = this.state;
+    if (showExtendView) {
+      this.setVisibleFun(false);
+    }
+  }
+
+  // 控制扩展列表视图的显隐
+  setVisibleFun = (visible) => {
+    this.setState({ showExtendView: visible });
   }
 
   // 点击该图标展示各题号的作答情况
   showQuestionOrderFun = () => {
-    console.log(13, '点击图标啦');
+    const { showExtendView } = this.state;
+    this.setVisibleFun(!showExtendView);
   }
 
+  // 点击提交的函数
+  submitFun = () => {
+    // console.log(111, '提交函数');
+    this.setVisibleFun(false);
+  }
+
+
+  // 渲染作业头部组件
+  renderDohomeworkTop = startTime => (
+    <TouchableOpacity
+      activeOpacity={1}
+      style={styles.dohomework_top}
+      onPress={this.onTopClickFun}
+    >
+      <View style={styles.doHomeworkHeader}>
+        <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.HomeworkTask} />
+        <Text style={styles.doHomeworkTitle}>作业名称</Text>
+        <Timer startTime={startTime} />
+      </View>
+      <View style={styles.questionOrder}>
+        <View style={styles.order_left}>
+          <CustomButton style={styles.quanbu} name="quanbu" onPress={this.showQuestionOrderFun} />
+          <View>
+            <Text style={styles.totalQuestion}>
+              <Text style={styles.currentIndex}>1</Text>
+              /12
+            </Text>
+          </View>
+        </View>
+        <CustomButton warpStyle={styles.submitBtn} style={styles.btnText} onPress={() => this.submitFun()}>
+          提交
+        </CustomButton>
+      </View>
+    </TouchableOpacity>
+  )
+
+  // 渲染需要展示在modal中的组件
+  renderQuestionOrder = data => (
+    <View style={styles.orderContent}>
+      <Text style={{ fontSize: 30, color: '#f00' }}>题目序号列表1111</Text>
+    </View>
+  )
+
   render() {
+    // 用于设置扩展列表视图层距离顶部的距离
+    const setTop = 168;
     const startTime = 1;
+    const { showExtendView } = this.state;
     return (
       <View style={styles.containers}>
-        <View style={styles.doHomeworkHeader}>
-          <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.HomeworkTask} />
-          <Text style={styles.doHomeworkTitle}>作业名称</Text>
-          <Timer startTime={startTime} />
-        </View>
-        <View style={styles.questionOrder}>
-          <View style={styles.order_left}>
-            <CustomButton style={styles.quanbu} name="quanbu" onPress={this.showQuestionOrderFun} />
-            <View>
-              <Text style={styles.totalQuestion}>
-                <Text style={styles.currentIndex}>1</Text>
-                /12
-              </Text>
-            </View>
-          </View>
-          <CustomButton warpStyle={styles.submitBtn} style={styles.btnText} onPress={() => this.submitFun()}>
-            提交
-          </CustomButton>
-        </View>
+        {this.renderDohomeworkTop(startTime)}
         <ScrollView style={styles.main_content}>
-          <View>
-            <QuestionCard />
-            <AnswerCard />
-          </View>
+          <QuestionCard />
+          <AnswerCard />
         </ScrollView>
+        {
+          showExtendView && (
+          <ExtendListView setTop={setTop} setVisibleFun={this.setVisibleFun}>
+            {this.renderQuestionOrder()}
+          </ExtendListView>
+          )
+        }
       </View>
     );
   }
