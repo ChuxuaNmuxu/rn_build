@@ -3,6 +3,10 @@
 import dayjs from 'dayjs';
 import R from 'ramda';
 
+export const exampleOne = (a) => a + 1;
+
+export const exampleTwo= (a) => {return {a: a} }
+
 // 秒数转换成00'00"格式
 export const formatSeconds = (value) => {
   let theTime = parseInt(value);
