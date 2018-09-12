@@ -2,30 +2,72 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import { type, mergeAll } from 'ramda';
-import Radio from './Radio';
+import Checkbox from './Checkbox';
 
-class GroupRadio extends Component {
+class GroupCheckbox extends Component {
   constructor(props) {
     super(props);
     const {
       defaultValue, value,
     } = this.props;
 
-    const checked = value || defaultValue || false;
+    const checked = value || defaultValue || [];
 
     this.state = {
       checked,
     };
   }
 
-  // 重写 onChange 方法
+  // 重写onChange方法，通过state更改复选框的状态
   onChangeGroup = (value) => {
     const { onChange } = this.props;
+    const { checked } = this.state;
+    const val = this.isExist(value);
+    let newChecked;
+
+    // 如果点击的按钮处于选中状态，则将其从checked中过滤掉，否则将其合并到数组中
+    if (val) {
+      newChecked = checked.filter(v => v !== value);
+    } else {
+      newChecked = checked.concat(value);
+    }
+
     this.setState({
-      checked: value,
-    }, onChange(value));
+      checked: newChecked,
+    }, onChange(newChecked));
   };
 
+  // 判断点击的按钮是否处于选中状态，若是直接返回value，否不是返回false
+  isExist = (value) => {
+    const { checked } = this.state;
+    if (checked.indexOf(value) === -1) {
+      return false;
+    }
+    return value;
+  }
+
+  // 根据value（v）值计算得出 checkbox的 children、disabled和value值
+  headleData = (v) => {
+    let child;
+    let val;
+    let disabled;
+
+    /**
+     * value 值只能为两种格式，string、object
+     * value 为对象时 {value: 必填, label, disabled}
+     */
+    if (type(v) === 'Object') {
+      ({ value: val, label: child, disabled } = v);
+    } else {
+      val = child = v;
+    }
+
+    if (!val) throw '使用Radio.Group或者Checkbox.Group时value为必传属性';
+
+    return { child, val, disabled };
+  }
+
+  // 渲染 复选框
   renderDom = () => {
     const { children, options } = this.props;
     if (!children) return null;
@@ -43,18 +85,22 @@ class GroupRadio extends Component {
 
   // Group嵌套Checkbox模式
   renderCloneChild = () => {
-    const { checked } = this.state;
     const {
       children, defaultValue, value, style, onChange, horizontal, options, ...rest
     } = this.props;
+
     return React.Children.map(children,
-      child => React.cloneElement(child,
-        mergeAll([rest, child.props, {
-          checked,
-          onChange: this.onChangeGroup,
-          style: mergeAll({ marginRight: 39 }, child.props),
-          type: 'group',
-        }])));
+      (child) => {
+        const { val } = this.headleData(child.props.value);
+        const checked = this.isExist(val);
+        return React.cloneElement(child,
+          mergeAll([rest, child.props, {
+            checked,
+            onChange: this.onChangeGroup,
+            style: mergeAll({ marginRight: 39 }, child.props),
+            type: 'group',
+          }]));
+      });
   }
 
   // 通过 options 快速生成模式，options是个数组里面的每个值是个对象或者字符串，为对象时value属性为必填项
@@ -62,20 +108,12 @@ class GroupRadio extends Component {
     const {
       children, defaultValue, value, style, onChange, horizontal, options, ...rest
     } = this.props;
-    const { checked } = this.state;
-    return options.map((v, i) => {
-      let child;
-      let val;
-      let disabled;
 
-      if (type(v) === 'Object') {
-        ({ value: val, label: child, disabled } = v);
-      } else {
-        val = child = v;
-      }
-      if (!val) throw '使用Radio.Group或者Checkbox.Group时value为必传属性';
+    return options.map((v, i) => {
+      const { disabled, val, child } = this.headleData(v);
+      const checked = this.isExist(val);
       return (
-        <Radio
+        <Checkbox
           key={val || i}
           {...mergeAll([rest, v.props, {
             checked,
@@ -86,7 +124,7 @@ class GroupRadio extends Component {
             type: 'group',
           }])}
         >{child}
-        </Radio>
+        </Checkbox>
       );
     });
   }
@@ -103,7 +141,7 @@ class GroupRadio extends Component {
   }
 }
 
-GroupRadio.propTypes = {
+GroupCheckbox.propTypes = {
   children: PropTypes.any,
   style: PropTypes.oneOfType([
     PropTypes.object,
@@ -118,8 +156,8 @@ GroupRadio.propTypes = {
   horizontal: PropTypes.bool,
 };
 
-GroupRadio.defaultProps = {
-  style: {},
+GroupCheckbox.defaultProps = {
+  style: null,
   defaultValue: null,
   disabled: false,
   options: null,
@@ -129,4 +167,4 @@ GroupRadio.defaultProps = {
   children: [],
 };
 
-export default GroupRadio;
+export default GroupCheckbox;

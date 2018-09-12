@@ -3258,10 +3258,6 @@ image-size@^0.6.0:
   version "0.6.3"
   resolved "http://registry.npm.taobao.org/image-size/download/image-size-0.6.3.tgz#e7e5c65bb534bd7cdcedd6cb5166272a85f75fb2"
 
-immutable@^3.8.2:
-  version "3.8.2"
-  resolved "http://registry.npm.taobao.org/immutable/download/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
-
 import-local@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/import-local/download/import-local-1.0.0.tgz#5e4ffdc03f4fe6c009c6729beb29631c2f8227bc"
@@ -5343,6 +5339,13 @@ react-native-image-zoom-viewer@^2.2.18:
   resolved "http://registry.npm.taobao.org/react-native-image-zoom-viewer/download/react-native-image-zoom-viewer-2.2.18.tgz#99304592a3b256c859cb07c0677726986f82ccb8"
   dependencies:
     react-native-image-pan-zoom "^2.1.9"
+react-native-image-crop-picker@^0.21.1:
+  version "0.21.1"
+  resolved "http://registry.npm.taobao.org/react-native-image-crop-picker/download/react-native-image-crop-picker-0.21.1.tgz#0903b11644e88cca3d178e3a16b451a310969b8b"
+
+react-native-image-picker@^0.26.10:
+  version "0.26.10"
+  resolved "http://registry.npm.taobao.org/react-native-image-picker/download/react-native-image-picker-0.26.10.tgz#0bb9ab928984948c67aee0b9e64216bee007a9fc"
 
 react-native-immersive@^1.1.1:
   version "1.1.1"
