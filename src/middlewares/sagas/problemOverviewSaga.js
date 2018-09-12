@@ -5,7 +5,7 @@ import {
 import * as actions from '../../actions/problemOverviewAction';
 import enhanceSaga from './enhanceSaga';
 
-export default function* classAnalysisSaga() {
+export default function* problemOverviewSaga() {
   // 请求错题本
   yield takeLatest('FETCH_PROBLEM_OVERVIEW_REQUEST', enhanceSaga(fetchDataSaga));
 }
