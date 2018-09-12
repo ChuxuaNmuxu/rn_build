@@ -176,7 +176,10 @@ const RouteMap = props => (
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />
       </Stack>
-      <Stack key="DemoStack" initial>
+      <Stack
+        key="DemoStack"
+        // initial
+      >
         <Scene
           key="Demo"
           component={Demo}

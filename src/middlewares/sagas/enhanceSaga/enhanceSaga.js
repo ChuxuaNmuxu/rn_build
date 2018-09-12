@@ -20,14 +20,15 @@ function enhanceSaga(fn) {
     const showInfo = args[0].hasOwnProperty('showInfo') ? args[0].showInfo : true;
     // 控制台打印信息，方便开发者知道调用了那个saga函数
     if (logger) {
-      console.groupCollapsed(
+      console.log(
+        // `${args[args.length - 1].type}  触发了Saga函数: ${fn.name}`
         `%c${args[args.length - 1].type}  %c触发了Saga函数: %c${fn.name}`,
         'color: #e2988f',
         'font-weight: bold ',
         'color: #1DA57A',
       );
-      console.log(fn);
-      console.groupEnd();
+      // console.log(fn);
+      // console.groupEnd();
     }
     // 这边思考了一下，还是单单传action(args是数组，数组最后一个是action, 其他的是你传进来的参数)过去吧，不想传args这个数组过去, 感觉没什么意义
     const task = yield fork(fn, args[args.length - 1]);
@@ -43,24 +44,24 @@ function enhanceSaga(fn) {
     if (showInfo) {
       // 只有传进来,timeOut cancelType才会显示信息
       if (result.timeOut && args[0].hasOwnProperty('timeOut')) {
-        console.groupCollapsed(
+        console.log(
           `%c${fn.name}%c超过规定时间${timeOut}ms后%c自动取消`,
           'color: #1DA57A',
           'font-weight: bold ',
           'color: #e2988f',
         );
-        console.log(fn);
-        console.groupEnd();
+        // console.log(fn);
+        // console.groupEnd();
       }
       if (result.handleToCancel && args[0].hasOwnProperty('cancelType')) {
-        console.groupCollapsed(
+        console.log(
           `%c${fn.name}%c被手动取消，action.type为%c${cancelType}`,
           'color: #1DA57A',
           'font-weight: bold ',
           'color: red',
         );
-        console.log(fn);
-        console.groupEnd();
+        // console.log(fn);
+        // console.groupEnd();
       }
     }
     yield cancel(task);
