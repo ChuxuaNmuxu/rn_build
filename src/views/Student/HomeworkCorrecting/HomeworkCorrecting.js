@@ -17,7 +17,7 @@ class HomeworkCorrecting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      index: 2,
+      index: 0,
       // isVisible: false,
     };
   }
@@ -49,7 +49,7 @@ class HomeworkCorrecting extends Component {
               <View style={styles.head}>
                 <TouchableOpacity
                   // 返回首页
-                  onPress={() => console.log('返回首页')}
+                  onPress={Actions.Student}
                 >
                   <Entypo name="chevron-thin-left" size={40} color="white" />
                 </TouchableOpacity>
@@ -89,12 +89,12 @@ class HomeworkCorrecting extends Component {
                   // 点击查看学生题目
                   onPress={() => console.log('点击查看学生题目')}
                 >
-                  {/* <View style={styles.body_homework_studentAnswer}> */}
-                  <Image
-                    style={{ width: '100%', height: '1091px', padding: '23px' }}
-                    source={{ uri: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png' }}
-                  />
-                  {/* </View> */}
+                  <View style={styles.body_homework_studentAnswer}>
+                    <Image
+                      style={{ width: '100%', height: '100%' }}
+                      source={{ uri: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png' }}
+                    />
+                  </View>
                 </TouchableOpacity>
               </View>
               <View style={styles.foot}>
@@ -113,7 +113,7 @@ class HomeworkCorrecting extends Component {
                   <TouchableOpacity
                     onPress={() => console.log('部分正确')}
                     ref={(node) => { this.partOfTheError = node; }}
-                    onPress={this.showPopover}
+                    // onPress={this.showPopover}
                   >
                     <I18nText style={[styles.foot_btn, styles.btn_color_orange]}>
                       homeworkCorrecting.partOfTheError
