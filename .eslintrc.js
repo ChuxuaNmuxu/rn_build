@@ -38,6 +38,7 @@ module.exports = {
       "no-throw-literal": 0,
       "no-multi-assign": 0,
       "class-methods-use-this": 0,
-      "no-restricted-globals": 0
+      "no-restricted-globals": 0,
+      "radix": 0,
     }
   }

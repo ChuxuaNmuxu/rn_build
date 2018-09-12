@@ -42,19 +42,21 @@ export default class Demo extends Component {
         {/* <Theme /> */}
         <Language />
 
-        <Text style={{ fontSize: 100 }}>对应题</Text>
-        <LineTo />
+        {/* <Text style={{ fontSize: 100 }}>对应题</Text> */}
+        {/* <LineTo value={{ 1: 'D' }} /> */}
+        <BoolSubject value={1} horizontal />
+
 
         {/* <Text style={{ fontSize: 100 }}>单选</Text>
         <Text>分组</Text>
         <Radio.Group>
           <Radio value={1}>A</Radio>
-        </Radio.Group>
+        </Radio.Group> */}
 
         <Text>options</Text>
-        <Radio.Group options={plainOptions} onChange={this.onChangeRadio} value="Apple1" horizontal />
+        <Radio.Group options={plainOptions} childStyle={{ marginRight: 100 }} onChange={this.onChangeRadio} value="Apple1" horizontal />
 
-        <Radio.Group horizontal value={1} defaultValue={2}>
+        {/* <Radio.Group horizontal value={1} defaultValue={2}>
           <Radio.Button value={1}>A</Radio.Button>
           <Radio.Button value={2}>B</Radio.Button>
         </Radio.Group>
@@ -79,8 +81,7 @@ export default class Demo extends Component {
           <Checkbox.Button value={2}>B</Checkbox.Button>
         </Checkbox.Group>
         <Checkbox.Group options={plainOptions} checkbox onChange={this.onChangeCheckbox} value={['Apple1', 'Apple2']} />
-        <Checkbox.Group />
-        <Checkbox.Group>哈哈哈哈</Checkbox.Group> */}
+        <Checkbox.Group /> */}
 
 
       </ScrollView>

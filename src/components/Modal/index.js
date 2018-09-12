@@ -1,4 +1,8 @@
 import Modal from './Modal';
 
-console.log(Modal, 'ss');
-export default Modal;
+const { MyModal, method } = Modal;
+const ModalApi = method;
+export default MyModal;
+export {
+  MyModal, ModalApi,
+};
