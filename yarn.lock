@@ -5334,6 +5334,16 @@ react-native-i18n@^2.0.15:
   dependencies:
     i18n-js "3.0.11"
 
+react-native-image-pan-zoom@^2.1.9:
+  version "2.1.9"
+  resolved "http://registry.npm.taobao.org/react-native-image-pan-zoom/download/react-native-image-pan-zoom-2.1.9.tgz#0a838330bda2468b00a0e5051e71149d86a44ad7"
+
+react-native-image-zoom-viewer@^2.2.18:
+  version "2.2.18"
+  resolved "http://registry.npm.taobao.org/react-native-image-zoom-viewer/download/react-native-image-zoom-viewer-2.2.18.tgz#99304592a3b256c859cb07c0677726986f82ccb8"
+  dependencies:
+    react-native-image-pan-zoom "^2.1.9"
+
 react-native-immersive@^1.1.1:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/react-native-immersive/download/react-native-immersive-1.1.1.tgz#5c2da8afe5367e97851ed58e6e7944ddc1efbf9a"

@@ -9,30 +9,41 @@ import ButtomModal from './ButtonModal';
 import TipsModal from './TipsModal';
 import AnimationsModal from './AnimationsModal';
 import CustomModal from './CustomModal';
+import ImageViewer from './ImageViewer';
 
 class Method {}
 
 class MyModal extends Component {
   constructor() {
     super();
+    // 参数很多是共用的，传入类型一样，表现因API不同而异
     this.state = {
       visible: false,
       type: 'ButtomModal',
+
       lCallbakFn: null,
       rCallbakFn: null,
       activeBtn: 'R',
       rightBtnText: '确定',
       leftBtnText: '取消',
       content: null,
+      closeBtn: false,
+
       tipsContent: null,
       bottomTips: '自动关闭',
       maskClosable: false,
+
       svgName: 'finger',
       animationType: 'slideInLeft',
-      closeBtn: false,
+
       customContent: null,
       top: 500,
+      height: 164,
+
+      studentName: '',
+      url: '',
     };
+    // 只提供两个API，TOST需要再搞
     Method.prototype.onOppen = this.onOppen;
     Method.prototype.onClose = this.onClose;
     Method.prototype.Tost = this.Tost;
@@ -45,13 +56,13 @@ class MyModal extends Component {
   }
 
   onOppen = (type, data) => {
-    // 万一双重modal
     this.setState(Object.assign({}, {
       visible: true,
       type,
     }, data));
   }
 
+  // 预留的功能，不见得用的上
   Tost=() => {
     ToastAndroid.showWithGravityAndOffset(
       'A wild toast appeared!',
@@ -68,8 +79,8 @@ class MyModal extends Component {
     } = this.state;
     return (
       <ButtomModal
-        leftFn={lCallbakFn}
-        rightFn={rCallbakFn}
+        leftFn={lCallbakFn || this.onClose}
+        rightFn={rCallbakFn || this.onClose}
         closeFn={this.onClose}
         activeBtn={activeBtn}
         rightBtnText={rightBtnText}
@@ -81,13 +92,16 @@ class MyModal extends Component {
   }
 
   _TipsModal=() => {
-    const { tipsContent, time, bottomTips } = this.state;
+    const {
+      tipsContent, time, bottomTips, maskClosable,
+    } = this.state;
     return (
       <TipsModal
         closeFn={this.onClose}
         tipsContent={tipsContent}
         time={time}
         bottomTips={bottomTips}
+        maskClosable={maskClosable}
       />
     );
   }
@@ -109,16 +123,28 @@ class MyModal extends Component {
 
   _CustomModal=() => {
     const {
-      customContent, top,
+      customContent, top, maskClosable, height,
     } = this.state;
     return (
       <CustomModal
         customContent={customContent}
         top={top}
+        maskClosable={maskClosable}
+        height={height}
       />
     );
   }
 
+  _ImageViewer=() => {
+    const { studentName, url } = this.state;
+    return (
+      <ImageViewer
+        closeFn={this.onClose}
+        name={studentName}
+        url={url}
+      />
+    );
+  }
 
   render() {
     const { visible, type } = this.state;
@@ -131,6 +157,9 @@ class MyModal extends Component {
           this.onClose();
         }}
       >
+        {/* <StatusBar
+          hidden
+        /> */}
         <Resolution>
           {
               {
@@ -138,6 +167,7 @@ class MyModal extends Component {
                 TipsModal: this._TipsModal(),
                 AnimationsModal: this._AnimationsModal(),
                 CustomModal: this._CustomModal(),
+                ImageViewer: this._ImageViewer(),
               }[type]
           }
         </Resolution>

@@ -4,21 +4,23 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Modal from '../../../components/Modal';
-import Style from './Modal.scss';
+// import ImageViewer from 'react-native-image-zoom-viewer';
+import Modal, { ModalApi } from '../../../components/Modal';
+import Style from './WrongNotes.scss';
 
 export default class Test3 extends Component {
   leftFn=() => {
-    Modal.method.onClose();
+    ModalApi.onClose();
   }
 
   rightFn=() => {
-    this.AnimationsModal();
+    this.pressF();
 
-    setTimeout(() => this.TipsModal(), 6000);
+    setTimeout(() => this.pressT(), 6000);
   }
 
-  ButtomModal=() => {
+  // demo的函数名乱搞的，写代码的大佬别乱copy
+  press=() => {
     const data = {
       lCallbakFn: this.leftFn,
       rCallbakFn: this.rightFn,
@@ -28,18 +30,18 @@ export default class Test3 extends Component {
       content: this.modalContent(),
       closeBtn: true,
     };
-    Modal.method.onOppen('ButtomModal', data);
+    ModalApi.onOppen('ButtomModal', data);
   }
 
-  TipsModal=() => {
+  pressT=() => {
     const data = {
       tipsContent: this.tipsContent(),
       bottomTips: '自动关闭',
     };
-    Modal.method.onOppen('TipsModal', data);
+    ModalApi.onOppen('TipsModal', data);
   }
 
-  AnimationsModal=() => {
+  pressF=() => {
     const data = {
       // tipsContent: this.svgContent(),
       svgName: 'finger',
@@ -47,14 +49,22 @@ export default class Test3 extends Component {
       bottomTips: '正在加载...',
       maskClosable: false,
     };
-    Modal.method.onOppen('AnimationsModal', data);
+    ModalApi.onOppen('AnimationsModal', data);
   }
 
-  CustomModal=() => {
+  pressK=() => {
     const data = {
       customContent: this.customContent(),
+      top: 700,
+      // 高度最好跟你自己自定义的内容高度一样
+      height: 164,
     };
-    Modal.method.onOppen('CustomModal', data);
+    ModalApi.onOppen('CustomModal', data);
+  }
+
+  pressD=() => {
+    const data = { url: 'https://photo.tuchong.com/1652350/f/632291737.jpg', studentName: '李香兰' };
+    ModalApi.onOppen('ImageViewer', data);
   }
 
   modalContent=() => (
@@ -76,7 +86,7 @@ export default class Test3 extends Component {
       <View style={Style.customContentItem}>
         {
             [1, 2, 3].map(item => (
-              <Text key={item} style={Style.btn} onPress={() => Modal.method.onClose()}>{item}</Text>
+              <Text key={item} style={Style.btn} onPress={() => ModalApi.onClose()}>{item}</Text>
             ))
           }
       </View>
@@ -85,41 +95,48 @@ export default class Test3 extends Component {
 
   render() {
     return (
-      <View>
-        <Modal.MyModal />
+      <View style={{ flex: 1 }}>
+        <Modal />
         <View style={{
           width: 200, height: 100, borderWidth: 2, borderColor: 'salmon', borderRadius: 50,
         }}
         >
-          <TouchableOpacity onPress={this.ButtomModal} style={{ flex: 1, backgroundColor: '#333' }}>
-            <Text>wocaonima</Text>
+          <TouchableOpacity onPress={this.press} style={{ flex: 1, backgroundColor: '#333' }}>
+            <Text style={{ color: '#ffffff', fontSize: 30 }}>ButtomModal</Text>
           </TouchableOpacity>
         </View>
         <View style={{
           width: 200, height: 100, borderWidth: 2, borderColor: 'salmon', borderRadius: 50,
         }}
         >
-          <TouchableOpacity onPress={this.TipsModal} style={{ flex: 1, backgroundColor: '#333' }}>
-            <Text>wocaonima</Text>
+          <TouchableOpacity onPress={this.pressT} style={{ flex: 1, backgroundColor: '#333' }}>
+            <Text style={{ color: '#ffffff', fontSize: 30 }}>TipsModal</Text>
           </TouchableOpacity>
         </View>
         <View style={{
           width: 200, height: 100, borderWidth: 2, borderColor: 'salmon', borderRadius: 50,
         }}
         >
-          <TouchableOpacity onPress={this.AnimationsModal} style={{ flex: 1, backgroundColor: '#333' }}>
-            <Text>wocaonima</Text>
+          <TouchableOpacity onPress={this.pressF} style={{ flex: 1, backgroundColor: '#333' }}>
+            <Text style={{ color: '#ffffff', fontSize: 30 }}>AnimationsModal</Text>
           </TouchableOpacity>
         </View>
         <View style={{
           width: 200, height: 100, borderWidth: 2, borderColor: 'salmon', borderRadius: 50,
         }}
         >
-          <TouchableOpacity onPress={this.CustomModal} style={{ flex: 1, backgroundColor: '#333' }}>
-            <Text>wocaonima</Text>
+          <TouchableOpacity onPress={this.pressK} style={{ flex: 1, backgroundColor: '#333' }}>
+            <Text style={{ color: '#ffffff', fontSize: 30 }}>CustomModal</Text>
           </TouchableOpacity>
         </View>
-
+        <View style={{
+          width: 200, height: 100, borderWidth: 2, borderColor: 'salmon', borderRadius: 50,
+        }}
+        >
+          <TouchableOpacity onPress={this.pressD} style={{ flex: 1, backgroundColor: '#333' }}>
+            <Text style={{ color: '#ffffff', fontSize: 30 }}>ImageViewer</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }

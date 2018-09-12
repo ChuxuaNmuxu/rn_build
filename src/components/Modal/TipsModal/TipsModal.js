@@ -49,9 +49,8 @@ class ButtonModal extends Component {
   }
 
   modalContent=() => {
-    const { tipsContent, time, bottomTips } = this.props;
+    const { tipsContent, bottomTips } = this.props;
     const { sec } = this.state;
-    console.log(time);
     return (
       <View style={Style.modalContent}>
         {
@@ -63,13 +62,18 @@ class ButtonModal extends Component {
   }
 
   render() {
+    const { maskClosable } = this.props;
     return (
       <TouchableOpacity
-        onPress={this._onClose}
+        onPress={maskClosable ? this._onClose : this._preventDefault}
         style={[Style.TouchableOpacity, Style.transparentTwo]}
         activeOpacity={1}
       >
-        <TouchableOpacity style={[Style.content]} onPress={this._preventDefault} activeOpacity={1}>
+        <TouchableOpacity
+          style={[Style.content]}
+          onPress={maskClosable ? this._onClose : this._preventDefault}
+          activeOpacity={1}
+        >
           <React.Fragment>
             {this.modalContent()}
           </React.Fragment>
@@ -81,16 +85,18 @@ class ButtonModal extends Component {
 
 ButtonModal.propTypes = {
   tipsContent: PropTypes.any,
-  time: PropTypes.number,
+  // time: PropTypes.number,
   closeFn: PropTypes.func,
   bottomTips: PropTypes.any,
+  maskClosable: PropTypes.bool,
 };
 
 ButtonModal.defaultProps = {
   tipsContent: null,
-  time: 2,
+  // time: 2,
   closeFn() {},
   bottomTips: '自动关闭',
+  maskClosable: false,
 };
 
 export default ButtonModal;

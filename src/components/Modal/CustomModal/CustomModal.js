@@ -28,14 +28,14 @@ class ButtonModal extends Component {
   }
 
   render() {
-    const { top } = this.props;
+    const { top, maskClosable, height } = this.props;
     return (
       <TouchableOpacity
-        onPress={this._preventDefault}
+        onPress={maskClosable ? this._onClose : this._preventDefault}
         style={[Style.TouchableOpacity, Style.transparentTwo]}
         activeOpacity={1}
       >
-        <TouchableOpacity style={[Style.content, { top }]} onPress={this._preventDefault} activeOpacity={1}>
+        <TouchableOpacity style={[Style.content, { top, height }]} onPress={this._preventDefault} activeOpacity={1}>
           <React.Fragment>
             {this.modalContent()}
           </React.Fragment>
@@ -49,12 +49,16 @@ ButtonModal.propTypes = {
   customContent: PropTypes.any,
   closeFn: PropTypes.func,
   top: PropTypes.number,
+  maskClosable: PropTypes.bool,
+  height: PropTypes.number,
 };
 
 ButtonModal.defaultProps = {
   customContent: null,
   closeFn() {},
   top: 500,
+  maskClosable: false,
+  height: 164,
 };
 
 export default ButtonModal;
