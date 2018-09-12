@@ -7,19 +7,24 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styles from './style.scss';
+import { mergeStyles } from '../../utils/common';
 
 class Radio extends Component {
   // 如果有自定义样式则使用自定义样式`
-  customStyle = (custemStyle, defaultStyle) => (isEmpty(custemStyle) ? defaultStyle : custemStyle)
+  customStyle = (custemStyle, defaultStyle) => {
+    // console.log(16, isEmpty(custemStyle), custemStyle);
+    return isEmpty(custemStyle) ? defaultStyle : custemStyle;
+  }
 
 
   // 如果选中且有自定义样式则使用自定义，如果选中没有自定义样式则使用默认
   checkedStyle = (checked, custemStyle, defaultStyle) => {
+    // console.log('xuanzhong');
     if (checked) {
       if (isEmpty(custemStyle)) {
         return defaultStyle;
       }
-      return custemStyle;
+      return mergeStyles(defaultStyle, custemStyle);
     }
     return {};
   }
@@ -46,20 +51,22 @@ class Radio extends Component {
 
     return (
       <TouchableOpacity onPress={() => this.handleClick(value)} disabled={disabled}>
-        <View style={[styles.wrapper, style]}>
-          <View style={[
-            this.customStyle(iconWrapStyle, styles.icon_wrap),
-            this.checkedStyle(checked === value, checkedIconWrapStyle, styles.checked_icon_wrap),
-          ]}
+        <View style={mergeStyles(styles.wrapper, style)}>
+          <View
+            style={mergeStyles(
+              this.customStyle(iconWrapStyle, styles.icon_wrap),
+              this.checkedStyle(checked === value, checkedIconWrapStyle, styles.checked_icon_wrap),
+            )}
+            aaaa
           >{
             <View style={styles.icon}>{checked === value ? checkedIcon : icon}</View>
           }
           </View>
           <Text
-            style={[
+            style={mergeStyles(
               this.customStyle(textStyle, styles.text),
               this.checkedStyle(checked === value, checkedTextStyle, styles.checked_text),
-            ]}
+            )}
             ref={(e) => { this.test = e; }}
           >{children}
           </Text>

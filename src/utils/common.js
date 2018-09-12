@@ -1,5 +1,7 @@
 // 工具方法
+
 import dayjs from 'dayjs';
+import R from 'ramda';
 
 // 秒数转换成00'00"格式
 export const formatSeconds = (value) => {
@@ -109,3 +111,43 @@ export const numMapCapitalLetter = num => numMapLetter(num + 65);
  * @param {num} num
  */
 export const numMapLowercase = num => numMapLetter(num + 97);
+
+
+/**
+ * 利用递归和尾递归将数组，对象，数组嵌套对象嵌套数据转为数组。
+ * params 接收一个数组。数组里的各项元素只能是对象或者数组，比如 paramsFlat([{a:1}, [{b:2, [{c: 3}]}]])
+ * 最终将嵌套数据转为一维数组。[{a:1}, {b:2}, {c:3}]
+ */
+export const paramsFlat = (params) => {
+  if (!params.length) return [];
+
+  const head = params[0];
+  const rest = R.tail(params);
+
+  if (R.type(head) === 'Object') return [head].concat(paramsFlat(rest));
+  return paramsFlat(head).concat(paramsFlat(rest));
+};
+
+/**
+ * 参数只能为数组，数组里的各项只能为对象
+ * 最终返回一个对象，后面会覆盖前面的值.
+ * 只能合并一层嵌套的对象
+ */
+export const mergeDeepAll = (params) => {
+  if (!params.length) return {};
+  let a = {};
+  R.forEach((x) => {
+    a = R.mergeDeepRight(a, x);
+  }, params);
+  return a;
+};
+
+/**
+ * 合并样式，无论样式是数组还是对象都统一合并为对象
+ * 参数个数不限，但只能是数组或字符串
+ * ...params 将参数自动转化为数组
+ */
+export const mergeStyles = (...params) => {
+  const arr = paramsFlat(params);
+  return mergeDeepAll(arr);
+};
