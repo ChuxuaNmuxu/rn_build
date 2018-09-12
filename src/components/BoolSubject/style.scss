@@ -3,8 +3,13 @@
   height: 72px;
 }
 
-.icon {
+.text_style {
   font-size: 22px;
+  font-weight: 900;
+}
+
+.checked_text_style {
+  color: #ffffff
 }
 
 .icon_wrap_style {
@@ -14,8 +19,4 @@
 .checked_icon_wrap_style {
   @include iconWrapStyle();
   background-color: #30bf6c;
-}
-
-.checked_text_style {
-  color: #ffffff
 }

@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 import PropTypes from 'prop-types';
 import Radio from './Radio';
 import styles from './button.scss';
+import { mergeStyles } from '../../utils/common';
 
 const RadioButton = (props) => {
   const {
@@ -12,8 +13,8 @@ const RadioButton = (props) => {
 
   return (
     <Radio
-      iconWrapStyle={[styles.iconWrap_style, iconWrapStyle]}
       {...rest}
+      iconWrapStyle={mergeStyles(styles.iconWrap_style, iconWrapStyle)}
       icon={renderIcon()}
       checkedIcon={renderIcon()}
     />
