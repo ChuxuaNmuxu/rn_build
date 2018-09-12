@@ -1,6 +1,10 @@
 // 工具方法
 import dayjs from 'dayjs';
 
+export const exampleOne = (a) => a + 1;
+
+export const exampleTwo= (a) => {return {a: a} }
+
 // 秒数转换成00'00"格式
 export const formatSeconds = (value) => {
   let theTime = parseInt(value);
