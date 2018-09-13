@@ -15,7 +15,8 @@ class TaskList extends Component {
         <ScrollView horizontal>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             {
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 34].map(item => <TimeItem key={item} />)
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 34]
+              .map(item => <TimeItem key={item} item={item} />)
           }
           </View>
         </ScrollView>
