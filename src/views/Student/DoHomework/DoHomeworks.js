@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Text, View, ScrollView, TouchableOpacity,
 } from 'react-native';
+import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 // import { PropTypes } from 'prop-types';
 import { Actions } from 'react-native-router-flux';
 import styles from './DoHomeworks.scss';
@@ -16,7 +17,23 @@ class DoHomeworks extends Component {
     super(props);
     this.state = {
       showExtendView: false, // 是否显示该份作业所有题目序号的扩展视图
-      // currentIndex: 0,                                    // 当前题目index
+      questionList: [{
+        questionNum: 1,
+        id: 1,
+        content: '第一题内容',
+        answer: '第一题答案',
+      }, {
+        questionNum: 2,
+        id: 2,
+        content: '第二题内容',
+        answer: '第二题答案',
+      }, {
+        questionNum: 3,
+        id: 3,
+        content: '第三题内容',
+        answer: '第三题答案',
+      }],
+      currentIndex: 0, // 当前题目index
       // currentStartTime: moment(new Date()).format(),      // 当前题目的开始时间
       // currentStopTime: 0,                                 // 当前题目的结束时间
       // currentTotalTime: 0,                                // 整个homework的计时
@@ -61,8 +78,23 @@ class DoHomeworks extends Component {
   }
 
 
+  // 左右滑动(切换tab)页面切换题目
+  changeQuestionFun = (obj) => {
+    const changeIndex = obj.i;
+    this.setState({
+      currentIndex: changeIndex,
+    });
+  }
+
+  // 渲染需要展示在扩展列表视图中的组件
+  renderQuestionOrder = () => (
+    <View style={styles.orderContent}>
+      <Text style={{ fontSize: 30, color: '#f00' }}>题目序号列表1111</Text>
+    </View>
+  )
+
   // 渲染作业头部组件
-  renderDohomeworkTop = startTime => (
+  renderDohomeworkTop = (startTime, currentIndex, questionList) => (
     <TouchableOpacity
       activeOpacity={1}
       style={styles.dohomework_top}
@@ -78,8 +110,8 @@ class DoHomeworks extends Component {
           <CustomButton style={styles.quanbu} name="quanbu" onPress={this.showQuestionOrderFun} />
           <View>
             <Text style={styles.totalQuestion}>
-              <Text style={styles.currentIndex}>1</Text>
-              /12
+              <Text style={styles.currentIndex}>{currentIndex + 1}</Text>
+              /{questionList && questionList.length}
             </Text>
           </View>
         </View>
@@ -90,25 +122,31 @@ class DoHomeworks extends Component {
     </TouchableOpacity>
   )
 
-  // 渲染需要展示在modal中的组件
-  renderQuestionOrder = data => (
-    <View style={styles.orderContent}>
-      <Text style={{ fontSize: 30, color: '#f00' }}>题目序号列表1111</Text>
-    </View>
-  )
-
   render() {
     // 用于设置扩展列表视图层距离顶部的距离
     const setTop = 168;
     const startTime = 1;
-    const { showExtendView } = this.state;
+    const { showExtendView, currentIndex, questionList } = this.state;
     return (
       <View style={styles.containers}>
-        {this.renderDohomeworkTop(startTime)}
-        <ScrollView style={styles.main_content}>
-          <QuestionCard />
-          <AnswerCard />
-        </ScrollView>
+        {this.renderDohomeworkTop(startTime, currentIndex, questionList)}
+        <ScrollableTabView
+          tabBarPosition="overlayBottom"
+          tabBarUnderlineStyle={{ backgroundColor: '#fff' }}
+          tabBarBackgroundColor="#fff"
+          initialPage={currentIndex}
+          onChangeTab={this.changeQuestionFun}
+          renderTabBar={() => <ScrollableTabBar />}
+        >
+          {
+          questionList.map((item, index) => (
+            <ScrollView key={index}>
+              <QuestionCard content={item.content} />
+              <AnswerCard answers={item.answer} />
+            </ScrollView>
+          ))
+        }
+        </ScrollableTabView>
         {
           showExtendView && (
           <ExtendListView setTop={setTop} setVisibleFun={this.setVisibleFun}>

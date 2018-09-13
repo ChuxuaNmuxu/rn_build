@@ -3,7 +3,9 @@ import {
   View,
   Text,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import styles from './filterBox.scss';
 import CIcon from '../../../../components/Icon';
 
@@ -11,63 +13,55 @@ class FilterBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subjectData: [{
-        subjectId: 0,
-        subjectName: '全部学科',
-      }, {
-        subjectId: 1,
-        subjectName: '语文',
-      }, {
-        subjectId: 2,
-        subjectName: '数学',
-      }, {
-        subjectId: 3,
-        subjectName: '英语',
-      }, {
-        subjectId: 5,
-        subjectName: '历史',
-      }, {
-        subjectId: 6,
-        subjectName: '地理',
-      }],
-      currentId: 0,
+      currentSubjectId: props.currentSubjectId,
     };
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.currentSubjectId !== prevState.currentSubjectId) {
+      return {
+        currentSubjectId: nextProps.currentSubjectId,
+      };
+    }
+    return null;
   }
 
   // 点击筛选学科
   filterSubjectFun = (subjectId) => {
-    console.log(123, '当前点击的学科为', subjectId);
-    this.setState({
-      currentId: subjectId,
-    });
+    const { filterSubjectFun } = this.props;
+    filterSubjectFun(subjectId);
   }
 
   // 点击更多筛选
   filterMoreFun = () => {
-    console.log(345, '更多筛选');
+    const { filterMoreFun } = this.props;
+    filterMoreFun();
   }
 
   render() {
-    const { subjectData, currentId } = this.state;
+    const { currentSubjectId } = this.state;
+    const { subjectData } = this.props;
     return (
       <View style={styles.filterContainer}>
         <View style={styles.filterBox}>
-          {
-            subjectData.map(item => (
-              <TouchableOpacity
-                key={item.subjectId}
-                style={[styles.subjectItem, (currentId === item.subjectId && styles.currentItem)]}
-                onPress={() => this.filterSubjectFun(item.subjectId)}
-              >
-                <Text style={[styles.filterText, (currentId === item.subjectId && styles.currentText)]}>
-                  {item.subjectName}
-                </Text>
-              </TouchableOpacity>
-            ))
-          }
+          <ScrollView horizontal>
+            {
+              subjectData.map(item => (
+                <TouchableOpacity
+                  key={item.subjectId}
+                  style={[styles.subjectItem, (currentSubjectId === item.subjectId && styles.currentItem)]}
+                  onPress={() => this.filterSubjectFun(item.subjectId)}
+                >
+                  <Text style={[styles.filterText, (currentSubjectId === item.subjectId && styles.currentText)]}>
+                    {item.subjectName}
+                  </Text>
+                </TouchableOpacity>
+              ))
+            }
+          </ScrollView>
           <TouchableOpacity style={styles.filterMoreBox} onPress={() => this.filterMoreFun()}>
             <Text style={styles.filterMoreText}>
-              更多筛选
+            更多筛选
               <CIcon style={styles.icon} name="shangyiye" />
             </Text>
           </TouchableOpacity>
@@ -77,4 +71,10 @@ class FilterBox extends Component {
   }
 }
 
+FilterBox.propTypes = {
+  currentSubjectId: PropTypes.number.isRequired,
+  subjectData: PropTypes.array.isRequired,
+  filterSubjectFun: PropTypes.func.isRequired,
+  filterMoreFun: PropTypes.func.isRequired,
+};
 export default FilterBox;

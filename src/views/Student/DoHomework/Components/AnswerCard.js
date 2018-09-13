@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { PropTypes } from 'prop-types';
 import styles from './AnswerCard.scss';
 
 class AnswerCard extends Component {
@@ -11,14 +12,19 @@ class AnswerCard extends Component {
   }
 
   render() {
+    const { answers } = this.props;
     return (
       <View style={styles.answerCard_container}>
         <View style={styles.answer_content}>
-          <Text style={styles.answer_content_txt}>题目答案选择区域</Text>
+          <Text style={styles.answer_content_txt}>{answers}</Text>
         </View>
       </View>
     );
   }
 }
+
+AnswerCard.propTypes = {
+  answers: PropTypes.string.isRequired,
+};
 
 export default AnswerCard;

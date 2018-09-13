@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { PropTypes } from 'prop-types';
 import styles from './QuestionCard.scss';
 import { getQuestionTypeName } from '../../../../utils/common';
 
@@ -12,17 +13,22 @@ class QuestionCard extends Component {
   }
 
   render() {
+    const { content } = this.props;
     return (
       <View style={styles.questionCard_container}>
         <View style={styles.question_title}>
           <Text style={styles.question_title_txt}>{getQuestionTypeName(parseInt(Math.random() * 10))}</Text>
         </View>
         <View style={styles.question_content}>
-          <Text style={styles.question_content_txt}>题目内容</Text>
+          <Text style={styles.question_content_txt}>{content}</Text>
         </View>
       </View>
     );
   }
 }
+
+QuestionCard.propTypes = {
+  content: PropTypes.string.isRequired,
+};
 
 export default QuestionCard;
