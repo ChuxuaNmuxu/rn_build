@@ -9,7 +9,7 @@ import {
 import styles from './recordCard.scss';
 import CIcon from '../../../../components/Icon';
 import NotViewImg from '../../../../public/img/notView.png';
-import { formatTimeToshow } from '../../../../utils/common';
+import { formatTimeToshow } from '../../../../utils/common/common';
 
 const getIconNameFun = (subjectName) => {
   let iconName;

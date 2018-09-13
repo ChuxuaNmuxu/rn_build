@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
-import { type, mergeAll } from 'ramda';
+import {
+  type, mergeAll, mergeDeepRight, compose,
+} from 'ramda';
 import Checkbox from './Checkbox';
 
 class GroupCheckbox extends Component {
@@ -86,27 +88,37 @@ class GroupCheckbox extends Component {
   // Group嵌套Checkbox模式
   renderCloneChild = () => {
     const {
-      children, defaultValue, value, style, onChange, horizontal, options, ...rest
+      children, defaultValue, value, style, onChange, childStyle, horizontal, options, ...rest
     } = this.props;
-
+    console.log(93, childStyle);
     return React.Children.map(children,
       (child) => {
         const { val } = this.headleData(child.props.value);
         const checked = this.isExist(val);
         return React.cloneElement(child,
-          mergeAll([rest, child.props, {
-            checked,
-            onChange: this.onChangeGroup,
-            style: mergeAll({ marginRight: 39 }, child.props),
-            type: 'group',
-          }]));
+          compose(
+            mergeDeepRight(child.props),
+            mergeDeepRight({
+              checked,
+              onChange: this.onChangeGroup,
+              style: mergeAll({ marginRight: 39 }, childStyle),
+              type: 'group',
+            }),
+          )(rest),
+          // mergeAll([rest, child.props, {
+          //   checked,
+          //   onChange: this.onChangeGroup,
+          //   style: mergeAll({ marginRight: 39 }, child.props),
+          //   type: 'group',
+          // }])
+        );
       });
   }
 
   // 通过 options 快速生成模式，options是个数组里面的每个值是个对象或者字符串，为对象时value属性为必填项
   renderOptions = () => {
     const {
-      children, defaultValue, value, style, onChange, horizontal, options, ...rest
+      children, defaultValue, value, style, childStyle, onChange, horizontal, options, ...rest
     } = this.props;
 
     return options.map((v, i) => {
@@ -115,14 +127,26 @@ class GroupCheckbox extends Component {
       return (
         <Checkbox
           key={val || i}
-          {...mergeAll([rest, v.props, {
-            checked,
-            onChange: this.onChangeGroup,
-            style: mergeAll({ marginRight: 39 }, v.props),
-            value: val,
-            disabled,
-            type: 'group',
-          }])}
+          // {...mergeAll([rest, v.props, {
+          //   checked,
+          //   onChange: this.onChangeGroup,
+          //   style: mergeAll({ marginRight: 39 }, v.props),
+          //   value: val,
+          //   disabled,
+          //   type: 'group',
+          // }])}
+          {
+            ...compose(
+              mergeDeepRight({
+                checked,
+                onChange: this.onChangeGroup,
+                style: mergeDeepRight({ marginRight: 39 }, childStyle),
+                value: val,
+                disabled,
+                type: 'group',
+              }),
+            )(rest)
+          }
         >{child}
         </Checkbox>
       );
@@ -143,8 +167,14 @@ class GroupCheckbox extends Component {
 
 GroupCheckbox.propTypes = {
   children: PropTypes.any,
-  style: PropTypes.object,
-
+  style: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]),
+  childStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]),
   defaultValue: PropTypes.any, // 默认选中的值
   disabled: PropTypes.bool, // 禁选所有子单选器
   options: PropTypes.array, // 以配置形式设置子元素
@@ -154,7 +184,7 @@ GroupCheckbox.propTypes = {
 };
 
 GroupCheckbox.defaultProps = {
-  style: {},
+  style: null,
   defaultValue: null,
   disabled: false,
   options: null,
@@ -162,6 +192,7 @@ GroupCheckbox.defaultProps = {
   onChange: () => {},
   horizontal: false,
   children: [],
+  childStyle: {},
 };
 
 export default GroupCheckbox;

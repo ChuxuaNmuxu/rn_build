@@ -156,7 +156,7 @@ ButtonModal.propTypes = {
 
 ButtonModal.defaultProps = {
   svgName: 'finger',
-  animationType: 'slideInLeft',
+  animationType: 'loading',
   closeFn() {},
   bottomTips: '正在加载……',
   maskClosable: false,

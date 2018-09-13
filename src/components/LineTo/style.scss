@@ -1,0 +1,26 @@
+.container {
+  // background-color: pink;
+}
+
+.opt_wrap {
+  flex-direction: row
+}
+
+.opt_item {
+  justify-content: center;
+  align-items: center;
+  background-color: #ddd;
+}
+
+.opt_check {
+  background-color: #30bf6c;
+}
+
+.opt_item_text {
+  font-size: 24px;
+  color: #333333;
+}
+
+.opt_text_check {
+  color: #ffffff;
+}

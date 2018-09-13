@@ -3,22 +3,37 @@ import { Text } from 'react-native';
 import PropTypes from 'prop-types';
 import Checkbox from './Checkbox';
 import styles from './button.scss';
+import { mergeStyles } from '../../utils/common';
 
-const RadioButton = (props) => {
-  const { children, ...rest } = props;
+const CheckboxButton = (props) => {
+  const {
+    children, iconWrapStyle, icon, checkedIcon, ...rest
+  } = props;
   const renderIcon = () => <Text style={styles.default_text}>{children}</Text>;
   return (
     <Checkbox
-      iconWrapStyle={styles.iconWrap_style}
+      iconWrapStyle={mergeStyles(styles.iconWrap_style, iconWrapStyle)}
       {...rest}
-      icon={renderIcon()}
-      checkedIcon={renderIcon()}
+      icon={icon || renderIcon()}
+      checkedIcon={checkedIcon || renderIcon()}
     />
   );
 };
 
-RadioButton.propTypes = {
+CheckboxButton.propTypes = {
   children: PropTypes.any.isRequired,
+  iconWrapStyle: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
+  icon: PropTypes.element,
+  checkedIcon: PropTypes.element,
 };
 
-export default RadioButton;
+CheckboxButton.defaultProps = {
+  iconWrapStyle: {},
+  icon: null,
+  checkedIcon: null,
+};
+
+export default CheckboxButton;
