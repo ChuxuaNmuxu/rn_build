@@ -50,7 +50,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        // initial
+        initial
       >
         <Tabs
           key="StudentTabs"
@@ -157,7 +157,6 @@ const RouteMap = props => (
         />
         {/* 作业批阅 */}
         <Scene
-          initial
           // back
           // navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
           // renderBackButton={() => (
@@ -177,7 +176,6 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="DemoStack"
-        initial
       >
         <Scene
           key="Demo"
