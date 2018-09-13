@@ -28,6 +28,7 @@ import styles from './router.scss';
 import TaskDetail from './views/Student/TaskDetail';
 import ProblemOverview from './views/Student/ProblemOverview';
 import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
+import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
 
 const RouteMap = props => (
   <Router
@@ -102,7 +103,7 @@ const RouteMap = props => (
             // titleStyle={styles.navigationBarStyle_title}
             // navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
             hideNavBar // 是否隐藏整个导航条
-            // initial
+            initial
           >
             <Scene
               key="ProblemOverview"
@@ -137,6 +138,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
+        // initial
       >
         <Scene key="DoHomework" component={DoHomework} hideNavBar />
         {/* 任务详情 */}
@@ -157,6 +159,7 @@ const RouteMap = props => (
         />
         {/* 作业批阅 */}
         <Scene
+          // initial
           // back
           // navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
           // renderBackButton={() => (
@@ -169,6 +172,12 @@ const RouteMap = props => (
           hideNavBar // 是否隐藏整个导航条
           key="HomeworkCorrecting"
           component={HomeworkCorrecting}
+        />
+        <Scene
+          initial
+          hideNavBar
+          key="HomeworkProblemDetail"
+          component={HomeworkProblemDetail}
         />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>

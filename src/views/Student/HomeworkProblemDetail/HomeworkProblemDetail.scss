@@ -1,0 +1,36 @@
+.wrapper {
+  // background-color: white; 
+  height: 100%;
+}
+
+.head_icon {
+  // position: relative;
+}
+
+.head {
+  background-color: #30bf6c;
+  flex-direction: row;
+  height: 72px;
+  align-items: center; 
+  padding: 10px; 
+}
+
+.head_content {
+  flex: 1;
+  // justify-content: center;
+  align-items: center;
+  margin-left: -10px;
+}
+
+.head_content_word {
+  font-family:PingFangSC-Medium;
+  font-size:24px;
+  color:white;
+}
+
+.space {
+  height: 20px;
+  // background-color: #ccc; 
+  // opacity: 0.3; 
+  // margin: 5px 0; 
+}
