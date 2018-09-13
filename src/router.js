@@ -185,7 +185,6 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="DemoStack"
-        // initial
       >
         <Scene
           key="Demo"

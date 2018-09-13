@@ -11,15 +11,15 @@ import { mergeStyles } from '../../utils/common';
 
 class Radio extends Component {
   // 如果有自定义样式则使用自定义样式`
-  customStyle = (custemStyle, defaultStyle) => {
-    // console.log(16, isEmpty(custemStyle), custemStyle);
-    return isEmpty(custemStyle) ? defaultStyle : custemStyle;
-  }
+  customStyle = (custemStyle, defaultStyle) => (
+    isEmpty(custemStyle)
+      ? defaultStyle
+      : mergeStyles(defaultStyle, custemStyle)
+  )
 
 
   // 如果选中且有自定义样式则使用自定义，如果选中没有自定义样式则使用默认
   checkedStyle = (checked, custemStyle, defaultStyle) => {
-    // console.log('xuanzhong');
     if (checked) {
       if (isEmpty(custemStyle)) {
         return defaultStyle;
@@ -57,7 +57,6 @@ class Radio extends Component {
               this.customStyle(iconWrapStyle, styles.icon_wrap),
               this.checkedStyle(checked === value, checkedIconWrapStyle, styles.checked_icon_wrap),
             )}
-            aaaa
           >{
             <View style={styles.icon}>{checked === value ? checkedIcon : icon}</View>
           }
