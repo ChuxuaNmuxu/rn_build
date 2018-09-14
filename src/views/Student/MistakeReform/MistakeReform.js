@@ -13,11 +13,15 @@ class MistakeReform extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      questions: {
+        content: '错题本题目内容',
+        answer: '错题本答案',
+      },
     };
   }
 
   render() {
+    const { questions } = this.state;
     return (
       <View style={styles.mistakeReform_container}>
         <View style={styles.mistakeReform_header}>
@@ -25,8 +29,8 @@ class MistakeReform extends Component {
           <Text style={styles.mistakeReformTitle}>错题重做</Text>
           <Text />
         </View>
-        <QuestionCard content="错题本题目内容" mistakeReform />
-        <AnswerCard answers="错题本答案" mistakeReform />
+        <QuestionCard questions={questions} mistakeReform />
+        <AnswerCard questions={questions} mistakeReform />
       </View>
     );
   }

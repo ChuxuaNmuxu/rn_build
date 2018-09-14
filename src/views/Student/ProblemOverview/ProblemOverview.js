@@ -50,10 +50,8 @@ class ProblemOverview extends PureComponent {
               console.log(dataItem);
               return (
                 <TouchableOpacity
-                  onPress={() => {
-                    console.log('点击查看错题', item.key, index);
-                  }}
-                  // key={index}
+                  onPress={this.goProblemListFun}
+                  key={index}
                 >
                   <View style={styles.item}>
                     <View style={styles.item_left}>

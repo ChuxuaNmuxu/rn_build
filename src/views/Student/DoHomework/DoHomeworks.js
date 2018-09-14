@@ -20,18 +20,33 @@ class DoHomeworks extends Component {
       questionList: [{
         questionNum: 1,
         id: 1,
-        content: '第一题内容',
-        answer: '第一题答案',
+        type: 1,
+        content: '单选题内容',
+        answer: '单选题答案',
       }, {
         questionNum: 2,
         id: 2,
-        content: '第二题内容',
-        answer: '第二题答案',
+        type: 2,
+        content: '多选题内容',
+        answer: '多选题答案',
       }, {
         questionNum: 3,
         id: 3,
-        content: '第三题内容',
-        answer: '第三题答案',
+        type: 3,
+        content: '判断题内容',
+        answer: '判断题答案',
+      }, {
+        questionNum: 4,
+        id: 4,
+        type: 4,
+        content: '对应题内容',
+        answer: '对应题答案',
+      }, {
+        questionNum: 5,
+        id: 5,
+        type: 10,
+        content: '填空题内容',
+        answer: '填空题答案',
       }],
       currentIndex: 0, // 当前题目index
       // currentStartTime: moment(new Date()).format(),      // 当前题目的开始时间
@@ -141,8 +156,8 @@ class DoHomeworks extends Component {
           {
           questionList.map((item, index) => (
             <ScrollView key={index}>
-              <QuestionCard content={item.content} />
-              <AnswerCard answers={item.answer} />
+              <QuestionCard questions={item} />
+              <AnswerCard questions={item} />
             </ScrollView>
           ))
         }

@@ -13,14 +13,14 @@ class QuestionCard extends Component {
   }
 
   render() {
-    const { content } = this.props;
+    const { questions } = this.props;
     return (
       <View style={styles.questionCard_container}>
         <View style={styles.question_title}>
-          <Text style={styles.question_title_txt}>{getQuestionTypeName(parseInt(Math.random() * 10))}</Text>
+          <Text style={styles.question_title_txt}>{getQuestionTypeName(questions.type)}</Text>
         </View>
         <View style={styles.question_content}>
-          <Text style={styles.question_content_txt}>{content}</Text>
+          <Text style={styles.question_content_txt}>{questions.content}</Text>
         </View>
       </View>
     );
@@ -28,7 +28,7 @@ class QuestionCard extends Component {
 }
 
 QuestionCard.propTypes = {
-  content: PropTypes.string.isRequired,
+  questions: PropTypes.object.isRequired,
   mistakeReform: PropTypes.bool, // 是否为错题本调用
 };
 

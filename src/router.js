@@ -93,12 +93,10 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
-            initial
           >
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
-              initial
             />
           </Stack>
           {/* 错题本 */}
@@ -110,7 +108,7 @@ const RouteMap = props => (
             // titleStyle={styles.navigationBarStyle_title}
             // navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
             hideNavBar // 是否隐藏整个导航条
-            initial
+            // initial
           >
             <Scene
               key="ProblemOverview"
@@ -145,10 +143,10 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        // initial
+        initial
       >
         {/* 做作业 */}
-        <Scene key="DoHomework" component={DoHomework} hideNavBar />
+        <Scene key="DoHomework" component={DoHomework} hideNavBar initial />
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
         {/* 错题本列表页 */}
@@ -192,7 +190,7 @@ const RouteMap = props => (
           component={HomeworkCorrecting}
         />
         <Scene
-          initial
+          // initial
           hideNavBar
           key="HomeworkProblemDetail"
           component={HomeworkProblemDetail}
