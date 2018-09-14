@@ -7,15 +7,21 @@ import { mergeStyles } from '../../utils/common';
 
 const RadioButton = (props) => {
   const {
-    children, iconWrapStyle, icon, checkedIcon, ...rest
+    children, iconWrapStyle, icon, checkedIcon, textStyle, checkedTextStyle, ...rest
   } = props;
-  const renderIcon = () => <Text style={styles.default_text}>{children}</Text>;
-
+  // console.log(12, rest);
+  const renderIcon = (type) => {
+    if (type === 'default') {
+      return <Text style={mergeStyles(styles.default_text, textStyle)}>{children}</Text>;
+    }
+    return <Text style={mergeStyles(styles.default_text, checkedTextStyle)}>{children}</Text>;
+  };
+  // console.log(19, rest);
   return (
     <Radio
       {...rest}
-      iconWrapStyle={mergeStyles(styles.iconWrap_style, iconWrapStyle)}
-      icon={icon || renderIcon()}
+      iconWrapStyle={mergeStyles(styles.iconWrap_style, { marginRight: 0 }, iconWrapStyle)}
+      icon={icon || renderIcon('default')}
       checkedIcon={checkedIcon || renderIcon()}
     />
   );
@@ -30,6 +36,14 @@ RadioButton.propTypes = {
   ]),
   icon: PropTypes.element,
   checkedIcon: PropTypes.element,
+  checkedTextStyle: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
+  textStyle: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
 };
 
 RadioButton.defaultProps = {
@@ -37,6 +51,8 @@ RadioButton.defaultProps = {
   iconWrapStyle: {},
   icon: null,
   checkedIcon: null,
+  checkedTextStyle: {},
+  textStyle: {},
 };
 
 export default RadioButton;
