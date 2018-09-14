@@ -29,6 +29,7 @@ class QuestionCard extends Component {
 
 QuestionCard.propTypes = {
   content: PropTypes.string.isRequired,
+  mistakeReform: PropTypes.bool, // 是否为错题本调用
 };
 
 export default QuestionCard;

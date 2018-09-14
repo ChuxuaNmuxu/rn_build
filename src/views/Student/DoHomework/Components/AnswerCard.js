@@ -25,6 +25,7 @@ class AnswerCard extends Component {
 
 AnswerCard.propTypes = {
   answers: PropTypes.string.isRequired,
+  mistakeReform: PropTypes.bool, // 错题重做页面调用时用来标识调用方的
 };
 
 export default AnswerCard;

@@ -23,7 +23,7 @@ class ProblemCard extends PureComponent {
 
   // 点击复习错题进入错题重做页面
   doErrWorkAgain = () => {
-
+    Actions.MistakeReform();
   }
 
   render() {
