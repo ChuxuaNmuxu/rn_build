@@ -55,7 +55,7 @@ export default class Test3 extends Component {
   pressK=() => {
     const data = {
       customContent: this.customContent(),
-      top: 700,
+      top: 400,
       // 高度最好跟你自己自定义的内容高度一样
       height: 164,
     };
@@ -63,7 +63,11 @@ export default class Test3 extends Component {
   }
 
   pressD=() => {
-    const data = { url: 'https://photo.tuchong.com/1652350/f/632291737.jpg', studentName: '李香兰' };
+    const data = {
+      url: 'https://photo.tuchong.com/3058042/f/80413193.jpg',
+      studentName: '李香兰',
+      imageViewType: 'asd',
+    };
     ModalApi.onOppen('ImageViewer', data);
   }
 

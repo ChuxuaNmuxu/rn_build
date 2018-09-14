@@ -61,10 +61,10 @@ class ZoomViewer extends Component {
 
 
   getContent=() => {
-    console.log(this.state);
     const { status } = this.state;
+    const { loadingRender } = this.props;
     if (status !== 'success') {
-      return null;
+      return <View style={Style.loadingRender}>{loadingRender()}</View>;
     }
     // 获得屏幕宽高
     const {
@@ -192,11 +192,13 @@ class ZoomViewer extends Component {
 ZoomViewer.propTypes = {
   closeFn: PropTypes.func,
   url: PropTypes.string,
+  loadingRender: PropTypes.any,
 };
 
 ZoomViewer.defaultProps = {
   closeFn: () => null,
   url: '',
+  loadingRender: null,
 };
 
 export default ZoomViewer;
