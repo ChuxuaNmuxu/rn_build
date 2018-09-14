@@ -48,7 +48,7 @@ class Radio extends Component {
       style,
       checked,
     } = this.props;
-
+    console.log(51, this.props.style);
     return (
       <TouchableOpacity onPress={() => this.handleClick(value)} disabled={disabled}>
         <View style={mergeStyles(styles.wrapper, style)}>
