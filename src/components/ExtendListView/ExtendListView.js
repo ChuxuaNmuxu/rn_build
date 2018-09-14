@@ -1,12 +1,12 @@
 // 扩展列表视图组件，非Modal
-import React from 'react';
+import React, { PureComponent } from 'react';
 import {
   TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './ExtendListView.scss';
 
-class ExtendListView extends React.PureComponent {
+class ExtendListView extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

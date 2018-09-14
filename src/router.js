@@ -28,6 +28,7 @@ import Demo from './views/Demo';
 import styles from './router.scss';
 import TaskDetail from './views/Student/TaskDetail';
 import ProblemOverview from './views/Student/ProblemOverview';
+import ProblemListOverview from './views/Student/ProblemListOverview';
 import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
 
 const RouteMap = props => (
@@ -142,6 +143,7 @@ const RouteMap = props => (
       >
         <Scene key="DoHomework" component={DoHomework} hideNavBar />
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
+        <Scene key="ProblemListOverview" component={ProblemListOverview} hideNavBar />
         {/* 任务详情 */}
         <Scene
           // initial

@@ -160,7 +160,6 @@ class ProblemRecords extends Component {
     </View>
   )
 
-
   render() {
     const {
       currentRecordType, recordData, showExtendView, currentSubjectId, subjectData,

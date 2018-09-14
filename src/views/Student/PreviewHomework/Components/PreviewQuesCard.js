@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './PreviewQuesCard.scss';
 import { getQuestionTypeName } from '../../../../utils/common';
 
-class PreviewQuesCard extends React.PureComponent {
+class PreviewQuesCard extends PureComponent {
   render() {
     const { questionData } = this.props;
     return (
