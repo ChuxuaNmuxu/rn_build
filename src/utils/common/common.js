@@ -3,9 +3,9 @@
 import dayjs from 'dayjs';
 import R from 'ramda';
 
-export const exampleOne = (a) => a + 1;
+export const exampleOne = a => a + 1;
 
-export const exampleTwo= (a) => {return {a: a} }
+export const exampleTwo = a => ({ a });
 
 // 秒数转换成00'00"格式
 export const formatSeconds = (value) => {
@@ -121,6 +121,7 @@ export const numMapLowercase = num => numMapLetter(num + 97);
  * 利用递归和尾递归将数组，对象，数组嵌套对象嵌套数据转为数组。
  * params 接收一个数组。数组里的各项元素只能是对象或者数组，比如 paramsFlat([{a:1}, [{b:2, [{c: 3}]}]])
  * 最终将嵌套数据转为一维数组。[{a:1}, {b:2}, {c:3}]
+ * @param {params} array
  */
 export const paramsFlat = (params) => {
   if (!params.length) return [];
@@ -136,6 +137,7 @@ export const paramsFlat = (params) => {
  * 参数只能为数组，数组里的各项只能为对象
  * 最终返回一个对象，后面会覆盖前面的值.
  * 只能合并一层嵌套的对象
+ * @param {params} array
  */
 export const mergeDeepAll = (params) => {
   if (!params.length) return {};
@@ -150,8 +152,54 @@ export const mergeDeepAll = (params) => {
  * 合并样式，无论样式是数组还是对象都统一合并为对象
  * 参数个数不限，但只能是数组或字符串
  * ...params 将参数自动转化为数组
+ * @param {params} 类似于 argnments
  */
 export const mergeStyles = (...params) => {
   const arr = paramsFlat(params);
   return mergeDeepAll(arr);
+};
+
+/**
+ * 格式化半小时时间段，num的值为0-47，48个时间段
+ * @param {num} number
+ */
+const formatPeriod = (num) => {
+  let hour = parseInt(num * 30 / 60);
+  let min = (num * 30) % 60;
+  // 小时不足十位补零
+  if (hour < 10) {
+    hour = `0${hour}`;
+  }
+  // 24点转为 0点
+  if (hour === 24) {
+    hour = '00';
+  }
+  // 分钟只会出现0或30，未0时补一位
+  if (min === 0) {
+    min = '00';
+  }
+  return `${hour}:${min}`;
+};
+
+/**
+ * 生成半小时时间段
+ * 思路：将24小时分为48段每段为30分钟
+ */
+export const createHalfHourPeriod = () => (
+  Array(48).fill().map((v, i) => {
+    const startTime = formatPeriod(i);
+    const endTime = formatPeriod(i + 1);
+    return `${startTime}-${endTime}`;
+  })
+);
+
+/**
+ * 将当前时间与时间段对应
+ */
+export const currentTimeToPeriod = () => {
+  const hour = dayjs().hour();
+  const minute = dayjs().minute();
+  // 整点算两个时间段，分钟大于30算一个时间段
+  const periodIndex = hour * 2 + (minute > 30 ? 1 : 0);
+  return periodIndex;
 };
