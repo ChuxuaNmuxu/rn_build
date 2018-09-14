@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
-import styles from './HomeworkTask.scss';
+import styles from './homeworkTask.scss';
 import TaskList from './TaskList';
 import TimeList from './TimeList';
 import I18nText from '../../../components/I18nText';
