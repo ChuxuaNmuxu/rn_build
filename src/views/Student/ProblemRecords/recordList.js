@@ -15,13 +15,17 @@ class RecordList extends Component {
   _keyExtractor = (item, index) => item.id;
 
   // 渲染子组件
-  _renderItem = ({ item, index }) => (
-    <RecordCard
-      key={index}
-      id={item.id}
-      datas={item}
-    />
-  );
+  _renderItem = ({ item, index }) => {
+    const { gotoDetailFun } = this.props;
+    return (
+      <RecordCard
+        key={index}
+        id={item.id}
+        datas={item}
+        gotoDetailFun={gotoDetailFun}
+      />
+    );
+  };
 
    // 渲染一个空白页，当列表无数据的时候显示。这里简单写成一个View控件
    _renderEmptyView = item => <View />;
@@ -62,6 +66,7 @@ class RecordList extends Component {
 
 RecordList.propTypes = {
   dataList: PropTypes.array.isRequired,
+  gotoDetailFun: PropTypes.func.isRequired,
 };
 
 export default RecordList;

@@ -68,12 +68,22 @@ class RecordCard extends PureComponent {
     console.log(666, '去订正');
   }
 
+  // 点击卡片进入详情页
+  gotoDetailFun = () => {
+    const { gotoDetailFun, datas } = this.props;
+    gotoDetailFun(datas.id);
+  }
+
   render() {
     const { datas } = this.props;
     const accuracyData = `${Math.round(parseInt(datas.accuracy) * 100)}%`;
     const randomNum = Math.random();
     return (
-      <View style={[styles.recordCard]}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={[styles.recordCard]}
+        onPress={this.gotoDetailFun}
+      >
         <View style={styles.cardLeft}>
           <View style={styles.subjectPic}>
             <CIcon style={styles.subjectIcon} name={getIconNameFun(datas.subjectName)} />
@@ -103,13 +113,14 @@ class RecordCard extends PureComponent {
             />)
           }
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
 
 RecordCard.propTypes = {
   datas: PropTypes.object.isRequired,
+  gotoDetailFun: PropTypes.func.isRequired,
 };
 
 export default RecordCard;

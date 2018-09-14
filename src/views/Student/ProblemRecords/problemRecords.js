@@ -153,6 +153,18 @@ class ProblemRecords extends Component {
     }
   }
 
+  // 点击卡片进入对应的作业/考试详情页
+  gotoDetailFun = (id) => {
+    const { currentRecordType } = this.state;
+    if (currentRecordType) {
+      // 进入考试详情页
+      Actions.ExamRecordDetail({ id });
+    } else {
+      // 进入作业详情页
+      Actions.HomworkRecordDetail({ id });
+    }
+  }
+
   // 渲染需要展示在扩展列表视图中的组件
   renderFilterView = () => (
     <View style={styles.renderFilterView}>
@@ -194,7 +206,7 @@ class ProblemRecords extends Component {
           filterSubjectFun={this.filterSubjectFun}
           filterMoreFun={this.filterMoreFun}
         />
-        <RecordList dataList={recordData} />
+        <RecordList dataList={recordData} gotoDetailFun={this.gotoDetailFun} />
         {
           showExtendView && (
           <ExtendListView setVisibleFun={this.setVisibleFun} setTop={170}>
