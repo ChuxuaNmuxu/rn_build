@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 import PropTypes from 'prop-types';
-import { handleFormattingTime } from '../../../../utils/common';
+import { handleFormattingTime } from '../../../../utils/common/common';
 import styles from './Timer.scss';
 
 class Timer extends React.Component {

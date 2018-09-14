@@ -11,7 +11,6 @@ import Swiper from 'react-native-swiper';
 import Entypo from 'react-native-vector-icons/Entypo';
 import I18nText from '../../../components/I18nText';
 import styles from './HomeworkCorrecting.scss';
-// import Popover from './Pop';
 
 class HomeworkCorrecting extends Component {
   constructor(props) {
@@ -37,29 +36,32 @@ class HomeworkCorrecting extends Component {
     const { title } = this.props;
     const { index } = this.state;
     return (
-      <Swiper
-        style={styles.wrapper}
-        loop={false}
-        showsPagination={false}
-        index={index}
-      >
-        {
+      <View style={styles.wrapper}>
+        {/* 头部自定义导航条 */}
+        <View style={styles.head}>
+          <TouchableOpacity
+            // 返回首页
+            onPress={Actions.Student}
+          >
+            <Entypo name="chevron-thin-left" size={40} color="white" />
+          </TouchableOpacity>
+          <View style={styles.head_content}>
+            <Text style={styles.head_content_word}>第{index + 1}题,共{title.length}题待批阅</Text>
+          </View>
+        </View>
+        <Swiper
+          loop={false}
+          showsPagination={false}
+          index={index}
+          onIndexChanged={(nextIndex) => {
+            this.setState({
+              index: nextIndex,
+            });
+          }}
+        >
+          {
           title.map((item, index1) => (
             <View style={styles.wrap} key={index1}>
-              <View style={styles.head}>
-                <TouchableOpacity
-                  // 返回首页
-                  onPress={Actions.Student}
-                >
-                  <Entypo name="chevron-thin-left" size={40} color="white" />
-                </TouchableOpacity>
-                <View style={styles.head_content}>
-                  <Text style={styles.head_content_word}>第{index1 + 1}题,共{title.length}题待批阅</Text>
-                </View>
-              </View>
-              {/* <View style={{ height: '200px', width: '100px', backgroundColor: 'red' }}>
-                <Popover />
-              </View> */}
               <View style={styles.body}>
                 <View style={styles.body_homework_title}>
                   <Swiper
@@ -143,7 +145,8 @@ class HomeworkCorrecting extends Component {
             </View>
           ))
         }
-      </Swiper>
+        </Swiper>
+      </View>
     );
   }
 }

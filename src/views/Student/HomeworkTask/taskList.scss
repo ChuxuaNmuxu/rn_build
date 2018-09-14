@@ -1,0 +1,24 @@
+
+.task_list_box {
+  margin-bottom: 12px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  height: 218px;
+  background-color: #fff;
+}
+
+.empty {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  // width: 100vw;
+}
+
+.empty_text {
+  font-size:21px;
+  color:#bfbfbf;
+}
+
+.flatList { 
+  flex: 1;
+}

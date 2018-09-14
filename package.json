@@ -76,6 +76,10 @@
     "rimraf": "^2.6.2"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "testRegex": "/*.(spec|test).(js)$"
   }
 }

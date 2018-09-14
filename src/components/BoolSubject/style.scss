@@ -1,0 +1,22 @@
+@mixin iconWrapStyle {
+  width: 72px;
+  height: 72px;
+}
+
+.text_style {
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.checked_text_style {
+  color: #ffffff
+}
+
+.icon_wrap_style {
+ @include iconWrapStyle();
+}
+
+.checked_icon_wrap_style {
+  @include iconWrapStyle();
+  background-color: #30bf6c;
+}
