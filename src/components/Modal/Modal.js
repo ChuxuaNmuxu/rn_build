@@ -42,6 +42,7 @@ class MyModal extends Component {
 
       studentName: '',
       url: '',
+      imageViewType: '',
     };
     // 只提供两个API，TOST需要再搞
     Method.prototype.onOppen = this.onOppen;
@@ -136,12 +137,13 @@ class MyModal extends Component {
   }
 
   _ImageViewer=() => {
-    const { studentName, url } = this.state;
+    const { studentName, url, imageViewType } = this.state;
     return (
       <ImageViewer
         closeFn={this.onClose}
         name={studentName}
         url={url}
+        type={imageViewType}
       />
     );
   }

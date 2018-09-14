@@ -20,27 +20,38 @@ function* fetchDataSaga(action) {
     // 模拟数据
     const code = 0;
     const result = [
-      {
-        subjectName: '语文',
-        count: 1,
-        icon: 'yuwen2',
-      },
-      {
-        subjectName: '数学',
-        count: 12,
-        icon: 'shuxue1',
-      },
-      {
-        subjectName: '英语',
-        count: 13,
-        icon: 'yuwen1',
-      },
-      {
-        subjectName: '化学',
-        count: 14,
-        icon: 'huaxue1',
-      },
+      // {
+      //   subjectName: '语文',
+      //   count: 1,
+      //   icon: 'yuwen2',
+
+      // },
+      // {
+      //   subjectName: '数学',
+      //   count: 12,
+      //   icon: 'shuxue1',
+      // },
+      // {
+      //   subjectName: '英语',
+      //   count: 13,
+      //   icon: 'yuwen1',
+      // },
+      // {
+      //   subjectName: '化学',
+      //   count: 14,
+      //   icon: 'huaxue1',
+      // },
     ];
+    for (let i = 0; i < 50; i++) {
+      result.push(
+        {
+          subjectName: '语文',
+          count: i,
+          icon: 'yuwen2',
+          // key: `${Math.random()}`,
+        },
+      );
+    }
     // console.warn('年级接口res=', res)
     if (code === 0) {
       yield put(actions.fetchDataAction(result, 'SUCCESS'));

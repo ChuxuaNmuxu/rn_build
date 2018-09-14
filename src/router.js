@@ -33,6 +33,7 @@ import MistakeReform from './views/Student/MistakeReform';
 import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
 import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
 import ExamRecordDetail from './views/Student/ExamRecordDetail';
+import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
 
 const RouteMap = props => (
   <Router
@@ -55,7 +56,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        // initial
+        initial
       >
         <Tabs
           key="StudentTabs"
@@ -109,6 +110,7 @@ const RouteMap = props => (
             // titleStyle={styles.navigationBarStyle_title}
             // navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
             hideNavBar // 是否隐藏整个导航条
+            initial
           >
             <Scene
               key="ProblemOverview"
@@ -143,6 +145,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
+        // initial
       >
         {/* 做作业 */}
         <Scene key="DoHomework" component={DoHomework} hideNavBar />
@@ -174,6 +177,7 @@ const RouteMap = props => (
         />
         {/* 作业批阅 */}
         <Scene
+          // initial
           // back
           // navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
           // renderBackButton={() => (
@@ -187,13 +191,18 @@ const RouteMap = props => (
           key="HomeworkCorrecting"
           component={HomeworkCorrecting}
         />
+        <Scene
+          initial
+          hideNavBar
+          key="HomeworkProblemDetail"
+          component={HomeworkProblemDetail}
+        />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />
       </Stack>
       <Stack
         key="DemoStack"
-        initial
       >
         <Scene
           key="Demo"
