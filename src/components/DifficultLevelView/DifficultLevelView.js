@@ -1,58 +1,55 @@
-// 错误原因分析组件
+// 难易程度组件
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { PropTypes } from 'prop-types';
 import Radio from '../Radio';
-import styles from './WrongReason.scss';
+import styles from './DifficultLevelView.scss';
 
-class WrongReason extends Component {
+class DifficultLevelView extends Component {
   static defaultProps = {
-    labelData: [ // 标签数据
+    labelData: [
       {
-        label: '知识记忆性错误',
+        label: '易',
         value: 1,
       },
       {
-        label: '理解性错误',
-        value: 2,
-      },
-      {
-        label: '考虑不全面',
-        value: 3,
-      },
-      {
-        label: '审题不仔细',
-        value: 4,
-      },
-      {
-        label: '粗心大意',
+        label: '适中',
         value: 5,
       },
       {
-        label: '其他',
-        value: 65535,
+        label: '难',
+        value: 9,
       },
     ],
-    title: '错误原因分析', // 组件title
-    onChange: (a) => { console.log('我被点击了：', a); },
+    onChange: (a) => { console.log(123, a); },
     defaultValue: null,
   } // 默认选中值
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentLevel: 1,
+    };
+  }
+
   render() {
+    const { currentLevel } = this.state;
     const {
-      title, labelData, onChange, defaultValue,
+      labelData, onChange, defaultValue,
     } = this.props;
     return (
       <View style={styles.problem_wrapper}>
-        <Text style={styles.problem_title}>{title}</Text>
+        <Text style={styles.problem_title}>你认为本题的难易程度<Text style={styles.required_txt}>(必选*)</Text></Text>
         <Radio.Group
           defaultValue={defaultValue}
           onChange={onChange}
-          checkedIconWrapStyle={{
-            borderColor: '#fa5656',
-          }}
+          checkedIconWrapStyle={[
+            currentLevel === 1 && styles.checkedIconWrapStyle1,
+            currentLevel === 5 && styles.checkedIconWrapStyle2,
+            currentLevel === 5 && styles.checkedIconWrapStyle3,
+          ]}
           checkedTextStyle={{
-            color: '#fa5656',
+            color: '#fff',
           }}
           style={styles.radio_wrapper}
           childStyle={styles.radio_childStyle}
@@ -68,11 +65,10 @@ class WrongReason extends Component {
   }
 }
 
-WrongReason.propTypes = {
+DifficultLevelView.propTypes = {
   labelData: PropTypes.array,
-  title: PropTypes.string,
   onChange: PropTypes.func,
   defaultValue: PropTypes.number,
 };
 
-export default WrongReason;
+export default DifficultLevelView;

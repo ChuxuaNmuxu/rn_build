@@ -11,6 +11,7 @@ import Timer from './Components/Timer';
 import QuestionCard from './Components/QuestionCard';
 import AnswerCard from './Components/AnswerCard';
 import ExtendListView from '../../../components/ExtendListView';
+import DifficultLevelView from '../../../components/DifficultLevelView';
 
 class DoHomeworks extends Component {
   constructor(props) {
@@ -158,6 +159,7 @@ class DoHomeworks extends Component {
             <ScrollView key={index}>
               <QuestionCard questions={item} />
               <AnswerCard questions={item} />
+              <DifficultLevelView />
             </ScrollView>
           ))
         }

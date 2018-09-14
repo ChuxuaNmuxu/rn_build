@@ -8,7 +8,10 @@ import {
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Swiper from 'react-native-swiper';
+import CIcon from '../../../components/Icon';
 import styles from './HomeworkProblemDetail.scss';
+import ThumbnailImage from '../../../components/ThumbnailImage';
+import WrongReason from '../../../components/WrongReason';
 
 class HomeworkProblemDetail extends Component {
   constructor(props) {
@@ -48,19 +51,53 @@ class HomeworkProblemDetail extends Component {
           }}
         >
           {
-            title.map((item, titleIndex) => {
-              return (
-                <View key={titleIndex}>
-                  <Image
-                    style={{ width: '100%', height: 225 }}
-                    source={{ uri: `${item.titleUrl}` }}
-                  />
-                  <View style={styles.space} />
+            title.map((item, titleIndex) => (
+              <View key={titleIndex}>
+                <Image
+                  style={{ width: '100%', height: 225 }}
+                  source={{ uri: `${item.titleUrl}` }}
+                />
+                <View style={styles.space} />
+                <View style={styles.reason_wrap}>
+                  <View style={styles.reason_word}>
+                    <View style={styles.reason_word_child}>
+                      <Text style={styles.reason_icon}>
+                        <CIcon name="cuowu" size={20} color="white" />
+                      </Text>
+                      <Text style={styles.reason_answer}>
+                        回答错误答,案是B,你的答案是A
+                      </Text>
+                    </View>
+                    <View style={styles.reason_word_child}>
+                      <Text style={[styles.reason_difficult]}>
+                      难易程度:
+                      </Text>
+                      <Text style={[styles.reason_difficult, styles.reason_difficult_result]}>
+                        {item.difficult}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.reason_image}>
+                    <Image
+                      style={{ height: 312 }}
+                      source={{ uri: `${item.titleUrl}` }}
+                    />
+                  </View>
                 </View>
-              );
-            })
+                <View style={styles.space} />
+                <View style={styles.answer_wrap}>
+                  <Text style={styles.answer_title}>题目答案:</Text>
+                  <ThumbnailImage
+                    option={{
+                      url: item.titleUrl,
+                    }}
+                  />
+                </View>
+                <View style={styles.space} />
+                <WrongReason onChange={this.onChange} />
+              </View>
+            ))
           }
-
         </Swiper>
       </View>
     );
@@ -76,16 +113,18 @@ HomeworkProblemDetail.defaultProps = {
   title: [
     {
       url: [1, 2, 3, 4],
-      testColor: '#9DD6EB',
+      difficult: '易',
       titleUrl: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
     },
     {
       url: [1, 2, 3, 4],
-      testColor: '#30bf6c',
+      difficult: '难',
+      titleUrl: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
     },
     {
       url: [1, 2, 3, 4],
-      testColor: '#92BBD9',
+      difficult: null,
+      titleUrl: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
     },
   ],
 };
