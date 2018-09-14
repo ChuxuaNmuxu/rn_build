@@ -79,6 +79,7 @@ class TaskList extends Component {
           keyExtractor={this.keyExtractor}
           getItemLayout={this.getItemLayout}
           // initialScrollIndex={10}
+          // initialNumToRender={parseInt(data.length / 2) + 4}
           ListEmptyComponent={this.renderListEmpty}
         />
       </View>

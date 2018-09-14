@@ -1,0 +1,39 @@
+// 传给 TaskItem 的样式
+.wrap_style {
+  margin-left: 0;
+  height: 96px;
+}
+
+.icon_wrap_style {
+  height: 71px;
+  width: 71px;
+}
+
+.icon {
+  font-size: 50px;
+  color: #54cc82;
+}
+
+.wrap {
+  margin-top: 12px;
+}
+
+// 
+.box {
+  justify-content: center;
+  align-items: center;
+  height: 96px;
+  width: 96px;
+  background-color: #54cc82;
+  border-radius:8px;
+}
+
+
+.border {
+  justify-content: center;
+  align-items: center;
+  height: 71px;
+  width: 71px;
+  background-color: #ffffff;
+  border-radius: 71px;
+}
