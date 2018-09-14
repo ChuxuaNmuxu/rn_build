@@ -10,27 +10,27 @@ class WrongReason extends Component {
     labelData: [ // 标签数据
       {
         label: '知识记忆性错误',
-        id: 1,
+        value: 1,
       },
       {
         label: '理解性错误',
-        id: 2,
+        value: 2,
       },
       {
         label: '考虑不全面',
-        id: 3,
+        value: 3,
       },
       {
         label: '审题不仔细',
-        id: 4,
+        value: 4,
       },
       {
         label: '粗心大意',
-        id: 5,
+        value: 5,
       },
       {
         label: '其他',
-        id: 65535,
+        value: 65535,
       },
     ],
     title: '错误原因分析', // 组件title
@@ -59,7 +59,7 @@ class WrongReason extends Component {
         >
           {
             labelData.map((proItem, proIndex) => (
-              <Radio.Button key={proIndex} value={proItem.id}>{proItem.label}</Radio.Button>
+              <Radio.Button key={proIndex} value={proItem.value}>{proItem.label}</Radio.Button>
             ))
           }
         </Radio.Group>
