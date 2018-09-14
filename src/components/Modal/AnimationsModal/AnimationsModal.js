@@ -49,7 +49,7 @@ class ButtonModal extends Component {
         <Animatable.View
           animation={slideInLeft}
           iterationCount="infinite"
-          direction="alternate"
+          direction="normal"
           easing="linear"
           style={Style.Animatable}
         >
@@ -60,7 +60,7 @@ class ButtonModal extends Component {
         <Animatable.View
           animation={slideInRight}
           iterationCount="infinite"
-          direction="alternate"
+          direction="normal"
           easing="linear"
           style={Style.Animatable}
         >
@@ -105,7 +105,7 @@ class ButtonModal extends Component {
           <Animatable.View
             animation={animationObj[animationType]}
             iterationCount="infinite"
-            direction="alternate"
+            direction="normal"
             easing="linear"
           >
             {

@@ -4,6 +4,7 @@ import {
   View, Text, TouchableOpacity,
 } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import * as Animatable from 'react-native-animatable';
 import ZommImage from './ZoomViewer';
 import Svg from '../../Svg';
 import Style from './ImageViewer.scss';
@@ -21,7 +22,36 @@ class ImageViewerModal extends Component {
     closeFn();
   }
 
-  renderIndicator = () => null
+
+  loadingRender=() => {
+    const rotate = {
+      from: {
+        transform: [{ rotate: '0deg' }],
+      },
+      to: {
+        transform: [{ rotate: '360deg' }],
+      },
+    };
+    return (
+      <Animatable.View
+        animation={rotate}
+        iterationCount="infinite"
+        direction="normal"
+        easing="linear"
+      >
+        <Svg height="72" width="72" source="imgLoading" fill="#fff" />
+      </Animatable.View>
+    );
+  }
+
+  viewerLoading=() => (
+    <View style={Style.loadingRenasder}>
+      {
+        this.loadingRender()
+      }
+    </View>
+  )
+
 
   renderHeader=() => {
     const { name } = this.props;
@@ -35,6 +65,7 @@ class ImageViewerModal extends Component {
     );
   }
 
+  renderIndicator = () => null
 
   render() {
     const { url, type } = this.props;
@@ -82,12 +113,13 @@ class ImageViewerModal extends Component {
 
           //     />
           //   </View>
-            <ZommImage closeFn={this._onClose} url={url} />
+            <ZommImage closeFn={this._onClose} url={url} loadingRender={this.loadingRender} />
           ) : (
             <ImageViewer
               imageUrls={images}
               renderHeader={this.renderHeader}
               renderIndicator={this.renderIndicator}
+              loadingRender={this.viewerLoading}
               style={{ flex: 1 }}
             />
           )
