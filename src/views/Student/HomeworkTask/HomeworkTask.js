@@ -4,11 +4,11 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
-import styles from './homeworkTask.scss';
+import styles from './HomeworkTask.scss';
 import TaskList from './TaskList';
 import TimeList from './TimeList';
 import I18nText from '../../../components/I18nText';
-import Drag from '../../../components/Drag';
+// import Drag from '../../../components/Drag';
 
 class MyHomework extends Component {
   constructor(props) {

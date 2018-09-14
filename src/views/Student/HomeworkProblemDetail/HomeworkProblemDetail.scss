@@ -34,3 +34,80 @@
   // opacity: 0.3; 
   // margin: 5px 0; 
 }
+
+.reason_wrap {
+  // align-items: center;
+  padding: 0 28px 28px 28px;
+  // justify-content: flex-start;
+  background-color: white;
+}
+
+.reason_word {
+  height: 72px;
+  flex-direction: row;
+}
+
+.reason_word_child {
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+}
+
+.reason_icon {
+  background:#fa5656;
+  border-radius:8px;
+  padding: 3px;
+  margin-right: 10px;
+}
+
+.reason_answer {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#fa5656;
+}
+
+.reason_difficult {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666666;
+}
+
+.reason_difficult_result {
+  color: green;
+} 
+
+.answer_wrap {
+  background-color:white;
+  height:240px;
+  padding: 24px;
+}
+
+.answer_title {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666;
+  margin-bottom: 24px; 
+}
+
+.problem_wrapper {
+  height: 263px;
+  background-color: white;
+}
+
+.problem_title {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666;
+  margin: 12px;
+}
+
+.radio_wrapper {
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+}
+
+.radio_childStyle {
+  margin: 12px;
+}
