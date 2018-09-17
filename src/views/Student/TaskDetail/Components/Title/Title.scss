@@ -3,6 +3,13 @@
   background-color: #30bf6c;
   justify-content: center;
   align-items: center;
+  position: relative;
+}
+
+.title_icon {
+  position: absolute;
+  left: 5;
+  top: 5;
 }
 
 .title {

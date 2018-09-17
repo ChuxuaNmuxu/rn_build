@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Swiper from 'react-native-swiper';
@@ -40,17 +41,19 @@ class HomeworkProblemDetail extends Component {
             <Text style={styles.head_content_word}>详情</Text>
           </View>
         </View>
-        <Swiper
-          loop={false}
-          showsPagination={false}
-          index={index}
-          onIndexChanged={(nextIndex) => {
-            this.setState({
-              index: nextIndex,
-            });
-          }}
-        >
-          {
+        <ScrollView>
+          <View style={styles.body}>
+            <Swiper
+              loop={false}
+              showsPagination={false}
+              index={index}
+              onIndexChanged={(nextIndex) => {
+                this.setState({
+                  index: nextIndex,
+                });
+              }}
+            >
+              {
             title.map((item, titleIndex) => (
               <View key={titleIndex}>
                 <Image
@@ -98,7 +101,9 @@ class HomeworkProblemDetail extends Component {
               </View>
             ))
           }
-        </Swiper>
+            </Swiper>
+          </View>
+        </ScrollView>
       </View>
     );
   }
