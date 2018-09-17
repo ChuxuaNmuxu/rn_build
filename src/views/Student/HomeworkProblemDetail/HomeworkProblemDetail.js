@@ -11,7 +11,7 @@ import Swiper from 'react-native-swiper';
 import CIcon from '../../../components/Icon';
 import styles from './HomeworkProblemDetail.scss';
 import ThumbnailImage from '../../../components/ThumbnailImage';
-import Radio from '../../../components/Radio';
+import WrongReason from '../../../components/WrongReason';
 
 class HomeworkProblemDetail extends Component {
   constructor(props) {
@@ -19,33 +19,6 @@ class HomeworkProblemDetail extends Component {
     this.state = {
       index: 0,
     };
-    // 写死的问题总结的array
-    this.problemSummary = [
-      {
-        name: '知识记忆性错误',
-        value: '知识记忆性错误',
-      },
-      {
-        name: '理解性错误',
-        value: '理解性错误',
-      },
-      {
-        name: '考虑不全面',
-        value: '考虑不全面',
-      },
-      {
-        name: '审题不仔细',
-        value: '审题不仔细',
-      },
-      {
-        name: '粗心大意',
-        value: '粗心大意',
-      },
-      {
-        name: '其他',
-        value: '其他',
-      },
-    ];
   }
 
   render() {
@@ -121,26 +94,7 @@ class HomeworkProblemDetail extends Component {
                   />
                 </View>
                 <View style={styles.space} />
-                <View style={styles.problem_wrapper}>
-                  <Text style={styles.problem_title}>错误原因分析</Text>
-                  <Radio.Group
-                    onChange={i => console.log(i)}
-                    checkedIconWrapStyle={{
-                      borderColor: '#fa5656',
-                    }}
-                    checkedTextStyle={{
-                      color: '#fa5656',
-                    }}
-                    style={styles.radio_wrapper}
-                    childStyle={styles.radio_childStyle}
-                  >
-                    {
-                      this.problemSummary.map((proItem, proIndex) => (
-                        <Radio.Button key={proIndex} value={proItem.value}>{proItem.name}</Radio.Button>
-                      ))
-                    }
-                  </Radio.Group>
-                </View>
+                <WrongReason onChange={this.onChange} />
               </View>
             ))
           }

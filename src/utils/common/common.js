@@ -3,9 +3,9 @@
 import dayjs from 'dayjs';
 import R from 'ramda';
 
-export const exampleOne = (a) => a + 1;
+export const exampleOne = a => a + 1;
 
-export const exampleTwo= (a) => {return {a: a} }
+export const exampleTwo = a => ({ a });
 
 // 秒数转换成00'00"格式
 export const formatSeconds = (value) => {
@@ -91,6 +91,58 @@ export const formatTimeToshow = (timeData) => {
     finalTime = dayjs(timeData).format('YYYY/MM/DD');
   }
   return finalTime;
+};
+
+// 各类题型
+export const subjectType = ['单选题', '多选题', '判断题', '对应题', '填空题', '主观题', '综合题'];
+
+/**
+ * 根据小题类型转成对应的题型名称
+ * @param {number} type
+ */
+export const getQuestionTypeName = (type) => {
+  switch (type) {
+    case 1:
+      return subjectType[0];
+    case 2:
+      return subjectType[1];
+    case 3:
+      return subjectType[2];
+    case 4:
+      return subjectType[3];
+    case 10:
+      return subjectType[4];
+    case 11:
+      return subjectType[5];
+    default:
+      return subjectType[6];
+  }
+};
+
+/**
+ * 根据难易程度的值返回对应的难易程度
+ * @param {num} difficultyLevel--难易程度的值
+ * @param {bool} needColor--是否只需根据难易程度值返回对应的颜色
+ */
+export const convertToDifficultyLevel = (difficultyLevel, needColor) => {
+  const level = parseInt(difficultyLevel);
+  if (needColor) {
+    switch (level) {
+      case 1: return '#30bf6c';
+      case 5: return '#f5a623';
+      case 9: return '#fa5656';
+      default: return '#fa5656';
+    }
+  } else {
+    switch (level) {
+      case 1: return '易';
+      case 3: return '偏易';
+      case 5: return '适中';
+      case 7: return '偏难';
+      case 9: return '难';
+      default: return '未标';
+    }
+  }
 };
 
 /**

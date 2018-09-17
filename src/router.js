@@ -18,6 +18,7 @@ import HomeworkTask from './views/Student/HomeworkTask';
 import ProblemRecords from './views/Student/ProblemRecords';
 import My from './views/Student/My';
 // import WrongNotes from './views/Student/WrongNotes'; // 项目人员 hqh 注释掉了，因为错题本是hqh写的！
+import PreviewHomework from './views/Student/PreviewHomework';
 import DoHomework from './views/Student/DoHomework';
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
@@ -27,7 +28,11 @@ import Demo from './views/Demo';
 import styles from './router.scss';
 import TaskDetail from './views/Student/TaskDetail';
 import ProblemOverview from './views/Student/ProblemOverview';
+import ProblemListOverview from './views/Student/ProblemListOverview';
+import MistakeReform from './views/Student/MistakeReform';
 import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
+import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
+import ExamRecordDetail from './views/Student/ExamRecordDetail';
 import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
 
 const RouteMap = props => (
@@ -140,7 +145,18 @@ const RouteMap = props => (
         key="StudentAll"
         initial
       >
-        <Scene key="DoHomework" component={DoHomework} hideNavBar />
+        {/* 做作业 */}
+        <Scene key="DoHomework" component={DoHomework} hideNavBar initial />
+        {/* 作业预览 */}
+        <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
+        {/* 错题本列表页 */}
+        <Scene key="ProblemListOverview" component={ProblemListOverview} hideNavBar />
+        {/* 错题重做 */}
+        <Scene key="MistakeReform" component={MistakeReform} hideNavBar />
+        {/* 作业记录详情页 */}
+        <Scene key="HomworkRecordDetail" component={HomworkRecordDetail} hideNavBar />
+        {/* 考试记录详情页 */}
+        <Scene key="ExamRecordDetail" component={ExamRecordDetail} hideNavBar />
         {/* 任务详情 */}
         <Scene
           // initial
@@ -174,7 +190,6 @@ const RouteMap = props => (
           component={HomeworkCorrecting}
         />
         <Scene
-          initial
           hideNavBar
           key="HomeworkProblemDetail"
           component={HomeworkProblemDetail}

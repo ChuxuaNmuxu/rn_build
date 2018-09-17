@@ -9,8 +9,9 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Entypo from 'react-native-vector-icons/Entypo';
-import styles from './ProblemOverview.scss';
 // import { ActivityIndicator } from 'antd-mobile-rn';
+import { Actions } from 'react-native-router-flux';
+import styles from './ProblemOverview.scss';
 import * as actions from '../../../actions/problemOverviewAction';
 import CIcon from '../../../components/Icon';
 
@@ -24,6 +25,11 @@ class ProblemOverview extends PureComponent {
 
   componentWillUnmount() {
     console.log('离开 ProblemOverview 组件！');
+  }
+
+  // 点击进入错题列表页面
+  goProblemListFun = () => {
+    Actions.ProblemListOverview();
   }
 
   render() {
@@ -44,10 +50,8 @@ class ProblemOverview extends PureComponent {
               console.log(dataItem);
               return (
                 <TouchableOpacity
-                  onPress={() => {
-                    console.log('点击查看错题', item.key, index);
-                  }}
-                  // key={index}
+                  onPress={this.goProblemListFun}
+                  key={index}
                 >
                   <View style={styles.item}>
                     <View style={styles.item_left}>
@@ -75,7 +79,7 @@ class ProblemOverview extends PureComponent {
         </View> */}
         {/* {
           data.map((item, index) => (
-            <TouchableOpacity onPress={() => console.log('点击查看错题')} key={index}>
+            <TouchableOpacity onPress={this.goProblemListFun} key={index}>
               <View style={styles.item}>
                 <View style={styles.item_left}>
                   <View style={styles.item_left_icon}>

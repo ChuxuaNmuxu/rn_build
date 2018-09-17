@@ -6,10 +6,10 @@ import {
   ScrollView,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import styles from './filterBox.scss';
+import styles from './FilterView.scss';
 import CIcon from '../../../../components/Icon';
 
-class FilterBox extends Component {
+class FilterView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -61,7 +61,7 @@ class FilterBox extends Component {
           </ScrollView>
           <TouchableOpacity style={styles.filterMoreBox} onPress={() => this.filterMoreFun()}>
             <Text style={styles.filterMoreText}>
-            更多筛选
+              更多筛选
               <CIcon style={styles.icon} name="shangyiye" />
             </Text>
           </TouchableOpacity>
@@ -71,10 +71,10 @@ class FilterBox extends Component {
   }
 }
 
-FilterBox.propTypes = {
+FilterView.propTypes = {
   currentSubjectId: PropTypes.number.isRequired,
   subjectData: PropTypes.array.isRequired,
   filterSubjectFun: PropTypes.func.isRequired,
   filterMoreFun: PropTypes.func.isRequired,
 };
-export default FilterBox;
+export default FilterView;
