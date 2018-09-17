@@ -67,6 +67,7 @@ class Content extends Component {
     }
     return (
       <View>
+        {/* <View style={{ justifyContent: 'center', alignItems: 'center' }}> */}
         <View style={styles.content_child}>
           <I18nText style={styles.content_child_left}>TaskDetail.useTime</I18nText>
           <Text style={styles.content_child_right}>{useTime}</Text>
