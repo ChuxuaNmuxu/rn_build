@@ -6,7 +6,7 @@ import styles from './plannedTask.scss';
 
 const PlannedTask = (props) => {
   const onPress = () => { console.log('做作业'); };
-  const { type } = props;
+  const { type, data } = props;
 
   const renderTask = () => {
     if (type === 2) {
@@ -16,6 +16,7 @@ const PlannedTask = (props) => {
           iconStyle={styles.icon}
           wrapStyle={styles.wrap_style}
           isShowSpendTime={false}
+          data={data}
         />
       );
     }

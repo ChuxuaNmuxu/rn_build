@@ -14,20 +14,20 @@ class TimeItem extends Component {
   }
 
   render() {
-    const { item } = this.props;
-    // /** , item.item === '02:00-02:30' && styles.time_box_checked */
+    const { data } = this.props;
+    // data.item === '02:00-02:30' && styles.time_box_checked
     return (
       <TouchableNativeFeedback>
         <View style={styles.time_wrap}>
           <View style={styles.time_content} />
-          <View style={[styles.time_box]}>
+          <View style={[styles.time_box, data.item === '10:00-10:30' && styles.time_box_checked]}>
             <View style={styles.task_list}>
-              <Text>{item.index}</Text>
+              <Text>{data.index}</Text>
               {
-                item.item === '01:00-01:30' && Array(5).fill(1).map((v, i) => <PlannedTask key={i} type={1} />)
+                data.item === '01:00-01:30' && Array(5).fill(1).map((v, i) => <PlannedTask key={i} type={1} data={data} />)
               }
               {
-                // item.item === '02:00-02:30' && Array(5).fill(1).map((v, i) => <PlannedTask key={i} type={2} />)
+                data.item === '10:00-10:30' && Array(5).fill(1).map((v, i) => <PlannedTask key={i} type={2} data={data} />)
               }
             </View>
             <View style={styles.time_scale}>
@@ -36,7 +36,7 @@ class TimeItem extends Component {
               }
             </View>
           </View>
-          <View style={styles.time_text}><Text>{item.item}</Text></View>
+          <View style={styles.time_text}><Text>{data.item}</Text></View>
         </View>
       </TouchableNativeFeedback>
     );

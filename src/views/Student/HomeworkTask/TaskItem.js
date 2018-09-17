@@ -26,6 +26,7 @@ class TaskItem extends React.Component {
     const {
       wrapStyle, iconWrapStyle, iconStyle, isShowSpendTime,
     } = this.props;
+
     return (
       <TouchableNativeFeedback
         onPress={this.openTaskDetail}
@@ -35,7 +36,7 @@ class TaskItem extends React.Component {
             <CIcon style={mergeStyles(styles.icon, iconStyle)} name="wendang1" size={25} />
           </View>
           <View>
-            <Text>{this.props.item.index}</Text>
+            <Text>{this.props.data.index}</Text>
             <Text style={[styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
               6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业
             </Text>

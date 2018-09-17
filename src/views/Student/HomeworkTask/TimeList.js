@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, FlatList } from 'react-native';
 import TimeItem from './TimeItem';
 import styles from './timeList.scss';
 import { createHalfHourPeriod, currentTimeToPeriod } from '../../../utils/common';
 
-class TaskList extends Component {
+class TaskList extends PureComponent {
   constructor(props) {
     super(props);
     this.flatList = null;
@@ -13,7 +13,7 @@ class TaskList extends Component {
   }
 
   componentDidMount() {
-    console.log(currentTimeToPeriod());
+    console.log(16, this.currentPeriodIndex);
     /**
      * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
      * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中
@@ -25,7 +25,7 @@ class TaskList extends Component {
       this.flatList.scrollToIndex({
         animated: true,
         index: this.currentPeriodIndex,
-        viewOffset: 142 - 496,
+        viewOffset: (142 - 496) / 2,
         viewPosition: 0.5,
       });
     });
@@ -42,7 +42,7 @@ class TaskList extends Component {
 
   keyExtractor = item => item.toString()
 
-  renderItem = item => <TimeItem item={item} />
+  renderItem = data => <TimeItem data={data} />
 
   render() {
     return (

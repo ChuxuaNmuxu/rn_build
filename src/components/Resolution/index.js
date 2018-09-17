@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
   Dimensions,
-  PixelRatio,
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import { zoomScreen, adaptiveRotation } from '../../utils/resolution';
 
 export default class Resolution extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ export default class Resolution extends Component {
       width,
       height,
       scale,
-    } = this.rotatingScreen();
+    } = zoomScreen();
     this.state = {
       width,
       height,
@@ -26,24 +26,11 @@ export default class Resolution extends Component {
   }
 
   onLayout = () => {
-    const { width: SWidth, height: SHeight } = Dimensions.get('screen');
-    let width;
-    let height;
-    let scale;
-
-    if (SWidth > SHeight) {
-      ({
-        width,
-        height,
-        scale,
-      } = this.rotatingScreen());
-    } else {
-      ({
-        width,
-        height,
-        scale,
-      } = this.rotatingScreen(1080, 1820));
-    }
+    const {
+      width,
+      height,
+      scale,
+    } = adaptiveRotation();
 
     const { width: oldWidth } = this.state;
     if (oldWidth !== width) {
@@ -53,38 +40,6 @@ export default class Resolution extends Component {
         scale,
       });
     }
-  }
-
-
-  rotatingScreen = (dwidth = 1920, dheight = 1080, dim = 'screen') => {
-    const { width, height } = Dimensions.get(dim);
-    const designSize = { width: dwidth, height: dheight };
-    const pxRatio = PixelRatio.get(dim);
-
-    const w = PixelRatio.getPixelSizeForLayoutSize(width);
-    const h = PixelRatio.getPixelSizeForLayoutSize(height);
-
-    // 竖屏时横向铺满
-    if (dwidth < dheight) {
-      const fixedWidthDesignScale = designSize.width / w;
-      const fixedWidthWidth = designSize.width;
-      const fixedWidthHeight = h * fixedWidthDesignScale;
-      const fixedWidthScale = 1 / pxRatio / fixedWidthDesignScale;
-
-      return {
-        width: fixedWidthWidth, height: fixedWidthHeight, scale: fixedWidthScale,
-      };
-    }
-
-    // 横屏事件纵向铺满
-    const fixedHeightDesignScale = designSize.height / h;
-    const fixedHeightWidth = w * fixedHeightDesignScale;
-    const fixedHeightHeight = designSize.height;
-    const fixedHeightScale = 1 / pxRatio / fixedHeightDesignScale;
-
-    return {
-      width: fixedHeightWidth, height: fixedHeightHeight, scale: fixedHeightScale,
-    };
   }
 
   render() {
