@@ -1,6 +1,6 @@
 .wrapper {
   background-color: white;
-  height: 100%;
+  flex: 1;
 }
 
 .head {
@@ -24,8 +24,13 @@
   color:white;
 }
 
+.content_wrap {
+  height: 2000px;
+}
+
 .body {
   // padding: 23px;
+  // height: 1900px;
 }
 
 .body_homework_title {
@@ -43,7 +48,7 @@
 }
 
 .body_homework_studentAnswer {
-  height: 1091px;
+  height: 1091;
   padding: 23px;
 }
 
@@ -54,17 +59,10 @@
 }
 
 .foot {
-  // width: 100%;
   height: 100%; 
   border: 1px solid #ccc; 
-  // -moz-box-shadow:0 0 10px #06c; 
-  // -webkit-box-shadow:0 0 10px #06c;
-  // box-shadow:0 0 10px #06c;
   flex-direction: row;
   padding: 60px 20px;
-  // align-items: center;
-  // text-align: center;
-  // justify-content: center;
 }
 
 .foot_child_left {
@@ -79,14 +77,8 @@
 }
 
 .foot_btn {
-  // border:1px solid #30bf6c;
   border-radius:50px;
-  // width:268px;
-  // height:70px;
-  // line-height: 70px; 
-  // text-align: center;
   padding: 20px 50px;
-  // margin: 10px;
   font-family:PingFangSC-Regular;
   font-size:24px;
   color: white;
