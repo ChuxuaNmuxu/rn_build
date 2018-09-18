@@ -53,10 +53,13 @@ class HomeworkCorrecting extends Component {
         <ScrollView>
           <View style={styles.content_wrap}>
             <Swiper
+              ref={(node) => { this.swiperRef = node; }}
               loop={false}
               showsPagination={false}
-              index={index}
+              // index={index}
+              // loadMinimal
               onIndexChanged={(nextIndex) => {
+                console.log('onIndexChanged, nextIndex=', nextIndex);
                 this.setState({
                   index: nextIndex,
                 });
@@ -72,6 +75,18 @@ class HomeworkCorrecting extends Component {
                       loop={false}
                       // showsPagination={false}
                       paginationStyle={styles.paginationStyle} // 暂时没覆盖成功
+                      dotStyle={{
+                        width: 24,
+                        height: 24,
+                        borderRadius: 12,
+                        backgroundColor: 'rgba(51, 51, 51, 0.20)',
+                      }}
+                      activeDotStyle={{
+                        width: 24,
+                        height: 24,
+                        borderRadius: 12,
+                        backgroundColor: '#30bf6c',
+                      }}
                     >
                       {
                         item.url.map((item2, index2) => (
@@ -97,7 +112,7 @@ class HomeworkCorrecting extends Component {
                     <View style={styles.body_homework_studentAnswer}>
                       <Image
                         style={{ width: '100%', height: '100%' }}
-                        source={{ uri: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png' }}
+                        source={{ uri: `${item.answerUrl}` }}
                       />
                     </View>
                   </TouchableOpacity>
@@ -132,12 +147,15 @@ class HomeworkCorrecting extends Component {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.foot_child_right}>
-                    <TouchableOpacity onPress={() => {
-                      console.log('完成批阅，下一题');
-                      this.setState({
-                        index: 1,
-                      });
-                    }}
+                    <TouchableOpacity
+                      onPress={() => {
+                        // const newIndex = index < title.length - 1 ? index + 1 : index;
+                        const bol = index < title.length - 1;
+                        console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol);
+                        if (bol) this.swiperRef.scrollBy(1);
+                        // 这个scrollBy会触发 onIndexChanged 所以不需要在这边设置 this.setState({})
+                      }}
+                      // disabled={index === title.length - 1}
                     >
                       <I18nText style={[styles.foot_btn, styles.btn_color_right]}>
                         homeworkCorrecting.finishCorrectingAndNext
@@ -165,14 +183,17 @@ HomeworkCorrecting.defaultProps = {
     {
       url: [1, 2, 3, 4],
       testColor: '#9DD6EB',
+      answerUrl: 'http://img.mp.itc.cn/upload/20170413/399df1317f8e42558933e4888d8ab731_th.jpg',
     },
     {
       url: [1, 2, 3, 4],
       testColor: '#30bf6c',
+      answerUrl: 'http://img.mp.itc.cn/upload/20170413/28c47adfdff04da3ba914c0304fe2148_th.jpg',
     },
     {
       url: [1, 2, 3, 4],
       testColor: '#92BBD9',
+      answerUrl: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
     },
   ],
 };
