@@ -100,12 +100,20 @@
   background: #fff;
   border-radius: 50px;
 }
+
+.currentOrderStyle {
+  background-color: #dbdbdb;
+}
 .checkedIconWrapStyle {
   background-color: #dbdbdb;
   border-color: #dbdbdb;
 }
 .radioTextStyle {
   color: #999;
+  font-size: 30px;
+}
+.currentRadioTextStyle {
+  color: #fff;
   font-size: 30px;
 }
 .checkedRadioTextStyle {

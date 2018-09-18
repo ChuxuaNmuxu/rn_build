@@ -8,6 +8,7 @@ import {
 import { SwipeRow } from 'react-native-swipe-list-view';
 import styles from './ProblemCard.scss';
 import { formatTimeToshow, getQuestionTypeName, convertToDifficultyLevel } from '../../../../utils/common/common';
+import I18nText from '../../../../components/I18nText';
 
 class ProblemCard extends PureComponent {
   constructor(props) {
@@ -43,7 +44,9 @@ class ProblemCard extends PureComponent {
             onPress={this.doErrWorkAgain}
           >
             <Text />
-            <Text style={styles.hideText}>复习错题</Text>
+            <I18nText style={styles.hideText}>
+              ProblemListOverview.ProblemCard.reviewQuestion
+            </I18nText>
           </TouchableOpacity>
           <View style={styles.problemCard}>
             <View style={styles.question_header}>
@@ -62,12 +65,22 @@ class ProblemCard extends PureComponent {
                   <Text style={styles.difficult_txt}>{convertToDifficultyLevel(datas.difficultyLevel)}</Text>
                 </View>
                 <View>
-                  <Text style={styles.err_reason}>错误原因：审题不仔细</Text>
+                  <Text style={styles.err_reason}>
+                    <I18nText>
+                      ProblemListOverview.ProblemCard.wrongReason
+                    </I18nText>
+                    审题不仔细
+                  </Text>
                 </View>
               </View>
               <View style={styles.footer_right}>
                 <Text style={styles.question_time}>{formatTimeToshow(datas.publishTime)}</Text>
-                <Text style={styles.err_reason}>来自：语文第一章作业</Text>
+                <Text style={styles.err_reason}>
+                  <I18nText>
+                    ProblemListOverview.ProblemCard.form
+                  </I18nText>
+                  语文第一章作业
+                </Text>
               </View>
             </View>
           </View>

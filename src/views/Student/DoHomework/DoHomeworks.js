@@ -8,6 +8,7 @@ import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab
 import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import I18nText from '../../../components/I18nText';
 import Radio from '../../../components/Radio';
 import * as actions from '../../../actions/doHomeworkAction';
 import styles from './DoHomeworks.scss';
@@ -87,23 +88,28 @@ class DoHomeworks extends Component {
     this.setState({
       currentIndex: num - 1,
     });
-    // this.setVisibleFun(false);
+    this.setVisibleFun(false);
   }
 
   // 渲染需要展示在扩展列表视图中的组件
-  renderQuestionOrder = (questionList) => (
+  renderQuestionOrder = (questionList, currentIndex) => (
     <View style={styles.orderContent}>
       <RadioGroup
         onChange={this.orderChange}
         style={styles.order_wrapper}
-        iconWrapStyle={styles.orderStyle}
         checkedIconWrapStyle={styles.checkedIconWrapStyle}
-        textStyle={styles.radioTextStyle}
         checkedTextStyle={styles.checkedRadioTextStyle}
       >
         {
           questionList.map((item, index) => (
-            <RadioButton value={1} key={index}>{item.number}</RadioButton>
+            <RadioButton
+              value={item.number}
+              key={index}
+              iconWrapStyle={[styles.orderStyle, (item.number - 1) === currentIndex && styles.currentOrderStyle]}
+              textStyle={[styles.radioTextStyle, (item.number - 1) === currentIndex && styles.currentRadioTextStyle]}
+            >
+              {item.number}
+            </RadioButton>
           ))
         }
       </RadioGroup>
@@ -133,7 +139,9 @@ class DoHomeworks extends Component {
           </View>
         </View>
         <CustomButton warpStyle={styles.submitBtn} style={styles.btnText} onPress={() => this.submitFun()}>
-          提交
+          <I18nText>
+            DoHomeworks.header.commit
+          </I18nText>
         </CustomButton>
       </View>
     </TouchableOpacity>
@@ -154,26 +162,27 @@ class DoHomeworks extends Component {
           <ScrollableTabView
             tabBarPosition="overlayBottom"
             tabBarUnderlineStyle={{ backgroundColor: '#fff' }}
-            tabBarBackgroundColor="#fff"
-            initialPage={currentIndex}
+            // tabBarBackgroundColor="#fff"
+            initialPage={currentIndex} // 页面初始化展示的页面序号。默认为0
+            page={currentIndex} // 动态控制当前展示的页面序号
             onChangeTab={this.changeQuestionFun}
             renderTabBar={() => <ScrollableTabBar />}
           >
             {
-            questionList.map((item, index) => (
-              <ScrollView key={index}>
-                <QuestionCard questions={item} />
-                <AnswerCard questions={item} />
-              </ScrollView>
-            ))
-        }
+              questionList.map((item, index) => (
+                <ScrollView key={index}>
+                  <QuestionCard questions={item} />
+                  <AnswerCard questions={item} />
+                </ScrollView>
+              ))
+            }
           </ScrollableTabView>
           )
         }
         {
           showExtendView && (
           <ExtendListView setTop={setTop} setVisibleFun={this.setVisibleFun}>
-            {this.renderQuestionOrder(questionList)}
+            {this.renderQuestionOrder(questionList, currentIndex)}
           </ExtendListView>
           )
         }
