@@ -19,6 +19,7 @@ import ProblemRecords from './views/Student/ProblemRecords';
 import My from './views/Student/My';
 // import WrongNotes from './views/Student/WrongNotes'; // 项目人员 hqh 注释掉了，因为错题本是hqh写的！
 import PreviewHomework from './views/Student/PreviewHomework';
+import ReviewHomework from './views/Student/ReviewHomework';
 import DoHomework from './views/Student/DoHomework';
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
@@ -146,9 +147,11 @@ const RouteMap = props => (
         initial
       >
         {/* 做作业 */}
-        <Scene key="DoHomework" component={DoHomework} hideNavBar />
+        <Scene key="DoHomework" component={DoHomework} hideNavBar initial />
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
+        {/* 作业检查 */}
+        <Scene key="ReviewHomework" component={ReviewHomework} hideNavBar />
         {/* 错题本列表页 */}
         <Scene key="ProblemListOverview" component={ProblemListOverview} hideNavBar />
         {/* 错题重做 */}
@@ -160,7 +163,7 @@ const RouteMap = props => (
         {/* 作业批阅 */}
         <Scene key="HomeworkCorrecting" component={HomeworkCorrecting} hideNavBar />
         {/* 错题明细 */}
-        <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar initial />
+        <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar />
         {/* 任务详情 */}
         <Scene key="TaskDetail" component={TaskDetail} hideNavBar />
       </Stack>

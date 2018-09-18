@@ -13,7 +13,7 @@
  - ``` <Icon name="rocket" size={30} color="#900" /> ```
  - ```<CIcon name="wendang1" size={25} color="#900" /> ```
 
-###### 注意：若需新添icon，需要将iconfont.ttf文件放置在src/public/icon/下并执行 win： ```npm run iconfontMap-win```、 linux：```iconfontMap-linux```
+###### 注意：若需新添icon，需要将iconfont.ttf文件放置在src/public/icon/下并执行 win： ```npm run move-iconfontMap```、 linux：```npm run mv-iconfontMap```
 ---
 
 ### Resolution
