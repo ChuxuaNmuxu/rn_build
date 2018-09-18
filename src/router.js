@@ -158,9 +158,9 @@ const RouteMap = props => (
         {/* 考试记录详情页 */}
         <Scene key="ExamRecordDetail" component={ExamRecordDetail} hideNavBar />
         {/* 作业批阅 */}
-        <Scene key="HomeworkCorrecting" component={HomeworkCorrecting} hideNavBar />
+        <Scene key="HomeworkCorrecting" component={HomeworkCorrecting} hideNavBar initial />
         {/* 错题明细 */}
-        <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar initial />
+        <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar />
         {/* 任务详情 */}
         <Scene key="TaskDetail" component={TaskDetail} hideNavBar />
       </Stack>
