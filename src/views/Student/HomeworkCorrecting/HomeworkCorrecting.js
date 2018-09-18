@@ -109,12 +109,12 @@ class HomeworkCorrecting extends Component {
                     // 点击查看学生题目
                     onPress={() => console.log('点击查看学生题目')}
                   >
-                    {/* <View style={styles.body_homework_studentAnswer}>
+                    <View style={styles.body_homework_studentAnswer}>
                       <Image
                         style={{ width: '100%', height: '100%' }}
                         source={{ uri: `${item.answerUrl}` }}
                       />
-                    </View> */}
+                    </View>
                   </TouchableOpacity>
                 </View>
                 <View style={styles.foot}>
