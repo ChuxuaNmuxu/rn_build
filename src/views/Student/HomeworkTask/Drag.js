@@ -14,6 +14,7 @@ export class Drop extends Component {
     this.dragAnimation = new Animated.ValueXY(0, 0);
     this.animatedValueX = 0;
     this.animatedValueY = 0;
+    this.ref = null;
 
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true, // 在开始触摸时是否成为响应者
@@ -40,14 +41,28 @@ export class Drop extends Component {
     });
   }
 
-  onPanResponderGrant = (evt, gestureState) => {
-    console.log(133, gestureState);
+  onPanResponderGrant = () => {
     // 防止再次响应时间时先自动跳到初始位置 0，0
     this.dragAnimation.setOffset({
       x: this.animatedValueX, y: this.animatedValueY,
     });
 
     this.dragAnimation.setValue({ x: 0, y: 0 });
+    const { scale } = adaptiveRotation();
+
+    console.log(53, this.ref);
+    this.ref.measure((width, height, px, py, fx, fy) => {
+      const location = {
+        fx,
+        fy,
+        px,
+        py,
+        width,
+        height,
+      };
+      console.log(location);
+      console.log(63, fx / scale, fy / scale);
+    });
   }
 
   onPanResponderMove = (evt, gestureState) => {
@@ -66,13 +81,14 @@ export class Drop extends Component {
 
   render() {
     const transform = this.dragAnimation.getTranslateTransform();
-    console.log(68, transform);
     return (
       <Animated.View
         {...this.panResponder.panHandlers}
         style={[styles.drag, { transform }]}
       >
-        <TaskItem />
+        <TaskItem
+          refs={(ref) => { this.ref = ref; }}
+        />
       </Animated.View>
     );
   }
