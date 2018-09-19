@@ -90,7 +90,7 @@ class GroupCheckbox extends Component {
     const {
       children, defaultValue, value, style, onChange, childStyle, horizontal, options, ...rest
     } = this.props;
-    console.log(93, childStyle);
+
     return React.Children.map(children,
       (child) => {
         const { val } = this.headleData(child.props.value);

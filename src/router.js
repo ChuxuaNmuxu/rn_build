@@ -125,6 +125,7 @@ const RouteMap = props => (
             image="wodedangxuan"
             selectedImage="wodedangxuan"
             hideNavBar
+            // initial
           >
             <Scene key="My" component={My} />
           </Stack>

@@ -4,7 +4,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import Drag from '../../../components/Drag';
+import Drag from '../../../components/Drag/test';
 
 const styles = StyleSheet.create({
   container: {
