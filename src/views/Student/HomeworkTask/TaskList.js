@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
 import {
-  View, Text, FlatList, TouchableOpacity,
+  View, Text, FlatList,
 } from 'react-native';
 import { merge } from 'ramda';
-import TaskItem from './TaskItem';
+import TouchTaskItem from './TouchTaskItem';
 import styles from './taskList.scss';
-import { adaptiveRotation } from '../../../utils/resolution';
 
 class TaskList extends PureComponent {
   constructor(props) {
@@ -45,7 +44,7 @@ class TaskList extends PureComponent {
   }
 
   // 长按禁止FlatList滚动，并用
-  onLongPress = (e) => {
+  onLongPress = () => {
     console.log('长按');
     // console.log(e.target);
     this.changeScrollEnabled(false);
@@ -57,15 +56,9 @@ class TaskList extends PureComponent {
     this.changeScrollEnabled(true);
   }
 
+  // 单击
   onPress = (e) => {
-    const {
-      locationX, locationY, pageX, pageY,
-    } = e.nativeEvent;
-    const { scale } = adaptiveRotation();
-    const currentElementX = (pageX - locationX) / scale;
-    const currentElementY = (pageY - locationY) / scale;
-    console.log(e.nativeEvent);
-    console.log(currentElementX, currentElementY);
+    console.log('单击');
   }
 
   getItemLayout = (data, index) => {
@@ -77,24 +70,24 @@ class TaskList extends PureComponent {
     };
   }
 
+  // key
   keyExtractor = item => item.data.toString()
 
+  // 更改滑动状态
   changeScrollEnabled = (bool) => {
     this.setState({
       scrollEnabled: bool,
     });
   }
 
-
+  // 列表每项
   renderItem = item => (
-    <TouchableOpacity
-      onPress={this.onPress}
+    <TouchTaskItem
+      item={item}
       onLongPress={this.onLongPress}
       onPressOut={this.onPressOut}
-    >
-      <TaskItem data={item} />
-
-    </TouchableOpacity>
+      onPress={this.onPress}
+    />
   )
 
   renderListEmpty = () => {

@@ -17,11 +17,11 @@ class TaskItem extends React.Component {
 
   render() {
     const {
-      wrapStyle, iconWrapStyle, iconStyle, isShowSpendTime,
+      wrapStyle, iconWrapStyle, iconStyle, isShowSpendTime, refs,
     } = this.props;
 
     return (
-      <View style={mergeStyles(styles.task, wrapStyle)}>
+      <View style={mergeStyles(styles.task, wrapStyle)} ref={refs}>
         <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
           <CIcon style={mergeStyles(styles.icon, iconStyle)} name="wendang1" size={25} />
         </View>
@@ -54,7 +54,6 @@ TaskItem.propTypes = {
     PropTypes.array,
   ]),
   isShowSpendTime: PropTypes.bool,
-  onPress: PropTypes.func,
 };
 
 TaskItem.defaultProps = {
@@ -62,9 +61,6 @@ TaskItem.defaultProps = {
   iconWrapStyle: {},
   iconStyle: {},
   isShowSpendTime: true,
-  onPress: () => {
-    console.log('跳转啦');
-  },
 };
 
 export default TaskItem;
