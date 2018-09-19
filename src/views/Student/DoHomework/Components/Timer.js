@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 import PropTypes from 'prop-types';
+import I18nText from '../../../../components/I18nText';
 import { handleFormattingTime } from '../../../../utils/common/common';
 import styles from './Timer.scss';
 
@@ -44,7 +45,12 @@ class Timer extends React.Component {
   render() {
     const { currentTime } = this.state;
     return (
-      <Text style={styles.doHomeworkTime}>计时{ handleFormattingTime(currentTime) }</Text>
+      <Text style={styles.doHomeworkTime}>
+        <I18nText>
+          DoHomeworks.header.count
+        </I18nText>
+        { handleFormattingTime(currentTime) }
+      </Text>
     );
   }
 }

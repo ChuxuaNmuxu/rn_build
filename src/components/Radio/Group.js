@@ -50,7 +50,7 @@ class GroupRadio extends Component {
     const {
       children, defaultValue, value, style, childStyle, onChange, horizontal, options, ...rest
     } = this.props;
-    console.log(53, childStyle, options);
+
     return React.Children.map(children,
       child => (React.cloneElement(child,
         compose(
@@ -58,7 +58,7 @@ class GroupRadio extends Component {
           mergeDeepRight({
             checked,
             onChange: this.onChangeGroup,
-            style: mergeDeepRight({ marginRight: 39 }, child.props.style || {}),
+            style: mergeDeepRight({ marginRight: 39 }, childStyle, child.props.style || {}),
             type: 'group',
           }),
         )(rest))));

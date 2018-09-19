@@ -40,5 +40,6 @@ module.exports = {
       "class-methods-use-this": 0,
       "no-restricted-globals": 0,
       "radix": 0,
+      "react/prefer-stateless-function": 0,
     }
   }

@@ -7,6 +7,7 @@ import {
   DatePickerAndroid,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { Actions } from 'react-native-router-flux';
 import I18nText from '../../../../../components/I18nText';
 import styles from './Content.scss';
 
@@ -66,6 +67,7 @@ class Content extends Component {
     }
     return (
       <View>
+        {/* <View style={{ justifyContent: 'center', alignItems: 'center' }}> */}
         <View style={styles.content_child}>
           <I18nText style={styles.content_child_left}>TaskDetail.useTime</I18nText>
           <Text style={styles.content_child_right}>{useTime}</Text>
@@ -91,13 +93,13 @@ class Content extends Component {
         </View>
         <View style={[styles.content_child_btn]}>
           {/* 预览作业 */}
-          <TouchableOpacity onPress={() => console.log('预览作业')}>
+          <TouchableOpacity onPress={() => Actions.PreviewHomework()}>
             <I18nText style={styles.content_child_btn_normal}>
               TaskDetail.reviewHomework
             </I18nText>
           </TouchableOpacity>
           {/* 开始作业 */}
-          <TouchableOpacity onPress={() => console.log('开始作业')}>
+          <TouchableOpacity onPress={() => Actions.DoHomework()}>
             <I18nText style={[styles.content_child_btn_normal, styles.content_child_btn_color]}>
               TaskDetail.beginHomework
             </I18nText>

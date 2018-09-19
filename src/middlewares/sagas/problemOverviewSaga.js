@@ -24,6 +24,7 @@ function* fetchDataSaga(action) {
         subjectName: '语文',
         count: 1,
         icon: 'yuwen2',
+
       },
       {
         subjectName: '数学',
@@ -41,6 +42,15 @@ function* fetchDataSaga(action) {
         icon: 'huaxue1',
       },
     ];
+    for (let i = 0; i < 50; i++) {
+      result.push(
+        {
+          subjectName: '语文',
+          count: i,
+          icon: 'yuwen2',
+        },
+      );
+    }
     // console.warn('年级接口res=', res)
     if (code === 0) {
       yield put(actions.fetchDataAction(result, 'SUCCESS'));

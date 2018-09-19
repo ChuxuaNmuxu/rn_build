@@ -13,7 +13,7 @@
  - ``` <Icon name="rocket" size={30} color="#900" /> ```
  - ```<CIcon name="wendang1" size={25} color="#900" /> ```
 
-###### 注意：若需新添icon，需要将iconfont.ttf文件放置在src/public/icon/下并执行 win： ```npm run iconfontMap-win```、 linux：```iconfontMap-linux```
+###### 注意：若需新添icon，需要将iconfont.ttf文件放置在src/public/icon/下并执行 win： ```npm run move-iconfontMap```、 linux：```npm run mv-iconfontMap```
 ---
 
 ### Resolution
@@ -91,7 +91,7 @@
 
     ```
 
-    > * onFooterRefresh 上拉加载执行的方法，加载成功或者失败时直接在里面调用停止加载的方法 ``` endRefreshing ```，调用方式：
+    > * ``` onFooterRefresh ``` 上拉加载执行的方法，加载成功或者失败时直接在里面调用停止加载的方法 ``` endRefreshing ```，调用方式：
     ```
     // RefreshState.NoMoreData 传入此时要展示的状态
     this.RefreshListView.endRefreshing(RefreshState.NoMoreData);

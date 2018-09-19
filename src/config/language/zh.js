@@ -44,4 +44,71 @@ export default {
       exanRecord: '考试记录',
     },
   },
+
+  // 检查作业页面
+  ReviewHomework: {
+    header: {
+      continueDoHomework: '返回继续做题',
+      onReview: '(检查中)',
+    },
+    footer: {
+      isAnswered: '已作答：',
+      notAnswered: '未作答：',
+      draftText: '保存草稿',
+      commitText: '提交作业',
+    },
+  },
+
+  // 作业预览
+  PreviewHomework: {
+    header: {
+      countdown: '倒计时: ',
+    },
+    footer: {
+      startDoHomework: '完成预览  开始作业',
+    },
+  },
+
+  // 做作业
+  DoHomeworks: {
+    header: {
+      count: '计时',
+      commit: '提交',
+    },
+    answerCard: {
+      toAnswer: '作答：',
+      uploadImgAnswerNotice: '上传解答过程将有机会被老师评为优秀解答',
+      notUnderstood: '不是很懂，请老师讲解',
+      toUpLoadNotice: '上传解题过程',
+      shoudUploadNotice: '(主观题须上传解答过程)',
+    },
+  },
+
+  // 难易程度组件
+  DifficultLevelView: {
+    title: '你认为本题的难易程度',
+    mustChoice: '(必选*)',
+    difficultLevel1: '易',
+    difficultLevel2: '适中',
+    difficultLevel3: '难',
+  },
+
+  // 错题本列表页
+  ProblemListOverview: {
+    header: {
+      moreFilter: '更多筛选',
+    },
+    ProblemCard: {
+      wrongReason: '错误原因：',
+      form: '来自：',
+      reviewQuestion: '复习错题',
+    },
+  },
+
+  // 错题重做
+  MistakeReform: {
+    header: {
+      title: '错题重做',
+    },
+  },
 };
