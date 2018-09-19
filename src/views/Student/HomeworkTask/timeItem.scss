@@ -1,16 +1,24 @@
 .time_wrap {
   flex: 1;
-  position: relative;
   justify-content: flex-end ;
+  position: relative;
 };
 
 .time_box {
   justify-content: flex-end ;
-  height: 360px;
+  min-height: 360px;
   width: 142px;
   border-left-width: 4px;
   border-left-color: #e8e8e8 ;
 };
+
+.time_box_checked {
+  width: 496px;
+}
+
+.task_list {
+  align-items: center;
+}
 
 .time_content {
   position: absolute ;
@@ -21,6 +29,7 @@
 
 .time_scale {
   flex-direction: row ;
+  margin-top: 11px;
   height: 24px;
 };
 
