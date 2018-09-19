@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './FilterView.scss';
+import I18nText from '../../../../components/I18nText';
 import CIcon from '../../../../components/Icon';
 
 class FilterView extends Component {
@@ -61,7 +62,9 @@ class FilterView extends Component {
           </ScrollView>
           <TouchableOpacity style={styles.filterMoreBox} onPress={() => this.filterMoreFun()}>
             <Text style={styles.filterMoreText}>
-              更多筛选
+              <I18nText style={styles.filterMoreText}>
+                ProblemListOverview.header.moreFilter
+              </I18nText>
               <CIcon style={styles.icon} name="shangyiye" />
             </Text>
           </TouchableOpacity>

@@ -1,18 +1,21 @@
 .wrapper {
-  // background-color: white; 
-  height: 100%;
+  // background-color: white;
+  // height: 100%;
+  flex: 1;
 }
 
 .head_icon {
-  // position: relative;
+  position: absolute;
+  left: 5;
 }
 
 .head {
   background-color: #30bf6c;
   flex-direction: row;
   height: 72px;
-  align-items: center; 
-  padding: 10px; 
+  align-items: center;
+  // padding: 10px;
+  position: relative;
 }
 
 .head_content {
@@ -33,6 +36,10 @@
   // background-color: #ccc; 
   // opacity: 0.3; 
   // margin: 5px 0; 
+}
+
+.body {
+  height: 1600px; 
 }
 
 .reason_wrap {

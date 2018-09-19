@@ -1,54 +1,30 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Text, View, ScrollView, TouchableOpacity,
 } from 'react-native';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 // import { PropTypes } from 'prop-types';
 import { Actions } from 'react-native-router-flux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import I18nText from '../../../components/I18nText';
+import Radio from '../../../components/Radio';
+import * as actions from '../../../actions/doHomeworkAction';
 import styles from './DoHomeworks.scss';
 import { CustomButton } from '../../../components/Icon';
 import Timer from './Components/Timer';
 import QuestionCard from './Components/QuestionCard';
 import AnswerCard from './Components/AnswerCard';
 import ExtendListView from '../../../components/ExtendListView';
-import DifficultLevelView from '../../../components/DifficultLevelView';
 
+const RadioGroup = Radio.Group;
+const RadioButton = Radio.Button;
 class DoHomeworks extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showExtendView: false, // 是否显示该份作业所有题目序号的扩展视图
-      questionList: [{
-        questionNum: 1,
-        id: 1,
-        type: 1,
-        content: '单选题内容',
-        answer: '单选题答案',
-      }, {
-        questionNum: 2,
-        id: 2,
-        type: 2,
-        content: '多选题内容',
-        answer: '多选题答案',
-      }, {
-        questionNum: 3,
-        id: 3,
-        type: 3,
-        content: '判断题内容',
-        answer: '判断题答案',
-      }, {
-        questionNum: 4,
-        id: 4,
-        type: 4,
-        content: '对应题内容',
-        answer: '对应题答案',
-      }, {
-        questionNum: 5,
-        id: 5,
-        type: 10,
-        content: '填空题内容',
-        answer: '填空题答案',
-      }],
       currentIndex: 0, // 当前题目index
       // currentStartTime: moment(new Date()).format(),      // 当前题目的开始时间
       // currentStopTime: 0,                                 // 当前题目的结束时间
@@ -67,6 +43,11 @@ class DoHomeworks extends Component {
     };
   }
 
+  componentDidMount() {
+    // 请求做作业的题目数据
+    const { actions: { fetchdoHomeworkAction } } = this.props;
+    fetchdoHomeworkAction(null, 'REQUEST');
+  }
 
   // 点击做作业头部时隐藏扩列表视图层
   onTopClickFun = () => {
@@ -102,10 +83,36 @@ class DoHomeworks extends Component {
     });
   }
 
+  // 点击题号切换到对应题目
+  orderChange = (num) => {
+    this.setState({
+      currentIndex: num - 1,
+    });
+    this.setVisibleFun(false);
+  }
+
   // 渲染需要展示在扩展列表视图中的组件
-  renderQuestionOrder = () => (
+  renderQuestionOrder = (questionList, currentIndex) => (
     <View style={styles.orderContent}>
-      <Text style={{ fontSize: 30, color: '#f00' }}>题目序号列表1111</Text>
+      <RadioGroup
+        onChange={this.orderChange}
+        style={styles.order_wrapper}
+        checkedIconWrapStyle={styles.checkedIconWrapStyle}
+        checkedTextStyle={styles.checkedRadioTextStyle}
+      >
+        {
+          questionList.map((item, index) => (
+            <RadioButton
+              value={item.number}
+              key={index}
+              iconWrapStyle={[styles.orderStyle, (item.number - 1) === currentIndex && styles.currentOrderStyle]}
+              textStyle={[styles.radioTextStyle, (item.number - 1) === currentIndex && styles.currentRadioTextStyle]}
+            >
+              {item.number}
+            </RadioButton>
+          ))
+        }
+      </RadioGroup>
     </View>
   )
 
@@ -127,12 +134,14 @@ class DoHomeworks extends Component {
           <View>
             <Text style={styles.totalQuestion}>
               <Text style={styles.currentIndex}>{currentIndex + 1}</Text>
-              /{questionList && questionList.length}
+              /{questionList ? questionList.length : 0}
             </Text>
           </View>
         </View>
         <CustomButton warpStyle={styles.submitBtn} style={styles.btnText} onPress={() => this.submitFun()}>
-          提交
+          <I18nText>
+            DoHomeworks.header.commit
+          </I18nText>
         </CustomButton>
       </View>
     </TouchableOpacity>
@@ -142,32 +151,38 @@ class DoHomeworks extends Component {
     // 用于设置扩展列表视图层距离顶部的距离
     const setTop = 168;
     const startTime = 1;
-    const { showExtendView, currentIndex, questionList } = this.state;
+    const { showExtendView, currentIndex } = this.state;
+    const { data } = this.props;
+    const { questionList } = data;
     return (
       <View style={styles.containers}>
         {this.renderDohomeworkTop(startTime, currentIndex, questionList)}
-        <ScrollableTabView
-          tabBarPosition="overlayBottom"
-          tabBarUnderlineStyle={{ backgroundColor: '#fff' }}
-          tabBarBackgroundColor="#fff"
-          initialPage={currentIndex}
-          onChangeTab={this.changeQuestionFun}
-          renderTabBar={() => <ScrollableTabBar />}
-        >
-          {
-          questionList.map((item, index) => (
-            <ScrollView key={index}>
-              <QuestionCard questions={item} />
-              <AnswerCard questions={item} />
-              <DifficultLevelView />
-            </ScrollView>
-          ))
+        {
+          questionList && (
+          <ScrollableTabView
+            tabBarPosition="overlayBottom"
+            tabBarUnderlineStyle={{ backgroundColor: '#fff' }}
+            // tabBarBackgroundColor="#fff"
+            initialPage={currentIndex} // 页面初始化展示的页面序号。默认为0
+            page={currentIndex} // 动态控制当前展示的页面序号
+            onChangeTab={this.changeQuestionFun}
+            renderTabBar={() => <ScrollableTabBar />}
+          >
+            {
+              questionList.map((item, index) => (
+                <ScrollView key={index}>
+                  <QuestionCard questions={item} />
+                  <AnswerCard questions={item} />
+                </ScrollView>
+              ))
+            }
+          </ScrollableTabView>
+          )
         }
-        </ScrollableTabView>
         {
           showExtendView && (
           <ExtendListView setTop={setTop} setVisibleFun={this.setVisibleFun}>
-            {this.renderQuestionOrder()}
+            {this.renderQuestionOrder(questionList, currentIndex)}
           </ExtendListView>
           )
         }
@@ -176,4 +191,20 @@ class DoHomeworks extends Component {
   }
 }
 
-export default DoHomeworks;
+DoHomeworks.propTypes = {
+  data: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  const { data } = state.doHomeworkReducer;
+  return {
+    data,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DoHomeworks);

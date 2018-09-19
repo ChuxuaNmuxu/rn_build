@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import TaskItem from './TaskItem';
 import styles from './taskList.scss';
 
-class TaskList extends Component {
+class TaskList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,7 +49,7 @@ class TaskList extends Component {
 
   keyExtractor = item => item.toString()
 
-  renderItem = item => <TaskItem item={item} />
+  renderItem = item => <TaskItem data={item} />
 
   renderListEmpty = () => {
     const {
@@ -79,6 +79,7 @@ class TaskList extends Component {
           keyExtractor={this.keyExtractor}
           getItemLayout={this.getItemLayout}
           // initialScrollIndex={10}
+          // initialNumToRender={parseInt(data.length / 2) + 4}
           ListEmptyComponent={this.renderListEmpty}
         />
       </View>

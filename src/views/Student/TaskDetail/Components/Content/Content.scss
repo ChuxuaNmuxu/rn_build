@@ -1,6 +1,6 @@
 .content_child {
   flex-direction: row;
-  padding: 25px;
+  padding: 25px 0 25px 100px;
 }
 
 .content_child_left {
@@ -23,7 +23,7 @@
 .content_child_btn {
   // flex-wrap: nowrap;
   flex-direction: row;
-  padding-top: 50px;
+  // padding-top: 50px; 
   justify-content: center;
 }
 
