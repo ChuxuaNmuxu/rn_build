@@ -8,7 +8,7 @@ import styles from './homeworkTask.scss';
 import TaskList from './TaskList';
 import TimeList from './TimeList';
 import I18nText from '../../../components/I18nText';
-// import Drag from '../../../components/Drag';
+import Drag from './Drag';
 
 class MyHomework extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class MyHomework extends Component {
           this.renderHeader()
         }
         <TaskList />
-        {/* <Drag /> */}
+        <Drag />
         <TimeList />
       </View>
     );

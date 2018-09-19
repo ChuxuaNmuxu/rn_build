@@ -80,11 +80,6 @@ export default class Drag extends Component {
   }
 
   render() {
-    // console.log(81, adaptiveRotation().scale);
-    console.log(82, this.state.pan);
-    console.log(83, this.state.pan.getLayout());
-    // console.log(84, this.state.pan.setValue);
-
     return (
       <View style={styles.mainContainer}>
         <View
