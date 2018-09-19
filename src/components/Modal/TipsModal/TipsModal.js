@@ -56,7 +56,7 @@ class ButtonModal extends Component {
         {
           tipsContent
         }
-        <Text style={Style.modalContentText}>{sec}{bottomTips}</Text>
+        <Text style={Style.bottomTipsText}>{sec}{bottomTips}</Text>
       </View>
     );
   }
