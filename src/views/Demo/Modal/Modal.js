@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 // import ImageViewer from 'react-native-image-zoom-viewer';
 import Modal, { ModalApi } from '../../../components/Modal';
-import Style from './WrongNotes.scss';
+import Style from './Modal.scss';
 
 export default class Test3 extends Component {
   leftFn=() => {

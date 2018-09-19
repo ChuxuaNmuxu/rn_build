@@ -147,10 +147,10 @@ const RouteMap = props => (
         key="StudentAll"
         initial
       >
-        {/* 做作业 */}
-        <Scene key="DoHomework" component={DoHomework} hideNavBar initial />
         {/* 作业预览 */}
-        <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
+        <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar initial />
+        {/* 做作业 */}
+        <Scene key="DoHomework" component={DoHomework} hideNavBar />
         {/* 作业检查 */}
         <Scene key="ReviewHomework" component={ReviewHomework} hideNavBar />
         {/* 错题本列表页 */}

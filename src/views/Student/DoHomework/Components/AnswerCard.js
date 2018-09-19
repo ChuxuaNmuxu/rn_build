@@ -38,7 +38,7 @@ class AnswerCard extends Component {
 
   // 单选题答案发生改变的函数
   handleRadioChange = (i) => {
-    // console.log(111, '当前单选题选择的答案是', i);
+    console.log(111, '当前单选题选择的答案是', i);
     this.setState({
       answered: true,
     });
@@ -46,7 +46,7 @@ class AnswerCard extends Component {
 
   // 多选题答案发生改变的函数
   handleMultiSelectChange = (obj) => {
-    // console.log(222, '当前多选题选择的答案是', obj);
+    console.log(222, '当前多选题选择的答案是', obj);
     this.setState({
       answered: true,
     });
@@ -54,7 +54,7 @@ class AnswerCard extends Component {
 
   // 判断题答案发生改变的函数
   judgementChange = (i) => {
-    // console.log(333, '当前判断题选择的答案是', i);
+    console.log(333, '当前判断题选择的答案是', i);
     this.setState({
       answered: true,
     });
@@ -62,7 +62,7 @@ class AnswerCard extends Component {
 
   // 对应题答案发生改变的函数
   lineToChange = (obj) => {
-    // console.log(444, '当前对应题的答案是', obj);
+    console.log(444, '当前对应题的答案是', obj);
     this.setState({
       answered: true,
     });
@@ -71,11 +71,13 @@ class AnswerCard extends Component {
   // 难易程度选项发生改变的函数
   difficultLevelChange = (a) => {
     // console.log(555, '当前选择的难易程度是', a);
+    const { handleDifficultLevel, questions } = this.props;
+    handleDifficultLevel(a, questions.number);
   }
 
   // 不是很懂
   handleCheckboxChange = (a) => {
-    // console.log(666, '当前是否选择了不是很懂', a);
+    console.log(666, '当前是否选择了不是很懂', a);
   }
 
   // 选择图片
@@ -184,13 +186,17 @@ class AnswerCard extends Component {
                     DoHomeworks.answerCard.uploadImgAnswerNotice
                   </I18nText>
                 </View>
-                <View style={styles.objectiveImg_container}>
-                  <ImagePicker
-                    styles={ImagePickerStyle}
-                    onChange={this.uploadImgChange}
-                    accept=".jpeg, .jpg, .png"
-                  />
-                </View>
+                {
+                  answered && (
+                  <View style={styles.objectiveImg_container}>
+                    <ImagePicker
+                      styles={ImagePickerStyle}
+                      onChange={this.uploadImgChange}
+                      accept=".jpeg, .jpg, .png"
+                    />
+                  </View>
+                  )
+                }
               </View>
             )
           }
@@ -228,6 +234,7 @@ AnswerCard.defaultProps = {
 AnswerCard.propTypes = {
   questions: PropTypes.object.isRequired,
   mistakeReform: PropTypes.bool, // 错题重做页面调用时用来标识调用方的
+  handleDifficultLevel: PropTypes.func.isRequired, // 难易程度发生改变的函数
 };
 
 export default AnswerCard;
