@@ -4,6 +4,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import Drag from '../../../components/Drag/test';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,6 +24,7 @@ export default class Test3 extends Component {
         <Text>
           我的
         </Text>
+        <Drag />
       </View>
     );
   }

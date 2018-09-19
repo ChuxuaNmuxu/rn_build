@@ -1,24 +1,78 @@
-import React, { Component } from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { PureComponent } from 'react';
+import { View, FlatList } from 'react-native';
 import TimeItem from './TimeItem';
 import styles from './timeList.scss';
+import { createHalfHourPeriod, currentTimeToPeriod } from '../../../utils/common';
 
-class TaskList extends Component {
+class TaskList extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.flatList = null;
+    this.periods = createHalfHourPeriod(); // 生成半小时时间段数组
+    this.currentPeriodIndex = currentTimeToPeriod();
+    this.state = {
+      scrollEnabled: true,
+    };
   }
 
+  componentDidMount() {
+    /**
+     * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
+     * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中
+     */
+    // const wait = new Promise(resolve => setTimeout(resolve, 500));
+    // wait.then(() => {
+    //   // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
+    //   // 如果有展开并且展开的任务
+    //   this.flatList.scrollToIndex({
+    //     animated: true,
+    //     index: this.currentPeriodIndex,
+    //     viewOffset: (142 - 496) / 2,
+    //     viewPosition: 0.5,
+    //   });
+    // });
+  }
+
+
+  getItemLayout = (data, index) => {
+    const length = 142;
+    return {
+      length,
+      offset: index * length,
+      index,
+    };
+  }
+
+  changeScrollEnabled = (bool) => {
+    console.log(47, bool);
+    // this.setState({
+    //   scrollEnabled: bool,
+    // });
+  }
+
+  keyExtractor = item => item.data.toString()
+
+  renderItem = data => <TimeItem data={data} />
+
   render() {
+    const { scrollEnabled } = this.state;
+    const data = this.periods.map(v => ({
+      data: v,
+      changeScrollEnabled: this.changeScrollEnabled,
+      currentPeriod: this.periods[this.currentPeriodIndex],
+    }));
     return (
       <View style={styles.time_list_box}>
-        <ScrollView horizontal>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
-            {
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 34].map(item => <TimeItem key={item} />)
-          }
-          </View>
-        </ScrollView>
+        <FlatList
+          horizontal
+          ref={(ref) => { this.flatList = ref; }}
+          data={data}
+          renderItem={this.renderItem}
+          keyExtractor={this.keyExtractor}
+          getItemLayout={this.getItemLayout}
+          initialNumToRender={this.periods.length}
+          scrollEnabled={scrollEnabled}
+        />
       </View>
     );
   }

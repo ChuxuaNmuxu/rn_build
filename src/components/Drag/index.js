@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import styles from './styles';
+import { adaptiveRotation } from '../../utils/resolution';
 
 export default class Drag extends Component {
   constructor(props) {
@@ -31,7 +32,9 @@ export default class Drag extends Component {
       onPanResponderMove: Animated.event([null, { // Step 3 处理程序将在元素移动时触发。设置动画值以正确执行拖动。
         dx: this.state.pan.x,
         dy: this.state.pan.y,
-      }]),
+      }],
+      { listener: (event, gestureState) => console.log(36, event, gestureState) }, // 可选的异步监听函数
+      ),
       onPanResponderRelease: (e, gesture) => { // Step 4 释放元素时执行的代码
         if (this.isDropZone(gesture)) { // Step 1
           this.setState({

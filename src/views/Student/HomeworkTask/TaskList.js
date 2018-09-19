@@ -1,13 +1,18 @@
-import React, { Component } from 'react';
-import { View, Text, FlatList } from 'react-native';
+import React, { PureComponent } from 'react';
+import {
+  View, Text, FlatList, TouchableOpacity,
+} from 'react-native';
+import { merge } from 'ramda';
 import TaskItem from './TaskItem';
 import styles from './taskList.scss';
+import { adaptiveRotation } from '../../../utils/resolution';
 
-class TaskList extends Component {
+class TaskList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       flatlistWidth: 0,
+      scrollEnabled: true,
     };
     this.flatList = null;
   }
@@ -17,18 +22,19 @@ class TaskList extends Component {
      * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
      * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中
      */
-    const wait = new Promise(resolve => setTimeout(resolve, 500));
-    wait.then(() => {
-      // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
-      this.flatList.scrollToIndex({
-        animated: true,
-        index: 10,
-        viewOffset: 0,
-        viewPosition: 0.5,
-      });
-    });
+    // const wait = new Promise(resolve => setTimeout(resolve, 500));
+    // wait.then(() => {
+    //   // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
+    //   this.flatList.scrollToIndex({
+    //     animated: true,
+    //     index: 10,
+    //     viewOffset: 0,
+    //     viewPosition: 0.5,
+    //   });
+    // });
   }
 
+  // 通过 onLayout 获取 最外面容器宽，当 FlatList 为空时，给 renderListEmpty 里面里的容器设置值让其可以全屏
   onLayout = (e) => {
     const {
       layout: {
@@ -36,6 +42,30 @@ class TaskList extends Component {
       },
     } = e.nativeEvent;
     this.setState({ flatlistWidth: width });
+  }
+
+  // 长按禁止FlatList滚动，并用
+  onLongPress = (e) => {
+    console.log('长按');
+    // console.log(e.target);
+    this.changeScrollEnabled(false);
+  }
+
+  // 鼠标放开之后恢复FlatList滚动
+  onPressOut = (e) => {
+    console.log('鼠标放开了');
+    this.changeScrollEnabled(true);
+  }
+
+  onPress = (e) => {
+    const {
+      locationX, locationY, pageX, pageY,
+    } = e.nativeEvent;
+    const { scale } = adaptiveRotation();
+    const currentElementX = (pageX - locationX) / scale;
+    const currentElementY = (pageY - locationY) / scale;
+    console.log(e.nativeEvent);
+    console.log(currentElementX, currentElementY);
   }
 
   getItemLayout = (data, index) => {
@@ -47,9 +77,25 @@ class TaskList extends Component {
     };
   }
 
-  keyExtractor = item => item.toString()
+  keyExtractor = item => item.data.toString()
 
-  renderItem = item => <TaskItem item={item} />
+  changeScrollEnabled = (bool) => {
+    this.setState({
+      scrollEnabled: bool,
+    });
+  }
+
+
+  renderItem = item => (
+    <TouchableOpacity
+      onPress={this.onPress}
+      onLongPress={this.onLongPress}
+      onPressOut={this.onPressOut}
+    >
+      <TaskItem data={item} />
+
+    </TouchableOpacity>
+  )
 
   renderListEmpty = () => {
     const {
@@ -63,8 +109,14 @@ class TaskList extends Component {
     );
   }
 
+
   render() {
-    const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 34];
+    const { scrollEnabled } = this.state;
+    const data = Array(20).fill({}).map((v, i) => (merge(v, {
+      data: i,
+      scrollEnabled,
+    })));
+
     return (
       <View
         style={styles.task_list_box}
@@ -79,7 +131,9 @@ class TaskList extends Component {
           keyExtractor={this.keyExtractor}
           getItemLayout={this.getItemLayout}
           // initialScrollIndex={10}
+          // initialNumToRender={parseInt(data.length / 2) + 4}
           ListEmptyComponent={this.renderListEmpty}
+          scrollEnabled={scrollEnabled}
         />
       </View>
     );
