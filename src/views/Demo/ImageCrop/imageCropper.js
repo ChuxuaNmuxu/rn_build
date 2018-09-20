@@ -8,8 +8,9 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
+import { captureRef } from 'react-native-view-shot';
 
-export default class ImageCrop extends React.Component {
+export default class ImageCropper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,10 +22,10 @@ export default class ImageCrop extends React.Component {
     // 是否拖动裁剪框
     this.dragClipRect = false;
     // 是否缩放裁剪框
-    this.scaleClipRectLT = true;
-    this.scaleClipRectLB = true;
-    this.scaleClipRectRT = true;
-    this.scaleClipRectRB = true;
+    this.scaleClipRectLT = false;
+    this.scaleClipRectLB = false;
+    this.scaleClipRectRT = false;
+    this.scaleClipRectRB = false;
 
     // 当前/动画 x 位移
     this._left = 0;
@@ -129,8 +130,8 @@ export default class ImageCrop extends React.Component {
             let scale = this.scale + (
               this.currentZoomDistance - this.lastZoomDistance
             ) * this.scale / this.imageMinSize;
-            if (scale < 1) {
-              scale = 1;
+            if (scale < 0.5) {
+              scale = 0.5;
             }
             this.animatedScale.setValue(scale);
             // this.updateTranslate();
@@ -191,12 +192,14 @@ export default class ImageCrop extends React.Component {
     }
   }
 
+  crop = () => captureRef(this.cropper, { format: 'png', quality: 1 });
+
   render() {
-    console.log('this.animatedScale', this.animatedScale);
+    // console.log('this.animatedScale', this.animatedScale);
     // const { top, left } = this.state;
     const animatedImgStyle = {
       transform: [{
-        scale: this.animatedScale || 1,
+        scale: this.animatedScale,
       }, {
         rotate: this.animatedRotate || '0deg',
       }],
@@ -207,68 +210,52 @@ export default class ImageCrop extends React.Component {
       width: this._animatedWidth,
       height: this._animatedHeight,
     };
-    const {
-      source = {},
-      imageWidth,
-      imageHeight,
-    } = this.props;
+    const { source = {}, imageWidth, imageHeight } = this.props;
     console.log('cropImage', source);
     return (
-      <View style={[styles.container, styles.editContainer]}>
+      <View
+        style={[styles.container, { position: 'relative', backgroundColor: 'red' }]}
+        {...this.imagePanResponder.panHandlers}
+      >
         <View
-          style={[styles.container, styles.bgc, styles.editboxMiddle, { position: 'relative' }]}
-          {...this.imagePanResponder.panHandlers}
+          style={[styles.container, styles.bgc]}
+          ref={(e) => { this.cropper = e; }}
         >
-          <View style={styles.container}>
-            <Animated.View style={animatedImgStyle}>
-              <Image
-                resizeMode="contain"
-                style={{ width: imageWidth, height: imageHeight }}
-                source={source}
-              />
-            </Animated.View>
-          </View>
-          <Animated.View
-            style={[animatedRectStyle, styles.clipRect]}
-            ref={(e) => { this.drag = e; }}
-          >
-            <TouchableOpacity
-              activeOpacity={1}
-              style={{ flex: 1 }}
-              onPressIn={e => this.onPressBtn(e, 'rect')}
+          <Animated.View style={animatedImgStyle}>
+            <Image
+              resizeMode="contain"
+              style={{ width: imageWidth, height: imageHeight }}
+              source={source}
             />
-            {['LT', 'LB', 'RT', 'RB'].map((point, index) => (
-              <TouchableOpacity
-                key={index}
-                activeOpacity={1}
-                style={[styles.rectPoint, styles[point]]}
-                onPressIn={e => this.onPressBtn(e, point)}
-              />
-            ))}
           </Animated.View>
         </View>
+        <Animated.View
+          style={[animatedRectStyle, styles.clipRect]}
+        >
+          <TouchableOpacity
+            activeOpacity={1}
+            style={{ flex: 1 }}
+            onPressIn={e => this.onPressBtn(e, 'rect')}
+          />
+          {['LT', 'LB', 'RT', 'RB'].map((point, index) => (
+            <TouchableOpacity
+              key={index}
+              activeOpacity={1}
+              style={[styles.rectPoint, styles[point]]}
+              onPressIn={e => this.onPressBtn(e, point)}
+            />
+          ))}
+        </Animated.View>
       </View>
     );
   }
 }
 
-ImageCrop.defaultProps = {
-  editRectWidth: 212,
-  editRectHeight: 212,
-  editRectRadius: 106,
-  overlayColor: 'rgba(0, 0, 0, 0.5)',
-  style: styles,
-};
 
-ImageCrop.propTypes = {
-  editRectWidth: PropTypes.number,
-  editRectHeight: PropTypes.number,
-  editRectRadius: PropTypes.number,
+ImageCropper.propTypes = {
   imageWidth: PropTypes.number.isRequired,
   imageHeight: PropTypes.number.isRequired,
-  overlayColor: PropTypes.any,
   source: PropTypes.any.isRequired,
-  style: PropTypes.any,
 };
 
 const styles = StyleSheet.create({
@@ -278,17 +265,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     overflow: 'hidden',
   },
-  editContainer: {
-    position: 'absolute',
-    zIndex: 99,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    paddingTop: 100,
-    paddingBottom: 100,
-    backgroundColor: 'black',
-  },
+
   clipRect: {
     position: 'absolute',
     borderWidth: 5,
@@ -297,7 +274,12 @@ const styles = StyleSheet.create({
     padding: 40,
   },
   bgc: {
-    backgroundColor: 'red',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'gray',
   },
   editboxMiddle: {
     flexDirection: 'row',

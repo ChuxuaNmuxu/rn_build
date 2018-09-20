@@ -1,2 +1,1 @@
-export { default } from './imageCrop';
-
+export { default } from './iamgeCrop';
