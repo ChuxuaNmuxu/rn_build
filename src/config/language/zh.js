@@ -74,6 +74,7 @@ export default {
     header: {
       count: '计时',
       commit: '提交',
+      viewAnsweredQues: '查看已答题目',
     },
     answerCard: {
       toAnswer: '作答：',
