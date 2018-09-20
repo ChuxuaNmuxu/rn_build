@@ -10,13 +10,18 @@ class TouchTaskItem extends Component {
   onLongPress = (e) => {
     const { onLongPress } = this.props;
     const { scale } = adaptiveRotation();
-    let offsetX;
-    let offsetY;
-    this.taskRef.measure((x, y, width, height, pageX, pageY) => {
-      offsetX = pageX / scale;
-      offsetY = pageY / scale;
+
+    new Promise((resolve) => {
+      let offsetX;
+      let offsetY;
+      this.taskRef.measure((x, y, width, height, pageX, pageY) => {
+        offsetX = pageX / scale;
+        offsetY = pageY / scale;
+        resolve({ offsetX, offsetY });
+      });
+    }).then((data) => {
+      onLongPress(e, data);
     });
-    onLongPress(e, { offsetX, offsetY });
   }
 
   // 获取子级的 ref

@@ -4,13 +4,23 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import styles from './homeworkTask.scss';
 import TaskList from './TaskList';
 import TimeList from './TimeList';
 import I18nText from '../../../components/I18nText';
 import Drag from './Drag';
+import { GetDragRef } from '../../../actions/homeworkTask';
 
-class MyHomework extends Component {
+@connect((state) => {
+  const { homeworkTaskReducer: { position } } = state;
+  return {
+    position,
+  };
+})
+class HomeworkTask extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -31,17 +41,26 @@ class MyHomework extends Component {
   )
 
   render() {
+    const { position, onGetDragRef } = this.props;
     return (
       <View style={styles.container}>
         {
           this.renderHeader()
         }
         <TaskList />
-        <Drag />
+        <Drag position={position} wrapStyle={{ backgroundColor: 'pink' }} onGetDragRef={onGetDragRef} />
         <TimeList />
       </View>
     );
   }
 }
 
-export default MyHomework;
+HomeworkTask.propTypes = {
+  position: PropTypes.object,
+};
+
+HomeworkTask.defaultProps = {
+  position: {},
+};
+
+export default HomeworkTask;

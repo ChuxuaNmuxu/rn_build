@@ -3,6 +3,7 @@ import routes from './common/routes';
 import config from './common/config';
 import problemOverviewReducer from './problemOverviewReducer';
 import doHomeworkReducer from './doHomeworkReducer';
+import homeworkTaskReducer from './HomeworkTask';
 
 export default combineReducers({
   routes,
@@ -10,4 +11,6 @@ export default combineReducers({
   problemOverviewReducer,
   // 做作业
   doHomeworkReducer,
+  // 任务计划
+  homeworkTaskReducer,
 });

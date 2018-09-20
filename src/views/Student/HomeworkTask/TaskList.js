@@ -2,10 +2,17 @@ import React, { PureComponent } from 'react';
 import {
   View, Text, FlatList,
 } from 'react-native';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { merge } from 'ramda';
+import PropTypes from 'prop-types';
 import TouchTaskItem from './TouchTaskItem';
 import styles from './taskList.scss';
+import { ChangeDropLocation } from '../../../actions/homeworkTask';
 
+@connect(null, dispatch => ({
+  onChangeDropLocation: bindActionCreators(ChangeDropLocation, dispatch),
+}))
 class TaskList extends PureComponent {
   constructor(props) {
     super(props);
@@ -44,15 +51,18 @@ class TaskList extends PureComponent {
   }
 
   // 长按禁止FlatList滚动，并用
-  onLongPress = () => {
-    console.log('长按');
-    // console.log(e.target);
+  onLongPress = (e, data) => {
+    const { onChangeDropLocation } = this.props;
     this.changeScrollEnabled(false);
+    onChangeDropLocation({
+      x: data.offsetX,
+      y: data.offsetY,
+    });
   }
 
   // 鼠标放开之后恢复FlatList滚动
   onPressOut = (e) => {
-    console.log('鼠标放开了');
+    // console.log('鼠标放开了');
     this.changeScrollEnabled(true);
   }
 
@@ -132,5 +142,13 @@ class TaskList extends PureComponent {
     );
   }
 }
+
+TaskList.defaultProps = {
+  onChangeDropLocation: () => {},
+};
+
+TaskList.propTypes = {
+  onChangeDropLocation: PropTypes.func,
+};
 
 export default TaskList;
