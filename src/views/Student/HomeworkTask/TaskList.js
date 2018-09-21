@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { merge } from 'ramda';
 import PropTypes from 'prop-types';
-import TouchTaskItem from './TouchTaskItem';
+import TaskItem from './TaskItem';
 import styles from './taskList.scss';
 import { ChangeDropLocation } from '../../../actions/homeworkTask';
 
@@ -52,17 +52,13 @@ class TaskList extends PureComponent {
 
   // 长按禁止FlatList滚动，并用
   onLongPress = (e, data) => {
-    const { onChangeDropLocation } = this.props;
+    console.log('长按');
     this.changeScrollEnabled(false);
-    onChangeDropLocation({
-      x: data.offsetX,
-      y: data.offsetY,
-    });
   }
 
   // 鼠标放开之后恢复FlatList滚动
   onPressOut = (e) => {
-    // console.log('鼠标放开了');
+    console.log('鼠标放开了');
     this.changeScrollEnabled(true);
   }
 
@@ -91,14 +87,18 @@ class TaskList extends PureComponent {
   }
 
   // 列表每项
-  renderItem = item => (
-    <TouchTaskItem
-      item={item}
-      onLongPress={this.onLongPress}
-      onPressOut={this.onPressOut}
-      onPress={this.onPress}
-    />
-  )
+  renderItem = (item) => {
+    const { onChangeDropLocation } = this.props;
+    return (
+      <TaskItem
+        item={item}
+        onLongPress={this.onLongPress}
+        onPressOut={this.onPressOut}
+        onPress={this.onPress}
+        onChangeDropLocation={onChangeDropLocation}
+      />
+    );
+  }
 
   renderListEmpty = () => {
     const {

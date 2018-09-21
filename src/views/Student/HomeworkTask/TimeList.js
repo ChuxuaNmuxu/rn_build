@@ -1,9 +1,15 @@
 import React, { PureComponent } from 'react';
 import { View, FlatList } from 'react-native';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import TimeItem from './TimeItem';
 import styles from './timeList.scss';
 import { createHalfHourPeriod, currentTimeToPeriod } from '../../../utils/common';
+import { ChangeDropLocation } from '../../../actions/homeworkTask';
 
+@connect(null, dispatch => ({
+  onChangeDropLocation: bindActionCreators(ChangeDropLocation, dispatch),
+}))
 class TaskList extends PureComponent {
   constructor(props) {
     super(props);
@@ -52,7 +58,15 @@ class TaskList extends PureComponent {
 
   keyExtractor = item => item.data.toString()
 
-  renderItem = data => <TimeItem data={data} />
+  renderItem = (data) => {
+    const { onChangeDropLocation } = this.props;
+    return (
+      <TimeItem
+        data={data}
+        onChangeDropLocation={onChangeDropLocation}
+      />
+    );
+  }
 
   render() {
     const { scrollEnabled } = this.state;

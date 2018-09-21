@@ -6,7 +6,7 @@ import * as fn from './fn';
 
 const initial = {
   position: {
-    x: 0,
+    x: -500,
     y: 0,
   },
   dragRef: null,
