@@ -40,6 +40,9 @@ export class Drop extends Component {
         <TaskItem
           refs={(ref) => { this.dragRef = ref; }}
           wrapStyle={wrapStyle}
+          data={{
+            index: '我是拖拽元素',
+          }}
         />
       </View>
     );

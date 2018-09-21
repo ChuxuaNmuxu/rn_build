@@ -91,7 +91,7 @@ class TaskList extends PureComponent {
     const { onChangeDropLocation } = this.props;
     return (
       <TaskItem
-        item={item}
+        data={item}
         onLongPress={this.onLongPress}
         onPressOut={this.onPressOut}
         onPress={this.onPress}
