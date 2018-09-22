@@ -10,7 +10,7 @@ import {
 import ImagePicker from 'react-native-image-picker';
 // import styles from './uploadImage.scss';
 
-
+// updateImage 回调
 export default class UploadImage extends Component {
   constructor(props) {
     super(props);
@@ -32,8 +32,8 @@ export default class UploadImage extends Component {
       mediaType: 'photo',
       videoQuality: 'high',
       durationLimit: 10,
-      maxWidth: 500,
-      maxHeight: 500,
+      maxWidth: 1000,
+      maxHeight: 1000,
       quality: 1,
       angle: 0,
       allowsEditing: false,
@@ -53,11 +53,11 @@ export default class UploadImage extends Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = { uri: response.uri };
+        // const source = { uri: response.uri };
 
         // You can also display the image using data:
         // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-        updateImage(source);
+        updateImage(response);
       }
     });
   }

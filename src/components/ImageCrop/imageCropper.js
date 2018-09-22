@@ -9,11 +9,13 @@ import {
   StyleSheet,
 } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
+// import styless from './imageCropper.scss';
 
 export default class ImageCropper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      rotate: 0,
     };
   }
 
@@ -27,15 +29,21 @@ export default class ImageCropper extends React.Component {
     this.scaleClipRectRT = false;
     this.scaleClipRectRB = false;
 
+    const {
+      imageWidth = 0,
+      imageHeight = 0,
+      containerWidth = 0,
+      containerHeight = 0,
+    } = this.props;
+
     // 当前/动画 x 位移
-    this._left = 0;
-    this._animatedLeft = new Animated.Value(0);
+    this._left = containerWidth / 2 - imageWidth / 2;
+    this._animatedLeft = new Animated.Value(this._left);
 
     // 当前/动画 y 位移
-    this._top = 0;
-    this._animatedTop = new Animated.Value(0);
+    this._top = containerHeight / 2 - imageHeight / 2;
+    this._animatedTop = new Animated.Value(this._top);
 
-    const { imageWidth = 100, imageHeight = 100 } = this.props;
     this._width = imageWidth;
     this._height = imageHeight;
     this._animatedWidth = new Animated.Value(imageWidth);
@@ -192,16 +200,29 @@ export default class ImageCropper extends React.Component {
     }
   }
 
-  crop = () => captureRef(this.cropper, { format: 'png', quality: 1 });
+  getCropData = () => ({
+    top: this._top * 1.125,
+    left: this._left * 1.125,
+    width: this._width * 1.125,
+    height: this._height * 1.125,
+  })
+
+  crop = () => captureRef(this.cropper, { format: 'png', quality: 1 })
+
+  rotate = (digit) => {
+    this.setState({
+      rotate: digit,
+    });
+  }
 
   render() {
     // console.log('this.animatedScale', this.animatedScale);
-    // const { top, left } = this.state;
+    const { rotate = 0 } = this.state;
     const animatedImgStyle = {
       transform: [{
         scale: this.animatedScale,
       }, {
-        rotate: this.animatedRotate || '0deg',
+        rotate: `${rotate}deg`,
       }],
     };
     const animatedRectStyle = {
@@ -211,14 +232,13 @@ export default class ImageCropper extends React.Component {
       height: this._animatedHeight,
     };
     const { source = {}, imageWidth, imageHeight } = this.props;
-    console.log('cropImage', source);
     return (
       <View
-        style={[styles.container, { position: 'relative', backgroundColor: 'red' }]}
+        style={styles.container}
         {...this.imagePanResponder.panHandlers}
       >
         <View
-          style={[styles.container, styles.bgc]}
+          style={styles.clipContainer}
           ref={(e) => { this.cropper = e; }}
         >
           <Animated.View style={animatedImgStyle}>
@@ -230,11 +250,11 @@ export default class ImageCropper extends React.Component {
           </Animated.View>
         </View>
         <Animated.View
-          style={[animatedRectStyle, styles.clipRect]}
+          style={[animatedRectStyle, styles.moveRect]}
         >
           <TouchableOpacity
             activeOpacity={1}
-            style={{ flex: 1 }}
+            style={styles.clipRect}
             onPressIn={e => this.onPressBtn(e, 'rect')}
           />
           {['LT', 'LB', 'RT', 'RB'].map((point, index) => (
@@ -253,9 +273,11 @@ export default class ImageCropper extends React.Component {
 
 
 ImageCropper.propTypes = {
+  source: PropTypes.any.isRequired,
   imageWidth: PropTypes.number.isRequired,
   imageHeight: PropTypes.number.isRequired,
-  source: PropTypes.any.isRequired,
+  containerWidth: PropTypes.number.isRequired,
+  containerHeight: PropTypes.number.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -263,22 +285,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
     overflow: 'hidden',
+    backgroundColor: 'red',
   },
-
-  clipRect: {
+  moveRect: {
     position: 'absolute',
-    borderWidth: 5,
+    borderWidth: 1,
     borderStyle: 'solid',
     borderColor: '#3bfa6c',
     padding: 40,
   },
-  bgc: {
+  clipRect: {
+    flex: 1,
+  },
+  clipContainer: {
     position: 'absolute',
     top: 0,
     right: 0,
     bottom: 0,
     left: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'gray',
   },
   editboxMiddle: {
