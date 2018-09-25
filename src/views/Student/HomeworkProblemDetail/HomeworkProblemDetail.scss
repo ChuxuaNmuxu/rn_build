@@ -4,11 +4,6 @@
   flex: 1;
 }
 
-.head_icon {
-  position: absolute;
-  left: 5;
-}
-
 .head {
   background-color: #30bf6c;
   flex-direction: row;
@@ -16,6 +11,11 @@
   align-items: center;
   // padding: 10px;
   position: relative;
+}
+
+.head_icon {
+  position: absolute;
+  left: 5;
 }
 
 .head_content {
