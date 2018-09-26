@@ -2,7 +2,7 @@ import React from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
+  // TouchableOpacity,
 } from 'react-native';
 import {
   Scene,
@@ -12,12 +12,14 @@ import {
   Stack,
   Reducer,
 } from 'react-native-router-flux';
-import Entypo from 'react-native-vector-icons/Entypo';
+// import Entypo from 'react-native-vector-icons/Entypo';
 import PropTypes from 'prop-types';
 import HomeworkTask from './views/Student/HomeworkTask';
 import ProblemRecords from './views/Student/ProblemRecords';
 import My from './views/Student/My';
 // import WrongNotes from './views/Student/WrongNotes'; // 项目人员 hqh 注释掉了，因为错题本是hqh写的！
+import PreviewHomework from './views/Student/PreviewHomework';
+import ReviewHomework from './views/Student/ReviewHomework';
 import DoHomework from './views/Student/DoHomework';
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
@@ -27,7 +29,11 @@ import Demo from './views/Demo';
 import styles from './router.scss';
 import TaskDetail from './views/Student/TaskDetail';
 import ProblemOverview from './views/Student/ProblemOverview';
+import ProblemListOverview from './views/Student/ProblemListOverview';
+import MistakeReform from './views/Student/MistakeReform';
 import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
+import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
+import ExamRecordDetail from './views/Student/ExamRecordDetail';
 import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
 
 const RouteMap = props => (
@@ -103,7 +109,7 @@ const RouteMap = props => (
             // titleStyle={styles.navigationBarStyle_title}
             // navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
             hideNavBar // 是否隐藏整个导航条
-            initial
+            // initial
           >
             <Scene
               key="ProblemOverview"
@@ -126,6 +132,7 @@ const RouteMap = props => (
             image="wodedangxuan"
             selectedImage="wodedangxuan"
             hideNavBar
+            // initial
           >
             <Scene key="My" component={My} />
           </Stack>
@@ -138,47 +145,27 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        // initial
       >
-        <Scene key="DoHomework" component={DoHomework} hideNavBar />
-        {/* 任务详情 */}
-        <Scene
-          // initial
-          // back
-          navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
-          renderBackButton={() => (
-            <View>
-              <TouchableOpacity onPress={Actions.Student}>
-                <Entypo name="chevron-thin-left" size={40} color="white" />
-              </TouchableOpacity>
-            </View>
-          )}
-          // hideNavBar // 是否隐藏整个导航条
-          key="TaskDetail"
-          component={TaskDetail}
-        />
+        {/* 做作业 */}
+        <Scene key="DoHomework" component={DoHomework} hideNavBar initial />
+        {/* 作业预览 */}
+        <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
+        {/* 作业检查 */}
+        <Scene key="ReviewHomework" component={ReviewHomework} hideNavBar />
+        {/* 错题本列表页 */}
+        <Scene key="ProblemListOverview" component={ProblemListOverview} hideNavBar />
+        {/* 错题重做 */}
+        <Scene key="MistakeReform" component={MistakeReform} hideNavBar />
+        {/* 作业记录详情页 */}
+        <Scene key="HomworkRecordDetail" component={HomworkRecordDetail} hideNavBar />
+        {/* 考试记录详情页 */}
+        <Scene key="ExamRecordDetail" component={ExamRecordDetail} hideNavBar />
         {/* 作业批阅 */}
-        <Scene
-          // initial
-          // back
-          // navigationBarStyle={styles.navigationBarStyle_taskDetail} // 导航条的样式
-          // renderBackButton={() => (
-          //   <View>
-          //     <TouchableOpacity onPress={Actions.Student}>
-          //       <Entypo name="chevron-thin-left" size={40} color="white" />
-          //     </TouchableOpacity>
-          //   </View>
-          // )}
-          hideNavBar // 是否隐藏整个导航条
-          key="HomeworkCorrecting"
-          component={HomeworkCorrecting}
-        />
-        <Scene
-          initial
-          hideNavBar
-          key="HomeworkProblemDetail"
-          component={HomeworkProblemDetail}
-        />
+        <Scene key="HomeworkCorrecting" component={HomeworkCorrecting} hideNavBar />
+        {/* 错题明细 */}
+        <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar />
+        {/* 任务详情 */}
+        <Scene key="TaskDetail" component={TaskDetail} hideNavBar />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />

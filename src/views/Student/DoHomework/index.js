@@ -1,3 +1,3 @@
-import DoHomework from './doHomework';
+import DoHomework from './DoHomeworks';
 
 export default DoHomework;

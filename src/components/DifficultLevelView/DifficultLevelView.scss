@@ -1,0 +1,36 @@
+.problem_wrapper {
+  width: 100%;
+  height: 164px;
+  padding-left: 24px;
+  background-color: white;
+}
+.problem_title {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666;
+  margin: 12px;
+}
+.required_txt {
+  color: #ffc14d;
+}
+.radio_wrapper {
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+}
+.radio_childStyle {
+  margin: 12px;
+}
+.checkedIconWrapStyle1{
+  border-color: #7cd99c;
+  background-color: #7cd99c;
+}
+.checkedIconWrapStyle2{
+  border-color: #ffc14d;
+  background-color: #ffc14d;
+}
+.checkedIconWrapStyle3{
+  border-color: #ff8480;
+  background-color: #ff8480;
+}

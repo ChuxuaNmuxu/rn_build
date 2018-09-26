@@ -9,11 +9,15 @@
 .opt_item {
   justify-content: center;
   align-items: center;
-  background-color: #ddd;
+  background-color: #fff;
+  border-width: 1px;
+  border-color: #dbdbdb;
+  border-style: solid;
 }
 
 .opt_check {
   background-color: #30bf6c;
+  border-color: #30bf6c;
 }
 
 .opt_item_text {

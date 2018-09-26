@@ -1,0 +1,122 @@
+.containers {
+  width: 100%;
+  height: 100%;
+}
+
+.dohomework_top {
+  width: 100%;
+  height: auto;
+}
+.doHomeworkHeader {
+  background: #30bf6c;
+  width: 100%;
+  height: 72px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buttonStyle {
+  font-size: 24px;
+  color: #fff;
+  text-align: center;
+  width: 60px;
+}
+
+.doHomeworkTitle {
+  color: #fff;
+  font-size: 24px;
+  text-align: center;
+}
+
+.questionOrder {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #fafafa;
+  padding-left: 24px;
+}
+.order_left {
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.quanbu {
+  font-size: 32px;
+  color: #30bf6c;
+}
+
+.totalQuestion {
+  font-size: 24px;
+  color: #bfbfbf;
+  text-align: left;
+  margin-left: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.currentIndex {
+  color: #54cc82;
+}
+
+.submitBtn {
+  width: 180px;
+  height: 60px;
+  border: 1px solid #30bf6c;
+  border-radius: 50px;
+  margin-right: 24px;
+  margin-top: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btnText {
+  font-size: 24px;
+  color: #30bf6c;
+}
+
+.main_content {
+  flex: 1;
+}
+.orderContent {
+  width: 100%;
+  margin-top: 22px;
+  margin-bottom: 22px;
+}
+
+.order_wrapper {
+  flex-direction: row;
+  margin: 0;
+  padding: 0;
+  margin-left: 24px;
+}
+.orderStyle {
+  width: 104px;
+  height: 72px;
+  border-width: 0;
+  border: 1px solid #dbdbdb;
+  background: #fff;
+  border-radius: 50px;
+}
+
+.currentOrderStyle {
+  background-color: #dbdbdb;
+}
+.checkedIconWrapStyle {
+  background-color: #dbdbdb;
+  border-color: #dbdbdb;
+}
+.radioTextStyle {
+  color: #999;
+  font-size: 30px;
+}
+.currentRadioTextStyle {
+  color: #fff;
+  font-size: 30px;
+}
+.checkedRadioTextStyle {
+  color: #fff;
+  font-size: 30px;
+}
