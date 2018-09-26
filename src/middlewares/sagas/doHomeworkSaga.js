@@ -1,6 +1,7 @@
 import {
   takeLatest, put,
 } from 'redux-saga/effects';
+// import { delay } from 'redux-saga';
 // import api from '../../utils/fetch';
 import * as actions from '../../actions/doHomeworkAction';
 import enhanceSaga from './enhanceSaga';
@@ -17,6 +18,7 @@ function* fetchDoHomeworkSaga(action) {
     // const fetch = (params) => api.get(url, params);
     // const res = yield call(fetch);
     // const { code, data: { items } } = res;
+    // yield call(delay, 1000); // 模拟异步 1秒延迟
     // 模拟数据
     const code = 0;
     const data = {

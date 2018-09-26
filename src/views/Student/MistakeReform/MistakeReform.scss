@@ -2,6 +2,10 @@
   flex: 1;
 }
 
+.content_wrap {
+  height: 1200px;
+}
+
 .head {
   background-color: #30bf6c;
   flex-direction: row;
@@ -41,7 +45,7 @@
 }
 
 .questionCard_container {
-  flex: 1;
+  height: 286px;
   width: 100%;
   background-color: #fff;
 }
@@ -81,7 +85,8 @@
   margin-top: -59px;
   justify-content: center;
   border-top-color: #ccc;
-  border-top-width: 1px;  
+  border-top-width: 1px;
+  padding: 0 24px;
 } 
 
 .submit_wrap {
@@ -97,3 +102,55 @@
   font-size:24px;
   color:#fff;
 }
+
+.result_wrap {
+  // align-items: center;
+  padding: 0 28px 28px 28px;
+  // justify-content: flex-start;
+  background-color: white;
+}
+
+.result_word {
+  height: 72px;
+  flex-direction: row;
+}
+
+.result_word_child {
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+}
+
+.result_icon {
+  
+  border-radius:8px;
+  padding: 3px;
+  margin-right: 10px;
+}
+
+.result_icon_right {
+  background-color:#30bf6c;
+}
+
+.result_icon_wrong {
+  background-color:#fa5656;
+}
+
+.result_answer {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+}
+
+.result_difficult {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666666;
+}
+
+.result_right {
+  color: #30bf6c;
+}
+
+.result_wrong {
+  color: #fa5656;
+} 

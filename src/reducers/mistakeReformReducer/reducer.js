@@ -1,0 +1,18 @@
+import createReducer from '../createReducer';
+import * as fn from './fn';
+
+const initState = {
+  // 错题
+  questions: [],
+};
+
+const handle = {
+  // 请求错题本成功了
+  FETCH_MISTAKE_SUCCESS: fn.fetchDataSuccess,
+  MISTAKE_SELECT_ANSWER: fn.selectAnswer,
+  MISTAKE_SUBMIT_ANSWER_SUCCESS: fn.submitAnswer,
+};
+
+const problemOverviewReducer = createReducer(initState, handle);
+
+export default problemOverviewReducer;
