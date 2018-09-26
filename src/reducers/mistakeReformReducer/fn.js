@@ -10,15 +10,28 @@ export const fetchDataSuccess = (state, action) => {
 export const selectAnswer = (state, action) => {
   const { index } = action.payload;
   const newState = immer(state, (draft) => {
-    draft.questions[index].controlComponent.showSubmitBtn = true;
+    const { showCorrectInfo, showErrorInfo } = draft.questions[index].controlComponent;
+    if (!showCorrectInfo && !showErrorInfo) {
+      draft.questions[index].controlComponent.showSubmitBtn = true;
+    } else {
+      draft.questions[index].controlComponent.showSubmitBtn = false;
+    }
   });
   return newState;
 };
 
-export const submitAnswer = (state, action) => {
+export const answerCorrect = (state, action) => {
   const { index } = action.payload;
   const newState = immer(state, (draft) => {
-    draft.questions[index].controlComponent.showSubmitBtn = false;
+    draft.questions[index].controlComponent.showCorrectInfo = true;
+  });
+  return newState;
+};
+
+export const answerError = (state, action) => {
+  const { index } = action.payload;
+  const newState = immer(state, (draft) => {
+    draft.questions[index].controlComponent.showErrorInfo = true;
   });
   return newState;
 };

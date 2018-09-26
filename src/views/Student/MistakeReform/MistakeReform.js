@@ -90,47 +90,48 @@ class MistakeReform extends Component {
   }
 
   // 提交返回的答案
-  submitAnswer = () => {
-    const { questions: { answer, hasSubmit } } = this.state;
-    if (answer !== null && hasSubmit) {
-      // 模拟返回
-      const x = false;
-      if (x) {
-        return (
-          <View style={styles.submit_container}>
-            <View style={styles.result_word}>
-              <View style={styles.result_word_child}>
-                <Text style={[styles.result_icon, styles.result_icon_right]}>
-                  <CIcon name="dui" size={20} color="white" />
-                </Text>
-                <Text style={[styles.result_answer, styles.result_right]}>
+  correctInfo = ({ bol, index }) => {
+    if (bol) {
+      return (
+        <View style={styles.submit_container}>
+          <View style={styles.result_word}>
+            <View style={styles.result_word_child}>
+              <Text style={[styles.result_icon, styles.result_icon_right]}>
+                <CIcon name="dui" size={20} color="white" />
+              </Text>
+              <Text style={[styles.result_answer, styles.result_right]}>
                   回答正确，答案是A
-                </Text>
-              </View>
-              <View style={styles.result_word_child}>
-                <Text style={[styles.result_difficult]}>
+              </Text>
+            </View>
+            <View style={styles.result_word_child}>
+              <Text style={[styles.result_difficult]}>
                   你可以将回答正确的题目
-                  {/* <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => {
                       console.log('移除错题本!');
                     }}
                   > */}
-                  <Text
-                    style={[styles.result_difficult, styles.result_right]}
-                    onPress={() => {
-                      console.log('移除错题本!');
-                    }}
-                  >
+                <Text
+                  style={[styles.result_difficult, styles.result_right]}
+                  onPress={() => {
+                    console.log('移除错题本!');
+                  }}
+                >
                       移除错题本
-                  </Text>
-                  {/* </TouchableOpacity> */}
-                  哦！
                 </Text>
-              </View>
+                {/* </TouchableOpacity> */}
+                  哦！
+              </Text>
             </View>
           </View>
-        );
-      }
+        </View>
+      );
+    }
+    return null;
+  }
+
+  errorInfo = ({ bol, index }) => {
+    if (bol) {
       return (
         <View style={styles.submit_container}>
           <View style={styles.result_word}>
@@ -139,27 +140,27 @@ class MistakeReform extends Component {
                 <CIcon name="cuowu" size={20} color="white" />
               </Text>
               <Text style={[styles.result_answer, styles.result_wrong]}>
-              回答错误,答案是B,你的答案是A
+            回答错误,答案是B,你的答案是A
               </Text>
             </View>
             <View style={styles.result_word_child}>
               <Text style={[styles.result_difficult]}>
-                你可以对该题进行
+              你可以对该题进行
                 {/* <TouchableOpacity
-                  onPress={() => {
-                    console.log('错误原因分析!');
-                  }}
-                > */}
+                onPress={() => {
+                  console.log('错误原因分析!');
+                }}
+              > */}
                 <Text
                   style={[styles.result_difficult, styles.result_wrong]}
                   onPress={() => {
                     console.log('错误原因分析!');
                   }}
                 >
-                  错误原因分析
+                错误原因分析
                 </Text>
                 {/* </TouchableOpacity> */}
-                  哦！
+                哦！
               </Text>
             </View>
           </View>
@@ -228,9 +229,12 @@ class MistakeReform extends Component {
                         handleToClickRadio={this.handleToClickRadio}
                       />
                     </View>
-                    {/* 各种按钮 */}
+                    {/* 提交按钮 */}
                     { this.submitBtn({ bol: item.controlComponent.showSubmitBtn, index: i }) }
-                    {/* { this.submitAnswer() } */}
+                    {/* 正确答案信息 */}
+                    { this.correctInfo({ bol: item.controlComponent.showCorrectInfo, index: i }) }
+                    {/* 错误答案信息 */}
+                    { this.errorInfo({ bol: item.controlComponent.showErrorInfo, index: i }) }
                   </View>
                 ))
             }

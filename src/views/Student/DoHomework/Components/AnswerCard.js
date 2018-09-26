@@ -39,7 +39,7 @@ class AnswerCard extends Component {
   // 单选题、多选、判断、对应答案发生改变的函数
   handleToClickRadio = (i) => {
     const { handleToClickRadio } = this.props;
-    console.log(111, '当前单选题选择的答案是', i);
+    // console.log(111, '当前单选题选择的答案是', i);
     this.setState({
       answered: true,
     });

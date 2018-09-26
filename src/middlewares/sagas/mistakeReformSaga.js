@@ -70,11 +70,20 @@ function* submitAnswerSaga(action) {
     const result = true;
     // console.warn('年级接口res=', res)
     if (code === 0) {
-      yield put(actions.submitAnswerAction({ result, index }, 'SUCCESS'));
+      // 如果答案正确，发送正确的action，反之发送错误的action
+      if (result) {
+        yield put(actions.showCorrectInfoAction({ result, index }));
+      } else {
+        yield put(actions.showWrongInfoAction({ result, index }));
+      }
+      // 这步是判断是否还要显示提交按钮，因为正确与错误信息显示以后，就不需要再显示提交按钮了
+      yield put(actions.selectAnswerAction({ index }));
     } else {
       yield put(actions.submitAnswerAction(code, 'ERROR'));
     }
   } catch (e) {
     yield put(actions.submitAnswerAction(e, 'ERROR'));
+  } finally {
+    yield put(actions.submitAnswerAction(null, 'FINISH'));
   }
 }
