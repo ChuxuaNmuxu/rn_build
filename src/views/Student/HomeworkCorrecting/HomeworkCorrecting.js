@@ -26,12 +26,12 @@ class HomeworkCorrecting extends Component {
     console.log('调用 HomeworkCorrecting 组件！', this.props);
   }
 
-  showPopover = () => {
-    const { isVisible } = this.state;
-    this.setState({
-      isVisible: !isVisible,
-    });
-  }
+  // showPopover = () => {
+  //   const { isVisible } = this.state;
+  //   this.setState({
+  //     isVisible: !isVisible,
+  //   });
+  // }
 
   render() {
     const { title } = this.props;

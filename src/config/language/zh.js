@@ -111,5 +111,6 @@ export default {
     header: {
       title: '错题重做',
     },
+    submit: '提交答案并查看结果',
   },
 };
