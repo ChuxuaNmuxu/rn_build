@@ -1,13 +1,17 @@
+### 参数及回调函数
+| 参数 | 说明 | 类型 | 默认 |
+| source          | 图片相关信息，包括uri地址，图片宽高  |  object
+| croppedImage    | 裁剪成功后的回调  |  function
+| cancelCrop      | 取消裁剪  |  function
+
+###示例代码
 import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
-  // Text,
   ScrollView,
   Image,
 } from 'react-native';
-// import Theme from '../../components/Theme';
-// import Language from '../../components/Language';
 import UploadImage from '../../components/UploadImage';
 import ImageCrop from '../../components/ImageCrop';
 
@@ -46,18 +50,13 @@ export default class Demo extends Component {
   }
 
   render() {
-    // console.log('7777', NativeModules.RNViewShot);
     const {
       source, showCropper, testUri, width, height,
     } = this.state;
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container}>
-          {/* <Theme /> */}
-          {/* <Language /> */}
-          <UploadImage updateImage={this.updateImage} />
-          {testUri && <Image source={{ uri: testUri }} style={{ width, height }} />}
-        </ScrollView>
+        <UploadImage updateImage={this.updateImage} />
+        {testUri && <Image source={{ uri: testUri }} style={{ width, height }} />}
         {showCropper && (
         <ImageCrop
           source={source}

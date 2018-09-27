@@ -170,6 +170,7 @@ dependencies {
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile project(':react-native-vector-icons')
     compile project(':react-native-svg')
+    compile project(':react-native-view-shot')
 }
 
 // Run this once to be able to run the application with BUCK

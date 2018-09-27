@@ -173,6 +173,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="DemoStack"
+        initial
       >
         <Scene
           key="Demo"
@@ -182,6 +183,7 @@ const RouteMap = props => (
               <Text style={styles.demo_renderTitle_title}>自定义标题</Text>
             </View>
           )}
+          initial
           // renderLeftButton={(
           //   <TouchableOpacity onPress={() => console.log('左边自定义')}>
           //     <View style={styles.demo_renderLeftButton_box}>
