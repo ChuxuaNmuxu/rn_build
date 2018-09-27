@@ -50,18 +50,6 @@ class TaskList extends PureComponent {
     this.setState({ flatlistWidth: width });
   }
 
-  // 长按禁止FlatList滚动，并用
-  onLongPress = (e, data) => {
-    console.log('长按');
-    this.changeScrollEnabled(false);
-  }
-
-  // 鼠标放开之后恢复FlatList滚动
-  onPressOut = (e) => {
-    console.log('鼠标放开了');
-    this.changeScrollEnabled(true);
-  }
-
   // 单击
   onPress = (e) => {
     console.log('单击');
@@ -92,8 +80,6 @@ class TaskList extends PureComponent {
     return (
       <TaskItem
         data={item}
-        onLongPress={this.onLongPress}
-        onPressOut={this.onPressOut}
         onPress={this.onPress}
         onChangeDropPosition={onChangeDropPosition}
       />

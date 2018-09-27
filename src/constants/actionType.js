@@ -25,5 +25,12 @@ export const FETCH_PROBLEM_OVERVIEW = 'FETCH_PROBLEM_OVERVIEW';
  */
 export const FETCH_DOHOMEWORK_QUESTION = 'FETCH_DOHOMEWORK_QUESTION';
 
-// 任务计划
+/**
+ * -------------任务计划----------------
+ */
+// 更改模拟移动位置的坐标
 export const CHANGE_DROP_POSITION = 'CHANGE_DROP_POSITION';
+// 是否重新获取时间段的监听范围
+export const IS_GET_DROP_LISTENER_RANGE = 'IS_GET_DROP_LISTENER_RANGE';
+// 重新获取时间段的监听范围
+export const GET_DROP_LISTENER_RANGE = 'GET_DROP_LISTENER_RANGE';

@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import styles from './timeItem.scss';
 import PlannedTask from './PlannedTask';
-import { adaptiveRotation } from '../../../utils/resolution';
 
 class TimeItem extends Component {
   constructor(props) {
@@ -15,25 +14,16 @@ class TimeItem extends Component {
     this.timeRef = null;
   }
 
-  onPress = () => {
-    console.log(19, this.timeRef);
+  componentDidMount() {
+    setTimeout(() => {
+      this.timeRef.measure((x, y, width, height, pageX, pageY) => {
+        console.log(34, pageX, pageY);
+      });
+    });
   }
 
-  componentDidMount() {
-    // const { scale } = adaptiveRotation();
-
-
-    // new Promise((resolve) => {
-    //   // 获取待操作元素的坐标值
-    //   this.timeRef.measure((x, y, width, height, pageX, pageY) => {
-    //     console.log(22, x, y, width, height, pageX, pageY);
-    //     // const offsetX = pageX / scale;
-    //     // const offsetY = pageY / scale;
-    //     // resolve({ offsetX, offsetY });
-    //   });
-    // }).then((data) => {
-    //   // console.log(27, data);
-    // });
+  onPress = () => {
+    console.log(19, this.timeRef);
   }
 
   render() {

@@ -64,16 +64,10 @@ class TaskItem extends React.Component {
     this.touchStartY = gestureState.dy;
     this.touchStartTime = evt.nativeEvent.timestamp;
 
-    new Promise((resolve) => {
-      // 获取待操作元素的坐标值
-      this.taskRef.measure((x, y, width, height, pageX, pageY) => {
-        const offsetX = pageX / scale;
-        const offsetY = pageY / scale;
-        resolve({ offsetX, offsetY });
-      });
-    }).then((data) => {
-      this.offsetX = data.offsetX;
-      this.offsetY = data.offsetY;
+    // 获取待操作元素的坐标值
+    this.taskRef.measure((x, y, width, height, pageX, pageY) => {
+      this.offsetX = pageX / scale;
+      this.offsetY = pageY / scale;
     });
   }
 
@@ -81,6 +75,10 @@ class TaskItem extends React.Component {
     const { dx, dy } = gestureState;
     const nowTime = evt.nativeEvent.timestamp;
 
+    /**
+     * 模拟长按
+     * 如果长按时间大于 longTouchTime 并且移动位置小于10则认为是长按
+     */
     if (this.isDraging) {
       this.dragHandle(dx, dy);
     } else if ((Math.abs(dx - this.touchStartX) < 10 || Math.abs(dy - this.touchStartY) < 10)) {
