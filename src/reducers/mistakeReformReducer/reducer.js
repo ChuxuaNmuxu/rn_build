@@ -4,6 +4,13 @@ import * as fn from './fn';
 const initState = {
   // 错题
   questions: [],
+  test: {
+    a: 1,
+    b: 2,
+    c: {
+      d: 3,
+    },
+  },
 };
 
 const handle = {
