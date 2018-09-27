@@ -24,6 +24,7 @@ export default class ImageCrop extends React.Component {
     };
   }
 
+  // 设置裁剪区容器和图片大小
   onLayout = (evt) => {
     const { layout } = evt.nativeEvent;
     const { source } = this.props;
@@ -36,6 +37,7 @@ export default class ImageCrop extends React.Component {
     });
   }
 
+  // 确定裁剪
   pressConfirm = () => {
     console.log('evt22', Dimensions.get('window'));
     const {
@@ -46,19 +48,16 @@ export default class ImageCrop extends React.Component {
       size: { width, height },
     };
     console.log('cropData', cropData);
-    // 裁剪之后的图片会放大1.125倍
     this.imgCrop.crop().then((uri) => {
       // Image.getSize(uri, (w, h) => {
       //   console.log('iamge123', w, h);
       // });
       ImageEditor.cropImage(uri, cropData, this.success, this.error);
     });
-    // this.imgCrop.rotate(45);
   }
 
+  // 裁剪之后的回调
   success = (uri) => {
-    console.log('success', uri);
-    // Image.getSize(uri, (w, h) => console.log(129, w, h));
     const {
       width, height,
     } = this.imgCrop.getCropData();
@@ -68,6 +67,11 @@ export default class ImageCrop extends React.Component {
 
   error = (err) => {
     console.log('success', err);
+  }
+
+  // 图片旋转
+  rotateImg = (digit) => {
+    this.imgCrop.rotate(digit);
   }
 
   pressCancel = () => {
@@ -105,9 +109,14 @@ export default class ImageCrop extends React.Component {
           ref={(crop) => { this.imgCrop = crop; }}
         />
         )}
-        <TouchableOpacity style={[styles.toolBar]}>
-          <Text style={styles.text}>bbb</Text>
-        </TouchableOpacity>
+        <View style={[styles.toolBar]}>
+          <TouchableOpacity style={styles.btn} onPress={() => this.rotateImg(-90)}>
+            <Text style={styles.text}>左旋</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn} onPress={() => this.rotateImg(90)}>
+            <Text style={styles.text}>右旋</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }

@@ -210,8 +210,9 @@ export default class ImageCropper extends React.Component {
   crop = () => captureRef(this.cropper, { format: 'png', quality: 1 })
 
   rotate = (digit) => {
+    const { rotate } = this.state;
     this.setState({
-      rotate: digit,
+      rotate: rotate + digit,
     });
   }
 

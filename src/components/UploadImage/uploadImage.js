@@ -20,7 +20,7 @@ export default class UploadImage extends Component {
   }
 
   selectPhotoTapped = () => {
-    const options = {
+    const option = {
       title: '选择图片',
       cancelButtonTitle: '取消',
       takePhotoButtonTitle: '拍照',
@@ -42,8 +42,9 @@ export default class UploadImage extends Component {
         skipBackup: true,
       },
     };
-    const { updateImage } = this.props;
-    ImagePicker.showImagePicker(options, (response) => {
+    const { updateImage, options } = this.props;
+    const opt = Object.assign({}, option, options);
+    ImagePicker.showImagePicker(opt, (response) => {
       console.log('Response = ', response);
 
       if (response.didCancel) {
@@ -91,4 +92,9 @@ const styles = StyleSheet.create({
 
 UploadImage.propTypes = {
   updateImage: PropTypes.func.isRequired,
+  options: PropTypes.object,
+};
+
+UploadImage.defaultProps = {
+  options: {},
 };
