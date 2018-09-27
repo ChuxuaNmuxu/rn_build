@@ -8,10 +8,10 @@ import { merge } from 'ramda';
 import PropTypes from 'prop-types';
 import TaskItem from './TaskItem';
 import styles from './taskList.scss';
-import { ChangeDropLocation } from '../../../actions/homeworkTask';
+import { ChangeDropPosition } from '../../../actions/homeworkTask';
 
 @connect(null, dispatch => ({
-  onChangeDropLocation: bindActionCreators(ChangeDropLocation, dispatch),
+  onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
 }))
 class TaskList extends PureComponent {
   constructor(props) {
@@ -88,14 +88,14 @@ class TaskList extends PureComponent {
 
   // 列表每项
   renderItem = (item) => {
-    const { onChangeDropLocation } = this.props;
+    const { onChangeDropPosition } = this.props;
     return (
       <TaskItem
         data={item}
         onLongPress={this.onLongPress}
         onPressOut={this.onPressOut}
         onPress={this.onPress}
-        onChangeDropLocation={onChangeDropLocation}
+        onChangeDropPosition={onChangeDropPosition}
       />
     );
   }
@@ -144,11 +144,11 @@ class TaskList extends PureComponent {
 }
 
 TaskList.defaultProps = {
-  onChangeDropLocation: () => {},
+  onChangeDropPosition: () => {},
 };
 
 TaskList.propTypes = {
-  onChangeDropLocation: PropTypes.func,
+  onChangeDropPosition: PropTypes.func,
 };
 
 export default TaskList;

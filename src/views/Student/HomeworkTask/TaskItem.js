@@ -92,11 +92,11 @@ class TaskItem extends React.Component {
   }
 
   onPanResponderRelease = () => {
-    const { onChangeDropLocation } = this.props;
+    const { onChangeDropPosition } = this.props;
     this.isDraging = false;
 
     // console.log('触摸结束');
-    onChangeDropLocation({
+    onChangeDropPosition({
       x: -500,
       y: 0,
     });
@@ -104,8 +104,8 @@ class TaskItem extends React.Component {
 
   dragHandle = (dx, dy) => {
     const { scale } = adaptiveRotation();
-    const { onChangeDropLocation } = this.props;
-    onChangeDropLocation({
+    const { onChangeDropPosition } = this.props;
+    onChangeDropPosition({
       x: dx / scale + this.offsetX - this.marginLeft,
       y: dy / scale + this.offsetY,
     });
@@ -115,7 +115,7 @@ class TaskItem extends React.Component {
     const {
       wrapStyle, iconWrapStyle, iconStyle, isShowSpendTime,
     } = this.props;
- 
+
     return (
       <Animated.View
         {...this.panResponder.panHandlers}
@@ -159,7 +159,7 @@ TaskItem.propTypes = {
     PropTypes.array,
   ]),
   isShowSpendTime: PropTypes.bool,
-  onChangeDropLocation: PropTypes.func,
+  onChangeDropPosition: PropTypes.func,
 };
 
 TaskItem.defaultProps = {
@@ -167,7 +167,7 @@ TaskItem.defaultProps = {
   iconWrapStyle: {},
   iconStyle: {},
   isShowSpendTime: true,
-  onChangeDropLocation: () => {},
+  onChangeDropPosition: () => {},
 };
 
 export default TaskItem;

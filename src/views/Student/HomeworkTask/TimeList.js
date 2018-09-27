@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import TimeItem from './TimeItem';
 import styles from './timeList.scss';
 import { createHalfHourPeriod, currentTimeToPeriod } from '../../../utils/common';
-import { ChangeDropLocation } from '../../../actions/homeworkTask';
+import { ChangeDropPosition } from '../../../actions/homeworkTask';
 
 @connect(null, dispatch => ({
-  onChangeDropLocation: bindActionCreators(ChangeDropLocation, dispatch),
+  onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
 }))
 class TaskList extends PureComponent {
   constructor(props) {
@@ -59,11 +59,11 @@ class TaskList extends PureComponent {
   keyExtractor = item => item.data.toString()
 
   renderItem = (data) => {
-    const { onChangeDropLocation } = this.props;
+    const { onChangeDropPosition } = this.props;
     return (
       <TimeItem
         data={data}
-        onChangeDropLocation={onChangeDropLocation}
+        onChangeDropPosition={onChangeDropPosition}
       />
     );
   }
@@ -86,6 +86,8 @@ class TaskList extends PureComponent {
           getItemLayout={this.getItemLayout}
           initialNumToRender={this.periods.length}
           scrollEnabled={scrollEnabled}
+
+          onMomentumScrollEnd={e => console.log(90, e)}
         />
       </View>
     );

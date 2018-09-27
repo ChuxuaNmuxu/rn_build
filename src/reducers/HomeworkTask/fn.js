@@ -1,4 +1,4 @@
-export const changeDropLocationReducer = (state, action) => {
+export const changeDropPositionReducer = (state, action) => {
   const newState = Object.assign({}, state, {
     position: action.payload,
   });
