@@ -6,12 +6,6 @@ import RefreshHeader from './RefreshHeader';
 import RefreshFooter from './RefreshFooter';
 
 class RefreshListView extends Component {
-  static propTypes = {
-    onHeaderRefresh: PropTypes.func, // 下拉刷新的方法
-    onFooterRefresh: PropTypes.func, // 上拉加载的方法
-    data: PropTypes.array, // 列表数据
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -23,6 +17,22 @@ class RefreshListView extends Component {
     };
   }
 
+
+  // 头部组件的状态，供外部调用，一般不会用到
+  setheaderState = (headerState) => {
+    // const {  } = this.props;
+    this.setState({
+      headerState,
+    });
+  }
+
+  // 尾部组件的状态，供外部调用，一般不会用到
+  setfooterState = (footerState) => {
+    // const {  } = this.props;
+    this.setState({
+      footerState,
+    });
+  }
 
   _renderHeader = headerState => (
     <RefreshHeader
@@ -42,18 +52,6 @@ class RefreshListView extends Component {
       }}
     />
   );
-
-  // 头部组件的状态，供外部调用，一般不会用到
-  headerState = () => {
-    const { headerState } = this.state;
-    return headerState;
-  }
-
-  // 尾部组件的状态，供外部调用，一般不会用到
-  footerState = () => {
-    const { footerState } = this.state;
-    return footerState;
-  }
 
   // 开始下拉刷新
   beginHeaderRefresh = () => {
@@ -170,6 +168,7 @@ class RefreshListView extends Component {
     const { isShowRefreshIcon, footerState, headerState } = this.state;
     return (
       <FlatList
+      // 传进所有参数
         {...this.props}
         refreshControl={(
           <RefreshControl
@@ -187,5 +186,21 @@ class RefreshListView extends Component {
     );
   }
 }
+
+RefreshListView.propTypes = {
+  onHeaderRefresh: PropTypes.func, // 下拉刷新的方法
+  onFooterRefresh: PropTypes.func, // 上拉加载的方法
+  data: PropTypes.array, // 列表数据
+  headerState: PropTypes.string,
+  footerState: PropTypes.string,
+};
+
+RefreshListView.defaultProps = {
+  onHeaderRefresh: () => null, // 下拉刷新的方法
+  onFooterRefresh: () => null, // 上拉加载的方法
+  data: [], // 列表数据
+  headerState: RefreshState.Idle,
+  footerState: RefreshState.Idle,
+};
 
 export default RefreshListView;

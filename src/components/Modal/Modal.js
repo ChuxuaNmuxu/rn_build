@@ -163,12 +163,12 @@ class MyModal extends Component {
         <Resolution>
           {
               {
-                ButtomModal: this._ButtomModal(),
-                TipsModal: this._TipsModal(),
-                AnimationsModal: this._AnimationsModal(),
-                CustomModal: this._CustomModal(),
-                ImageViewer: this._ImageViewer(),
-              }[type]
+                ButtomModal: this._ButtomModal,
+                TipsModal: this._TipsModal,
+                AnimationsModal: this._AnimationsModal,
+                CustomModal: this._CustomModal,
+                ImageViewer: this._ImageViewer,
+              }[type]()
           }
         </Resolution>
       </Modal>

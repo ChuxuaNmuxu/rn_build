@@ -91,7 +91,7 @@ class DoHomeworks extends Component {
   }
 
   // 渲染需要展示在扩展列表视图中的组件
-  renderQuestionOrder = (questionList) => (
+  renderQuestionOrder = questionList => (
     <View style={styles.orderContent}>
       <RadioGroup
         onChange={this.orderChange}

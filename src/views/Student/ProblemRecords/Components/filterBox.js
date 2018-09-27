@@ -61,7 +61,7 @@ class FilterBox extends Component {
           </ScrollView>
           <TouchableOpacity style={styles.filterMoreBox} onPress={() => this.filterMoreFun()}>
             <Text style={styles.filterMoreText}>
-            更多筛选
+                更多筛选
               <CIcon style={styles.icon} name="shangyiye" />
             </Text>
           </TouchableOpacity>

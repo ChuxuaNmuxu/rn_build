@@ -1,18 +1,22 @@
 .recordCard {
   width: 100%;
   height: 192px;
-  padding-top: 24px;
-  margin-top: 12px;
+  // padding-top: 24px;
+  // margin-top: 12px;
   background: #fff;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 
 .cardLeft {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
+  flex: 1;
+  height: 192px;
+  align-items: center;
 }
 .subjectPic {
   width: 144px;
@@ -32,11 +36,24 @@
 .subjectInfo {
   // justify-content: center;
   // align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 154px;
 }
+
+.bottomInfo {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
 .subjectName {
   font-size: 30px;
   color: #666;
-  margin-bottom: 20%;
+  // margin-bottom: 20%;
+  text-align: left;
 }
 .otherInfo {
   font-size: 24px;
@@ -44,6 +61,9 @@
 }
 .cardRight {
   position: relative;
+  height: 144px;
+  justify-content: flex-start;
+  align-items: center;
 }
 .toReviseBox {
   width: 178px;
