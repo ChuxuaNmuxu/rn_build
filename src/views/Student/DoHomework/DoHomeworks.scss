@@ -46,13 +46,13 @@
 .quanbu {
   font-size: 32px;
   color: #30bf6c;
+  margin-right: 20px;
 }
 
 .totalQuestion {
   font-size: 24px;
   color: #bfbfbf;
   text-align: left;
-  margin-left: 20px;
   margin-top: 30px;
   margin-bottom: 30px;
 }
@@ -100,12 +100,20 @@
   background: #fff;
   border-radius: 50px;
 }
+
+.currentOrderStyle {
+  background-color: #dbdbdb;
+}
 .checkedIconWrapStyle {
   background-color: #dbdbdb;
   border-color: #dbdbdb;
 }
 .radioTextStyle {
   color: #999;
+  font-size: 30px;
+}
+.currentRadioTextStyle {
+  color: #fff;
   font-size: 30px;
 }
 .checkedRadioTextStyle {

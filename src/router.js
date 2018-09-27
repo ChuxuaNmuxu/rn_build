@@ -19,6 +19,7 @@ import ProblemRecords from './views/Student/ProblemRecords';
 import My from './views/Student/My';
 // import WrongNotes from './views/Student/WrongNotes'; // 项目人员 hqh 注释掉了，因为错题本是hqh写的！
 import PreviewHomework from './views/Student/PreviewHomework';
+import ReviewHomework from './views/Student/ReviewHomework';
 import DoHomework from './views/Student/DoHomework';
 import Login from './views/Account/Login';
 import Homework from './views/Teacher/Homework';
@@ -134,6 +135,7 @@ const RouteMap = props => (
             image="wodedangxuan"
             selectedImage="wodedangxuan"
             hideNavBar
+            // initial
           >
             <Scene key="My" component={My} />
           </Stack>
@@ -147,14 +149,16 @@ const RouteMap = props => (
       <Stack
         key="StudentAll"
       >
-        {/* 做作业 */}
-        <Scene key="DoHomework" component={DoHomework} hideNavBar />
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
+        {/* 做作业 */}
+        <Scene key="DoHomework" component={DoHomework} hideNavBar />
+        {/* 作业检查 */}
+        <Scene key="ReviewHomework" component={ReviewHomework} hideNavBar />
         {/* 错题本列表页 */}
         <Scene key="ProblemListOverview" component={ProblemListOverview} hideNavBar />
         {/* 错题重做 */}
-        <Scene key="MistakeReform" component={MistakeReform} hideNavBar />
+        <Scene key="MistakeReform" component={MistakeReform} hideNavBar initial />
         {/* 作业记录详情页 */}
         <Scene key="HomworkRecordDetail" component={HomworkRecordDetail} hideNavBar />
         {/* 考试记录详情页 */}
@@ -171,6 +175,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="DemoStack"
+        initial
       >
         <Scene
           key="Demo"
@@ -180,6 +185,7 @@ const RouteMap = props => (
               <Text style={styles.demo_renderTitle_title}>自定义标题</Text>
             </View>
           )}
+          initial
           // renderLeftButton={(
           //   <TouchableOpacity onPress={() => console.log('左边自定义')}>
           //     <View style={styles.demo_renderLeftButton_box}>

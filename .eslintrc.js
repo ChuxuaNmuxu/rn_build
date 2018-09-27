@@ -41,5 +41,6 @@ module.exports = {
       "no-restricted-globals": 0,
       "radix": 0,
       "react/prefer-stateless-function": 0,
+      "no-param-reassign": 0,
     }
   }

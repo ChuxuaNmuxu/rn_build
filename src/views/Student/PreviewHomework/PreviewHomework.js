@@ -5,6 +5,7 @@ import PreviewQuesCard from './Components/PreviewQuesCard';
 import { handleFormattingTime } from '../../../utils/common';
 import { CustomButton } from '../../../components/Icon';
 import styles from './PreviewHomework.scss';
+import I18nText from '../../../components/I18nText';
 
 class PreviewHomework extends Component {
   constructor(props) {
@@ -72,7 +73,12 @@ class PreviewHomework extends Component {
         <View style={styles.previewHomework_header}>
           <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.HomeworkTask} />
           <Text style={styles.previewHomework_title}>作业名称</Text>
-          <Text style={styles.previewHomework_time}>倒计时: {handleFormattingTime(previewTime)}</Text>
+          <Text style={styles.previewHomework_time}>
+            <I18nText>
+              PreviewHomework.header.countdown
+            </I18nText>
+            {handleFormattingTime(previewTime)}
+          </Text>
         </View>
         <ScrollView>
           {
@@ -85,7 +91,9 @@ class PreviewHomework extends Component {
             style={styles.btnText}
             onPress={() => this.todoHomeworkFun()}
           >
-              完成预览  开始作业
+            <I18nText>
+              PreviewHomework.footer.startDoHomework
+            </I18nText>
           </CustomButton>
         </View>
       </View>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { PropTypes } from 'prop-types';
+import { ImagePicker } from 'antd-mobile-rn';
 import styles from './AnswerCard.scss';
 import Radio from '../../../../components/Radio';
 import Checkbox from '../../../../components/Checkbox';
@@ -9,6 +10,8 @@ import CheckboxComponent from './CheckboxComponent';
 import LineTo from '../../../../components/LineTo';
 import { CustomButton } from '../../../../components/Icon';
 import DifficultLevelView from '../../../../components/DifficultLevelView';
+import I18nText from '../../../../components/I18nText';
+import ImagePickerStyle from './ImagePickerStyle';
 
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
@@ -33,46 +36,32 @@ class AnswerCard extends Component {
   //   return null;
   // }
 
-  // 单选题答案发生改变的函数
-  handleRadioChange = (i) => {
-    console.log(111, '当前单选题选择的答案是', i);
+  // 单选题、多选、判断、对应答案发生改变的函数
+  handleToClickRadio = (i) => {
+    const { handleToClickRadio } = this.props;
+    // console.log(111, '当前单选题选择的答案是', i);
     this.setState({
       answered: true,
     });
-  }
-
-  // 多选题答案发生改变的函数
-  handleMultiSelectChange = (obj) => {
-    console.log(222, '当前多选题选择的答案是', obj);
-    this.setState({
-      answered: true,
-    });
-  }
-
-  // 判断题答案发生改变的函数
-  judgementChange = (i) => {
-    console.log(333, '当前判断题选择的答案是', i);
-    this.setState({
-      answered: true,
-    });
-  }
-
-  // 对应题答案发生改变的函数
-  lineToChange = (obj) => {
-    console.log(444, '当前对应题的答案是', obj);
-    this.setState({
-      answered: true,
-    });
+    // sb eslint
+    if (handleToClickRadio) handleToClickRadio(i);
   }
 
   // 难易程度选项发生改变的函数
   difficultLevelChange = (a) => {
-    console.log(555, '当前选择的难易程度是', a);
+    // console.log(555, '当前选择的难易程度是', a);
+    const { handleDifficultLevel, questions } = this.props;
+    handleDifficultLevel(a, questions.number);
   }
 
   // 不是很懂
   handleCheckboxChange = (a) => {
-    console.log(666, '当前是否选择了不是很懂', a)
+    console.log(666, '当前是否选择了不是很懂', a);
+  }
+
+  // 选择图片
+  uploadImgChange = () => {
+
   }
 
   render() {
@@ -81,7 +70,9 @@ class AnswerCard extends Component {
     return (
       <View style={styles.answerCard_container}>
         <View style={styles.question_title}>
-          <Text style={styles.question_title_txt}>作答：</Text>
+          <I18nText style={styles.question_title_txt}>
+            DoHomeworks.answerCard.toAnswer
+          </I18nText>
         </View>
         <View style={styles.answer_area}>
           <View style={styles.answer_content}>
@@ -90,7 +81,7 @@ class AnswerCard extends Component {
             <RadioComponent
               options={optionCount}
               childStyle={styles.radioStyle}
-              handleRadioChange={this.handleRadioChange}
+              handleRadioChange={this.handleToClickRadio}
               radioAnswer={answer}
             />
             )
@@ -101,7 +92,7 @@ class AnswerCard extends Component {
               <CheckboxComponent
                 options={optionCount}
                 childStyle={styles.radioStyle}
-                handleMultiSelectChange={this.handleMultiSelectChange}
+                handleMultiSelectChange={this.handleToClickRadio}
                 multiSelectAnswer={answer}
               />
               )
@@ -111,7 +102,7 @@ class AnswerCard extends Component {
               questions.type === 3 && (
                 <RadioGroup
                   value={answer}
-                  onChange={this.judgementChange}
+                  onChange={this.handleToClickRadio}
                   style={styles.radio_wrapper}
                   iconWrapStyle={styles.radioStyle}
                   checkedIconWrapStyle={styles.checkedIconWrapStyle}
@@ -129,7 +120,7 @@ class AnswerCard extends Component {
                 <View style={styles.lineToStyle}>
                   <LineTo
                     optionSize={optionCount}
-                    onChange={this.lineToChange}
+                    onChange={this.handleToClickRadio}
                   />
                 </View>
               )
@@ -138,29 +129,54 @@ class AnswerCard extends Component {
             {
             (questions.type === 10 || questions.type === 11) && (
               <View style={styles.uploadAreaStyle}>
-                <View style={styles.iconphoto_container}>
-                  <CustomButton name="iconphoto" style={styles.iconphotoStyle} />
+                <View style={styles.img_container}>
+                  <View style={styles.iconphoto_container}>
+                    <CustomButton name="iconphoto" style={styles.iconphotoStyle} />
+                  </View>
+                  <Text style={styles.txtStyle}>
+                    <I18nText>
+                    DoHomeworks.answerCard.toUpLoadNotice
+                    </I18nText>
+                    <I18nText style={styles.highColor}>
+                    DoHomeworks.answerCard.shoudUploadNotice
+                    </I18nText>
+                  </Text>
                 </View>
-                <Text style={styles.txtStyle}>
-                  上传解题过程
-                  <Text style={styles.highColor}>(主观题须上传解答过程)</Text>
-                </Text>
+                <View style={styles.imgPic_container}>
+                  <ImagePicker
+                    styles={ImagePickerStyle}
+                    onChange={this.uploadImgChange}
+                    accept=".jpeg, .jpg, .png"
+                  />
+                </View>
               </View>
             )
             }
           </View>
+          {/* 难易程度---不默认且必选，错题重做页面调用时不显示 */}
           {
-            (questions.type !== 10 && questions.type !== 11) && (
+            (questions.type !== 10 && questions.type !== 11) && !mistakeReform && (
               <View style={styles.objective_area}>
                 {/* 客观题上传解答过程区域 */}
                 <View style={[answered ? styles.photoCanClick_container : styles.photo_container]}>
                   <CustomButton name="iconphoto" style={[answered ? styles.photoCanClick : styles.objective_photo]} />
                 </View>
                 <View style={styles.text_container}>
-                  <Text style={[answered ? styles.textCanClick : styles.objective_text]}>
-                    上传解答过程将有机会被老师评为优秀解答
-                  </Text>
+                  <I18nText style={[answered ? styles.textCanClick : styles.objective_text]}>
+                    DoHomeworks.answerCard.uploadImgAnswerNotice
+                  </I18nText>
                 </View>
+                {
+                  answered && (
+                  <View style={styles.objectiveImg_container}>
+                    <ImagePicker
+                      styles={ImagePickerStyle}
+                      onChange={this.uploadImgChange}
+                      accept=".jpeg, .jpg, .png"
+                    />
+                  </View>
+                  )
+                }
               </View>
             )
           }
@@ -180,7 +196,9 @@ class AnswerCard extends Component {
             TextStyle={styles.notUnderstood_text}
             checkedTextStyle={styles.notUnderstood_text}
           >
-          不是很懂，请老师讲解
+            <I18nText>
+              DoHomeworks.answerCard.notUnderstood
+            </I18nText>
           </Checkbox>
           )
         }
@@ -189,13 +207,18 @@ class AnswerCard extends Component {
   }
 }
 
-AnswerCard.defaultProps = {
-  mistakeReform: false, // 错题重做页面调用时用来标识调用方的
-};
-
 AnswerCard.propTypes = {
   questions: PropTypes.object.isRequired,
   mistakeReform: PropTypes.bool, // 错题重做页面调用时用来标识调用方的
+  handleDifficultLevel: PropTypes.func, // 难易程度发生改变的函数
+  handleToClickRadio: PropTypes.func, // 单选题的回调函数
 };
+
+AnswerCard.defaultProps = {
+  mistakeReform: false,
+  handleToClickRadio: () => {},
+  handleDifficultLevel: () => {},
+};
+
 
 export default AnswerCard;
