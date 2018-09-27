@@ -4,6 +4,8 @@ import commonSaga from './common';
 import problemOverviewSaga from './problemOverviewSaga';
 // 做作业
 import doHomeworkSaga from './doHomeworkSaga';
+// 作业或者考试记录内容
+import recordDetailSaga from './recordDetailSaga';
 // 错题重做
 import mistakeReformSaga from './mistakeReformSaga';
 
@@ -12,6 +14,7 @@ function* rootSaga() {
     fork(commonSaga),
     fork(problemOverviewSaga),
     fork(doHomeworkSaga),
+    fork(recordDetailSaga),
     fork(mistakeReformSaga),
   ]);
 }

@@ -32,8 +32,9 @@ import ProblemOverview from './views/Student/ProblemOverview';
 import ProblemListOverview from './views/Student/ProblemListOverview';
 import MistakeReform from './views/Student/MistakeReform';
 import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
+// 文件改名字失败，不改了。这两个组件时同一个的其实。考试详情和练习详情。
 import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
-import ExamRecordDetail from './views/Student/ExamRecordDetail';
+// import ExamRecordDetail from './views/Student/ExamRecordDetail';
 import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
 
 const RouteMap = props => (
@@ -57,7 +58,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        // initial
+        initial
       >
         <Tabs
           key="StudentTabs"
@@ -94,10 +95,12 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
+            initial
           >
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
+              initial
             />
           </Stack>
           {/* 错题本 */}
@@ -145,7 +148,6 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
@@ -160,7 +162,7 @@ const RouteMap = props => (
         {/* 作业记录详情页 */}
         <Scene key="HomworkRecordDetail" component={HomworkRecordDetail} hideNavBar />
         {/* 考试记录详情页 */}
-        <Scene key="ExamRecordDetail" component={ExamRecordDetail} hideNavBar />
+        <Scene key="ExamRecordDetail" component={HomworkRecordDetail} hideNavBar />
         {/* 作业批阅 */}
         <Scene key="HomeworkCorrecting" component={HomeworkCorrecting} hideNavBar />
         {/* 错题明细 */}
