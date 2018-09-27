@@ -57,7 +57,7 @@ class ImageViewerModal extends Component {
     const { name } = this.props;
     return (
       <View style={Style.renderHeader}>
-        <Text style={Style.leftText}>作答人：{name}</Text>
+        <Text style={Style.leftText}>{name ? `作答人：${name}` : '正确答案'}</Text>
         <TouchableOpacity onPress={this._onClose} style={Style.close}>
           <Svg height="30" width="30" source="closeNoCircle" fill="#fff" />
         </TouchableOpacity>

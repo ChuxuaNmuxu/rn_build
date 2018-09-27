@@ -12,17 +12,23 @@ class RecordList extends Component {
     };
   }
 
+  componentDidMount() {
+    const { getRefreshListView } = this.props;
+    getRefreshListView(this.listView);
+  }
+
   _keyExtractor = item => item.id;
 
   // 渲染子组件
   _renderItem = ({ item, index }) => {
-    const { gotoDetailFun } = this.props;
+    const { gotoDetailFun, recordType } = this.props;
     return (
       <RecordCard
         key={index}
         id={item.id}
         datas={item}
         gotoDetailFun={gotoDetailFun}
+        recordType={recordType}
       />
     );
   };
@@ -67,6 +73,8 @@ class RecordList extends Component {
 RecordList.propTypes = {
   dataList: PropTypes.array.isRequired,
   gotoDetailFun: PropTypes.func.isRequired,
+  getRefreshListView: PropTypes.func.isRequired,
+  recordType: PropTypes.number.isRequired,
 };
 
 export default RecordList;

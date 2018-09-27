@@ -26,6 +26,15 @@ export const FETCH_PROBLEM_OVERVIEW = 'FETCH_PROBLEM_OVERVIEW';
 export const FETCH_DOHOMEWORK_QUESTION = 'FETCH_DOHOMEWORK_QUESTION';
 
 /**
+ * ------------------------作业与考试详情页面-----------------------------------------
+ */
+// '考试或者作业页面--请求考试数据--全部返回'
+export const FETCH_RECORD_DETAIL_EXAM = 'FETCH_RECORD_DETAIL_EXAM';
+// '考试或者作业页面--请求作业数据--单次请求'
+export const FETCH_RECORD_DETAIL_HOMEWORK = 'FETCH_RECORD_DETAIL_HOMEWORK';
+// '考试或者作业页面--请求作业数据--作业题号list请求'
+export const FETCH_RECORD_DETAIL_HOMEWORK_LIST = 'FETCH_RECORD_DETAIL_HOMEWORK_LIST';
+/**
  * 错题重做
  */
 export const FETCH_MISTAKE = 'FETCH_MISTAKE';

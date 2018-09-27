@@ -56,5 +56,15 @@
 
 .renderFilterView {
   width: 100%;
-  height: 200px;
+  height: 542px;
+  padding: 19px 24px 61px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+
+.nullView {
+  width: 100%;
+  height: 114px;
 }
