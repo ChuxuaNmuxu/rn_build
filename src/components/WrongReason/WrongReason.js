@@ -6,38 +6,6 @@ import Radio from '../Radio';
 import styles from './WrongReason.scss';
 
 class WrongReason extends Component {
-  static defaultProps = {
-    labelData: [ // 标签数据
-      {
-        label: '知识记忆性错误',
-        value: 1,
-      },
-      {
-        label: '理解性错误',
-        value: 2,
-      },
-      {
-        label: '考虑不全面',
-        value: 3,
-      },
-      {
-        label: '审题不仔细',
-        value: 4,
-      },
-      {
-        label: '粗心大意',
-        value: 5,
-      },
-      {
-        label: '其他',
-        value: 65535,
-      },
-    ],
-    title: '错误原因分析', // 组件title
-    onChange: (a) => { console.log('我被点击了：', a); },
-    defaultValue: null,
-  } // 默认选中值
-
   render() {
     const {
       title, labelData, onChange, defaultValue,
@@ -67,6 +35,38 @@ class WrongReason extends Component {
     );
   }
 }
+
+WrongReason.defaultProps = {
+  labelData: [ // 标签数据
+    {
+      label: '知识记忆性错误',
+      value: 1,
+    },
+    {
+      label: '理解性错误',
+      value: 2,
+    },
+    {
+      label: '考虑不全面',
+      value: 3,
+    },
+    {
+      label: '审题不仔细',
+      value: 4,
+    },
+    {
+      label: '粗心大意',
+      value: 5,
+    },
+    {
+      label: '其他',
+      value: 65535,
+    },
+  ],
+  title: '错误原因分析', // 组件title
+  onChange: (a) => { console.log('我被点击了：', a); },
+  defaultValue: null,
+};
 
 WrongReason.propTypes = {
   labelData: PropTypes.array,

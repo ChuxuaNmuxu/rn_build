@@ -67,7 +67,7 @@ function* submitAnswerSaga(action) {
     // yield call(delay, 100);// 模拟异步 1秒延迟
     // 模拟数据
     const code = 0;
-    const result = true;
+    const result = false;
     // console.warn('年级接口res=', res)
     if (code === 0) {
       // 如果答案正确，发送正确的action，反之发送错误的action
