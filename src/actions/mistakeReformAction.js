@@ -6,3 +6,4 @@ export const selectAnswerAction = actionCreator(types.MISTAKE_SELECT_ANSWER, '�
 export const submitAnswerAction = actionCreator(types.MISTAKE_SUBMIT_ANSWER, '错题重做-提交答案，判断对错');
 export const showCorrectInfoAction = actionCreator(types.MISTAKE_SUBMIT_ANSWER_CORRECT, '错题重做-正确答案');
 export const showWrongInfoAction = actionCreator(types.MISTAKE_SUBMIT_ANSWER_ERROR, '错题重做-错误答案');
+export const showWrongInfoRadioAction = actionCreator(types.MISTAKE_SUBMIT_ANSWER_ERROR_RADIO, '错题重做-点击错题总结显示Radio');

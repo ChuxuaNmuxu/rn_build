@@ -30,20 +30,28 @@ function* fetchDataSaga(action) {
         url: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
         controlComponent: {
           showSubmitBtn: false,
-          showCorrectInfo: false,
-          showErrorInfo: false,
+          showCorrectInfo: {
+            showAll: false,
+            showWord: false,
+            showRadio: false,
+          },
+          showErrorInfo: {
+            showAll: false,
+            showWord: false,
+            showRadio: false,
+          },
         },
       },
-      {
-        type: 2,
-        answer: null,
-        url: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
-        controlComponent: {
-          showSubmitBtn: false,
-          showCorrectInfo: false,
-          showErrorInfo: false,
-        },
-      },
+      // {
+      //   type: 2,
+      //   answer: null,
+      //   url: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
+      //   controlComponent: {
+      //     showSubmitBtn: false,
+      //     showCorrectInfo: false,
+      //     showErrorInfo: false,
+      //   },
+      // },
     ];
     // console.warn('年级接口res=', res)
     if (code === 0) {
