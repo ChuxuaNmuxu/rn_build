@@ -1,3 +1,3 @@
-import problemOverviewReducer from './problemOverviewReducer';
+import reducer from './reducer';
 
-export default problemOverviewReducer;
+export default reducer;

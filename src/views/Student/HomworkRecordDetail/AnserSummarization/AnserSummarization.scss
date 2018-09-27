@@ -1,0 +1,125 @@
+.AnserSummarization {
+  background:#ffffff;
+  width:100%;
+  height: 72px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+  align-items: center;
+}
+
+.text {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  letter-spacing:0;
+  text-align:left;
+}
+
+.textMargin {
+  margin-left: 13px; 
+}
+
+.difficultyView {
+  margin-left: 72px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.difficultyDegree {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666666;
+  letter-spacing:0;
+  text-align:left;
+}
+
+.studentCorect {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  right: 0;
+}
+
+.leftTips {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+}
+
+.studentCorectText1 {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666666;
+  letter-spacing:0;
+  text-align:left;
+}
+
+.studentCorectText2 {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#30bf6c;
+  letter-spacing:0;
+  text-align:left;
+}
+
+.contentStyle {
+  background:#ffffff;
+  border-radius:8px;
+  width:421px;
+  height:259px;
+  
+}
+
+.popoverView {
+  // width: 100%;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  // background-color: aqua;
+}
+
+.popoverViewTips {
+  width: 100%;
+  flex: 2;
+  justify-content: center;
+  align-items: center;
+  // background-color: #30bf6c;
+}
+
+.popoverViewTipsText {
+  font-family:PingFangSC-Regular;
+  font-size:17px;
+  color:#666666;
+  letter-spacing:0;
+  text-align:left;
+}
+
+.btnView {
+  flex: 1;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  // background-color: #666666;
+  width: 100%;
+}
+
+.popoverBtn {
+  border:1px solid #30bf6c;
+  border-radius:50px;
+  width:170px;
+  height:66px;
+  justify-content: center;
+  align-items: center;
+}
+
+.popoverBtnText {
+  font-family:PingFangSC-Regular;
+  font-size:17px;
+  letter-spacing:0;
+  text-align:left;
+}

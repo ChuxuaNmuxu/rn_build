@@ -36,46 +36,27 @@ class AnswerCard extends Component {
   //   return null;
   // }
 
-  // 单选题答案发生改变的函数
-  handleRadioChange = (i) => {
+  // 单选题、多选、判断、对应答案发生改变的函数
+  handleToClickRadio = (i) => {
+    const { handleToClickRadio } = this.props;
     // console.log(111, '当前单选题选择的答案是', i);
     this.setState({
       answered: true,
     });
-  }
-
-  // 多选题答案发生改变的函数
-  handleMultiSelectChange = (obj) => {
-    // console.log(222, '当前多选题选择的答案是', obj);
-    this.setState({
-      answered: true,
-    });
-  }
-
-  // 判断题答案发生改变的函数
-  judgementChange = (i) => {
-    // console.log(333, '当前判断题选择的答案是', i);
-    this.setState({
-      answered: true,
-    });
-  }
-
-  // 对应题答案发生改变的函数
-  lineToChange = (obj) => {
-    // console.log(444, '当前对应题的答案是', obj);
-    this.setState({
-      answered: true,
-    });
+    // sb eslint
+    if (handleToClickRadio) handleToClickRadio(i);
   }
 
   // 难易程度选项发生改变的函数
   difficultLevelChange = (a) => {
     // console.log(555, '当前选择的难易程度是', a);
+    const { handleDifficultLevel, questions } = this.props;
+    handleDifficultLevel(a, questions.number);
   }
 
   // 不是很懂
   handleCheckboxChange = (a) => {
-    // console.log(666, '当前是否选择了不是很懂', a);
+    console.log(666, '当前是否选择了不是很懂', a);
   }
 
   // 选择图片
@@ -100,7 +81,7 @@ class AnswerCard extends Component {
             <RadioComponent
               options={optionCount}
               childStyle={styles.radioStyle}
-              handleRadioChange={this.handleRadioChange}
+              handleRadioChange={this.handleToClickRadio}
               radioAnswer={answer}
             />
             )
@@ -111,7 +92,7 @@ class AnswerCard extends Component {
               <CheckboxComponent
                 options={optionCount}
                 childStyle={styles.radioStyle}
-                handleMultiSelectChange={this.handleMultiSelectChange}
+                handleMultiSelectChange={this.handleToClickRadio}
                 multiSelectAnswer={answer}
               />
               )
@@ -121,7 +102,7 @@ class AnswerCard extends Component {
               questions.type === 3 && (
                 <RadioGroup
                   value={answer}
-                  onChange={this.judgementChange}
+                  onChange={this.handleToClickRadio}
                   style={styles.radio_wrapper}
                   iconWrapStyle={styles.radioStyle}
                   checkedIconWrapStyle={styles.checkedIconWrapStyle}
@@ -139,7 +120,7 @@ class AnswerCard extends Component {
                 <View style={styles.lineToStyle}>
                   <LineTo
                     optionSize={optionCount}
-                    onChange={this.lineToChange}
+                    onChange={this.handleToClickRadio}
                   />
                 </View>
               )
@@ -172,8 +153,9 @@ class AnswerCard extends Component {
             )
             }
           </View>
+          {/* 难易程度---不默认且必选，错题重做页面调用时不显示 */}
           {
-            (questions.type !== 10 && questions.type !== 11) && (
+            (questions.type !== 10 && questions.type !== 11) && !mistakeReform && (
               <View style={styles.objective_area}>
                 {/* 客观题上传解答过程区域 */}
                 <View style={[answered ? styles.photoCanClick_container : styles.photo_container]}>
@@ -184,13 +166,17 @@ class AnswerCard extends Component {
                     DoHomeworks.answerCard.uploadImgAnswerNotice
                   </I18nText>
                 </View>
-                <View style={styles.objectiveImg_container}>
-                  <ImagePicker
-                    styles={ImagePickerStyle}
-                    onChange={this.uploadImgChange}
-                    accept=".jpeg, .jpg, .png"
-                  />
-                </View>
+                {
+                  answered && (
+                  <View style={styles.objectiveImg_container}>
+                    <ImagePicker
+                      styles={ImagePickerStyle}
+                      onChange={this.uploadImgChange}
+                      accept=".jpeg, .jpg, .png"
+                    />
+                  </View>
+                  )
+                }
               </View>
             )
           }
@@ -221,13 +207,18 @@ class AnswerCard extends Component {
   }
 }
 
-AnswerCard.defaultProps = {
-  mistakeReform: false, // 错题重做页面调用时用来标识调用方的
-};
-
 AnswerCard.propTypes = {
   questions: PropTypes.object.isRequired,
   mistakeReform: PropTypes.bool, // 错题重做页面调用时用来标识调用方的
+  handleDifficultLevel: PropTypes.func, // 难易程度发生改变的函数
+  handleToClickRadio: PropTypes.func, // 单选题的回调函数
 };
+
+AnswerCard.defaultProps = {
+  mistakeReform: false,
+  handleToClickRadio: () => {},
+  handleDifficultLevel: () => {},
+};
+
 
 export default AnswerCard;

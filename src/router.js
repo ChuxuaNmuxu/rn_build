@@ -32,8 +32,9 @@ import ProblemOverview from './views/Student/ProblemOverview';
 import ProblemListOverview from './views/Student/ProblemListOverview';
 import MistakeReform from './views/Student/MistakeReform';
 import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
+// 文件改名字失败，不改了。这两个组件时同一个的其实。考试详情和练习详情。
 import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
-import ExamRecordDetail from './views/Student/ExamRecordDetail';
+// import ExamRecordDetail from './views/Student/ExamRecordDetail';
 import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
 
 const RouteMap = props => (
@@ -94,10 +95,12 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
+            initial
           >
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
+              initial
             />
           </Stack>
           {/* 错题本 */}
@@ -146,20 +149,20 @@ const RouteMap = props => (
       <Stack
         key="StudentAll"
       >
-        {/* 做作业 */}
-        <Scene key="DoHomework" component={DoHomework} hideNavBar initial />
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
+        {/* 做作业 */}
+        <Scene key="DoHomework" component={DoHomework} hideNavBar />
         {/* 作业检查 */}
         <Scene key="ReviewHomework" component={ReviewHomework} hideNavBar />
         {/* 错题本列表页 */}
         <Scene key="ProblemListOverview" component={ProblemListOverview} hideNavBar />
         {/* 错题重做 */}
-        <Scene key="MistakeReform" component={MistakeReform} hideNavBar />
+        <Scene key="MistakeReform" component={MistakeReform} hideNavBar initial />
         {/* 作业记录详情页 */}
         <Scene key="HomworkRecordDetail" component={HomworkRecordDetail} hideNavBar />
         {/* 考试记录详情页 */}
-        <Scene key="ExamRecordDetail" component={ExamRecordDetail} hideNavBar />
+        <Scene key="ExamRecordDetail" component={HomworkRecordDetail} hideNavBar />
         {/* 作业批阅 */}
         <Scene key="HomeworkCorrecting" component={HomeworkCorrecting} hideNavBar />
         {/* 错题明细 */}
@@ -172,6 +175,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="DemoStack"
+        // initial
       >
         <Scene
           key="Demo"
@@ -181,6 +185,7 @@ const RouteMap = props => (
               <Text style={styles.demo_renderTitle_title}>自定义标题</Text>
             </View>
           )}
+          // initial
           // renderLeftButton={(
           //   <TouchableOpacity onPress={() => console.log('左边自定义')}>
           //     <View style={styles.demo_renderLeftButton_box}>

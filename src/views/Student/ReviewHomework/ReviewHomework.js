@@ -23,14 +23,19 @@ class ReviewHomework extends Component {
     fetchdoHomeworkAction(null, 'REQUEST');
   }
 
-  // 提交作业
+  // 提交作业---回到首页
   commitHomework = () => {
-
+    Actions.HomeworkTask();
   }
 
-  // 保存草稿
+  // 保存草稿---回到首页
   draftHomework = () => {
+    Actions.HomeworkTask();
+  }
 
+  // 点击未作答热区进入做作业页面--此时做作业页面展示可查看题目序号的图标并只出现未作答的题目
+  goUnAnswered = () => {
+    Actions.DoHomework();
   }
 
   render() {
@@ -73,15 +78,13 @@ class ReviewHomework extends Component {
                 <Text style={styles.questionNum}>5题</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.footer_left}>
+            <TouchableOpacity style={styles.footer_left} onPress={this.goUnAnswered}>
               <CustomButton name="yuanjiaojuxing" style={styles.unAnswer_btn} />
               <I18nText style={styles.answer_info}>
                 ReviewHomework.footer.notAnswered
               </I18nText>
-              <TouchableOpacity>
-                <Text style={styles.questionNum}>3题</Text>
-              </TouchableOpacity>
-            </View>
+              <Text style={styles.questionNum}>3题</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.footer_right}>
             <TouchableOpacity style={[styles.btn, styles.draftBtn]} onPress={this.draftHomework}>
