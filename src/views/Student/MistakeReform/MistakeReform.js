@@ -18,6 +18,7 @@ import I18nText from '../../../components/I18nText';
 import * as actions from '../../../actions/mistakeReformAction';
 import CIcon from '../../../components/Icon';
 import AnswerCard from '../DoHomework/Components/AnswerCard';
+// import WrongReason from '../../../components/WrongReason';
 import styles from './MistakeReform.scss';
 
 class MistakeReform extends Component {
