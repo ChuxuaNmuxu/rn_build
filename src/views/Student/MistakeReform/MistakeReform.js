@@ -18,7 +18,7 @@ import I18nText from '../../../components/I18nText';
 import * as actions from '../../../actions/mistakeReformAction';
 import CIcon from '../../../components/Icon';
 import AnswerCard from '../DoHomework/Components/AnswerCard';
-// import WrongReason from '../../../components/WrongReason';
+import WrongReason from '../../../components/WrongReason';
 import styles from './MistakeReform.scss';
 
 class MistakeReform extends Component {
@@ -44,7 +44,7 @@ class MistakeReform extends Component {
   // 导航条右侧是否有 index
   haveIndex = (index) => {
     const { questions } = this.props;
-    if (questions.length > 0) {
+    if (questions.length > 1) {
       return (
         <View style={styles.head_index_view}>
           <Text style={styles.head_index_text}>{index + 1}/5</Text>
@@ -66,7 +66,7 @@ class MistakeReform extends Component {
   }
 
   // 提交答案的按钮
-  submitBtn = ({ bol, index }) => {
+  showSubmitBtn = ({ bol, index }) => {
     const {
       actions: {
         submitAnswerAction,
@@ -90,9 +90,9 @@ class MistakeReform extends Component {
     return null;
   }
 
-  // 提交返回的答案
-  correctInfo = ({ bol, index }) => {
-    if (bol) {
+  // 提交正确答案信息
+  showCorrectInfo = ({ bol, index }) => {
+    if (bol.showAll) {
       return (
         <View style={styles.submit_container}>
           <View style={styles.result_word}>
@@ -131,8 +131,10 @@ class MistakeReform extends Component {
     return null;
   }
 
-  errorInfo = ({ bol, index }) => {
-    if (bol) {
+  // 提交返回的错误答案信息
+  showErrorInfo = ({ bol, index }) => {
+    const { showWrongInfoRadioAction } = this.props.actions;
+    if (bol.showAll) {
       return (
         <View style={styles.submit_container}>
           <View style={styles.result_word}>
@@ -145,26 +147,36 @@ class MistakeReform extends Component {
               </Text>
             </View>
             <View style={styles.result_word_child}>
-              <Text style={[styles.result_difficult]}>
-              你可以对该题进行
-                {/* <TouchableOpacity
-                onPress={() => {
-                  console.log('错误原因分析!');
-                }}
-              > */}
-                <Text
-                  style={[styles.result_difficult, styles.result_wrong]}
-                  onPress={() => {
-                    console.log('错误原因分析!');
-                  }}
-                >
-                错误原因分析
-                </Text>
-                {/* </TouchableOpacity> */}
-                哦！
-              </Text>
+              {
+                bol.showWord ? (
+                  <Text style={[styles.result_difficult]}>
+                      你可以对该题进行
+                    <Text
+                      style={[styles.result_difficult, styles.result_wrong]}
+                      onPress={() => {
+                        showWrongInfoRadioAction({ index });
+                      }}
+                    >
+                      错误原因分析
+                    </Text>
+                    哦！
+                  </Text>
+                ) : null
+                }
             </View>
           </View>
+        </View>
+      );
+    }
+    return null;
+  }
+
+  showErrorRadio = ({ bol, index }) => {
+    if (bol.showRadio) {
+      return (
+        <View>
+          <View style={styles.space} />
+          <WrongReason />
         </View>
       );
     }
@@ -231,11 +243,13 @@ class MistakeReform extends Component {
                       />
                     </View>
                     {/* 提交按钮 */}
-                    { this.submitBtn({ bol: item.controlComponent.showSubmitBtn, index: i }) }
+                    { this.showSubmitBtn({ bol: item.controlComponent.showSubmitBtn, index: i }) }
                     {/* 正确答案信息 */}
-                    { this.correctInfo({ bol: item.controlComponent.showCorrectInfo, index: i }) }
+                    { this.showCorrectInfo({ bol: item.controlComponent.showCorrectInfo, index: i }) }
                     {/* 错误答案信息 */}
-                    { this.errorInfo({ bol: item.controlComponent.showErrorInfo, index: i }) }
+                    { this.showErrorInfo({ bol: item.controlComponent.showErrorInfo, index: i }) }
+                    {/* 错误信息的总结(radio) */}
+                    { this.showErrorRadio({ bol: item.controlComponent.showErrorInfo, index: i }) }
                   </View>
                 ))
             }
