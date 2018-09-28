@@ -5,3 +5,6 @@
 ![图片](./img/generatingSignature.png)
 
 [剩下步骤请看官方教程](https://reactnative.cn/docs/signed-apk-android/)
+
+**注意：**
+默认会使用全局配置的 gradle.properties 文件，如果全局全局配置和当前项目密钥不一致即使当前项目配置 gradle.properties 文件也会报错。
