@@ -1,3 +1,3 @@
-import RecordDetailReducer from './recordDetailReducer';
+import RecordDetailReducer from './reducer';
 
 export default RecordDetailReducer;

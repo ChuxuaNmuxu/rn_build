@@ -11,6 +11,10 @@ export default function* mistakeReformSaga() {
   yield takeLatest('FETCH_MISTAKE_REQUEST', enhanceSaga(fetchDataSaga));
   // 提交答案，判断对错
   yield takeLatest('MISTAKE_SUBMIT_ANSWER_REQUEST', enhanceSaga(submitAnswerSaga));
+  // 提交错误分析
+  yield takeLatest('MISTAKE_SUBMIT_ANSWER_ERROR_SUBMIT_RADIO_REQUEST', enhanceSaga(submitRadioSaga));
+  // 确认移除错题
+  yield takeLatest('MISTAKE_SUBMIT_ANSWER_CORRECT_CONFIRM_REQUEST', enhanceSaga(confirmDeleteSaga));
 }
 
 function* fetchDataSaga(action) {
@@ -20,28 +24,50 @@ function* fetchDataSaga(action) {
     // const fetch = (params) => api.get(url, params);
     // const res = yield call(fetch);
     // const { code, data: { items } } = res;
-    // yield call(delay, 100);// 模拟异步 1秒延迟
+    // yield call(delay, 10000);// 模拟异步 1秒延迟
     // 模拟数据
     const code = 0;
     const result = [
+      {
+        type: 11,
+        answer: null,
+        url: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
+        controlComponent: {
+          showSubmitBtn: false,
+          showCorrectInfo: {
+            showAll: false,
+            showConfirm: false,
+          },
+          showErrorInfo: {
+            showAll: false,
+            showWord: false,
+            showRadio: false,
+          },
+          showImageInfo: {
+            urlSource: {},
+            showAll: false,
+          },
+        },
+      },
       {
         type: 1,
         answer: null,
         url: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
         controlComponent: {
           showSubmitBtn: false,
-          showCorrectInfo: false,
-          showErrorInfo: false,
-        },
-      },
-      {
-        type: 2,
-        answer: null,
-        url: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
-        controlComponent: {
-          showSubmitBtn: false,
-          showCorrectInfo: false,
-          showErrorInfo: false,
+          showCorrectInfo: {
+            showAll: false,
+            showConfirm: false,
+          },
+          showErrorInfo: {
+            showAll: false,
+            showWord: false,
+            showRadio: false,
+          },
+          showImageInfo: {
+            urlSource: {},
+            showAll: false,
+          },
         },
       },
     ];
@@ -85,5 +111,50 @@ function* submitAnswerSaga(action) {
     yield put(actions.submitAnswerAction(e, 'ERROR'));
   } finally {
     yield put(actions.submitAnswerAction(null, 'FINISH'));
+  }
+}
+
+function* submitRadioSaga(action) {
+  try {
+    const { index, value } = action.payload;
+    // console.log(action);
+    // const url = '/analysis/grade/gradereport';
+    // const fetch = (params) => api.get(url, params);
+    // const res = yield call(fetch);
+    // const { code, data: { items } } = res;
+    // yield call(delay, 100);// 模拟异步 1秒延迟
+    // 模拟数据
+    const code = 0;
+    // console.warn('年级接口res=', res)
+    if (code === 0) {
+      yield put(actions.submitRadioAction({ value, index }, 'SUCCESS'));
+    } else {
+      yield put(actions.submitRadioAction(code, 'ERROR'));
+    }
+  } catch (e) {
+    yield put(actions.submitRadioAction(e, 'ERROR'));
+  }
+}
+function* confirmDeleteSaga(action) {
+  try {
+    const { index, callback } = action.payload;
+    // console.log(action);
+    // const url = '/analysis/grade/gradereport';
+    // const fetch = (params) => api.get(url, params);
+    // const res = yield call(fetch);
+    // const { code, data: { items } } = res;
+    // yield call(delay, 100);// 模拟异步 1秒延迟
+    // 模拟数据
+    const code = 0;
+    // console.warn('年级接口res=', res)
+    if (code === 0) {
+      yield put(actions.correctConfirmAction({ index }, 'SUCCESS'));
+      // 成功后的回调
+      callback();
+    } else {
+      yield put(actions.correctConfirmAction(code, 'ERROR'));
+    }
+  } catch (e) {
+    yield put(actions.correctConfirmAction(e, 'ERROR'));
   }
 }

@@ -4,6 +4,9 @@
  * @param {*} initialState
  * @param {*} handlers
  */
+/**
+ * https://github.com/mweststrate/immer
+ */
 import immer from 'immer';
 
 function createReducer(initialState, handlers) {
@@ -11,6 +14,7 @@ function createReducer(initialState, handlers) {
   return function reducer(state = initialState, action) {
     if (handlers.hasOwnProperty(action.type)) {
       return immer(state, (draft) => {
+        // const newstate = lodash.cloneDeep(state)
         // "ACTION_TYPE": function ===> function (state, action)
         // handlers[action.type] === function
         handlers[action.type](draft, action);
