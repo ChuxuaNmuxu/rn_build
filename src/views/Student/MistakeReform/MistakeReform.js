@@ -190,7 +190,7 @@ class MistakeReform extends Component {
 
   // 提交返回的错误答案信息
   showErrorInfo = ({ bol, index }) => {
-    const { showWrongInfoRadioAction } = this.props.actions;
+    const { actions: { showWrongInfoRadioAction } } = this.props;
     if (bol.showAll) {
       return (
         <View style={styles.submit_container}>
@@ -230,7 +230,7 @@ class MistakeReform extends Component {
 
   // 错误信息的单选
   showErrorRadio = ({ bol, index }) => {
-    const { submitRadioAction } = this.props.actions;
+    const { actions: { submitRadioAction } } = this.props;
     if (bol.showRadio) {
       return (
         <View>
@@ -244,6 +244,58 @@ class MistakeReform extends Component {
       );
     }
     return null;
+  }
+
+  // 上传的图片
+  showImage = ({ item, index }) => {
+    const {
+      showImageInfo: {
+        urlSource,
+      },
+    } = item.controlComponent;
+    if (urlSource) {
+      const {
+        uri = null,
+        // width = null,
+        // height = null,
+      } = urlSource;
+      if (uri && uri.length > 0) {
+        return (
+          <View style={styles.updateImage_container}>
+            <View style={styles.question_title}>
+              <I18nText style={styles.question_title_txt}>
+            DoHomeworks.answerCard.toAnswer
+              </I18nText>
+            </View>
+            <View style={styles.image_container}>
+              <Image
+                source={{ uri }}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </View>
+          </View>
+        );
+      }
+    }
+    return (
+      <View>
+        {/* 0:综合题 1:单选题 2:多选题 3:判断题 4:对应题, 10:填空题 11:主观题 */}
+        <AnswerCard
+          questions={item}
+          mistakeReform
+          handleToClickRadio={this.handleToClickRadio}
+          updateImage={this.updateImage}
+        />
+      </View>
+    );
+  }
+
+  // 上传图片的回调函数
+  updateImage = (source) => {
+    const { actions: { updateImageAction, selectAnswerAction } } = this.props;
+    const { index } = this.state;
+    updateImageAction({ index, urlSource: source });
+    selectAnswerAction({ index });
   }
 
   render() {
@@ -296,15 +348,10 @@ class MistakeReform extends Component {
                       </View>
                     </View>
                     <View style={styles.space} />
+                    {/* 主观题上传图片后的图片显示,如果有图片,就显示图片，如果没有就显示题型 */}
+                    {this.showImage({ item, index })}
                     {/* 答案 */}
-                    <View>
-                      {/* 0:综合题 1:单选题 2:多选题 3:判断题 4:对应题, 10:填空题 11:主观题 */}
-                      <AnswerCard
-                        questions={item}
-                        mistakeReform
-                        handleToClickRadio={this.handleToClickRadio}
-                      />
-                    </View>
+                    <View />
                     {/* 提交按钮 */}
                     { this.showSubmitBtn({ bol: item.controlComponent.showSubmitBtn, index: i }) }
                     {/* 正确答案信息 */}

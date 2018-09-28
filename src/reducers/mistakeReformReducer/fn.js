@@ -7,8 +7,8 @@ export const fetchDataSuccess = (state, action) => {
 export const selectAnswer = (state, action) => {
   const { index } = action.payload;
   // const newState = immer(state, (draft) => {
-  const { showCorrectInfo, showErrorInfo } = state.questions[index].controlComponent;
-  if (!showCorrectInfo.showAll && !showErrorInfo.showAll) {
+  const { showCorrectInfo, showErrorInfo, showImageInfo } = state.questions[index].controlComponent;
+  if (!showCorrectInfo.showAll && !showErrorInfo.showAll && !showImageInfo.showAll) {
     state.questions[index].controlComponent.showSubmitBtn = true;
   } else {
     state.questions[index].controlComponent.showSubmitBtn = false;
@@ -37,4 +37,10 @@ export const showAnswerErrorRadio = (state, action) => {
   state.questions[index].controlComponent.showErrorInfo.showWord = false;
   // 显示出下面的单选radio
   state.questions[index].controlComponent.showErrorInfo.showRadio = true;
+};
+
+export const updateImage = (state, action) => {
+  const { index, urlSource } = action.payload;
+  // 把那个可点击的隐藏掉
+  state.questions[index].controlComponent.showImageInfo.urlSource = urlSource;
 };
