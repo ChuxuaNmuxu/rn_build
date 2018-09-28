@@ -1,14 +1,12 @@
 export const changeDropPositionReducer = (state, action) => {
-  const newState = Object.assign({}, state, {
-    position: action.payload,
-  });
-  return newState;
+  state.position = action.payload;
 };
 
 export const isGetDropListenerRangeReducer = (state, action) => {
-  state.homeworkTask.isGetDropListenerRange = action.payload;
+  state.isGetDropListenerRange = action.payload;
 };
 
 export const GetDropListenerReducer = (state, action) => {
-  state.homeworkTask.listenerRangeList = action.payload;
+  console.log(10, state);
+  state.listenerRangeList = [action.payload];
 };

@@ -11,8 +11,7 @@ const initial = {
     x: -500,
     y: 0,
   },
-  dragRef: null,
-  isGetDropListenerRange: false,
+  isGetDropListenerRange: true,
   listenerRangeList: [],
 };
 

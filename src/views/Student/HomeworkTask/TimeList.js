@@ -1,23 +1,31 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { View, FlatList } from 'react-native';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TimeItem from './TimeItem';
 import styles from './timeList.scss';
 import { createHalfHourPeriod, currentTimeToPeriod } from '../../../utils/common';
-import { ChangeDropPosition } from '../../../actions/homeworkTask';
+import { ChangeDropPosition, IsGetDropListenerRange, GetDropListenerRange } from '../../../actions/homeworkTask';
 
-@connect(null, dispatch => ({
+@connect(({
+  homeworkTaskReducer: {
+    isGetDropListenerRange,
+  },
+}) => ({
+  isGetDropListenerRange,
+}), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
+  onIsGetDropListenerRange: bindActionCreators(IsGetDropListenerRange, dispatch),
+  onGetDropListenerRange: bindActionCreators(GetDropListenerRange, dispatch),
 }))
-class TaskList extends PureComponent {
+class TaskList extends Component {
   constructor(props) {
     super(props);
     this.flatList = null;
     this.periods = createHalfHourPeriod(); // 生成半小时时间段数组
     this.currentPeriodIndex = currentTimeToPeriod();
     this.state = {
-      scrollEnabled: true,
     };
   }
 
@@ -39,6 +47,10 @@ class TaskList extends PureComponent {
     // });
   }
 
+  onMomentumScrollEnd = () => {
+    const { onIsGetDropListenerRange } = this.props;
+    onIsGetDropListenerRange(true);
+  }
 
   getItemLayout = (data, index) => {
     const length = 142;
@@ -49,30 +61,27 @@ class TaskList extends PureComponent {
     };
   }
 
-  changeScrollEnabled = (bool) => {
-    console.log(47, bool);
-    // this.setState({
-    //   scrollEnabled: bool,
-    // });
-  }
-
   keyExtractor = item => item.data.toString()
 
   renderItem = (data) => {
-    const { onChangeDropPosition } = this.props;
+    const {
+      onChangeDropPosition,
+      isGetDropListenerRange,
+      onGetDropListenerRange,
+    } = this.props;
     return (
       <TimeItem
         data={data}
         onChangeDropPosition={onChangeDropPosition}
+        isGetDropListenerRange={isGetDropListenerRange}
+        onGetDropListenerRange={onGetDropListenerRange}
       />
     );
   }
 
   render() {
-    const { scrollEnabled } = this.state;
     const data = this.periods.map(v => ({
       data: v,
-      changeScrollEnabled: this.changeScrollEnabled,
       currentPeriod: this.periods[this.currentPeriodIndex],
     }));
     return (
@@ -85,13 +94,25 @@ class TaskList extends PureComponent {
           keyExtractor={this.keyExtractor}
           getItemLayout={this.getItemLayout}
           initialNumToRender={this.periods.length}
-          scrollEnabled={scrollEnabled}
-
-          onMomentumScrollEnd={e => console.log(90, e)}
+          onMomentumScrollEnd={this.onMomentumScrollEnd}
         />
       </View>
     );
   }
 }
+
+TaskList.propTypes = {
+  onChangeDropPosition: PropTypes.func,
+  isGetDropListenerRange: PropTypes.bool,
+  onIsGetDropListenerRange: PropTypes.func,
+  onGetDropListenerRange: PropTypes.func,
+};
+
+TaskList.defaultProps = {
+  onChangeDropPosition: () => {},
+  isGetDropListenerRange: false,
+  onIsGetDropListenerRange: () => {},
+  onGetDropListenerRange: () => {},
+};
 
 export default TaskList;

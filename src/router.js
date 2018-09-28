@@ -95,12 +95,10 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
-            initial
           >
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
-              initial
             />
           </Stack>
           {/* 错题本 */}

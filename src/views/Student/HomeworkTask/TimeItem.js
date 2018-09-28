@@ -4,6 +4,7 @@ import {
   Text,
   TouchableNativeFeedback,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import styles from './timeItem.scss';
 import PlannedTask from './PlannedTask';
 
@@ -14,16 +15,21 @@ class TimeItem extends Component {
     this.timeRef = null;
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.timeRef.measure((x, y, width, height, pageX, pageY) => {
-        console.log(34, pageX, pageY);
-      });
-    });
+  componentDidUpdate(nextProps) {
+    if (nextProps.isGetDropListenerRange) {
+      this.getTimeItemOffset();
+    }
   }
 
   onPress = () => {
     console.log(19, this.timeRef);
+  }
+
+  getTimeItemOffset = () => {
+    const { onGetDropListenerRange } = this.props;
+    this.timeRef.measure((x, y, width, height, pageX, pageY) => {
+      onGetDropListenerRange({ x: pageX, y: pageY });
+    });
   }
 
   render() {
@@ -61,5 +67,13 @@ class TimeItem extends Component {
     );
   }
 }
+
+TimeItem.propTypes = {
+  onGetDropListenerRange: PropTypes.func,
+};
+
+TimeItem.defaultProps = {
+  onGetDropListenerRange: () => {},
+};
 
 export default TimeItem;

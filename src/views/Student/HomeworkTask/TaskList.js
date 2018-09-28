@@ -8,17 +8,24 @@ import { merge } from 'ramda';
 import PropTypes from 'prop-types';
 import TaskItem from './TaskItem';
 import styles from './taskList.scss';
-import { ChangeDropPosition } from '../../../actions/homeworkTask';
+import { ChangeDropPosition, IsGetDropListenerRange } from '../../../actions/homeworkTask';
 
-@connect(null, dispatch => ({
+@connect(({
+  homeworkTaskReducer: {
+    isGetDropListenerRange,
+  },
+}) => ({
+  isGetDropListenerRange,
+}), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
+  onIsGetDropListenerRange: bindActionCreators(IsGetDropListenerRange, dispatch),
 }))
 class TaskList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       flatlistWidth: 0,
-      scrollEnabled: true,
+      // scrollEnabled: true,
     };
     this.flatList = null;
   }
@@ -67,21 +74,20 @@ class TaskList extends PureComponent {
   // key
   keyExtractor = item => item.data.toString()
 
-  // 更改滑动状态
-  changeScrollEnabled = (bool) => {
-    this.setState({
-      scrollEnabled: bool,
-    });
-  }
-
   // 列表每项
   renderItem = (item) => {
-    const { onChangeDropPosition } = this.props;
+    const {
+      onChangeDropPosition,
+      onIsGetDropListenerRange,
+      isGetDropListenerRange,
+    } = this.props;
     return (
       <TaskItem
         data={item}
         onPress={this.onPress}
         onChangeDropPosition={onChangeDropPosition}
+        onIsGetDropListenerRange={onIsGetDropListenerRange}
+        isGetDropListenerRange={isGetDropListenerRange}
       />
     );
   }
@@ -100,10 +106,8 @@ class TaskList extends PureComponent {
 
 
   render() {
-    const { scrollEnabled } = this.state;
     const data = Array(20).fill({}).map((v, i) => (merge(v, {
       data: i,
-      scrollEnabled,
     })));
 
     return (
@@ -122,7 +126,6 @@ class TaskList extends PureComponent {
           // initialScrollIndex={10}
           // initialNumToRender={parseInt(data.length / 2) + 4}
           ListEmptyComponent={this.renderListEmpty}
-          scrollEnabled={scrollEnabled}
         />
       </View>
     );
@@ -131,10 +134,14 @@ class TaskList extends PureComponent {
 
 TaskList.defaultProps = {
   onChangeDropPosition: () => {},
+  onIsGetDropListenerRange: () => {},
+  isGetDropListenerRange: false,
 };
 
 TaskList.propTypes = {
   onChangeDropPosition: PropTypes.func,
+  onIsGetDropListenerRange: PropTypes.func,
+  isGetDropListenerRange: PropTypes.bool,
 };
 
 export default TaskList;
