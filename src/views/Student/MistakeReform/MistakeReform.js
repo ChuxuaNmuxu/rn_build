@@ -12,6 +12,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-native-swiper';
+import Modal, { ModalApi } from '../../../components/Modal';
 import { getQuestionTypeName } from '../../../utils/common';
 // import QuestionCard from '../DoHomework/Components/QuestionCard';
 import I18nText from '../../../components/I18nText';
@@ -65,7 +66,7 @@ class MistakeReform extends Component {
     });
   }
 
-  // 提交答案的按钮
+  // 显示提交答案的按钮
   showSubmitBtn = ({ bol, index }) => {
     const {
       actions: {
@@ -90,11 +91,12 @@ class MistakeReform extends Component {
     return null;
   }
 
-  // 提交正确答案信息
-  showCorrectInfo = ({ bol, index }) => {
+  // 显示提交正确答案信息
+  showCorrectInfo = ({ bol }) => {
     if (bol.showAll) {
       return (
         <View style={styles.submit_container}>
+          <Modal />
           <View style={styles.result_word}>
             <View style={styles.result_word_child}>
               <Text style={[styles.result_icon, styles.result_icon_right]}>
@@ -115,7 +117,7 @@ class MistakeReform extends Component {
                 <Text
                   style={[styles.result_difficult, styles.result_right]}
                   onPress={() => {
-                    console.log('移除错题本!');
+                    this.showConfirmModal();
                   }}
                 >
                       移除错题本
@@ -130,6 +132,61 @@ class MistakeReform extends Component {
     }
     return null;
   }
+
+  leftFn = () => {
+    ModalApi.onClose();
+  }
+
+  rightFn = () => {
+    const { actions: { correctConfirmAction } } = this.props;
+    const { index } = this.state;
+    this.confirm();
+    correctConfirmAction({ index, callback: this.pressT }, 'REQUEST');
+  }
+
+  // 自动关闭tips
+  pressT = () => {
+    const data = {
+      tipsContent: this.modalContent('错题已移除错题本！'),
+      bottomTips: '自动关闭',
+    };
+    ModalApi.onOppen('TipsModal', data);
+  }
+
+  // 确认按钮后触发的 tips (打酱油的)
+  confirm = () => {
+    const data = {
+      // tipsContent: this.svgContent(),
+      svgName: 'finger',
+      animationType: 'loading',
+      bottomTips: '正在加载...',
+      maskClosable: false,
+    };
+    ModalApi.onOppen('AnimationsModal', data);
+  }
+
+  modalContent = tip => (
+    <View style={styles.modalContent}>
+      <Text style={styles.modalContentText}>
+        {tip}
+      </Text>
+    </View>
+  )
+
+  // demo的函数名乱搞的，写代码的大佬别乱copy
+  showConfirmModal = () => {
+    const data = {
+      lCallbakFn: this.leftFn,
+      rCallbakFn: this.rightFn,
+      activeBtn: 'R',
+      rightBtnText: '确定',
+      leftBtnText: '取消',
+      content: this.modalContent('移除后将不可恢复，请确定是否移除错题本'),
+      closeBtn: true,
+    };
+    ModalApi.onOppen('ButtomModal', data);
+  }
+
 
   // 提交返回的错误答案信息
   showErrorInfo = ({ bol, index }) => {
@@ -171,12 +228,18 @@ class MistakeReform extends Component {
     return null;
   }
 
+  // 错误信息的单选
   showErrorRadio = ({ bol, index }) => {
+    const { submitRadioAction } = this.props.actions;
     if (bol.showRadio) {
       return (
         <View>
           <View style={styles.space} />
-          <WrongReason />
+          <WrongReason
+            onChange={(value) => {
+              submitRadioAction({ index, value }, 'REQUEST');
+            }}
+          />
         </View>
       );
     }

@@ -12,7 +12,7 @@ const initState = {
       e: [
         {
           f: {
-            g: '',
+            g: '变化前',
           },
         },
       ],
@@ -26,7 +26,7 @@ const handle = {
   MISTAKE_SELECT_ANSWER: fn.selectAnswer,
   MISTAKE_SUBMIT_ANSWER_CORRECT: fn.answerCorrect,
   MISTAKE_SUBMIT_ANSWER_ERROR: fn.answerError,
-  MISTAKE_SUBMIT_ANSWER_ERROR_RADIO: fn.showAnswerErrorRadio,
+  MISTAKE_SUBMIT_ANSWER_ERROR_SHOW_RADIO: fn.showAnswerErrorRadio,
 };
 
 const problemOverviewReducer = createReducer(initState, handle);
