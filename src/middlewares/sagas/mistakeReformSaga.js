@@ -29,6 +29,27 @@ function* fetchDataSaga(action) {
     const code = 0;
     const result = [
       {
+        type: 11,
+        answer: null,
+        url: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
+        controlComponent: {
+          showSubmitBtn: false,
+          showCorrectInfo: {
+            showAll: false,
+            showConfirm: false,
+          },
+          showErrorInfo: {
+            showAll: false,
+            showWord: false,
+            showRadio: false,
+          },
+          showImageInfo: {
+            urlSource: {},
+            showAll: false,
+          },
+        },
+      },
+      {
         type: 1,
         answer: null,
         url: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
@@ -43,22 +64,9 @@ function* fetchDataSaga(action) {
             showWord: false,
             showRadio: false,
           },
-        },
-      },
-      {
-        type: 2,
-        answer: null,
-        url: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
-        controlComponent: {
-          showSubmitBtn: false,
-          showCorrectInfo: {
+          showImageInfo: {
+            urlSource: {},
             showAll: false,
-            showConfirm: false,
-          },
-          showErrorInfo: {
-            showAll: false,
-            showWord: false,
-            showRadio: false,
           },
         },
       },

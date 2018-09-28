@@ -18,3 +18,4 @@ export const correctConfirmAction = actionCreator(
   types.MISTAKE_SUBMIT_ANSWER_CORRECT_CONFIRM,
   '错题重做-点击正确答案的提交确认框',
 );
+export const updateImageAction = actionCreator(types.MISTAKE_UPLOAD_IMAGE, '错题重做-点击主观题上传图片，控制提交按钮');

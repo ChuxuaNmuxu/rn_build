@@ -27,6 +27,7 @@ const handle = {
   MISTAKE_SUBMIT_ANSWER_CORRECT: fn.answerCorrect,
   MISTAKE_SUBMIT_ANSWER_ERROR: fn.answerError,
   MISTAKE_SUBMIT_ANSWER_ERROR_SHOW_RADIO: fn.showAnswerErrorRadio,
+  MISTAKE_UPLOAD_IMAGE: fn.updateImage,
 };
 
 const problemOverviewReducer = createReducer(initState, handle);
