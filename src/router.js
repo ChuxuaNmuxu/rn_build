@@ -58,7 +58,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        initial
+        // initial
       >
         <Tabs
           key="StudentTabs"
@@ -95,12 +95,12 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
-            initial
+            // initial
           >
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
-              initial
+              // initial
             />
           </Stack>
           {/* 错题本 */}
@@ -148,6 +148,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
+        initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />

@@ -154,3 +154,16 @@
 .result_wrong {
   color: #fa5656;
 } 
+
+.modalContent {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContentText {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666666;
+  text-align:center;
+}
