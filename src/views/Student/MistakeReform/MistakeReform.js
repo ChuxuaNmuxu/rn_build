@@ -140,7 +140,7 @@ class MistakeReform extends Component {
   rightFn = () => {
     const { actions: { correctConfirmAction } } = this.props;
     const { index } = this.state;
-    this.confirm();
+    this.showLoading();
     correctConfirmAction({ index, callback: this.pressT }, 'REQUEST');
   }
 
@@ -154,7 +154,7 @@ class MistakeReform extends Component {
   }
 
   // 确认按钮后触发的 tips (打酱油的)
-  confirm = () => {
+  showLoading = () => {
     const data = {
       // tipsContent: this.svgContent(),
       svgName: 'finger',
