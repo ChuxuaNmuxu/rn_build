@@ -12,33 +12,20 @@ class TimeItem extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.timeRef = null;
-  }
-
-  componentDidUpdate(nextProps) {
-    if (nextProps.isGetDropListenerRange) {
-      this.getTimeItemOffset();
-    }
   }
 
   onPress = () => {
-    console.log(19, this.timeRef);
-  }
-
-  getTimeItemOffset = () => {
-    const { onGetDropListenerRange } = this.props;
-    this.timeRef.measure((x, y, width, height, pageX, pageY) => {
-      onGetDropListenerRange({ x: pageX, y: pageY });
-    });
+    console.log(19, '去做作业');
   }
 
   render() {
-    const { data } = this.props;
+    const { data, getTimeItemRef } = this.props;
+
     return (
       <TouchableNativeFeedback onPress={this.onPress}>
         <View
           style={styles.time_wrap}
-          ref={(ref) => { this.timeRef = ref; }}
+          ref={getTimeItemRef}
         >
           <View style={styles.time_content} />
           <View style={[styles.time_box, data.item.data === data.item.currentPeriod && styles.time_box_checked]}>

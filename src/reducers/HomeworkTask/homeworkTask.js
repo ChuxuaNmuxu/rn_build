@@ -2,7 +2,7 @@ import createReducer from '../createReducer';
 import {
   CHANGE_DROP_POSITION,
   GET_DROP_LISTENER_RANGE,
-  IS_GET_DROP_LISTENER_RANGE,
+  FIRST_GET_DROP_LISTENER_RANGE,
 } from '../../constants/actionType';
 import * as fn from './fn';
 
@@ -11,13 +11,13 @@ const initial = {
     x: -500,
     y: 0,
   },
-  isGetDropListenerRange: true,
+  isFirstGetDropListenerRange: true,
   listenerRangeList: [],
 };
 
 const handle = {
   [CHANGE_DROP_POSITION]: fn.changeDropPositionReducer,
-  [IS_GET_DROP_LISTENER_RANGE]: fn.isGetDropListenerRangeReducer,
+  [FIRST_GET_DROP_LISTENER_RANGE]: fn.firstGetDropListenerRangeReducer,
   [GET_DROP_LISTENER_RANGE]: fn.getDropListenerReducer,
 };
 

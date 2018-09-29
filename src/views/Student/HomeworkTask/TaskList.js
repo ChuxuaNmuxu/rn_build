@@ -8,17 +8,17 @@ import { merge } from 'ramda';
 import PropTypes from 'prop-types';
 import TaskItem from './TaskItem';
 import styles from './taskList.scss';
-import { ChangeDropPosition, IsGetDropListenerRange } from '../../../actions/homeworkTask';
+import { ChangeDropPosition, FirstGetDropListenerRange } from '../../../actions/homeworkTask';
 
 @connect(({
   homeworkTaskReducer: {
-    isGetDropListenerRange,
+    isFirstGetDropListenerRange,
   },
 }) => ({
-  isGetDropListenerRange,
+  isFirstGetDropListenerRange,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
-  onIsGetDropListenerRange: bindActionCreators(IsGetDropListenerRange, dispatch),
+  onFirstGetDropListenerRange: bindActionCreators(FirstGetDropListenerRange, dispatch),
 }))
 class TaskList extends PureComponent {
   constructor(props) {
@@ -78,16 +78,16 @@ class TaskList extends PureComponent {
   renderItem = (item) => {
     const {
       onChangeDropPosition,
-      onIsGetDropListenerRange,
-      isGetDropListenerRange,
+      onFirstGetDropListenerRange,
+      isFirstGetDropListenerRange,
     } = this.props;
     return (
       <TaskItem
         data={item}
         onPress={this.onPress}
         onChangeDropPosition={onChangeDropPosition}
-        onIsGetDropListenerRange={onIsGetDropListenerRange}
-        isGetDropListenerRange={isGetDropListenerRange}
+        onFirstGetDropListenerRange={onFirstGetDropListenerRange}
+        isFirstGetDropListenerRange={isFirstGetDropListenerRange}
       />
     );
   }
@@ -134,14 +134,14 @@ class TaskList extends PureComponent {
 
 TaskList.defaultProps = {
   onChangeDropPosition: () => {},
-  onIsGetDropListenerRange: () => {},
-  isGetDropListenerRange: false,
+  onFirstGetDropListenerRange: () => {},
+  isFirstGetDropListenerRange: false,
 };
 
 TaskList.propTypes = {
   onChangeDropPosition: PropTypes.func,
-  onIsGetDropListenerRange: PropTypes.func,
-  isGetDropListenerRange: PropTypes.bool,
+  onFirstGetDropListenerRange: PropTypes.func,
+  isFirstGetDropListenerRange: PropTypes.bool,
 };
 
 export default TaskList;

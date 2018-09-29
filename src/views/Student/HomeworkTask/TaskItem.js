@@ -64,11 +64,11 @@ class TaskItem extends React.Component {
     this.touchStartY = gestureState.dy;
     this.touchStartTime = evt.nativeEvent.timestamp;
     const {
-      onIsGetDropListenerRange,
-      isGetDropListenerRange,
+      onFirstGetDropListenerRange,
+      isFirstGetDropListenerRange,
     } = this.props;
-    if (isGetDropListenerRange) {
-      onIsGetDropListenerRange(false);
+    if (isFirstGetDropListenerRange) {
+      onFirstGetDropListenerRange(false);
     }
 
     // 获取待操作元素的坐标值
@@ -165,8 +165,8 @@ TaskItem.propTypes = {
   ]),
   isShowSpendTime: PropTypes.bool,
   onChangeDropPosition: PropTypes.func,
-  onIsGetDropListenerRange: PropTypes.func,
-  isGetDropListenerRange: PropTypes.bool,
+  onFirstGetDropListenerRange: PropTypes.func,
+  isFirstGetDropListenerRange: PropTypes.bool,
 };
 
 TaskItem.defaultProps = {
@@ -175,8 +175,8 @@ TaskItem.defaultProps = {
   iconStyle: {},
   isShowSpendTime: true,
   onChangeDropPosition: () => {},
-  onIsGetDropListenerRange: () => {},
-  isGetDropListenerRange: false,
+  onFirstGetDropListenerRange: () => {},
+  isFirstGetDropListenerRange: false,
 };
 
 export default TaskItem;

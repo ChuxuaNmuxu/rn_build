@@ -6,17 +6,18 @@ import { connect } from 'react-redux';
 import TimeItem from './TimeItem';
 import styles from './timeList.scss';
 import { createHalfHourPeriod, currentTimeToPeriod } from '../../../utils/common';
-import { ChangeDropPosition, IsGetDropListenerRange, GetDropListenerRange } from '../../../actions/homeworkTask';
+import { ChangeDropPosition, FirstGetDropListenerRange, GetDropListenerRange } from '../../../actions/homeworkTask';
+import { adaptiveRotation } from '../../../utils/resolution';
 
 @connect(({
   homeworkTaskReducer: {
-    isGetDropListenerRange,
+    isFirstGetDropListenerRange,
   },
 }) => ({
-  isGetDropListenerRange,
+  isFirstGetDropListenerRange,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
-  onIsGetDropListenerRange: bindActionCreators(IsGetDropListenerRange, dispatch),
+  onFirstGetDropListenerRange: bindActionCreators(FirstGetDropListenerRange, dispatch),
   onGetDropListenerRange: bindActionCreators(GetDropListenerRange, dispatch),
 }))
 class TaskList extends Component {
@@ -25,8 +26,7 @@ class TaskList extends Component {
     this.flatList = null;
     this.periods = createHalfHourPeriod(); // 生成半小时时间段数组
     this.currentPeriodIndex = currentTimeToPeriod();
-    this.state = {
-    };
+    this.timeItemRefList = []; // timeItem ref
   }
 
   componentDidMount() {
@@ -34,22 +34,53 @@ class TaskList extends Component {
      * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
      * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中
      */
-    // const wait = new Promise(resolve => setTimeout(resolve, 500));
-    // wait.then(() => {
-    //   // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
-    //   // 如果有展开并且展开的任务
-    //   this.flatList.scrollToIndex({
-    //     animated: true,
-    //     index: this.currentPeriodIndex,
-    //     viewOffset: (142 - 496) / 2,
-    //     viewPosition: 0.5,
-    //   });
-    // });
+    const wait = new Promise(resolve => setTimeout(resolve, 500));
+    wait.then(() => {
+      // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
+      // 如果有展开并且展开的任务
+      this.flatList.scrollToIndex({
+        animated: true,
+        index: this.currentPeriodIndex,
+        viewOffset: (142 - 496) / 2,
+        viewPosition: 0.5,
+      });
+    });
   }
 
+  componentDidUpdate(nextProps) {
+    if (nextProps.isFirstGetDropListenerRange) {
+      this.saveListenerRangeToStore();
+    }
+  }
+
+  // 滑动时间段动画结束之后的回调
   onMomentumScrollEnd = () => {
-    const { onIsGetDropListenerRange } = this.props;
-    onIsGetDropListenerRange(true);
+    const {
+      isFirstGetDropListenerRange,
+      onFirstGetDropListenerRange,
+    } = this.props;
+    if (isFirstGetDropListenerRange) onFirstGetDropListenerRange(false);
+    this.saveListenerRangeToStore();
+  }
+
+  // 批量获取每个时间段的offset值
+  getTimeItemOffsetList = () => {
+    const { scale } = adaptiveRotation();
+    const timeItemOffsetList = this.timeItemRefList.map((v, k) => new Promise(((resolve) => {
+      v.measure((x, y, width, height, pageX, pageY) => {
+        // 通过measure或者的width、height是适配之前的值所有需要乘以缩放比，pageX、pageY是之后的值
+        const obj = {
+          startX: pageX,
+          endX: pageX + width * scale,
+          startY: pageY,
+          endY: pageY + height * scale,
+          index: k,
+        };
+        resolve(obj);
+      });
+    })));
+
+    return Promise.all(timeItemOffsetList);
   }
 
   getItemLayout = (data, index) => {
@@ -61,20 +92,32 @@ class TaskList extends Component {
     };
   }
 
+  getTimeItemRef = (ref) => {
+    this.timeItemRefList.push(ref);
+  }
+
+  // 将获取的时间段范围保存在store中
+  saveListenerRangeToStore = () => {
+    const { onGetDropListenerRange } = this.props;
+    this.getTimeItemOffsetList()
+      .then(data => onGetDropListenerRange(data));
+  }
+
   keyExtractor = item => item.data.toString()
 
   renderItem = (data) => {
     const {
       onChangeDropPosition,
-      isGetDropListenerRange,
-      onGetDropListenerRange,
+      isFirstGetDropListenerRange,
+      onFirstGetDropListenerRange,
     } = this.props;
     return (
       <TimeItem
         data={data}
         onChangeDropPosition={onChangeDropPosition}
-        isGetDropListenerRange={isGetDropListenerRange}
-        onGetDropListenerRange={onGetDropListenerRange}
+        isFirstGetDropListenerRange={isFirstGetDropListenerRange}
+        onFirstGetDropListenerRange={onFirstGetDropListenerRange}
+        getTimeItemRef={this.getTimeItemRef}
       />
     );
   }
@@ -103,15 +146,15 @@ class TaskList extends Component {
 
 TaskList.propTypes = {
   onChangeDropPosition: PropTypes.func,
-  isGetDropListenerRange: PropTypes.bool,
-  onIsGetDropListenerRange: PropTypes.func,
+  isFirstGetDropListenerRange: PropTypes.bool,
+  onFirstGetDropListenerRange: PropTypes.func,
   onGetDropListenerRange: PropTypes.func,
 };
 
 TaskList.defaultProps = {
   onChangeDropPosition: () => {},
-  isGetDropListenerRange: false,
-  onIsGetDropListenerRange: () => {},
+  isFirstGetDropListenerRange: false,
+  onFirstGetDropListenerRange: () => {},
   onGetDropListenerRange: () => {},
 };
 

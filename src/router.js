@@ -58,7 +58,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        // initial
+        initial
       >
         <Tabs
           key="StudentTabs"
@@ -110,7 +110,6 @@ const RouteMap = props => (
             // titleStyle={styles.navigationBarStyle_title}
             // navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
             hideNavBar // 是否隐藏整个导航条
-            initial
           >
             <Scene
               key="ProblemOverview"
@@ -146,7 +145,6 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />

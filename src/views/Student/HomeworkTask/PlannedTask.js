@@ -11,11 +11,11 @@ const PlannedTask = (props) => {
     if (type === 2) {
       return (
         <TaskItem
+          {...rest}
           iconWrapStyle={styles.icon_wrap_style}
           iconStyle={styles.icon}
           wrapStyle={styles.wrap_style}
           isShowSpendTime={false}
-          {...rest}
         />
       );
     }
