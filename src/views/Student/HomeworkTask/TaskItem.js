@@ -63,13 +63,13 @@ class TaskItem extends React.Component {
     this.touchStartX = gestureState.dx;
     this.touchStartY = gestureState.dy;
     this.touchStartTime = evt.nativeEvent.timestamp;
-    const {
-      onFirstGetDropListenerRange,
-      isFirstGetDropListenerRange,
-    } = this.props;
-    if (isFirstGetDropListenerRange) {
-      onFirstGetDropListenerRange(false);
-    }
+    // const {
+    //   onFirstGetDropListenerRange,
+    //   isFirstGetDropListenerRange,
+    // } = this.props;
+    // if (isFirstGetDropListenerRange) {
+    //   onFirstGetDropListenerRange(false);
+    // }
 
     // 获取待操作元素的坐标值
     this.taskRef.measure((x, y, width, height, pageX, pageY) => {
@@ -96,11 +96,28 @@ class TaskItem extends React.Component {
     }
   }
 
-  onPanResponderRelease = () => {
-    const { onChangeDropPosition } = this.props;
+  onPanResponderRelease = (evt) => {
+    const { onChangeDropPosition, listenerRangeList } = this.props;
     this.isDraging = false;
+    const { pageX, pageY } = evt.nativeEvent;
 
-    // console.log('触摸结束');
+    // 任务排期
+    const findTask = listenerRangeList.find((v) => {
+      if (v.startX <= pageX && v.endX >= pageX && v.startY <= pageY && v.endY >= pageY) {
+        return true;
+      }
+      return false;
+    });
+
+    if (findTask) {
+      console.log('排期成功：', findTask.index);
+    } else {
+      console.log('排期失败');
+    }
+
+    // 取消任务排期
+
+    // 将拖拽元素定位到窗口外隐藏拖拽元素
     onChangeDropPosition({
       x: -500,
       y: 0,
@@ -167,6 +184,7 @@ TaskItem.propTypes = {
   onChangeDropPosition: PropTypes.func,
   onFirstGetDropListenerRange: PropTypes.func,
   isFirstGetDropListenerRange: PropTypes.bool,
+  listenerRangeList: PropTypes.array,
 };
 
 TaskItem.defaultProps = {
@@ -177,6 +195,7 @@ TaskItem.defaultProps = {
   onChangeDropPosition: () => {},
   onFirstGetDropListenerRange: () => {},
   isFirstGetDropListenerRange: false,
+  listenerRangeList: [],
 };
 
 export default TaskItem;

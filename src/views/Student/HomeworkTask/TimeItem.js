@@ -20,7 +20,7 @@ class TimeItem extends Component {
 
   render() {
     const { data, getTimeItemRef } = this.props;
-
+    console.log('TimeItem', data);
     return (
       <TouchableNativeFeedback onPress={this.onPress}>
         <View
@@ -54,13 +54,5 @@ class TimeItem extends Component {
     );
   }
 }
-
-TimeItem.propTypes = {
-  onGetDropListenerRange: PropTypes.func,
-};
-
-TimeItem.defaultProps = {
-  onGetDropListenerRange: () => {},
-};
 
 export default TimeItem;

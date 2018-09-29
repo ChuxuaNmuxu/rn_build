@@ -1,10 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import {
   View, Text, FlatList,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { merge } from 'ramda';
 import PropTypes from 'prop-types';
 import TaskItem from './TaskItem';
 import styles from './taskList.scss';
@@ -13,14 +12,18 @@ import { ChangeDropPosition, FirstGetDropListenerRange } from '../../../actions/
 @connect(({
   homeworkTaskReducer: {
     isFirstGetDropListenerRange,
+    listenerRangeList,
+    planList,
   },
 }) => ({
   isFirstGetDropListenerRange,
+  listenerRangeList,
+  planList,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
   onFirstGetDropListenerRange: bindActionCreators(FirstGetDropListenerRange, dispatch),
 }))
-class TaskList extends PureComponent {
+class TaskList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -80,6 +83,7 @@ class TaskList extends PureComponent {
       onChangeDropPosition,
       onFirstGetDropListenerRange,
       isFirstGetDropListenerRange,
+      listenerRangeList,
     } = this.props;
     return (
       <TaskItem
@@ -88,6 +92,7 @@ class TaskList extends PureComponent {
         onChangeDropPosition={onChangeDropPosition}
         onFirstGetDropListenerRange={onFirstGetDropListenerRange}
         isFirstGetDropListenerRange={isFirstGetDropListenerRange}
+        listenerRangeList={listenerRangeList}
       />
     );
   }
@@ -106,10 +111,7 @@ class TaskList extends PureComponent {
 
 
   render() {
-    const data = Array(20).fill({}).map((v, i) => (merge(v, {
-      data: i,
-    })));
-
+    const { planList } = this.props;
     return (
       <View
         style={styles.task_list_box}
@@ -118,7 +120,7 @@ class TaskList extends PureComponent {
         <FlatList
           horizontal
           ref={(ref) => { this.flatList = ref; }}
-          data={data}
+          data={planList}
           style={styles.latList}
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
@@ -136,12 +138,16 @@ TaskList.defaultProps = {
   onChangeDropPosition: () => {},
   onFirstGetDropListenerRange: () => {},
   isFirstGetDropListenerRange: false,
+  listenerRangeList: [],
+  planList: [],
 };
 
 TaskList.propTypes = {
   onChangeDropPosition: PropTypes.func,
   onFirstGetDropListenerRange: PropTypes.func,
   isFirstGetDropListenerRange: PropTypes.bool,
+  listenerRangeList: PropTypes.array,
+  planList: PropTypes.array,
 };
 
 export default TaskList;

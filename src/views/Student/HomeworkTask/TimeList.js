@@ -12,9 +12,11 @@ import { adaptiveRotation } from '../../../utils/resolution';
 @connect(({
   homeworkTaskReducer: {
     isFirstGetDropListenerRange,
+    todoList,
   },
 }) => ({
   isFirstGetDropListenerRange,
+  todoList,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
   onFirstGetDropListenerRange: bindActionCreators(FirstGetDropListenerRange, dispatch),
@@ -34,17 +36,17 @@ class TaskList extends Component {
      * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
      * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中
      */
-    const wait = new Promise(resolve => setTimeout(resolve, 500));
-    wait.then(() => {
-      // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
-      // 如果有展开并且展开的任务
-      this.flatList.scrollToIndex({
-        animated: true,
-        index: this.currentPeriodIndex,
-        viewOffset: (142 - 496) / 2,
-        viewPosition: 0.5,
-      });
-    });
+    // const wait = new Promise(resolve => setTimeout(resolve, 500));
+    // wait.then(() => {
+    //   // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
+    //   // 如果有展开并且展开的任务
+    //   this.flatList.scrollToIndex({
+    //     animated: true,
+    //     index: this.currentPeriodIndex,
+    //     viewOffset: (142 - 496) / 2,
+    //     viewPosition: 0.5,
+    //   });
+    // });
   }
 
   componentDidUpdate(nextProps) {
@@ -75,6 +77,7 @@ class TaskList extends Component {
           startY: pageY,
           endY: pageY + height * scale,
           index: k,
+          width,
         };
         resolve(obj);
       });
@@ -100,7 +103,10 @@ class TaskList extends Component {
   saveListenerRangeToStore = () => {
     const { onGetDropListenerRange } = this.props;
     this.getTimeItemOffsetList()
-      .then(data => onGetDropListenerRange(data));
+      .then((data) => {
+        const filterData = data.filter(v => v.startX > -v.width);
+        onGetDropListenerRange(filterData);
+      });
   }
 
   keyExtractor = item => item.data.toString()
@@ -123,16 +129,14 @@ class TaskList extends Component {
   }
 
   render() {
-    const data = this.periods.map(v => ({
-      data: v,
-      currentPeriod: this.periods[this.currentPeriodIndex],
-    }));
+    const { todoList } = this.props;
+    console.log(133, todoList);
     return (
       <View style={styles.time_list_box}>
         <FlatList
           horizontal
           ref={(ref) => { this.flatList = ref; }}
-          data={data}
+          data={todoList}
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
           getItemLayout={this.getItemLayout}
@@ -149,6 +153,7 @@ TaskList.propTypes = {
   isFirstGetDropListenerRange: PropTypes.bool,
   onFirstGetDropListenerRange: PropTypes.func,
   onGetDropListenerRange: PropTypes.func,
+  todoList: PropTypes.array,
 };
 
 TaskList.defaultProps = {
@@ -156,6 +161,7 @@ TaskList.defaultProps = {
   isFirstGetDropListenerRange: false,
   onFirstGetDropListenerRange: () => {},
   onGetDropListenerRange: () => {},
+  todoList: [],
 };
 
 export default TaskList;

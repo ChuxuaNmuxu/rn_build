@@ -34,6 +34,10 @@ export const CHANGE_DROP_POSITION = 'CHANGE_DROP_POSITION';
 export const FIRST_GET_DROP_LISTENER_RANGE = 'FIRST_GET_DROP_LISTENER_RANGE';
 // 重新获取时间段的监听范围
 export const GET_DROP_LISTENER_RANGE = 'GET_DROP_LISTENER_RANGE';
+// 更改计划任务
+export const CHANGE_PLAN_TASK = 'CHANGE_PLAN_TASK';
+// 取消计划任务
+export const CHANGE_TODO_TASK = 'CHANGE_TODO_TASK';
 
 /**
  *------------------------作业与考试详情页面-----------------------------------------
