@@ -5,7 +5,7 @@ export const fetchDataAction = actionCreator(types.FETCH_MISTAKE, '错题重做-
 export const showWrongInfoAction = actionCreator(types.MISTAKE_SUBMIT_ANSWER_ERROR, '错题重做-显示错误答案提示');
 export const showWrongInfoRadioAction = actionCreator(
   types.MISTAKE_SUBMIT_ANSWER_ERROR_SHOW_RADIO,
-  '错题重做-点击错题总结显示Radio',
+  '错题重做-显示错题总结的Radio',
 );
 export const submitRadioAction = actionCreator(
   types.MISTAKE_SUBMIT_ANSWER_ERROR_SUBMIT_RADIO,
@@ -19,3 +19,11 @@ export const correctConfirmAction = actionCreator(
   '错题重做-点击正确答案的提交确认框',
 );
 export const updateImageAction = actionCreator(types.MISTAKE_UPLOAD_IMAGE, '错题重做-点击主观题上传图片，控制提交按钮');
+export const fetchSubjectiveAnswerAction = actionCreator(
+  types.MISTAKE_CHANGE_SUBJECTIVE_SHOWALL,
+  '错题重做-主观题-点击提交按钮获取老师答案、别人的答案',
+);
+export const controlSubjectiveButtonAction = actionCreator(
+  types.MISTAKE_CHANGE_SUBJECTIVE_SHOWBUTTON,
+  '错题重做-主观题-点击那个错误的按钮，把这一行隐藏掉',
+);
