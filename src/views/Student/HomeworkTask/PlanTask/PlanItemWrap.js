@@ -14,40 +14,45 @@ class TodoItem extends Component {
     this.state = {};
   }
 
-  componentDidUpdate(nextProps) {
-    console.log('更新即便');
-    // console.log(nextProps, this.props);
-    // console.log(R.)
-  }
-
-  onPress = () => {
-    console.log(19, '去做作业');
-  }
-
   render() {
     const { data, getTimeItemRef } = this.props;
-    console.log('TimeItem', data);
-    // data.item.data === data.item.currentPeriod && styles.time_box_checked
+    // console.log(23, data);
+
+    // data
+    // {
+    //   index:46,
+    //   item:{
+    //     currentPeriod:"14:00-14:30",
+    //     period:"23:00-23:30",
+    //     data:[]
+    //   }
+    // }
+    const {
+      index, item,
+    } = data;
     return (
-      <TouchableNativeFeedback onPress={this.onPress}>
+      <TouchableNativeFeedback>
         <View
           style={styles.time_wrap}
           ref={getTimeItemRef}
         >
           <View style={styles.time_content} />
-          <View style={[styles.time_box]}>
+          <View style={[styles.time_box, item.period === item.currentPeriod && styles.time_box_checked]}>
             <View style={styles.task_list}>
-              <Text>{data.index}</Text>
-              {/* {
-                data.data === '01:00-01:30' && (
-                  Array(5).fill(1).map((v, i) => <PlanItem key={i} type={1} data={data} />)
-                )
-              } */}
-              {/* {
-                data.item.data === data.item.currentPeriod && (
-                  Array(5).fill(1).map((v, i) => <PlanItem key={i} type={2} {...this.props} />)
-                )
-              } */}
+              <Text>{index}</Text>
+              {/*
+                * 1.有任务状态
+                * 2.进入时自动居中状态或者当前正在操作状态
+              */}
+              {
+                item.data.map((v, i) => (
+                  <PlanItem
+                    key={i}
+                    type={item.period === item.currentPeriod ? 2 : 1}
+                    {...v}
+                  />
+                ))
+              }
             </View>
             <View style={styles.time_scale}>
               {
@@ -55,7 +60,7 @@ class TodoItem extends Component {
               }
             </View>
           </View>
-          <View style={styles.time_text}><Text>{data.item.data}</Text></View>
+          <View style={styles.time_text}><Text>{item.period}</Text></View>
         </View>
       </TouchableNativeFeedback>
     );

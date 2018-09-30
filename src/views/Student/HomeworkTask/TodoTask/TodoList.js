@@ -5,7 +5,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import TaskItem from '../component/Task';
+import Task from '../component/Task';
 import styles from './todoList.scss';
 import { ChangeDropPosition, FirstGetDropListenerRange } from '../../../../actions/homeworkTask';
 
@@ -13,12 +13,12 @@ import { ChangeDropPosition, FirstGetDropListenerRange } from '../../../../actio
   homeworkTaskReducer: {
     isFirstGetDropListenerRange,
     listenerRangeList,
-    planList,
+    todoList,
   },
 }) => ({
   isFirstGetDropListenerRange,
   listenerRangeList,
-  planList,
+  todoList,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
   onFirstGetDropListenerRange: bindActionCreators(FirstGetDropListenerRange, dispatch),
@@ -79,8 +79,9 @@ class TodoList extends Component {
       isFirstGetDropListenerRange,
       listenerRangeList,
     } = this.props;
+    // console.log(82, listenerRangeList);
     return (
-      <TaskItem
+      <Task
         data={item}
         onChangeDropPosition={onChangeDropPosition}
         onFirstGetDropListenerRange={onFirstGetDropListenerRange}
@@ -104,7 +105,8 @@ class TodoList extends Component {
 
 
   render() {
-    const { planList } = this.props;
+    const { todoList, listenerRangeList } = this.props;
+
     return (
       <View
         style={styles.task_list_box}
@@ -113,13 +115,14 @@ class TodoList extends Component {
         <FlatList
           horizontal
           ref={(ref) => { this.flatList = ref; }}
-          data={planList}
+          data={todoList}
           style={styles.latList}
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
           getItemLayout={this.getItemLayout}
-          initialNumToRender={planList.length}
+          // initialNumToRender={planList.length}
           ListEmptyComponent={this.renderListEmpty}
+          extraData={listenerRangeList}
         />
       </View>
     );
@@ -131,7 +134,7 @@ TodoList.defaultProps = {
   onFirstGetDropListenerRange: () => {},
   isFirstGetDropListenerRange: false,
   listenerRangeList: [],
-  planList: [],
+  todoList: [],
 };
 
 TodoList.propTypes = {
@@ -139,7 +142,7 @@ TodoList.propTypes = {
   onFirstGetDropListenerRange: PropTypes.func,
   isFirstGetDropListenerRange: PropTypes.bool,
   listenerRangeList: PropTypes.array,
-  planList: PropTypes.array,
+  todoList: PropTypes.array,
 };
 
 export default TodoList;

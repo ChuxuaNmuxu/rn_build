@@ -3,7 +3,8 @@ import { View, FlatList, Text } from 'react-native';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import PlanItem from './PlanItemWrap';
+import R from 'ramda';
+import PlanItemWrap from './PlanItemWrap';
 import styles from './planList.scss';
 import { currentTimeToPeriod } from '../../../../utils/common';
 import { ChangeDropPosition, FirstGetDropListenerRange, GetDropListenerRange } from '../../../../actions/homeworkTask';
@@ -13,18 +14,18 @@ import { adaptiveRotation } from '../../../../utils/resolution';
   homeworkTaskReducer: {
     isFirstGetDropListenerRange,
     listenerRangeList,
-    todoList,
+    planList,
   },
 }) => ({
   isFirstGetDropListenerRange,
   listenerRangeList,
-  todoList,
+  planList,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
   onFirstGetDropListenerRange: bindActionCreators(FirstGetDropListenerRange, dispatch),
   onGetDropListenerRange: bindActionCreators(GetDropListenerRange, dispatch),
 }))
-class TaskList extends Component {
+class PlanList extends Component {
   constructor(props) {
     super(props);
     this.flatList = null;
@@ -40,24 +41,31 @@ class TaskList extends Component {
      * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
      * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中
      */
-    // const wait = new Promise(resolve => setTimeout(resolve, 500));
-    // wait.then(() => {
-    //   // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
-    //   // 如果有展开并且展开的任务
-    //   this.flatList.scrollToIndex({
-    //     animated: true,
-    //     index: this.currentPeriodIndex,
-    //     viewOffset: (142 - 496) / 2,
-    //     viewPosition: 0.5,
-    //   });
-    // });
+    const wait = new Promise(resolve => setTimeout(resolve, 500));
+    wait.then(() => {
+      // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
+      // 如果有展开并且展开的任务
+      this.flatList.scrollToIndex({
+        animated: true,
+        index: this.currentPeriodIndex,
+        viewOffset: (142 - 496) / 2,
+        viewPosition: 0.5,
+      });
+    });
   }
 
-  // componentDidUpdate(nextProps) {
-  //   if (nextProps.isFirstGetDropListenerRange) {
-  //     this.saveListenerRangeToStore();
-  //   }
-  // }
+  componentDidUpdate(nextProps) {
+    // 当isFirstGetDropListenerRange为true时，表示第一次
+    const {
+      isFirstGetDropListenerRange,
+      planList: nextPlanList,
+    } = nextProps;
+    const { planList } = this.props;
+
+    if (isFirstGetDropListenerRange && !R.equals(nextPlanList, planList)) {
+      this.saveListenerRangeToStore();
+    }
+  }
 
   // 通过 onLayout 获取 最外面容器宽，当 FlatList 为空时，给 renderListEmpty 里面里的容器设置值让其可以全屏
   onLayout = (e) => {
@@ -81,8 +89,14 @@ class TaskList extends Component {
 
   // 批量获取每个时间段的offset值
   getTimeItemOffsetList = () => {
+    const timeItemOffsetList = this.timeItemRefList.map(this.getTimeItemOffset);
+    return Promise.all(timeItemOffsetList);
+  }
+
+  // 获取单个时间段的offset值
+  getTimeItemOffset = (v, k) => {
     const { scale } = adaptiveRotation();
-    const timeItemOffsetList = this.timeItemRefList.map((v, k) => new Promise(((resolve) => {
+    return new Promise(((resolve) => {
       v.measure((x, y, width, height, pageX, pageY) => {
         // 通过measure或者的width、height是适配之前的值所有需要乘以缩放比，pageX、pageY是之后的值
         const obj = {
@@ -95,9 +109,7 @@ class TaskList extends Component {
         };
         resolve(obj);
       });
-    })));
-
-    return Promise.all(timeItemOffsetList);
+    }));
   }
 
   getItemLayout = (data, index) => {
@@ -118,12 +130,12 @@ class TaskList extends Component {
     const { onGetDropListenerRange } = this.props;
     this.getTimeItemOffsetList()
       .then((data) => {
-        const filterData = data.filter(v => v.startX > -v.width);
+        const filterData = data.filter(v => v.startX >= -v.width);
         onGetDropListenerRange(filterData);
       });
   }
 
-  keyExtractor = item => item.data.toString()
+  keyExtractor = data => data.period
 
   renderItem = (data) => {
     const {
@@ -132,9 +144,10 @@ class TaskList extends Component {
       onFirstGetDropListenerRange,
       listenerRangeList,
     } = this.props;
+    console.log(159);
 
     return (
-      <PlanItem
+      <PlanItemWrap
         data={data}
         onChangeDropPosition={onChangeDropPosition}
         isFirstGetDropListenerRange={isFirstGetDropListenerRange}
@@ -158,8 +171,8 @@ class TaskList extends Component {
   }
 
   render() {
-    const { todoList } = this.props;
-    // console.log(134, todoList);
+    const { planList, listenerRangeList } = this.props;
+
     return (
       <View
         style={styles.time_list_box}
@@ -168,12 +181,13 @@ class TaskList extends Component {
         <FlatList
           horizontal
           ref={(ref) => { this.flatList = ref; }}
-          data={todoList}
+          data={planList}
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
           getItemLayout={this.getItemLayout}
-          initialNumToRender={todoList.length}
+          initialNumToRender={planList.length}
           ListEmptyComponent={this.renderListEmpty}
+          extraData={listenerRangeList}
           onMomentumScrollEnd={this.onMomentumScrollEnd}
         />
       </View>
@@ -181,22 +195,22 @@ class TaskList extends Component {
   }
 }
 
-TaskList.propTypes = {
+PlanList.propTypes = {
   onChangeDropPosition: PropTypes.func,
   isFirstGetDropListenerRange: PropTypes.bool,
   onFirstGetDropListenerRange: PropTypes.func,
   onGetDropListenerRange: PropTypes.func,
-  todoList: PropTypes.array,
+  planList: PropTypes.array,
   listenerRangeList: PropTypes.array,
 };
 
-TaskList.defaultProps = {
+PlanList.defaultProps = {
   onChangeDropPosition: () => {},
   isFirstGetDropListenerRange: false,
   onFirstGetDropListenerRange: () => {},
   onGetDropListenerRange: () => {},
   listenerRangeList: [],
-  todoList: [],
+  planList: [],
 };
 
-export default TaskList;
+export default PlanList;

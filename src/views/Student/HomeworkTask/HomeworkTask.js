@@ -39,12 +39,13 @@ class HomeworkTask extends Component {
 
   componentDidMount() {
     const { onChangePlanTask, onChangeTodoTask } = this.props;
-    const planListData = Array(48).fill({}).map((v, i) => (merge(v, {
+    const todoListData = Array(4).fill({}).map((v, i) => (merge(v, {
       data: i,
     })));
 
-    const todoListData = this.periods.map(v => ({
-      data: v,
+    const planListData = this.periods.map(v => ({
+      data: [],
+      period: v,
       currentPeriod: this.periods[this.currentPeriodIndex],
     }));
 
@@ -52,7 +53,7 @@ class HomeworkTask extends Component {
       console.log('模拟请求');
       onChangePlanTask(planListData);
       onChangeTodoTask(todoListData);
-    }, 1000);
+    });
   }
 
 

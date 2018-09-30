@@ -1,16 +1,17 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import TaskItem from '../component/Task';
+import PropTypes from 'prop-types';
+import Task from '../component/Task';
 import CIcon from '../../../../components/Icon';
 import styles from './planItem.scss';
 
-const PlannedTask = (props) => {
+const PlanItem = (props) => {
   const onPress = () => { console.log('做作业'); };
   const { type, ...rest } = props;
   const renderTask = () => {
     if (type === 2) {
       return (
-        <TaskItem
+        <Task
           {...rest}
           iconWrapStyle={styles.icon_wrap_style}
           iconStyle={styles.icon}
@@ -39,4 +40,12 @@ const PlannedTask = (props) => {
   );
 };
 
-export default PlannedTask;
+PlanItem.propTypes = {
+  type: PropTypes.number,
+};
+
+PlanItem.defaultProps = {
+  type: null,
+};
+
+export default PlanItem;

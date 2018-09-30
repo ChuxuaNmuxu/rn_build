@@ -36,7 +36,7 @@ class TaskItem extends React.Component {
     // 防抖值
     this.antiShakeValue = 10;
     // 长按时间
-    this.longTouchTime = 600;
+    this.longTouchTime = 400;
     // 是否正在拖动
     this.isDraging = false;
     // 待操作元素的左边距
@@ -118,10 +118,10 @@ class TaskItem extends React.Component {
     // 取消任务排期
 
     // 将拖拽元素定位到窗口外隐藏拖拽元素
-    onChangeDropPosition({
-      x: -500,
-      y: 0,
-    });
+    // onChangeDropPosition({
+    //   x: -500,
+    //   y: 0,
+    // });
   }
 
   dragHandle = (dx, dy) => {
