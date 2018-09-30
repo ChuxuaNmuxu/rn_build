@@ -47,7 +47,7 @@
 .studentAnserImage {
   padding: 12px 24px 30px;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   background-color: #fff;
 }
 
@@ -102,8 +102,8 @@
 .CauseOfError {
   width: 100%;
   height: 360px;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   padding-left: 12px;
   padding-bottom: 80px;
   background-color: #fff;
