@@ -21,6 +21,7 @@ class GroupRadio extends Component {
     };
   }
 
+
   // 重写 onChange 方法
   onChangeGroup = (value) => {
     const { onChange } = this.props;
@@ -28,6 +29,17 @@ class GroupRadio extends Component {
       checked: value,
     }, onChange(value));
   };
+
+  static getDerivedStateFromProps(props, state) {
+    const { defaultValue, value } = props;
+    if ((value || defaultValue) !== state.checked) {
+      const checked = value || defaultValue || false;
+      return {
+        checked,
+      };
+    }
+    return null;
+  }
 
   renderDom = () => {
     const { children, options } = this.props;

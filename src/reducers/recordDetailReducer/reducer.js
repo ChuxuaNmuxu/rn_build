@@ -15,6 +15,8 @@ const handle = {
   FETCH_RECORD_DETAIL_HOMEWORK_LIST_SUCCESS: fn.fetchHomeworkListDataSuccess,
   // 请求作业记录内容数据（点一次请求一次系列）
   FETCH_RECORD_DETAIL_HOMEWORK_SUCCESS: fn.fetchHomeworkDataSuccess,
+  // 清空缓存
+  INIT_RECORD_DETAIL_ALL_DATA: fn.initailState,
 };
 
 const problemOverviewReducer = createReducer(initState, handle);

@@ -58,7 +58,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        // initial
+        initial
       >
         <Tabs
           key="StudentTabs"
@@ -100,7 +100,7 @@ const RouteMap = props => (
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
-              // initial
+              initial
             />
           </Stack>
           {/* 错题本 */}
@@ -112,7 +112,7 @@ const RouteMap = props => (
             // titleStyle={styles.navigationBarStyle_title}
             // navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
             hideNavBar // 是否隐藏整个导航条
-            initial
+            // initial
           >
             <Scene
               key="ProblemOverview"
@@ -148,7 +148,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        initial
+        // initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
@@ -159,7 +159,7 @@ const RouteMap = props => (
         {/* 错题本列表页 */}
         <Scene key="ProblemListOverview" component={ProblemListOverview} hideNavBar />
         {/* 错题重做 */}
-        <Scene key="MistakeReform" component={MistakeReform} hideNavBar initial />
+        <Scene key="MistakeReform" component={MistakeReform} hideNavBar />
         {/* 作业记录详情页 */}
         <Scene key="HomworkRecordDetail" component={HomworkRecordDetail} hideNavBar />
         {/* 考试记录详情页 */}

@@ -8,3 +8,5 @@ export const fetchHomeworkListData = actionCreator(
   '考试或者作业页面--请求作业数据--作业题号list请求',
 );
 export const fetchHomeworkData = actionCreator(types.FETCH_RECORD_DETAIL_HOMEWORK, '考试或者作业页面--请求作业数据--单次请求');
+
+export const initialState = actionCreator(types.INIT_RECORD_DETAIL_ALL_DATA, '清缓存啦啦啦啦啦啦啦啦');

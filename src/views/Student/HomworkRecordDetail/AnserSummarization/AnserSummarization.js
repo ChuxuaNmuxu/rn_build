@@ -18,17 +18,19 @@ class AnserSummarization extends Component {
   constructor(props) {
     super(props);
     // 这样子写没什么特别之处，就是我懒得每个用到的地方都去解构
-    this.type = props.type;
-    this.isItCorrect = props.isItCorrect;
-    this.status = props.status;
-    this.difficultyDegree = props.difficultyDegree;
-    this.questionType = props.questionType;
+    // this.type = props.type;
+    // this.isItCorrect = props.isItCorrect;
+    // this.status = props.status;
+    // this.difficultyDegree = props.difficultyDegree;
+    // this.questionType = props.questionType;
+    // this.correctAnser = props.correctAnser;
+    // this.studentAnser = props.studentAnser;
+    // this.score = props.score;
     this.state = {
       showPopover: false,
       popoverAnchor: {},
     };
   }
-
 
   getTextColor=(status, isItCorrect) => {
     // :#fa5656 :#30bf6c; :#f5a623; :#ffffff
@@ -42,6 +44,10 @@ class AnserSummarization extends Component {
   }
 
   getText = (status, isItCorrect) => {
+    const {
+      correctAnser, studentAnser, score, questionType,
+    } = this.props;
+    console.log(questionType, 'getTextgetTextgetText');
     // 主观题客观题的展示效果不一样，五种状态下的展示也不一样。文档敢写详细点？
     let text = null;
     const [
@@ -51,11 +57,11 @@ class AnserSummarization extends Component {
       partialCorrect,
       unCorrect,
     ] = [
-      this.questionType === 'obj' ? `回答错误，答案是${'B'}，你的答案是${'A'}，得分：${0}分` : `回答错误，得分：${0}分`,
-      this.questionType === 'obj' ? `回答正确，答案是${'B'}，得分：${5}分` : `回答正确，得分：${0}分`,
-      this.questionType === 'obj' ? `未作答，答案是${'B'}` : '未作答',
-      `部分正确，答案是${'ABCDEF'}，你的答案是${'FEDABC'}，得分：${3}分`,
-      this.questionType === 'obj' ? `答案是${'B'}，你的答案是A` : '解答过程',
+      questionType === 'obj' ? `回答错误，答案是${correctAnser}，你的答案是${studentAnser}，得分：${score}分` : `回答错误，得分：${score}分`,
+      questionType === 'obj' ? `回答正确，答案是${correctAnser}，得分：${score}分` : `回答正确，得分：${score}分`,
+      questionType === 'obj' ? `未作答，答案是${correctAnser}` : '未作答',
+      `部分正确，答案是${correctAnser}，你的答案是${studentAnser}，得分：${score}分`,
+      questionType === 'obj' ? `答案是${correctAnser}，你的答案是${studentAnser}` : '解答过程',
     ];
     switch (status) {
       case 0:
@@ -80,7 +86,7 @@ class AnserSummarization extends Component {
     const handle = findNodeHandle(this.button);
     if (handle) {
       NativeModules.UIManager.measure(handle, (x0, y0, width, height, x, y) => {
-        console.log(width, height);
+        console.log(x, y);
         this.setState({
           popoverAnchor: {
             x, y, width, height,
@@ -94,20 +100,21 @@ class AnserSummarization extends Component {
   // 考试的
   examinationSummary=() => {
     console.log('垃圾ESlint标准');
+    const { isItCorrect, status } = this.props;
     const iconArr = ['wrongIcon', 'corectIcon', 'partialCorrect'];
     return (
       <View style={styles.AnserSummarization}>
         {
           // icon不一定会展示,没教师或者同学修改不展示
-          [0, 3, 4].includes(this.status)
+          [0, 3, 4].includes(status)
             ? null
-            : <Svg height="40" width="40" source={iconArr[this.isItCorrect]} fill="#fff" />
+            : <Svg height="40" width="40" source={iconArr[isItCorrect]} fill="#fff" />
         }
 
         <Text
-          style={[styles.text, { color: this.getTextColor(this.status, this.isItCorrect) }, styles.textMargin]}
+          style={[styles.text, { color: this.getTextColor(status, isItCorrect) }, styles.textMargin]}
         >
-          {this.getText(this.status, this.isItCorrect)}
+          {this.getText(status, isItCorrect)}
         </Text>
       </View>
     );
@@ -117,6 +124,9 @@ class AnserSummarization extends Component {
   //  humanCorrected: true, systemCorrected: true, result: 0, otherCorrected
   homeworkSummary=() => {
     console.log('垃圾ESlint标准');
+    const {
+      isItCorrect, status, difficultyDegree, questionType,
+    } = this.props;
     const iconArr = ['wrongIcon', 'corectIcon', 'partialCorrect'];
     const colorArr = ['#fa5656', '#30bf6c', '#f5a623'];
     return (
@@ -124,27 +134,27 @@ class AnserSummarization extends Component {
         <View style={styles.leftTips}>
           {
           // icon不一定会展示,没教师或者同学修改不展示
-          [0, 3, 4].includes(this.status)
+          [0, 3, 4].includes(status)
             ? null
-            : <Svg height="40" width="40" source={iconArr[this.isItCorrect]} fill="#fff" />
+            : <Svg height="40" width="40" source={iconArr[isItCorrect]} fill="#fff" />
         }
 
           <Text
-            style={[styles.text, { color: this.getTextColor(this.status, this.isItCorrect) }, styles.textMargin]}
+            style={[styles.text, { color: this.getTextColor(status, isItCorrect) }, styles.textMargin]}
           >
-            {this.getText(this.status, this.isItCorrect)}
+            {this.getText(status, isItCorrect)}
           </Text>
 
           <View style={styles.difficultyView}>
-            <Text style={styles.difficultyDegree}>难易程度：</Text>
-            <Text style={[styles.difficultyDegree, { color: colorArr[this.difficultyDegree] }]}>
-              {['难', '易', '适中'][this.difficultyDegree]}
+            {/* <Text style={styles.difficultyDegree}>难易程度：</Text> */}
+            <Text style={[styles.difficultyDegree, { backgroundColor: colorArr[difficultyDegree], color: '#ffffff' }]}>
+              {['难', '易', '适中'][difficultyDegree]}
             </Text>
           </View>
         </View>
         {
           // 同学批阅才会出现的
-          this.status === 2 && this.popoverComponent()
+          questionType === 'sub' && status === 2 && this.popoverComponent()
         }
 
       </View>
@@ -220,6 +230,7 @@ class AnserSummarization extends Component {
   };
 
   render() {
+    const { type } = this.props;
     return (
       <React.Fragment>
         {
@@ -227,7 +238,7 @@ class AnserSummarization extends Component {
           {
             E: this.examinationSummary,
             H: this.homeworkSummary,
-          }[this.type]()
+          }[type]()
         }
       </React.Fragment>
     );
@@ -240,14 +251,26 @@ AnserSummarization.propTypes = {
   questionType: PropTypes.string,
   status: PropTypes.number,
   difficultyDegree: PropTypes.number,
+  // 正确答案
+  correctAnser: PropTypes.string,
+  // 学生答案
+  studentAnser: PropTypes.string,
+  // 得分
+  score: PropTypes.number,
 };
 
 AnserSummarization.defaultProps = {
   type: 'H',
   isItCorrect: 0,
   questionType: 'sub', // obj客观  sub主观
-  status: 2, // 0是未提交，1教师操作过，2是学生操作过，3是机器操作过，4是未批改
+  status: 0, // 0是未提交，1教师操作过，2是学生操作过，3是机器操作过，4是未批改
   difficultyDegree: 0, // 0难，1易，2适中
+  // 正确答案
+  correctAnser: '',
+  // 学生答案
+  studentAnser: '',
+  // 得分
+  score: 0,
 };
 
 export default AnserSummarization;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import RefreshListView from '../../../components/RefreshListView';
-import RefreshState from '../../../components/RefreshListView/RefreshState';
+// import RefreshState from '../../../components/RefreshListView/RefreshState';
 import RecordCard from './Components/recordCard';
 
 class RecordList extends Component {
@@ -17,14 +17,14 @@ class RecordList extends Component {
     getRefreshListView(this.listView);
   }
 
-  _keyExtractor = item => item.id;
+  _keyExtractor = item => item.id + Math.random();
 
   // 渲染子组件
   _renderItem = ({ item, index }) => {
     const { gotoDetailFun, recordType } = this.props;
     return (
       <RecordCard
-        key={index}
+        key={recordType === 0 ? `index${index}` : `cao${index}`}
         id={item.id}
         datas={item}
         gotoDetailFun={gotoDetailFun}
@@ -38,20 +38,26 @@ class RecordList extends Component {
 
   // 上拉加载更多
   loadMoreFun = () => {
-    setTimeout(() => {
-      this.listView.endRefreshing(RefreshState.NoMoreData);
-    }, 2000);
+    const { upPullGetMore } = this.props;
+    upPullGetMore();
+    console.log('???????????????????');
+    // setTimeout(() => {
+    //   this.listView.endRefreshing(RefreshState.NoMoreData);
+    // }, 2000);
   }
 
   // 下拉刷新
   RefreshListFunc = () => {
-    setTimeout(() => {
-      this.listView.endHeaderRefreshing(RefreshState.Failure);
-      // 刷新成功后隐藏提示
-      // setTimeout(() => {
-      //   this.listView.endHeaderRefreshing(RefreshState.Idle);
-      // }, 1000);
-    }, 2000);
+    console.log('???????????????????');
+    const { dropDownRefresh } = this.props;
+    dropDownRefresh();
+    // setTimeout(() => {
+    //   this.listView.endHeaderRefreshing(RefreshState.Failure);
+    //   // 刷新成功后隐藏提示
+    //   // setTimeout(() => {
+    //   //   this.listView.endHeaderRefreshing(RefreshState.Idle);
+    //   // }, 1000);
+    // }, 2000);
   }
 
   render() {
@@ -63,8 +69,8 @@ class RecordList extends Component {
         renderItem={this._renderItem}
         keyExtractor={this._keyExtractor}
         ListEmptyComponent={this._renderEmptyView}
-        onHeaderRefresh={() => this.RefreshListFunc()}
-        onFooterRefresh={() => this.loadMoreFun()}
+        onHeaderRefresh={this.RefreshListFunc}
+        onFooterRefresh={this.loadMoreFun}
       />
     );
   }
@@ -75,6 +81,8 @@ RecordList.propTypes = {
   gotoDetailFun: PropTypes.func.isRequired,
   getRefreshListView: PropTypes.func.isRequired,
   recordType: PropTypes.number.isRequired,
+  dropDownRefresh: PropTypes.func.isRequired,
+  upPullGetMore: PropTypes.func.isRequired,
 };
 
 export default RecordList;

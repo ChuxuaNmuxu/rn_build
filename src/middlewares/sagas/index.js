@@ -8,6 +8,8 @@ import doHomeworkSaga from './doHomeworkSaga';
 import recordDetailSaga from './recordDetailSaga';
 // 错题重做
 import mistakeReformSaga from './mistakeReformSaga';
+// 做题记录
+import problemRecordsSaga from './problemRecordsSaga';
 
 function* rootSaga() {
   yield all([
@@ -16,6 +18,7 @@ function* rootSaga() {
     fork(doHomeworkSaga),
     fork(recordDetailSaga),
     fork(mistakeReformSaga),
+    fork(problemRecordsSaga),
   ]);
 }
 export default rootSaga;

@@ -1,27 +1,22 @@
 
 export function fetchExamDataSuccess(state, action) {
   const { headerList, detailsDataList } = action.payload;
-  // const newState = Object.assign({}, state, {
-  //   headerList,
-  //   detailsDataList,
-  // });
-  // return newState;
   state.headerList = headerList;
   state.detailsDataList = detailsDataList;
 }
 
+export function initailState(state) {
+  state.headerList = [];
+  state.detailsDataList = [];
+}
+
 export function fetchHomeworkListDataSuccess(state, action) {
-  // const newState = Object.assign({}, state, {
-  //   headerList: action.payload,
-  // });
-  // return newState;
-  state.headerList = action.payload;
+  const { headerList, detailsDataList } = action.payload;
+  state.headerList = headerList;
+  state.detailsDataList = detailsDataList;
 }
 
 export function fetchHomeworkDataSuccess(state, action) {
-  // const newState = Object.assign({}, state, {
-  //   detailsDataList: action.payload,
-  // });
-  // return newState;
-  state.detailsDataList = action.payload;
+  const { data, index } = action.payload;
+  state.detailsDataList[index] = data;
 }
