@@ -9,6 +9,13 @@ const initState = {
     b: 2,
     c: {
       d: 3,
+      e: [
+        {
+          f: {
+            g: '变化前',
+          },
+        },
+      ],
     },
   },
 };
@@ -19,6 +26,10 @@ const handle = {
   MISTAKE_SELECT_ANSWER: fn.selectAnswer,
   MISTAKE_SUBMIT_ANSWER_CORRECT: fn.answerCorrect,
   MISTAKE_SUBMIT_ANSWER_ERROR: fn.answerError,
+  MISTAKE_SUBMIT_ANSWER_ERROR_SHOW_RADIO: fn.showAnswerErrorRadio,
+  MISTAKE_UPLOAD_IMAGE: fn.updateImage,
+  MISTAKE_CHANGE_SUBJECTIVE_SHOWALL_SUCCESS: fn.changeSubjectiveShowall,
+  MISTAKE_CHANGE_SUBJECTIVE_SHOWBUTTON: fn.controlSubjectButton,
 };
 
 const problemOverviewReducer = createReducer(initState, handle);

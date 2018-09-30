@@ -64,6 +64,7 @@ export default class UploadImage extends Component {
   }
 
   render() {
+    const { CustomComponent } = this.props;
     const { source } = this.state;
     console.log('image', source);
     return (
@@ -72,7 +73,11 @@ export default class UploadImage extends Component {
           {/* <View>
             { source === null ? <Text>选择照片</Text> : <Image style={styles.avatar} source={source} />}
           </View> */}
-          <View><Text>选择照片</Text></View>
+          {
+            CustomComponent ? (
+              <CustomComponent />
+            ) : <View><Text>选择照片</Text></View>
+          }
         </TouchableOpacity>
       </View>
     );
@@ -82,19 +87,20 @@ export default class UploadImage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 200,
-    paddingBottom: 200,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#eee',
+    // backgroundColor: '#eee',
   },
 });
 
 UploadImage.propTypes = {
-  updateImage: PropTypes.func.isRequired,
+  updateImage: PropTypes.func,
   options: PropTypes.object,
+  CustomComponent: PropTypes.func,
 };
 
 UploadImage.defaultProps = {
   options: {},
+  updateImage: () => { console.log('上传了'); },
+  CustomComponent: null,
 };

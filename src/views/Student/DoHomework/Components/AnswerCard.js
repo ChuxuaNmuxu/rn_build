@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import {
+  View, Text, TouchableOpacity,
+  // Image,
+} from 'react-native';
 import { PropTypes } from 'prop-types';
 import { ImagePicker } from 'antd-mobile-rn';
+import UploadImage from '../../../../components/UploadImage';
+// import ImageCrop from '../../../../components/ImageCrop';
+// import Demo from '../../../Demo/index';
 import styles from './AnswerCard.scss';
 import Radio from '../../../../components/Radio';
 import Checkbox from '../../../../components/Checkbox';
@@ -12,6 +18,7 @@ import { CustomButton } from '../../../../components/Icon';
 import DifficultLevelView from '../../../../components/DifficultLevelView';
 import I18nText from '../../../../components/I18nText';
 import ImagePickerStyle from './ImagePickerStyle';
+
 
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
@@ -24,6 +31,11 @@ class AnswerCard extends Component {
       optionCount: 4,
       answer: null,
       answered: false, // 客观题是否选择了答案
+      // source: null,
+      // showCropper: false,
+      // testUri: null,
+      // width: null,
+      // height: null,
     };
   }
 
@@ -59,14 +71,39 @@ class AnswerCard extends Component {
     console.log(666, '当前是否选择了不是很懂', a);
   }
 
-  // 选择图片
-  uploadImgChange = () => {
+  updateImage = (source) => {
+    // console.log(source);
+    const { updateImage } = this.props;
+    if (updateImage) updateImage(source);
+    // this.setState({
+    //   source,
+    //   showCropper: true,
+    // });
+  }
 
+  croppedImage = (uri, width, height) => {
+    console.log(uri, width, height);
+    this.setState({
+      // showCropper: false,
+      // testUri: uri,
+      // width,
+      // height,
+    });
+  }
+
+  cancelCrop = () => {
+    this.setState({
+      // showCropper: false,
+    });
   }
 
   render() {
     const { questions, mistakeReform } = this.props;
-    const { optionCount, answer, answered } = this.state;
+    const {
+      optionCount, answer, answered,
+      // testUri, width, height,
+      // source, showCropper,
+    } = this.state;
     return (
       <View style={styles.answerCard_container}>
         <View style={styles.question_title}>
@@ -130,9 +167,36 @@ class AnswerCard extends Component {
             (questions.type === 10 || questions.type === 11) && (
               <View style={styles.uploadAreaStyle}>
                 <View style={styles.img_container}>
-                  <View style={styles.iconphoto_container}>
-                    <CustomButton name="iconphoto" style={styles.iconphotoStyle} />
-                  </View>
+                  <TouchableOpacity
+                    // 没办法传组件进去调用 selectPhotoTapped，只能通过这种方式 (为了让外面的圆点击也有效果)
+                    onPress={this.UploadImageRef && this.UploadImageRef.selectPhotoTapped}
+                  >
+                    <View style={styles.iconphoto_container}>
+                      <View style={styles.container}>
+                        {/* <ScrollView> */}
+                        <UploadImage
+                          ref={(node) => { this.UploadImageRef = node; }}
+                          CustomComponent={() => (
+                            <CustomButton
+                              // 没办法传组件进去调用 selectPhotoTapped，只能通过这种方式
+                              onPress={this.UploadImageRef && this.UploadImageRef.selectPhotoTapped}
+                              name="iconphoto"
+                              style={styles.iconphotoStyle}
+                            />
+                          )}
+                          updateImage={this.updateImage}
+                        />
+                        {/* </ScrollView> */}
+                        {/* {showCropper && (
+                      <ImageCrop
+                        source={source}
+                        croppedImage={this.croppedImage}
+                        cancelCrop={this.cancelCrop}
+                      />
+                      )} */}
+                      </View>
+                    </View>
+                  </TouchableOpacity>
                   <Text style={styles.txtStyle}>
                     <I18nText>
                     DoHomeworks.answerCard.toUpLoadNotice
@@ -142,13 +206,22 @@ class AnswerCard extends Component {
                     </I18nText>
                   </Text>
                 </View>
-                <View style={styles.imgPic_container}>
+                {/* {
+                  testUri && (
+                    <Image
+                      source={{ uri: testUri }}
+                      style={{ width, height }}
+                    />
+                  )
+                } */}
+                {/* 这是之前冬梅写的，目前用晓枫的替换 */}
+                {/* <View style={styles.imgPic_container}>
                   <ImagePicker
                     styles={ImagePickerStyle}
                     onChange={this.uploadImgChange}
                     accept=".jpeg, .jpg, .png"
                   />
-                </View>
+                </View> */}
               </View>
             )
             }
@@ -212,12 +285,14 @@ AnswerCard.propTypes = {
   mistakeReform: PropTypes.bool, // 错题重做页面调用时用来标识调用方的
   handleDifficultLevel: PropTypes.func, // 难易程度发生改变的函数
   handleToClickRadio: PropTypes.func, // 单选题的回调函数
+  updateImage: PropTypes.func, // 上传图片后的回调函数
 };
 
 AnswerCard.defaultProps = {
   mistakeReform: false,
   handleToClickRadio: () => {},
   handleDifficultLevel: () => {},
+  updateImage: () => {},
 };
 
 

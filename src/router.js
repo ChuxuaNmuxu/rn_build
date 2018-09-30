@@ -95,7 +95,7 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
-            initial
+            // initial
           >
             <Scene
               key="ProblemRecords"
@@ -148,6 +148,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
+        // initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
@@ -158,7 +159,7 @@ const RouteMap = props => (
         {/* 错题本列表页 */}
         <Scene key="ProblemListOverview" component={ProblemListOverview} hideNavBar />
         {/* 错题重做 */}
-        <Scene key="MistakeReform" component={MistakeReform} hideNavBar initial />
+        <Scene key="MistakeReform" component={MistakeReform} hideNavBar />
         {/* 作业记录详情页 */}
         <Scene key="HomworkRecordDetail" component={HomworkRecordDetail} hideNavBar />
         {/* 考试记录详情页 */}
