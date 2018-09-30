@@ -5,9 +5,9 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import TaskItem from './TaskItem';
-import styles from './taskList.scss';
-import { ChangeDropPosition, FirstGetDropListenerRange } from '../../../actions/homeworkTask';
+import TaskItem from '../component/Task';
+import styles from './todoList.scss';
+import { ChangeDropPosition, FirstGetDropListenerRange } from '../../../../actions/homeworkTask';
 
 @connect(({
   homeworkTaskReducer: {
@@ -23,12 +23,11 @@ import { ChangeDropPosition, FirstGetDropListenerRange } from '../../../actions/
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
   onFirstGetDropListenerRange: bindActionCreators(FirstGetDropListenerRange, dispatch),
 }))
-class TaskList extends Component {
+class TodoList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       flatlistWidth: 0,
-      // scrollEnabled: true,
     };
     this.flatList = null;
   }
@@ -60,11 +59,6 @@ class TaskList extends Component {
     this.setState({ flatlistWidth: width });
   }
 
-  // 单击
-  onPress = (e) => {
-    console.log('单击');
-  }
-
   getItemLayout = (data, index) => {
     const length = 450 + 24;
     return {
@@ -88,7 +82,6 @@ class TaskList extends Component {
     return (
       <TaskItem
         data={item}
-        onPress={this.onPress}
         onChangeDropPosition={onChangeDropPosition}
         onFirstGetDropListenerRange={onFirstGetDropListenerRange}
         isFirstGetDropListenerRange={isFirstGetDropListenerRange}
@@ -125,8 +118,7 @@ class TaskList extends Component {
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
           getItemLayout={this.getItemLayout}
-          // initialScrollIndex={10}
-          // initialNumToRender={parseInt(data.length / 2) + 4}
+          initialNumToRender={planList.length}
           ListEmptyComponent={this.renderListEmpty}
         />
       </View>
@@ -134,7 +126,7 @@ class TaskList extends Component {
   }
 }
 
-TaskList.defaultProps = {
+TodoList.defaultProps = {
   onChangeDropPosition: () => {},
   onFirstGetDropListenerRange: () => {},
   isFirstGetDropListenerRange: false,
@@ -142,7 +134,7 @@ TaskList.defaultProps = {
   planList: [],
 };
 
-TaskList.propTypes = {
+TodoList.propTypes = {
   onChangeDropPosition: PropTypes.func,
   onFirstGetDropListenerRange: PropTypes.func,
   isFirstGetDropListenerRange: PropTypes.bool,
@@ -150,4 +142,4 @@ TaskList.propTypes = {
   planList: PropTypes.array,
 };
 
-export default TaskList;
+export default TodoList;

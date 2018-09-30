@@ -1,8 +1,8 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import TaskItem from './TaskItem';
-import CIcon from '../../../components/Icon';
-import styles from './plannedTask.scss';
+import TaskItem from '../component/Task';
+import CIcon from '../../../../components/Icon';
+import styles from './planItem.scss';
 
 const PlannedTask = (props) => {
   const onPress = () => { console.log('做作业'); };

@@ -4,8 +4,8 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import R from 'ramda';
-import TaskItem from './TaskItem';
-import { adaptiveRotation } from '../../../utils/resolution';
+import TaskItem from './Task';
+import { adaptiveRotation } from '../../../../utils/resolution';
 import styles from './drag.scss';
 
 export class Drop extends Component {

@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Text } from 'react-native';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import TimeItem from './TimeItem';
-import styles from './timeList.scss';
-import { createHalfHourPeriod, currentTimeToPeriod } from '../../../utils/common';
-import { ChangeDropPosition, FirstGetDropListenerRange, GetDropListenerRange } from '../../../actions/homeworkTask';
-import { adaptiveRotation } from '../../../utils/resolution';
+import PlanItem from './PlanItemWrap';
+import styles from './planList.scss';
+import { currentTimeToPeriod } from '../../../../utils/common';
+import { ChangeDropPosition, FirstGetDropListenerRange, GetDropListenerRange } from '../../../../actions/homeworkTask';
+import { adaptiveRotation } from '../../../../utils/resolution';
 
 @connect(({
   homeworkTaskReducer: {
     isFirstGetDropListenerRange,
+    listenerRangeList,
     todoList,
   },
 }) => ({
   isFirstGetDropListenerRange,
+  listenerRangeList,
   todoList,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
@@ -26,9 +28,11 @@ class TaskList extends Component {
   constructor(props) {
     super(props);
     this.flatList = null;
-    this.periods = createHalfHourPeriod(); // 生成半小时时间段数组
     this.currentPeriodIndex = currentTimeToPeriod();
     this.timeItemRefList = []; // timeItem ref
+    this.state = {
+      flatlistWidth: 0,
+    };
   }
 
   componentDidMount() {
@@ -49,10 +53,20 @@ class TaskList extends Component {
     // });
   }
 
-  componentDidUpdate(nextProps) {
-    if (nextProps.isFirstGetDropListenerRange) {
-      this.saveListenerRangeToStore();
-    }
+  // componentDidUpdate(nextProps) {
+  //   if (nextProps.isFirstGetDropListenerRange) {
+  //     this.saveListenerRangeToStore();
+  //   }
+  // }
+
+  // 通过 onLayout 获取 最外面容器宽，当 FlatList 为空时，给 renderListEmpty 里面里的容器设置值让其可以全屏
+  onLayout = (e) => {
+    const {
+      layout: {
+        width,
+      },
+    } = e.nativeEvent;
+    this.setState({ flatlistWidth: width });
   }
 
   // 滑动时间段动画结束之后的回调
@@ -116,23 +130,41 @@ class TaskList extends Component {
       onChangeDropPosition,
       isFirstGetDropListenerRange,
       onFirstGetDropListenerRange,
+      listenerRangeList,
     } = this.props;
+
     return (
-      <TimeItem
+      <PlanItem
         data={data}
         onChangeDropPosition={onChangeDropPosition}
         isFirstGetDropListenerRange={isFirstGetDropListenerRange}
         onFirstGetDropListenerRange={onFirstGetDropListenerRange}
+        listenerRangeList={listenerRangeList}
         getTimeItemRef={this.getTimeItemRef}
       />
     );
   }
 
+
+  renderListEmpty = () => {
+    const {
+      flatlistWidth,
+    } = this.state;
+    return (
+      <View style={[styles.empty, { width: flatlistWidth }]}>
+        <Text style={styles.empty_text}>暂无数据</Text>
+      </View>
+    );
+  }
+
   render() {
     const { todoList } = this.props;
-    console.log(133, todoList);
+    // console.log(134, todoList);
     return (
-      <View style={styles.time_list_box}>
+      <View
+        style={styles.time_list_box}
+        onLayout={this.onLayout}
+      >
         <FlatList
           horizontal
           ref={(ref) => { this.flatList = ref; }}
@@ -140,7 +172,8 @@ class TaskList extends Component {
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
           getItemLayout={this.getItemLayout}
-          initialNumToRender={this.periods.length}
+          initialNumToRender={todoList.length}
+          ListEmptyComponent={this.renderListEmpty}
           onMomentumScrollEnd={this.onMomentumScrollEnd}
         />
       </View>
@@ -154,6 +187,7 @@ TaskList.propTypes = {
   onFirstGetDropListenerRange: PropTypes.func,
   onGetDropListenerRange: PropTypes.func,
   todoList: PropTypes.array,
+  listenerRangeList: PropTypes.array,
 };
 
 TaskList.defaultProps = {
@@ -161,6 +195,7 @@ TaskList.defaultProps = {
   isFirstGetDropListenerRange: false,
   onFirstGetDropListenerRange: () => {},
   onGetDropListenerRange: () => {},
+  listenerRangeList: [],
   todoList: [],
 };
 

@@ -9,10 +9,10 @@ import PropTypes from 'prop-types';
 import { merge } from 'ramda';
 import { bindActionCreators } from 'redux';
 import styles from './homeworkTask.scss';
-import TaskList from './TaskList';
-import TimeList from './TimeList';
+import PlanList from './PlanTask/PlanList';
+import TodoList from './TodoTask/TodoList';
 import I18nText from '../../../components/I18nText';
-import Drag from './Drag';
+import Drag from './component/Drag';
 import { createHalfHourPeriod, currentTimeToPeriod } from '../../../utils/common';
 import { ChangePlanTask, ChangeTodoTask } from '../../../actions/homeworkTask';
 
@@ -32,14 +32,14 @@ import { ChangePlanTask, ChangeTodoTask } from '../../../actions/homeworkTask';
 class HomeworkTask extends Component {
   constructor(props) {
     super(props);
-    this.periods = createHalfHourPeriod(); // 生成半小时时间段数组
+    this.periods = createHalfHourPeriod() || []; // 生成半小时时间段数组
     this.currentPeriodIndex = currentTimeToPeriod(); // 获取当前时间段
     this.state = {};
   }
 
   componentDidMount() {
     const { onChangePlanTask, onChangeTodoTask } = this.props;
-    const planListData = Array(20).fill({}).map((v, i) => (merge(v, {
+    const planListData = Array(48).fill({}).map((v, i) => (merge(v, {
       data: i,
     })));
 
@@ -52,7 +52,7 @@ class HomeworkTask extends Component {
       console.log('模拟请求');
       onChangePlanTask(planListData);
       onChangeTodoTask(todoListData);
-    }, 10000);
+    }, 1000);
   }
 
 
@@ -80,9 +80,9 @@ class HomeworkTask extends Component {
         {
           this.renderHeader()
         }
-        <TaskList />
+        <TodoList />
         <Drag position={position} wrapStyle={{ backgroundColor: 'pink' }} />
-        <TimeList />
+        <PlanList />
       </View>
     );
   }

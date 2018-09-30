@@ -7,10 +7,10 @@ import {
   PanResponder,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import CIcon from '../../../components/Icon';
-import styles from './taskItem.scss';
-import { mergeStyles } from '../../../utils/common';
-import { adaptiveRotation } from '../../../utils/resolution';
+import CIcon from '../../../../components/Icon';
+import styles from './task.scss';
+import { mergeStyles } from '../../../../utils/common';
+import { adaptiveRotation } from '../../../../utils/resolution';
 
 class TaskItem extends React.Component {
   constructor(props) {

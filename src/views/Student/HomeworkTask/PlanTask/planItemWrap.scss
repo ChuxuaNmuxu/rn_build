@@ -1,5 +1,6 @@
 .time_wrap {
   flex: 1;
+  flex-shrink: 0;
   justify-content: flex-end ;
   position: relative;
 };
