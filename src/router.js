@@ -95,7 +95,7 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
-            // initial
+            initial
           >
             <Scene
               key="ProblemRecords"
