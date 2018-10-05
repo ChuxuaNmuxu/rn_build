@@ -20,6 +20,7 @@ class RefreshListView extends Component {
 
   // 头部组件的状态，供外部调用，一般不会用到
   setheaderState = (headerState) => {
+    console.log('setheaderState', '皇上，臣妾1跑起来了啊', headerState);
     // const {  } = this.props;
     this.setState({
       headerState,
@@ -28,6 +29,7 @@ class RefreshListView extends Component {
 
   // 尾部组件的状态，供外部调用，一般不会用到
   setfooterState = (footerState) => {
+    console.log('setfooterState', '皇上，臣妾2跑起来了啊', footerState);
     // const {  } = this.props;
     this.setState({
       footerState,
@@ -55,16 +57,18 @@ class RefreshListView extends Component {
 
   // 开始下拉刷新
   beginHeaderRefresh = () => {
-    if (this.shouldStartHeaderRefreshing()) {
-      this.startHeaderRefreshing();
-    }
+    console.log('开始下拉刷新', this.shouldStartHeaderRefreshing());
+    // if (this.shouldStartHeaderRefreshing()) {
+    this.startHeaderRefreshing();
+    // }
   }
 
   // 开始上拉加载更多
   beginFooterRefresh = () => {
-    if (this.shouldStartFooterRefreshing()) {
-      this.startFooterRefreshing();
-    }
+    console.log('开始下拉刷新', this.shouldStartFooterRefreshing());
+    // if (this.shouldStartFooterRefreshing()) {
+    this.startFooterRefreshing();
+    // }
   }
 
   // 下拉刷新，设置完刷新状态后再调用刷新方法，使页面上可以显示出加载中的UI，注意这里setState写法
@@ -75,19 +79,23 @@ class RefreshListView extends Component {
       isHeaderRefreshing: true,
     }, () => {
       if (onHeaderRefresh) {
+        console.log('函数跑起来了吗', 'onHeaderRefresh');
         onHeaderRefresh();
       }
     });
+    console.log('startHeaderRefreshingstartHeaderRefreshing');
   }
 
   // 上拉加载更多，将底部刷新状态改为正在刷新，然后调用刷新方法，页面上可以显示出加载中的UI，注意这里setState写法
   startFooterRefreshing = () => {
+    console.log('startFooterRefreshing');
     const { onFooterRefresh } = this.props;
     this.setState({
       footerState: RefreshState.Refreshing,
       isFooterRefreshing: true,
     }, () => {
       if (onFooterRefresh) {
+        console.log('函数跑起来了吗', 'onFooterRefresh', onFooterRefresh);
         onFooterRefresh();
       }
     });
@@ -101,8 +109,8 @@ class RefreshListView extends Component {
    * 如果列表头部已经在刷新中了，就返回false
    */
   shouldStartHeaderRefreshing = () => {
-    const { footerState, isHeaderRefreshing, isFooterRefreshing } = this.state;
-    if (footerState === RefreshState.refreshing || isHeaderRefreshing || isFooterRefreshing) {
+    const { headerState, isHeaderRefreshing, isFooterRefreshing } = this.state;
+    if (headerState === RefreshState.refreshing || isHeaderRefreshing || isFooterRefreshing) {
       return false;
     }
     return true;
@@ -136,6 +144,7 @@ class RefreshListView extends Component {
    * 刷新成功或者刷新失败
    */
   endHeaderRefreshing = (headerState) => {
+    console.log('老进来就跑了啊');
     const headerRefreshState = headerState || headerState.Idle;
     this.setState({
       headerState: headerRefreshState,
@@ -166,6 +175,7 @@ class RefreshListView extends Component {
 
   render() {
     const { isShowRefreshIcon, footerState, headerState } = this.state;
+    console.log(this.props, '草草草草草');
     return (
       <FlatList
       // 传进所有参数
@@ -175,11 +185,13 @@ class RefreshListView extends Component {
             colors={['#30BF6C']}
             progressBackgroundColor="#fff"
             refreshing={isShowRefreshIcon}
-            onRefresh={() => { this.beginHeaderRefresh(); }}
+            onRefresh={this.beginHeaderRefresh}
           />
         )}
+        // refreshing={isShowRefreshIcon}
+        // onRefresh={() => { this.beginHeaderRefresh(); }}
         ListHeaderComponent={() => this._renderHeader(headerState)}
-        onEndReached={() => { this.beginFooterRefresh(); }}
+        onEndReached={this.beginFooterRefresh}
         onEndReachedThreshold={0.1} // 这里取值0.1，可以根据实际情况调整，取值尽量小,取值范围时0-1
         ListFooterComponent={() => this._renderFooter(footerState)}
       />

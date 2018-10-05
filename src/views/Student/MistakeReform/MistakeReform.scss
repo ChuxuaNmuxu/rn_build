@@ -3,7 +3,7 @@
 }
 
 .content_wrap {
-  height: 1200px;
+  height: 1800px;
 }
 
 .head {
@@ -82,7 +82,7 @@
   width: 100%;
   height: 100px;
   background-color: white;
-  margin-top: -59px;
+  // margin-top: -59px;
   justify-content: center;
   border-top-color: #ccc;
   border-top-width: 1px;
@@ -176,4 +176,63 @@
   height: 375px;
   width: 100%;
   padding: 22px;
+}
+
+.subjective_container {
+  background-color: white;
+  padding: 19px;
+}
+
+.answer_title {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666666;
+  margin-bottom: 19px;
+}
+
+.other_student_answer {
+  flex-direction: row;
+}
+
+.dotted_line {
+  width: 100%;
+  // height: 1px;
+  margin: 19px 0;
+  border: 1px dotted #e8e8e8;
+}
+
+.subjective_bottom {
+  background-color: white;
+  padding: 0 23px;
+  height: 120px;
+  flex-direction: row;
+  align-items: center;
+}
+
+.subjective_bottom_left {
+  flex: 2;
+}
+
+.subjective_bottom_left_word {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666666;
+}
+
+.subjective_bottom_right {
+  flex-direction: row;
+  flex: 1;
+  justify-content: space-around;
+}
+
+.subjective_bottom_right_btn {
+  border:1px solid #30bf6c;
+  border-radius:50px;
+}
+
+.subjective_bottom_right_word {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#30bf6c;
+  padding: 20px 81px;
 }

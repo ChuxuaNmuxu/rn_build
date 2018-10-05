@@ -13,6 +13,7 @@ import HTMLView from 'react-native-htmlview';
 // import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import _ from 'ramda';
 import * as actions from '../../../actions/recordDetailActions';
 import { CustomButton } from '../../../components/Icon';
 import styles from './HomworkRecordDetail.scss';
@@ -32,7 +33,7 @@ class HomworkRecordDetail extends Component {
     // 初始化请求数据
     this.init(this.type, id);
     // 学生答案图片的url
-    this.url = props.url;
+    // this.url = props.url;
     // 展示需要区分考试和作业，那设考试为'E',作业为'H'
     this.state = {
       width: 0,
@@ -40,31 +41,53 @@ class HomworkRecordDetail extends Component {
       screenWidth: 0,
       screenHeight: 0,
       selectTion: 0,
+      isgetImageSize: false,
     };
   }
 
-  componentWillMount() {
+  componentDidUpdate() {
+    // 获取图片的大小
     // 真实情况应该在loading结束后才跑这个函数
-    this.getImageSize();
+    const { detailsDataList } = this.props;
+    const { selectTion, isgetImageSize } = this.state;
+    if (!_.isEmpty(detailsDataList) && !isgetImageSize) {
+      // 如果需要loading就ladoging
+
+      const {
+        studentAnserImage,
+      } = detailsDataList[selectTion];
+
+      this.getImageSize(studentAnserImage);
+    }
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const { detailsDataList } = props;
+    console.log(state, 'statestatestate');
+    if (detailsDataList !== state.detailsDataList) {
+      // this.getImageSize(studentAnserImage);
+    }
+    return null;
   }
 
 
   // 获取图片初始化大小
-  getImageSize=() => {
+  getImageSize=(url) => {
     Image.getSize(
-      this.url,
+      url,
       (width, height) => {
         this.setState(
           {
             width,
             height,
+            isgetImageSize: true,
           },
         );
       },
       () => {
         try {
           // 应该是静态资源，不过没做
-          const data = (Image).resolveAssetSource(this.url);
+          const data = (Image).resolveAssetSource(url);
           this.setState(
             {
               width: data.width,
@@ -124,17 +147,17 @@ class HomworkRecordDetail extends Component {
   }
 
   // 富文本数据展示框
-  htmlViewComponent=() => {
+  htmlViewComponent=(htmlContent) => {
     const htmlViewStyles = StyleSheet.create({
       p: {
         fontSize: 24,
         color: '#999999',
       },
     });
-    const htmlContent = '<p>zhazhazha</p>'
-    + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
-    + 'alt="undefined" style="float:none;height: auto;width: auto"/>'
-    + '<p>曹尼玛的富文本</p>';
+    // const htmlContent = '<p>zhazhazha</p>'
+    // + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
+    // + 'alt="undefined" style="float:none;height: auto;width: auto"/>'
+    // + '<p>曹尼玛的富文本</p>';
     return (
       <View style={styles.htmlViewComponent}>
         <HTMLView
@@ -151,7 +174,7 @@ class HomworkRecordDetail extends Component {
   )
 
   // 学生自己的答案（图片）
-  studentAnserImage=() => {
+  studentAnserImage=(url) => {
     // 获得屏幕宽高
     const {
       screenHeight, screenWidth, width, height,
@@ -176,7 +199,7 @@ class HomworkRecordDetail extends Component {
       <View style={[styles.studentAnserImage]}>
         <Image
           style={[{ width: _width, height: _height }]}
-          source={{ uri: this.url }}
+          source={{ uri: url }}
         />
       </View>
     );
@@ -192,7 +215,7 @@ class HomworkRecordDetail extends Component {
         {
             data.map((
               (item, index) => (
-                <View style={styles.imageListItem} key={`${index}666`}>
+                <View style={styles.imageListItem} key={`${index}${title}`}>
                   <TouchableOpacity onPress={() => this.callImageModal(item.url, item.studentName && item.studentName)}>
                     <Image
                       style={[{ width: 146, height: 146 }]}
@@ -215,19 +238,69 @@ class HomworkRecordDetail extends Component {
     ModalApi.onOppen('ImageViewer', data);
   }
 
+  myComponentWillUnmount=() => {
+    // 离开该页面清理数据，否则下次进来有缓存
+    const {
+      actions: {
+        initialState,
+      },
+    } = this.props;
+    initialState(null);
+    Actions.ProblemRecords();
+    console.log('caonika');
+  }
+
+  selectFun=(index) => {
+    console.log(index);
+    // 应该写个中转函数，检测数据是否存在，如果reducer里面存在该index的对应项，则直接拿数据。
+    // 如果没有则触发请求去拉取数据。那么页面也应该稍微调整增加个loading状态。不过产品没说，真是渣渣。
+    const { detailsDataList, headerList } = this.props;
+    // 无脑刷新state，如果有就直接显示了，不用鸟
+    this.setState({
+      selectTion: index,
+    });
+    // 如果没有数据的话就去拉取
+    if (_.isNil(detailsDataList[index])) {
+      console.log('我要去请求数据啦啦啦啦啦');
+      const {
+        actions: {
+          fetchHomeworkData,
+        },
+      } = this.props;
+      fetchHomeworkData({ id: headerList[index].id, index }, 'REQUEST');
+    }
+  }
+
 
   render() {
     const { headerList, detailsDataList } = this.props;
     const { selectTion } = this.state;
-    console.log(detailsDataList);
+    if (_.isNil(headerList[selectTion]) || _.isNil(detailsDataList[selectTion])) {
+      console.log('尼玛这个能进来？');
+      console.log(headerList[selectTion]);
+      console.log(_.isNil(headerList[selectTion]));
+      // 如果需要loading就ladoging
+      return null;
+    }
+    const {
+      status, isItCorrect,
+    } = headerList[selectTion];
+    console.log(status, 'renderrenderrender');
+    console.log(isItCorrect, 'renderrenderrender');
     const {
       htmlContent,
+      AnserSummarizationData,
+      studentAnserImage,
+      rightAnser,
+      othersAnser,
+      causeOfErrorNum,
     } = detailsDataList[selectTion];
+    console.log(causeOfErrorNum, 'studentAnserImagestudentAnserImagestudentAnserImage');
     return (
       <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
         <Modal />
         <View style={styles.homeworkDetail_header}>
-          <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.ProblemRecords} />
+          <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.myComponentWillUnmount} />
           <Text style={styles.homeworkDetailTitle}>作业记录详情</Text>
 
         </View>
@@ -236,7 +309,7 @@ class HomworkRecordDetail extends Component {
         }
         {
           // 头部的滚动选择器
-          <ScrollSelectedBar data={headerList} />
+          <ScrollSelectedBar data={headerList} moveIndex={this.selectFun} />
         }
         {
           // 你好我是分割线
@@ -244,16 +317,18 @@ class HomworkRecordDetail extends Component {
         }
 
         {
-          <React.Fragment>
-            {
+          !_.isEmpty(htmlContent) ? (
+            <React.Fragment>
+              {
               // 富文本显示块，，，如果出错可能是返回数据是block而不是html字符串。形式固定，不独立组件了。
-              htmlContent ? this.htmlViewComponent(htmlContent) : null
+               this.htmlViewComponent(htmlContent)
             }
-            {
+              {
                // 你好我是分割线
               this.splitLine()
             }
-          </React.Fragment>
+            </React.Fragment>
+          ) : null
 
         }
 
@@ -261,8 +336,25 @@ class HomworkRecordDetail extends Component {
           <React.Fragment>
             {
               // 该题的摘要，包括对错得分难易同批阅之类。
-              // 说起来你不信。这个页面这个组件时最难的，但是看起来是最少东西的。
-              <AnserSummarization />
+              // 说起来你不信。这个页面这个组件是最复杂的，但是看起来是最少东西的。
+              <AnserSummarization
+                // 状态
+                status={status}
+                // 是否正确
+                isItCorrect={isItCorrect}
+                // 是作业or考试
+                type={this.type}
+                // 题目类型
+                questionType={AnserSummarizationData.questionType}
+                // 难易度
+                difficultyDegree={AnserSummarizationData.difficultyDegree}
+                // 正确答案
+                correctAnser={AnserSummarizationData.correctAnser}
+                // 学生答案
+                studentAnser={AnserSummarizationData.studentAnser}
+                // 得分
+                score={AnserSummarizationData.score}
+              />
             }
             {
               // 你好我是分割线
@@ -272,63 +364,56 @@ class HomworkRecordDetail extends Component {
         }
 
         {
-          <React.Fragment>
-            {
+           _.isEmpty(studentAnserImage) ? null : (
+             <React.Fragment>
+               {
               // 学生自己的答案，是个图片。形式固定，不独立组件了。
               // 这个B组件没有答案的时候就不展示了
-              this.studentAnserImage()
+             this.studentAnserImage(studentAnserImage)
             }
-            {
+               {
               // 你好我是分割线
               this.splitLine()
             }
-          </React.Fragment>
+             </React.Fragment>
+           )
         }
 
         {
-          // 题目答案
-          this.correctAndOthersAnser(
-            [
+          _.isEmpty(rightAnser) ? null : (
+            <React.Fragment>
               {
-                url: 'https://s1.tuchong.com/content-image/201808/c0d4a9ed78db8ccff97dbd04d9ab62ab.png',
-
-              },
-            ], '题目答案',
+              // 题目答案
+              this.correctAndOthersAnser(rightAnser, '题目答案：')
+            }
+              {
+              // 你好我是分割线
+              this.splitLine()
+            }
+            </React.Fragment>
           )
         }
-        {
-          // 你好我是分割线
-          this.splitLine()
-        }
 
         {
-          // 题目答案
-          this.correctAndOthersAnser(
-            [
+          _.isEmpty(rightAnser) ? null : (
+            <React.Fragment>
               {
-                url: 'https://s1.tuchong.com/content-image/201808/c0d4a9ed78db8ccff97dbd04d9ab62ab.png',
-                studentName: '李香兰',
-              },
+                // 题目答案
+                this.correctAndOthersAnser(othersAnser, '看看其他同学的解答过程：')
+              }
               {
-                url: 'https://s1.tuchong.com/content-image/201808/c0d4a9ed78db8ccff97dbd04d9ab62ab.png',
-                studentName: '李香兰',
-              },
-              {
-                url: 'https://s1.tuchong.com/content-image/201808/c0d4a9ed78db8ccff97dbd04d9ab62ab.png',
-                studentName: '李香兰',
-              },
-            ], '看看其他同学的解答过程：',
+                // 你好我是分割线
+                this.splitLine()
+              }
+            </React.Fragment>
           )
         }
-        {
-          // 你好我是分割线
-          this.splitLine()
-        }
+
 
         {
           // 错误原因分析
           <View style={styles.CauseOfError}>
-            <CauseOfError />
+            <CauseOfError defaultValue={causeOfErrorNum} />
           </View>
         }
       </ScrollView>
@@ -337,7 +422,7 @@ class HomworkRecordDetail extends Component {
 }
 
 HomworkRecordDetail.propTypes = {
-  url: PropTypes.string,
+  // url: PropTypes.string,
   params: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
   headerList: PropTypes.array.isRequired,
@@ -345,7 +430,7 @@ HomworkRecordDetail.propTypes = {
 };
 
 HomworkRecordDetail.defaultProps = {
-  url: 'https://s1.tuchong.com/content-image/201808/c0d4a9ed78db8ccff97dbd04d9ab62ab.png',
+  // url: 'https://s1.tuchong.com/content-image/201808/c0d4a9ed78db8ccff97dbd04d9ab62ab.png',
 };
 
 const mapStateToProps = (state) => {

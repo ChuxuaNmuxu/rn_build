@@ -47,9 +47,10 @@ class ScrollSelectedBar extends Component {
   }
 
   _onClick=(index) => {
+    const { moveIndex } = this.props;
     this.setState({
       selectTion: index,
-    });
+    }, () => moveIndex(index));
   }
 
   /**
@@ -94,7 +95,7 @@ class ScrollSelectedBar extends Component {
           data.map(
             (item, index) => (
               <TouchableOpacity
-                key={index}
+                key={`${index}aug`}
                 style={[
                   styles.btn,
                   {
@@ -146,6 +147,7 @@ class ScrollSelectedBar extends Component {
 
 ScrollSelectedBar.propTypes = {
   data: PropTypes.array.isRequired,
+  moveIndex: PropTypes.func.isRequired,
 };
 
 export default ScrollSelectedBar;

@@ -9,9 +9,9 @@ export default function* recordDetailSaga() {
   // 请求考试数据
   yield takeLatest('FETCH_RECORD_DETAIL_EXAM_REQUEST', enhanceSaga(fetchExamData));
   // 请求作业数据头部
-  // yield takeLatest('FETCH_RECORD_DETAIL_HOMEWORK_LIST_REQUEST', enhanceSaga(fetchHomeworkListData));
+  yield takeLatest('FETCH_RECORD_DETAIL_HOMEWORK_LIST_REQUEST', enhanceSaga(fetchHomeworkListData));
   // 请求作业数据内容
-  // yield takeLatest('FETCH_RECORD_DETAIL_HOMEWORK_REQUEST', enhanceSaga(fetchHomeworkData));
+  yield takeLatest('FETCH_RECORD_DETAIL_HOMEWORK_REQUEST', enhanceSaga(fetchHomeworkData));
 }
 
 function* fetchExamData(action) {
@@ -21,11 +21,55 @@ function* fetchExamData(action) {
     const code = 0;
     if (code === 0) {
       const data = {
-        // 前端自己定义好了数据形态，但未有接口，或者返回数据不是最优展示方式，因此需要转换
         headerList: transFromExamHeaderList(),
         detailsDataList: transFromExamDetailsDataList(),
       };
       yield put(actions.fetchExaminationData(data, 'SUCCESS'));
+    } else {
+      // yield put(actions.fetchExaminationData(code, 'ERROR'));
+    }
+  } catch (e) {
+    // yield put(actions.fetchExaminationData(e, 'ERROR'));
+  }
+}
+
+function* fetchHomeworkListData(action) {
+  try {
+    console.log(action, '我是action快来see');
+    const {
+      // id,
+      callback,
+      // type,
+    } = action.payload;
+    // 模拟数据
+    const code = 0;
+    if (code === 0) {
+      const data = {
+        headerList: transFromHomeworkHeaderListDataList(),
+        detailsDataList: transFromHomeworkDataList(0),
+      };
+      yield put(actions.fetchHomeworkListData(data, 'SUCCESS'));
+      yield put(callback({ index: 0 }, 'REQUEST'));
+    } else {
+      // yield put(actions.fetchExaminationData(code, 'ERROR'));
+    }
+  } catch (e) {
+    // yield put(actions.fetchExaminationData(e, 'ERROR'));
+  }
+}
+
+function* fetchHomeworkData(action) {
+  try {
+    console.log(action, '我是action快来see');
+    const {
+      // id,
+      index,
+      // type,
+    } = action.payload;
+    // 模拟数据
+    const code = 0;
+    if (code === 0) {
+      yield put(actions.fetchHomeworkData({ data: detailsDataList[index], index }, 'SUCCESS'));
     } else {
       // yield put(actions.fetchExaminationData(code, 'ERROR'));
     }
@@ -66,7 +110,7 @@ const detailsDataList = [
     + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
     + 'alt="undefined" style="float:none;height: auto;width: auto"/>',
     // 中间的状态栏数据（其他需要的状态数据目测在header里面存在，到时转换一下就OK）
-    AnserSummarization: {
+    AnserSummarizationData: {
       // 正确答案
       correctAnser: 'A',
       // 学生答案
@@ -75,11 +119,13 @@ const detailsDataList = [
       score: 30,
       // 题目类型
       questionType: 'obj',
+      // 难易度
+      difficultyDegree: 1,
     },
     studentAnserImage: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
-    correctAnser: [
+    rightAnser: [
       {
-        url: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
+        url: 'https://p9.pstatp.com/weili/l/389047947440685058.webp',
       },
     ],
     othersAnser: [
@@ -96,7 +142,7 @@ const detailsDataList = [
         studentName: '狗大锤',
       },
     ],
-    causeOfError: 0,
+    causeOfErrorNum: 1,
   },
   {
     // 富文本的
@@ -104,7 +150,7 @@ const detailsDataList = [
     + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
     + 'alt="undefined" style="float:none;height: auto;width: auto"/>',
     // 中间的状态栏数据（其他需要的状态数据目测在header里面存在，到时转换一下就OK）
-    AnserSummarization: {
+    AnserSummarizationData: {
       // 正确答案
       correctAnser: 'A',
       // 学生答案
@@ -113,9 +159,11 @@ const detailsDataList = [
       score: 30,
       // 题目类型
       questionType: 'sub',
+      // 难易度
+      difficultyDegree: 0,
     },
     studentAnserImage: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
-    correctAnser: [
+    rightAnser: [
       {
         url: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
       },
@@ -134,7 +182,7 @@ const detailsDataList = [
         studentName: '狗大锤',
       },
     ],
-    causeOfError: 0,
+    causeOfErrorNum: 2,
   },
   {
     // 富文本的
@@ -142,18 +190,20 @@ const detailsDataList = [
     + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
     + 'alt="undefined" style="float:none;height: auto;width: auto"/>',
     // 中间的状态栏数据（其他需要的状态数据目测在header里面存在，到时转换一下就OK）
-    AnserSummarization: {
+    AnserSummarizationData: {
       // 正确答案
-      correctAnser: 'A',
+      correctAnser: 'ABCDEF',
       // 学生答案
-      studentAnser: 'A',
+      studentAnser: 'ABCDFE',
       // 得分
       score: 30,
       // 题目类型
       questionType: 'obj',
+      // 难易度
+      difficultyDegree: 0,
     },
     studentAnserImage: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
-    correctAnser: [
+    rightAnser: [
       {
         url: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
       },
@@ -172,7 +222,7 @@ const detailsDataList = [
         studentName: '狗大锤',
       },
     ],
-    causeOfError: 0,
+    causeOfErrorNum: 3,
   },
   {
     // 富文本的
@@ -180,7 +230,7 @@ const detailsDataList = [
     + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
     + 'alt="undefined" style="float:none;height: auto;width: auto"/>',
     // 中间的状态栏数据（其他需要的状态数据目测在header里面存在，到时转换一下就OK）
-    AnserSummarization: {
+    AnserSummarizationData: {
       // 正确答案
       correctAnser: 'A',
       // 学生答案
@@ -189,9 +239,11 @@ const detailsDataList = [
       score: 30,
       // 题目类型
       questionType: 'sub',
+      // 难易度
+      difficultyDegree: 0,
     },
     studentAnserImage: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
-    correctAnser: [
+    rightAnser: [
       {
         url: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
       },
@@ -210,7 +262,7 @@ const detailsDataList = [
         studentName: '狗大锤',
       },
     ],
-    causeOfError: 0,
+    causeOfErrorNum: 4,
   },
   {
     // 富文本的
@@ -218,7 +270,7 @@ const detailsDataList = [
     + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
     + 'alt="undefined" style="float:none;height: auto;width: auto"/>',
     // 中间的状态栏数据（其他需要的状态数据目测在header里面存在，到时转换一下就OK）
-    AnserSummarization: {
+    AnserSummarizationData: {
       // 正确答案
       correctAnser: 'A',
       // 学生答案
@@ -227,9 +279,11 @@ const detailsDataList = [
       score: 30,
       // 题目类型
       questionType: 'obj',
+      // 难易度
+      difficultyDegree: 0,
     },
     studentAnserImage: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
-    correctAnser: [
+    rightAnser: [
       {
         url: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
       },
@@ -248,7 +302,7 @@ const detailsDataList = [
         studentName: '狗大锤',
       },
     ],
-    causeOfError: 0,
+    causeOfErrorNum: 5,
   },
   {
     // 富文本的
@@ -256,7 +310,7 @@ const detailsDataList = [
     + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
     + 'alt="undefined" style="float:none;height: auto;width: auto"/>',
     // 中间的状态栏数据（其他需要的状态数据目测在header里面存在，到时转换一下就OK）
-    AnserSummarization: {
+    AnserSummarizationData: {
       // 正确答案
       correctAnser: 'A',
       // 学生答案
@@ -265,9 +319,11 @@ const detailsDataList = [
       score: 30,
       // 题目类型
       questionType: 'sub',
+      // 难易度
+      difficultyDegree: 0,
     },
     studentAnserImage: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
-    correctAnser: [
+    rightAnser: [
       {
         url: 'https://p9.pstatp.com/weili/l/384111071515115535.webp',
       },
@@ -286,9 +342,22 @@ const detailsDataList = [
         studentName: '狗大锤',
       },
     ],
-    causeOfError: 0,
+    causeOfErrorNum: 65535,
   },
 ];
 function transFromExamDetailsDataList() {
   return detailsDataList;
+}
+/**
+ * --------------------------------------------------------
+ */
+function transFromHomeworkDataList(index) {
+  const arr = new Array(headerList.length).fill(null);
+  arr[index] = detailsDataList[index];
+  console.log(arr, 'detailsDataListdetailsDataListdetailsDataListdetailsDataListdetailsDataList');
+  return arr;
+}
+
+function transFromHomeworkHeaderListDataList() {
+  return headerList;
 }

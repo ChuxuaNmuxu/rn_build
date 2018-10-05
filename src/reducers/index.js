@@ -6,6 +6,7 @@ import doHomeworkReducer from './doHomeworkReducer';
 import homeworkTaskReducer from './HomeworkTask';
 import recordDetailReducer from './recordDetailReducer';
 import mistakeReformReducer from './mistakeReformReducer';
+import problemRecordsReduecer from './problemRecordsReduecer';
 
 export default combineReducers({
   routes,
@@ -20,4 +21,6 @@ export default combineReducers({
   recordDetailReducer,
   // 错题重做
   mistakeReformReducer,
+  // 做题记录
+  problemRecordsReduecer,
 });

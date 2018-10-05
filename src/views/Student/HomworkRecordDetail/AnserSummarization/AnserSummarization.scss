@@ -21,7 +21,7 @@
 }
 
 .difficultyView {
-  margin-left: 72px;
+  margin-left: 30px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -30,10 +30,12 @@
 
 .difficultyDegree {
   font-family:PingFangSC-Regular;
-  font-size:24px;
+  font-size:22px;
   color:#666666;
   letter-spacing:0;
-  text-align:left;
+  text-align:center;
+  width: 56px;
+  border-radius: 14px;
 }
 
 .studentCorect {

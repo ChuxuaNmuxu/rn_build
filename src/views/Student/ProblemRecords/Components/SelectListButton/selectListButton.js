@@ -11,7 +11,7 @@ class SelectListButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectItems: [],
+      selectItems: props.selected || [],
     };
   }
 
@@ -45,16 +45,19 @@ class SelectListButton extends Component {
 
   getSlectIetms=(id, objKey) => {
     const { getItems, selectType } = this.props;
+    console.log(selectType);
     const { selectItems } = this.state;
     let SET = new Set(selectItems);
     if (selectType !== 'single') {
-      // 找到的话就剔除
+    // 找到的话就剔除
       if (SET.has(id)) {
         SET.delete(id);
       } else {
-        // 没找到就添加
+      // 没找到就添加
         SET.add(id);
       }
+    } else if (SET.has(id)) {
+      SET.delete(id);
     } else {
       SET = new Set([id]);
     }
@@ -91,5 +94,6 @@ SelectListButton.propTypes = {
   getItems: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   objKey: PropTypes.string.isRequired,
+  selected: PropTypes.array.isRequired,
 };
 export default SelectListButton;
