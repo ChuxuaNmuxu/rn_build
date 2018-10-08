@@ -7,22 +7,19 @@ import R from 'ramda';
 import PlanItemWrap from './PlanItemWrap';
 import styles from './planList.scss';
 import { currentTimeToPeriod } from '../../../../utils/common';
-import { ChangeDropPosition, FirstGetDropListenerRange, GetDropListenerRange } from '../../../../actions/homeworkTask';
+import { ChangeDropPosition, GetDropListenerRange } from '../../../../actions/homeworkTask';
 import { adaptiveRotation } from '../../../../utils/resolution';
 
 @connect(({
   homeworkTaskReducer: {
-    isFirstGetDropListenerRange,
     listenerRangeList,
     planList,
   },
 }) => ({
-  isFirstGetDropListenerRange,
   listenerRangeList,
   planList,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
-  onFirstGetDropListenerRange: bindActionCreators(FirstGetDropListenerRange, dispatch),
   onGetDropListenerRange: bindActionCreators(GetDropListenerRange, dispatch),
 }))
 class PlanList extends Component {
@@ -46,24 +43,13 @@ class PlanList extends Component {
       // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
       // 如果有展开并且展开的任务
       this.flatList.scrollToIndex({
-        animated: true,
+        animated: false,
         index: this.currentPeriodIndex,
         viewOffset: (142 - 496) / 2,
         viewPosition: 0.5,
       });
-    });
-  }
-
-  componentDidUpdate(nextProps) {
-    // 当isFirstGetDropListenerRange为true时，表示第一次
-    const {
-      isFirstGetDropListenerRange,
-      planList: nextPlanList,
-    } = nextProps;
-    const { planList } = this.props;
-    if (isFirstGetDropListenerRange && nextPlanList.length && !R.equals(nextPlanList, planList)) {
       this.saveListenerRangeToStore();
-    }
+    });
   }
 
   // 通过 onLayout 获取 最外面容器宽，当 FlatList 为空时，给 renderListEmpty 里面里的容器设置值让其可以全屏
@@ -78,11 +64,6 @@ class PlanList extends Component {
 
   // 滑动时间段动画结束之后的回调
   onMomentumScrollEnd = () => {
-    const {
-      isFirstGetDropListenerRange,
-      onFirstGetDropListenerRange,
-    } = this.props;
-    if (isFirstGetDropListenerRange) onFirstGetDropListenerRange(false);
     this.saveListenerRangeToStore();
   }
 
@@ -139,8 +120,6 @@ class PlanList extends Component {
   renderItem = (data) => {
     const {
       onChangeDropPosition,
-      isFirstGetDropListenerRange,
-      onFirstGetDropListenerRange,
       listenerRangeList,
     } = this.props;
 
@@ -148,8 +127,6 @@ class PlanList extends Component {
       <PlanItemWrap
         data={data}
         onChangeDropPosition={onChangeDropPosition}
-        isFirstGetDropListenerRange={isFirstGetDropListenerRange}
-        onFirstGetDropListenerRange={onFirstGetDropListenerRange}
         listenerRangeList={listenerRangeList}
         getTimeItemRef={this.getTimeItemRef}
       />
@@ -195,8 +172,6 @@ class PlanList extends Component {
 
 PlanList.propTypes = {
   onChangeDropPosition: PropTypes.func,
-  isFirstGetDropListenerRange: PropTypes.bool,
-  onFirstGetDropListenerRange: PropTypes.func,
   onGetDropListenerRange: PropTypes.func,
   planList: PropTypes.array,
   listenerRangeList: PropTypes.array,
@@ -204,8 +179,6 @@ PlanList.propTypes = {
 
 PlanList.defaultProps = {
   onChangeDropPosition: () => {},
-  isFirstGetDropListenerRange: false,
-  onFirstGetDropListenerRange: () => {},
   onGetDropListenerRange: () => {},
   listenerRangeList: [],
   planList: [],

@@ -10,7 +10,6 @@ import Task from '../component/Task';
 import styles from './todoList.scss';
 import {
   ChangeDropPosition,
-  FirstGetDropListenerRange,
   ChangeDropIndex,
   ChangeTodoTask,
   ChangePlanTask,
@@ -18,19 +17,16 @@ import {
 
 @connect(({
   homeworkTaskReducer: {
-    isFirstGetDropListenerRange,
     listenerRangeList,
     todoList,
     dragIndex,
   },
 }) => ({
-  isFirstGetDropListenerRange,
   listenerRangeList,
   todoList,
   dragIndex,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
-  onFirstGetDropListenerRange: bindActionCreators(FirstGetDropListenerRange, dispatch),
   onChangeDropIndex: bindActionCreators(ChangeDropIndex, dispatch),
   onChangePlanTask: bindActionCreators(ChangePlanTask, dispatch),
   onChangeTodoTask: bindActionCreators(ChangeTodoTask, dispatch),
@@ -42,6 +38,7 @@ class TodoList extends Component {
       flatlistWidth: 0,
       listenerRangeList: props.listenerRangeList,
       dragIndex: props.dragIndex,
+
     };
     this.flatList = null;
   }
@@ -103,8 +100,6 @@ class TodoList extends Component {
   renderItem = (item) => {
     const {
       onChangeDropPosition,
-      onFirstGetDropListenerRange,
-      isFirstGetDropListenerRange,
       onChangeDropIndex,
       onChangeTodoTask,
       onChangePlanTask,
@@ -114,8 +109,6 @@ class TodoList extends Component {
       <Task
         data={item}
         onChangeDropPosition={onChangeDropPosition}
-        onFirstGetDropListenerRange={onFirstGetDropListenerRange}
-        isFirstGetDropListenerRange={isFirstGetDropListenerRange}
         listenerRangeList={listenerRangeList}
         onChangeDropIndex={onChangeDropIndex}
         dragIndex={dragIndex}
@@ -165,8 +158,6 @@ class TodoList extends Component {
 
 TodoList.defaultProps = {
   onChangeDropPosition: () => {},
-  onFirstGetDropListenerRange: () => {},
-  isFirstGetDropListenerRange: false,
   listenerRangeList: [],
   todoList: [],
   onChangeDropIndex: () => {},
@@ -177,8 +168,6 @@ TodoList.defaultProps = {
 
 TodoList.propTypes = {
   onChangeDropPosition: PropTypes.func,
-  onFirstGetDropListenerRange: PropTypes.func,
-  isFirstGetDropListenerRange: PropTypes.bool,
   listenerRangeList: PropTypes.array,
   todoList: PropTypes.array,
   onChangeDropIndex: PropTypes.func,

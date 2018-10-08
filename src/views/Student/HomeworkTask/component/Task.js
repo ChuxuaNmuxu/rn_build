@@ -64,15 +64,6 @@ class TaskItem extends React.Component {
     this.touchStartY = gestureState.dy;
     this.touchStartTime = evt.nativeEvent.timestamp;
 
-    // 当点击任务时，如果isFirstGetDropListenerRange为true表示是第一次点击将其改为false
-    const {
-      onFirstGetDropListenerRange,
-      isFirstGetDropListenerRange,
-    } = this.props;
-    if (isFirstGetDropListenerRange) {
-      onFirstGetDropListenerRange(false);
-    }
-
     // 获取待操作元素的坐标值
     this.taskRef.measure((x, y, width, height, pageX, pageY) => {
       this.offsetX = pageX / scale;
@@ -111,9 +102,6 @@ class TaskItem extends React.Component {
     const { pageX, pageY } = evt.nativeEvent;
     const { onChangeDropIndex } = this.props;
 
-    // 将正在拖拽的元素索引置为空
-    onChangeDropIndex();
-
     // 任务排期
     const findTask = listenerRangeList.find((v) => {
       if (v.startX <= pageX && v.endX >= pageX && v.startY <= pageY && v.endY >= pageY) {
@@ -137,6 +125,9 @@ class TaskItem extends React.Component {
       x: -500,
       y: 0,
     });
+
+    // 将正在拖拽的元素索引置为空
+    onChangeDropIndex();
   }
 
   dragHandle = (dx, dy) => {
@@ -203,8 +194,6 @@ TaskItem.propTypes = {
   ]),
   isShowSpendTime: PropTypes.bool,
   onChangeDropPosition: PropTypes.func,
-  onFirstGetDropListenerRange: PropTypes.func,
-  isFirstGetDropListenerRange: PropTypes.bool,
   listenerRangeList: PropTypes.array,
   onChangeDropIndex: PropTypes.func,
   dragIndex: PropTypes.number,
@@ -218,8 +207,6 @@ TaskItem.defaultProps = {
   iconStyle: {},
   isShowSpendTime: true,
   onChangeDropPosition: () => {},
-  onFirstGetDropListenerRange: () => {},
-  isFirstGetDropListenerRange: false,
   listenerRangeList: [],
   onChangeDropIndex: () => {},
   dragIndex: null,
