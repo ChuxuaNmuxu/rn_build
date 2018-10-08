@@ -5,32 +5,43 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import R from 'ramda';
 import Task from '../component/Task';
 import styles from './todoList.scss';
-import { ChangeDropPosition, FirstGetDropListenerRange } from '../../../../actions/homeworkTask';
+import {
+  ChangeDropPosition,
+  FirstGetDropListenerRange,
+  ChangeDropIndex,
+} from '../../../../actions/homeworkTask';
 
 @connect(({
   homeworkTaskReducer: {
     isFirstGetDropListenerRange,
     listenerRangeList,
     todoList,
+    dragIndex,
   },
 }) => ({
   isFirstGetDropListenerRange,
   listenerRangeList,
   todoList,
+  dragIndex,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
   onFirstGetDropListenerRange: bindActionCreators(FirstGetDropListenerRange, dispatch),
+  onChangeDropIndex: bindActionCreators(ChangeDropIndex, dispatch),
 }))
 class TodoList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       flatlistWidth: 0,
+      listenerRangeList: props.listenerRangeList,
+      dragIndex: props.dragIndex,
     };
     this.flatList = null;
   }
+
 
   componentDidMount() {
     /**
@@ -59,6 +70,18 @@ class TodoList extends Component {
     this.setState({ flatlistWidth: width });
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    // const { dragIndex: stateDragIndex, listenerRangeList: stateListenerRangeList } = prevState;
+    // const { dragIndex: propsDragIndex, listenerRangeList: propsListenerRangeList } = nextProps;
+    // if (propsDragIndex && stateDragIndex !== propsDragIndex) {
+    //   return propsDragIndex;
+    // }
+    // if (propsListenerRangeList.length && !R.equals(propsListenerRangeList, stateListenerRangeList)) {
+    //   return propsListenerRangeList;
+    // }
+    return null;
+  }
+
   getItemLayout = (data, index) => {
     const length = 450 + 24;
     return {
@@ -77,9 +100,10 @@ class TodoList extends Component {
       onChangeDropPosition,
       onFirstGetDropListenerRange,
       isFirstGetDropListenerRange,
-      listenerRangeList,
+      onChangeDropIndex,
     } = this.props;
-    // console.log(82, listenerRangeList);
+    const { listenerRangeList, dragIndex } = this.state;
+    console.log(102, dragIndex);
     return (
       <Task
         data={item}
@@ -87,6 +111,8 @@ class TodoList extends Component {
         onFirstGetDropListenerRange={onFirstGetDropListenerRange}
         isFirstGetDropListenerRange={isFirstGetDropListenerRange}
         listenerRangeList={listenerRangeList}
+        onChangeDropIndex={onChangeDropIndex}
+        dragIndex={dragIndex}
       />
     );
   }
@@ -105,7 +131,7 @@ class TodoList extends Component {
 
 
   render() {
-    const { todoList, listenerRangeList } = this.props;
+    const { todoList } = this.props;
 
     return (
       <View
@@ -122,7 +148,7 @@ class TodoList extends Component {
           getItemLayout={this.getItemLayout}
           // initialNumToRender={planList.length}
           ListEmptyComponent={this.renderListEmpty}
-          extraData={listenerRangeList}
+          extraData={this.state}
         />
       </View>
     );
@@ -135,6 +161,8 @@ TodoList.defaultProps = {
   isFirstGetDropListenerRange: false,
   listenerRangeList: [],
   todoList: [],
+  onChangeDropIndex: () => {},
+  dragIndex: null,
 };
 
 TodoList.propTypes = {
@@ -143,6 +171,8 @@ TodoList.propTypes = {
   isFirstGetDropListenerRange: PropTypes.bool,
   listenerRangeList: PropTypes.array,
   todoList: PropTypes.array,
+  onChangeDropIndex: PropTypes.func,
+  dragIndex: PropTypes.number,
 };
 
 export default TodoList;

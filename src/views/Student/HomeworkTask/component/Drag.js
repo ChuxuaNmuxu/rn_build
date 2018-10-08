@@ -5,8 +5,6 @@ import {
 import PropTypes from 'prop-types';
 import R from 'ramda';
 import TaskItem from './Task';
-import { adaptiveRotation } from '../../../../utils/resolution';
-import styles from './drag.scss';
 
 export class Drop extends Component {
   constructor(props) {
@@ -28,7 +26,6 @@ export class Drop extends Component {
   }
 
   render() {
-    // const transform = this.dragAnimation.getTranslateTransform();
     const { position: { x, y } } = this.state;
     const { wrapStyle } = this.props;
 

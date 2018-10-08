@@ -40,3 +40,12 @@ export const changeTodoTask = (state, action) => {
     state.todoList.splice(action.payload.data, 1);
   }
 };
+
+// 可以不传参数，如果不传默认设为null
+export const changeDragingIndex = (state, action) => {
+  if (action.payload || action.payload === 0) {
+    state.dragIndex = action.payload;
+  } else {
+    state.dragIndex = null;
+  }
+};

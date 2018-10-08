@@ -38,6 +38,8 @@ export const GET_DROP_LISTENER_RANGE = 'GET_DROP_LISTENER_RANGE';
 export const CHANGE_PLAN_TASK = 'CHANGE_PLAN_TASK';
 // 取消计划任务
 export const CHANGE_TODO_TASK = 'CHANGE_TODO_TASK';
+// 正在拖拽的元素
+export const CHANGE_DRAG_INDEX = 'CHANGE_DRAG_INDEX';
 
 /**
  *------------------------作业与考试详情页面-----------------------------------------

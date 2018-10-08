@@ -81,6 +81,7 @@ class TaskItem extends React.Component {
   onPanResponderMove = (evt, gestureState) => {
     const { dx, dy } = gestureState;
     const nowTime = evt.nativeEvent.timestamp;
+    const { onChangeDropIndex } = this.props;
 
     /**
      * 模拟长按
@@ -92,6 +93,7 @@ class TaskItem extends React.Component {
       if (nowTime - this.touchStartTime > this.longTouchTime) {
         this.dragHandle(dx, dy);
         this.isDraging = true;
+        onChangeDropIndex(this.props.data.index);
       }
     }
   }
@@ -100,6 +102,10 @@ class TaskItem extends React.Component {
     const { onChangeDropPosition, listenerRangeList } = this.props;
     this.isDraging = false;
     const { pageX, pageY } = evt.nativeEvent;
+    const { onChangeDropIndex } = this.props;
+
+    // 将正在拖拽的元素索引置为空
+    onChangeDropIndex();
 
     // 任务排期
     const findTask = listenerRangeList.find((v) => {
@@ -135,9 +141,9 @@ class TaskItem extends React.Component {
 
   render() {
     const {
-      wrapStyle, iconWrapStyle, iconStyle, isShowSpendTime,
+      wrapStyle, iconWrapStyle, iconStyle, isShowSpendTime, dragIndex,
     } = this.props;
-
+    // console.log(146, dragIndex);
     return (
       <Animated.View
         {...this.panResponder.panHandlers}
@@ -185,6 +191,7 @@ TaskItem.propTypes = {
   onFirstGetDropListenerRange: PropTypes.func,
   isFirstGetDropListenerRange: PropTypes.bool,
   listenerRangeList: PropTypes.array,
+  onChangeDropIndex: PropTypes.func,
 };
 
 TaskItem.defaultProps = {
@@ -196,6 +203,7 @@ TaskItem.defaultProps = {
   onFirstGetDropListenerRange: () => {},
   isFirstGetDropListenerRange: false,
   listenerRangeList: [],
+  onChangeDropIndex: () => {},
 };
 
 export default TaskItem;

@@ -82,7 +82,7 @@ class HomeworkTask extends Component {
           this.renderHeader()
         }
         <TodoList />
-        <Drag position={position} wrapStyle={{ backgroundColor: 'pink' }} />
+        <Drag position={position} />
         <PlanList />
       </View>
     );
