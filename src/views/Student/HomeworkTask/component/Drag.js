@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import R from 'ramda';
-import TaskItem from './Task';
+import Task from './Task';
 
 export class Drop extends Component {
   constructor(props) {
@@ -34,8 +34,7 @@ export class Drop extends Component {
         left: x, top: y, position: 'absolute', zIndex: 1,
       }}
       >
-        <TaskItem
-          refs={(ref) => { this.dragRef = ref; }}
+        <Task
           wrapStyle={wrapStyle}
           data={{
             index: '我是拖拽元素',

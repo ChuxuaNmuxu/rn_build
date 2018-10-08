@@ -26,7 +26,7 @@ export const changePlanTask = (state, action) => {
   if (R.type(action.payload) === 'Array') {
     action.payload.forEach(v => state.planList.push(v));
   } else if (R.type(action.payload) === 'Object') {
-    state.planList.push(action.payload);
+    // state.planList.push(action.payload);
   }
   console.log(31, action.payload);
 };
@@ -38,6 +38,9 @@ export const changeTodoTask = (state, action) => {
     // 暂时不考虑取消排期，所以暂时只做排除
     // 当前下标保存在data中
     state.todoList.splice(action.payload.data, 1);
+
+    console.log('action.payload:', action.payload);
+    console.log('state.todoList:', state.todoList);
   }
 };
 

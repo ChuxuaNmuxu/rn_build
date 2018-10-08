@@ -33,7 +33,6 @@ class PlanList extends Component {
     this.timeItemRefList = []; // timeItem ref
     this.state = {
       flatlistWidth: 0,
-      dragIndex: null,
     };
   }
 
@@ -42,19 +41,17 @@ class PlanList extends Component {
      * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
      * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中
      */
-    const wait = new Promise(resolve => setTimeout(resolve, 500));
-    wait
-      .then(() => {
+    const delay = new Promise(resolve => setTimeout(resolve, 500));
+    delay.then(() => {
       // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
       // 如果有展开并且展开的任务
-        this.flatList.scrollToIndex({
-          animated: true,
-          index: this.currentPeriodIndex,
-          viewOffset: (142 - 496) / 2,
-          viewPosition: 0.5,
-        });
-      })
-      .then(() => this.saveListenerRangeToStore());
+      this.flatList.scrollToIndex({
+        animated: true,
+        index: this.currentPeriodIndex,
+        viewOffset: (142 - 496) / 2,
+        viewPosition: 0.5,
+      });
+    });
   }
 
   componentDidUpdate(nextProps) {

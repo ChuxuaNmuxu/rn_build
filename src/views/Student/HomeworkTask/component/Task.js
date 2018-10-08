@@ -63,13 +63,15 @@ class TaskItem extends React.Component {
     this.touchStartX = gestureState.dx;
     this.touchStartY = gestureState.dy;
     this.touchStartTime = evt.nativeEvent.timestamp;
-    // const {
-    //   onFirstGetDropListenerRange,
-    //   isFirstGetDropListenerRange,
-    // } = this.props;
-    // if (isFirstGetDropListenerRange) {
-    //   onFirstGetDropListenerRange(false);
-    // }
+
+    // 当点击任务时，如果isFirstGetDropListenerRange为true表示是第一次点击将其改为false
+    const {
+      onFirstGetDropListenerRange,
+      isFirstGetDropListenerRange,
+    } = this.props;
+    if (isFirstGetDropListenerRange) {
+      onFirstGetDropListenerRange(false);
+    }
 
     // 获取待操作元素的坐标值
     this.taskRef.measure((x, y, width, height, pageX, pageY) => {
@@ -99,7 +101,12 @@ class TaskItem extends React.Component {
   }
 
   onPanResponderRelease = (evt) => {
-    const { onChangeDropPosition, listenerRangeList } = this.props;
+    const {
+      onChangeDropPosition,
+      listenerRangeList,
+      onChangeTodoTask,
+      onChangePlanTask,
+    } = this.props;
     this.isDraging = false;
     const { pageX, pageY } = evt.nativeEvent;
     const { onChangeDropIndex } = this.props;
@@ -117,6 +124,8 @@ class TaskItem extends React.Component {
 
     if (findTask) {
       console.log('排期成功：', findTask.index);
+      onChangeTodoTask(findTask);
+      onChangePlanTask({ ...findTask, shijianduan: 1 });
     } else {
       console.log('排期失败');
     }
@@ -124,10 +133,10 @@ class TaskItem extends React.Component {
     // 取消任务排期
 
     // 将拖拽元素定位到窗口外隐藏拖拽元素
-    // onChangeDropPosition({
-    //   x: -500,
-    //   y: 0,
-    // });
+    onChangeDropPosition({
+      x: -500,
+      y: 0,
+    });
   }
 
   dragHandle = (dx, dy) => {
@@ -143,30 +152,36 @@ class TaskItem extends React.Component {
     const {
       wrapStyle, iconWrapStyle, iconStyle, isShowSpendTime, dragIndex,
     } = this.props;
-    // console.log(146, dragIndex);
+
     return (
       <Animated.View
         {...this.panResponder.panHandlers}
       >
         <TouchableOpacity>
-          <View
-            style={mergeStyles(styles.task, wrapStyle)}
-            ref={(ref) => { this.taskRef = ref; }}
-          >
-            <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
-              <CIcon style={mergeStyles(styles.icon, iconStyle)} name="wendang1" size={25} />
-            </View>
-            <View>
-              <Text>{this.props.data.index}</Text>
-              <Text style={[styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
-              6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业
-              </Text>
-              {
-              isShowSpendTime && <Text style={styles.details}>预计耗时：15′</Text>
-            }
-              <Text style={styles.details}>截止提交时间：6-24 24:00</Text>
-            </View>
-          </View>
+          {
+                dragIndex === this.props.data.index
+                  ? <View style={styles.task_placeholder}><View /></View>
+                  : (
+                    <View
+                      style={mergeStyles(styles.task, wrapStyle)}
+                      ref={(ref) => { this.taskRef = ref; }}
+                    >
+                      <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
+                        <CIcon style={mergeStyles(styles.icon, iconStyle)} name="wendang1" size={25} />
+                      </View>
+                      <View>
+                        <Text>{this.props.data.index}</Text>
+                        <Text style={[styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
+                          6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业
+                        </Text>
+                        {
+                          isShowSpendTime && <Text style={styles.details}>预计耗时：15′</Text>
+                        }
+                        <Text style={styles.details}>截止提交时间：6-24 24:00</Text>
+                      </View>
+                    </View>
+                  )
+              }
         </TouchableOpacity>
       </Animated.View>
     );
@@ -192,6 +207,9 @@ TaskItem.propTypes = {
   isFirstGetDropListenerRange: PropTypes.bool,
   listenerRangeList: PropTypes.array,
   onChangeDropIndex: PropTypes.func,
+  dragIndex: PropTypes.number,
+  onChangeTodoTask: PropTypes.func,
+  onChangePlanTask: PropTypes.func,
 };
 
 TaskItem.defaultProps = {
@@ -204,6 +222,9 @@ TaskItem.defaultProps = {
   isFirstGetDropListenerRange: false,
   listenerRangeList: [],
   onChangeDropIndex: () => {},
+  dragIndex: null,
+  onChangeTodoTask: () => {},
+  onChangePlanTask: () => {},
 };
 
 export default TaskItem;

@@ -12,6 +12,8 @@ import {
   ChangeDropPosition,
   FirstGetDropListenerRange,
   ChangeDropIndex,
+  ChangeTodoTask,
+  ChangePlanTask,
 } from '../../../../actions/homeworkTask';
 
 @connect(({
@@ -30,6 +32,8 @@ import {
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
   onFirstGetDropListenerRange: bindActionCreators(FirstGetDropListenerRange, dispatch),
   onChangeDropIndex: bindActionCreators(ChangeDropIndex, dispatch),
+  onChangePlanTask: bindActionCreators(ChangePlanTask, dispatch),
+  onChangeTodoTask: bindActionCreators(ChangeTodoTask, dispatch),
 }))
 class TodoList extends Component {
   constructor(props) {
@@ -42,14 +46,13 @@ class TodoList extends Component {
     this.flatList = null;
   }
 
-
   componentDidMount() {
     /**
      * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
      * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中
      */
-    // const wait = new Promise(resolve => setTimeout(resolve, 500));
-    // wait.then(() => {
+    // const delay = new Promise(resolve => setTimeout(resolve, 500));
+    // delay.then(() => {
     //   // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
     //   this.flatList.scrollToIndex({
     //     animated: true,
@@ -71,14 +74,16 @@ class TodoList extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    // const { dragIndex: stateDragIndex, listenerRangeList: stateListenerRangeList } = prevState;
-    // const { dragIndex: propsDragIndex, listenerRangeList: propsListenerRangeList } = nextProps;
-    // if (propsDragIndex && stateDragIndex !== propsDragIndex) {
-    //   return propsDragIndex;
-    // }
-    // if (propsListenerRangeList.length && !R.equals(propsListenerRangeList, stateListenerRangeList)) {
-    //   return propsListenerRangeList;
-    // }
+    const { dragIndex: stateDragIndex, listenerRangeList: stateListenerRangeList } = prevState;
+    const { dragIndex: propsDragIndex, listenerRangeList: propsListenerRangeList } = nextProps;
+
+    if (stateDragIndex !== propsDragIndex) {
+      return { dragIndex: propsDragIndex };
+    }
+    if (propsListenerRangeList.length && !R.equals(propsListenerRangeList, stateListenerRangeList)) {
+      return { listenerRangeList: propsListenerRangeList };
+    }
+
     return null;
   }
 
@@ -101,9 +106,10 @@ class TodoList extends Component {
       onFirstGetDropListenerRange,
       isFirstGetDropListenerRange,
       onChangeDropIndex,
+      onChangeTodoTask,
+      onChangePlanTask,
     } = this.props;
     const { listenerRangeList, dragIndex } = this.state;
-    console.log(102, dragIndex);
     return (
       <Task
         data={item}
@@ -113,6 +119,8 @@ class TodoList extends Component {
         listenerRangeList={listenerRangeList}
         onChangeDropIndex={onChangeDropIndex}
         dragIndex={dragIndex}
+        onChangeTodoTask={onChangeTodoTask}
+        onChangePlanTask={onChangePlanTask}
       />
     );
   }
@@ -163,6 +171,8 @@ TodoList.defaultProps = {
   todoList: [],
   onChangeDropIndex: () => {},
   dragIndex: null,
+  onChangePlanTask: () => {},
+  onChangeTodoTask: () => {},
 };
 
 TodoList.propTypes = {
@@ -173,6 +183,8 @@ TodoList.propTypes = {
   todoList: PropTypes.array,
   onChangeDropIndex: PropTypes.func,
   dragIndex: PropTypes.number,
+  onChangePlanTask: PropTypes.func,
+  onChangeTodoTask: PropTypes.func,
 };
 
 export default TodoList;
