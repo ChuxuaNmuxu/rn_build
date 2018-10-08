@@ -32,8 +32,8 @@ class GroupRadio extends Component {
 
   static getDerivedStateFromProps(props, state) {
     const { defaultValue, value } = props;
-    if ((value || defaultValue) !== state.checked) {
-      const checked = value || defaultValue || false;
+    const checked = state.checked || value || defaultValue || false;
+    if (checked !== state.checked) {
       return {
         checked,
       };
@@ -44,7 +44,6 @@ class GroupRadio extends Component {
   renderDom = () => {
     const { children, options } = this.props;
     if (!children) return null;
-
     if (type(children) === 'String') {
       return <Text>{children}</Text>;
     }
@@ -62,7 +61,6 @@ class GroupRadio extends Component {
     const {
       children, defaultValue, value, style, childStyle, onChange, horizontal, options, ...rest
     } = this.props;
-
     return React.Children.map(children,
       child => (React.cloneElement(child,
         compose(
