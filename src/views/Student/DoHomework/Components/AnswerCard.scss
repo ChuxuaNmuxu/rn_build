@@ -116,16 +116,6 @@
   border-bottom-width: 1px;
   border-style: solid;
   border-color: #e8e8e8;
-  position: relative;
-}
-.objectiveImg_container {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 70px;
-  opacity: 0;
-  overflow: hidden;
 }
 .photo_container {
   width: 48px;
@@ -157,7 +147,7 @@
 }
 .objective_text {
   font-size: 24px;
-  color: #dbdbdb;
+  color: #e8e8e8;
 }
 .textCanClick {
   font-size: 24px;
@@ -187,4 +177,25 @@
   // flex: 1;
   // background-color: 'yellow';
   // position: 'relative';
+}
+.img_box {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 24px;
+  width: 100%;
+  position: relative;
+}
+
+.icon_box {
+  position: absolute;
+  top: 15px;
+  right: 24px;
+  width: auto;
+  height: auto;
+}
+
+.icon_close {
+  font-size: 32px;
+  color: rgba(0, 0, 0, 0.65);
 }
