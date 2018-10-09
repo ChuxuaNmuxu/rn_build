@@ -22,21 +22,28 @@ export const changePlanTask = (state, action) => {
   if (R.type(action.payload) === 'Array') {
     action.payload.forEach(v => state.planList.push(v));
   } else if (R.type(action.payload) === 'Object') {
-    // state.planList.push(action.payload);
+    if ('addIndex' in action.payload) {
+      // 排期
+      const current = state.planList[action.payload.addIndex];
+      delete action.payload.addIndex;
+      current.data.push(action.payload);
+    }
+    if ('delIndex' in action.payload) {
+      // 取消排期或切换排期
+    }
   }
-  console.log(31, action.payload);
 };
 
 export const changeTodoTask = (state, action) => {
   if (R.type(action.payload) === 'Array') {
     action.payload.forEach(v => state.todoList.push(v));
   } else if (R.type(action.payload) === 'Object') {
-    // 暂时不考虑取消排期，所以暂时只做排除
-    // 当前下标保存在data中
-    state.todoList.splice(action.payload.data, 1);
+    // 取消排期
 
-    console.log('action.payload:', action.payload);
-    console.log('state.todoList:', state.todoList);
+
+  } else if (R.type(action.payload) === 'Number') {
+    // 排期
+    state.todoList.splice(action.payload, 1);
   }
 };
 
@@ -47,4 +54,20 @@ export const changeDragingIndex = (state, action) => {
   } else {
     state.dragIndex = null;
   }
+};
+
+export const changeDragingTaskCorrespondPeriod = (state, action) => {
+  if (action.payload || action.payload === 0) {
+    state.dragingTaskCorrespondPeriodIndex = action.payload;
+  } else {
+    state.dragingTaskCorrespondPeriodIndex = null;
+  }
+};
+
+export const changeLastHandlePeriodIndex = (state, action) => {
+  state.lastHandlePeriodIndex = action.payload;
+};
+
+export const regetDropListenerRange = (state, action) => {
+  state.isRegetDropListenerRange = action.payload;
 };

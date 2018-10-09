@@ -15,7 +15,12 @@ class TodoItem extends Component {
   }
 
   render() {
-    const { data, getTimeItemRef } = this.props;
+    const {
+      data,
+      getTimeItemRef,
+      dragingTaskCorrespondPeriodIndex,
+      lastHandlePeriodIndex,
+    } = this.props;
     // console.log(23, data);
 
     // data
@@ -30,14 +35,17 @@ class TodoItem extends Component {
     const {
       index, item,
     } = data;
+    const checked = index === lastHandlePeriodIndex;
+
+    // breviary
     return (
       <TouchableNativeFeedback>
         <View
-          style={styles.time_wrap}
+          style={[styles.time_wrap, dragingTaskCorrespondPeriodIndex === index ? styles.hover : {}]}
           ref={getTimeItemRef}
         >
           <View style={styles.time_content} />
-          <View style={[styles.time_box, item.period === item.currentPeriod && styles.time_box_checked]}>
+          <View style={[styles.time_box, checked ? styles.time_box_checked : {}]}>
             <View style={styles.task_list}>
               <Text>{index}</Text>
               {/*
@@ -48,7 +56,7 @@ class TodoItem extends Component {
                 item.data.map((v, i) => (
                   <PlanItem
                     key={i}
-                    type={item.period === item.currentPeriod ? 2 : 1}
+                    type={checked ? 2 : 1}
                     {...v}
                   />
                 ))
@@ -70,11 +78,15 @@ class TodoItem extends Component {
 TodoItem.propTypes = {
   data: PropTypes.object,
   getTimeItemRef: PropTypes.func,
+  dragingTaskCorrespondPeriodIndex: PropTypes.number,
+  lastHandlePeriodIndex: PropTypes.number,
 };
 
 TodoItem.defaultProps = {
   data: {},
   getTimeItemRef: () => {},
+  dragingTaskCorrespondPeriodIndex: null,
+  lastHandlePeriodIndex: null,
 };
 
 export default TodoItem;

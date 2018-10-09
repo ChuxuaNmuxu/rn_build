@@ -15,6 +15,7 @@ import I18nText from '../../../components/I18nText';
 import Drag from './component/Drag';
 import { createHalfHourPeriod, currentTimeToPeriod } from '../../../utils/common';
 import { ChangePlanTask, ChangeTodoTask } from '../../../actions/homeworkTask';
+import Modal from '../../../components/Modal';
 
 @connect((state) => {
   const {
@@ -39,7 +40,7 @@ class HomeworkTask extends Component {
 
   componentDidMount() {
     const { onChangePlanTask, onChangeTodoTask } = this.props;
-    const todoListData = Array(4).fill({}).map((v, i) => (merge(v, {
+    const todoListData = Array(16).fill({}).map((v, i) => (merge(v, {
       data: i,
     })));
 
@@ -84,6 +85,7 @@ class HomeworkTask extends Component {
         <TodoList />
         <Drag position={position} />
         <PlanList />
+        <Modal />
       </View>
     );
   }

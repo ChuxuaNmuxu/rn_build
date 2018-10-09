@@ -37,7 +37,7 @@ export class Drop extends Component {
         <Task
           wrapStyle={wrapStyle}
           data={{
-            index: '我是拖拽元素',
+            data: '我是拖拽元素',
           }}
         />
       </View>

@@ -13,6 +13,9 @@ import {
   ChangeDropIndex,
   ChangeTodoTask,
   ChangePlanTask,
+  ChangeDragingTaskCorrespondPeriod,
+  ChangeLastHandlePeriodIndex,
+  RegetDropListenerRange,
 } from '../../../../actions/homeworkTask';
 
 @connect(({
@@ -20,16 +23,23 @@ import {
     listenerRangeList,
     todoList,
     dragIndex,
+    planList,
+    lastHandlePeriodIndex,
   },
 }) => ({
   listenerRangeList,
   todoList,
   dragIndex,
+  planList,
+  lastHandlePeriodIndex,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
   onChangeDropIndex: bindActionCreators(ChangeDropIndex, dispatch),
   onChangePlanTask: bindActionCreators(ChangePlanTask, dispatch),
   onChangeTodoTask: bindActionCreators(ChangeTodoTask, dispatch),
+  onChangeDragingTaskCorrespondPeriod: bindActionCreators(ChangeDragingTaskCorrespondPeriod, dispatch),
+  onChangeLastHandlePeriodIndex: bindActionCreators(ChangeLastHandlePeriodIndex, dispatch),
+  onRegetDropListenerRange: bindActionCreators(RegetDropListenerRange, dispatch),
 }))
 class TodoList extends Component {
   constructor(props) {
@@ -38,7 +48,6 @@ class TodoList extends Component {
       flatlistWidth: 0,
       listenerRangeList: props.listenerRangeList,
       dragIndex: props.dragIndex,
-
     };
     this.flatList = null;
   }
@@ -71,14 +80,32 @@ class TodoList extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { dragIndex: stateDragIndex, listenerRangeList: stateListenerRangeList } = prevState;
-    const { dragIndex: propsDragIndex, listenerRangeList: propsListenerRangeList } = nextProps;
+    const {
+      dragIndex: stateDragIndex,
+      listenerRangeList: stateListenerRangeList,
+      planList: statePlanList,
+      lastHandlePeriodIndex: stateLastHandlePeriodIndex,
+    } = prevState;
+    const {
+      dragIndex: propsDragIndex,
+      listenerRangeList: propsListenerRangeList,
+      planList: propsPlanList,
+      lastHandlePeriodIndex: propsLastHandlePeriodIndex,
+    } = nextProps;
 
     if (stateDragIndex !== propsDragIndex) {
       return { dragIndex: propsDragIndex };
     }
     if (propsListenerRangeList.length && !R.equals(propsListenerRangeList, stateListenerRangeList)) {
       return { listenerRangeList: propsListenerRangeList };
+    }
+    if (propsPlanList.length && !R.equals(propsPlanList, statePlanList)) {
+      return { planList: propsPlanList };
+    }
+    if (stateLastHandlePeriodIndex !== propsLastHandlePeriodIndex) {
+      return {
+        lastHandlePeriodIndex: propsLastHandlePeriodIndex,
+      };
     }
 
     return null;
@@ -103,6 +130,11 @@ class TodoList extends Component {
       onChangeDropIndex,
       onChangeTodoTask,
       onChangePlanTask,
+      onChangeDragingTaskCorrespondPeriod,
+      onChangeLastHandlePeriodIndex,
+      planList,
+      lastHandlePeriodIndex,
+      onRegetDropListenerRange,
     } = this.props;
     const { listenerRangeList, dragIndex } = this.state;
     return (
@@ -114,6 +146,11 @@ class TodoList extends Component {
         dragIndex={dragIndex}
         onChangeTodoTask={onChangeTodoTask}
         onChangePlanTask={onChangePlanTask}
+        onChangeDragingTaskCorrespondPeriod={onChangeDragingTaskCorrespondPeriod}
+        onChangeLastHandlePeriodIndex={onChangeLastHandlePeriodIndex}
+        lastHandlePeriodIndex={lastHandlePeriodIndex}
+        planList={planList}
+        onRegetDropListenerRange={onRegetDropListenerRange}
       />
     );
   }
@@ -164,6 +201,11 @@ TodoList.defaultProps = {
   dragIndex: null,
   onChangePlanTask: () => {},
   onChangeTodoTask: () => {},
+  onChangeDragingTaskCorrespondPeriod: () => {},
+  onChangeLastHandlePeriodIndex: () => {},
+  planList: [],
+  lastHandlePeriodIndex: null,
+  onRegetDropListenerRange: () => {},
 };
 
 TodoList.propTypes = {
@@ -174,6 +216,11 @@ TodoList.propTypes = {
   dragIndex: PropTypes.number,
   onChangePlanTask: PropTypes.func,
   onChangeTodoTask: PropTypes.func,
+  onChangeDragingTaskCorrespondPeriod: PropTypes.func,
+  onChangeLastHandlePeriodIndex: PropTypes.func,
+  planList: PropTypes.array,
+  lastHandlePeriodIndex: PropTypes.number,
+  onRegetDropListenerRange: PropTypes.func,
 };
 
 export default TodoList;

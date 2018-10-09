@@ -8,6 +8,7 @@ import styles from './planItem.scss';
 const PlanItem = (props) => {
   const onPress = () => { console.log('做作业'); };
   const { type, ...rest } = props;
+
   const renderTask = () => {
     if (type === 2) {
       return (
