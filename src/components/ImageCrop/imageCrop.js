@@ -8,8 +8,10 @@ import {
   StyleSheet,
   ImageEditor,
   Dimensions,
+  Modal,
 } from 'react-native';
 import ImageCropper from './imageCropper';
+// import Resolution from '../Resolution';
 // import { adaptiveRotation } from '../../../utils/resolution';
 
 export default class ImageCrop extends React.Component {
@@ -17,7 +19,7 @@ export default class ImageCrop extends React.Component {
     super(props);
     this.state = {
       source: null,
-      iamgeWidth: null,
+      imageWidth: null,
       imageHeight: null,
       containerWidth: null,
       containerHeight: null,
@@ -28,12 +30,26 @@ export default class ImageCrop extends React.Component {
   onLayout = (evt) => {
     const { layout } = evt.nativeEvent;
     const { source } = this.props;
+    let imageWidth = source.width;
+    let imageHeight = source.height;
+    // 处理判断下当前图片裁切灰色区的高度和宽度，进而控制判断图片展示的大小，以免图片超出裁切区时点击确定会报错
+    if (layout.width > layout.height - 144) {
+      if (source.height > layout.height - 144) {
+        imageHeight = layout.height - 144;
+        imageWidth = (imageHeight / source.height) * source.width;
+      }
+    } else if (layout.width < layout.height - 144) {
+      if (source.width > layout.width) {
+        imageWidth = layout.width;
+        imageHeight = (imageWidth / source.width) * source.height;
+      }
+    }
     this.setState({
       source,
-      iamgeWidth: source.width,
-      imageHeight: source.height,
+      imageWidth,
+      imageHeight,
       containerWidth: layout.width,
-      containerHeight: layout.height - 200,
+      containerHeight: layout.height - 144,
     });
   }
 
@@ -82,42 +98,54 @@ export default class ImageCrop extends React.Component {
   render() {
     const {
       source,
-      iamgeWidth,
+      imageWidth,
       imageHeight,
       containerWidth,
       containerHeight,
     } = this.state;
-    // console.log('144', source, iamgeWidth, imageHeight);
+    // console.log('144', source, imageWidth, imageHeight);
     // const { source } = this.props;
     return (
-      <View style={styles.container} onLayout={this.onLayout}>
-        <View style={[styles.toolBar]}>
-          <TouchableOpacity style={styles.btn} onPress={this.pressCancel}>
-            <Text style={styles.text}>cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btn} onPress={this.pressConfirm}>
-            <Text style={styles.text}>confirm</Text>
-          </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible
+        onRequestClose={() => {
+          console.log('Modal has been closed.');
+        }}
+      >
+        <View style={styles.container} onLayout={this.onLayout}>
+          <View style={[styles.toolBar]}>
+            <TouchableOpacity style={styles.btn} onPress={this.pressCancel}>
+              <Text style={styles.text}>X</Text>
+            </TouchableOpacity>
+            <View style={styles.btn}>
+              <Text style={styles.text}>裁剪</Text>
+            </View>
+            <TouchableOpacity style={styles.btn} onPress={this.pressConfirm}>
+              <Text style={styles.text}>√</Text>
+            </TouchableOpacity>
+          </View>
+          {source && (
+            <ImageCropper
+              source={{ uri: source.uri }}
+              imageWidth={imageWidth}
+              imageHeight={imageHeight}
+              containerWidth={containerWidth}
+              containerHeight={containerHeight}
+              ref={(crop) => { this.imgCrop = crop; }}
+            />
+          )}
+          <View style={[styles.toolBar]}>
+            <TouchableOpacity style={styles.btn} onPress={() => this.rotateImg(-90)}>
+              <Text style={styles.text}>左旋</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.btn} onPress={() => this.rotateImg(90)}>
+              <Text style={styles.text}>右旋</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        {source && (
-        <ImageCropper
-          source={{ uri: source.uri }}
-          imageWidth={iamgeWidth}
-          imageHeight={imageHeight}
-          containerWidth={containerWidth}
-          containerHeight={containerHeight}
-          ref={(crop) => { this.imgCrop = crop; }}
-        />
-        )}
-        <View style={[styles.toolBar]}>
-          <TouchableOpacity style={styles.btn} onPress={() => this.rotateImg(-90)}>
-            <Text style={styles.text}>左旋</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btn} onPress={() => this.rotateImg(90)}>
-            <Text style={styles.text}>右旋</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </Modal>
     );
   }
 }
@@ -139,13 +167,13 @@ const styles = StyleSheet.create({
   },
   toolBar: {
     flexDirection: 'row',
-    height: 100,
+    height: 72,
     justifyContent: 'space-evenly',
-    backgroundColor: 'blue',
+    backgroundColor: '#30bf6c',
   },
   btn: {
     width: 100,
-    height: 100,
+    height: 72,
     justifyContent: 'center',
     alignItems: 'center',
   },

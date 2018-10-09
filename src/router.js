@@ -95,12 +95,12 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
-            initial
+            // initial
           >
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
-              initial
+              // initial
             />
           </Stack>
           {/* 错题本 */}
@@ -148,12 +148,12 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        // initial
+        initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
         {/* 做作业 */}
-        <Scene key="DoHomework" component={DoHomework} hideNavBar />
+        <Scene key="DoHomework" component={DoHomework} hideNavBar initial />
         {/* 作业检查 */}
         <Scene key="ReviewHomework" component={ReviewHomework} hideNavBar />
         {/* 错题本列表页 */}
