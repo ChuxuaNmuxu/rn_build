@@ -1,5 +1,6 @@
 .time_wrap {
   flex: 1;
+  flex-shrink: 0;
   justify-content: flex-end ;
   position: relative;
 };
@@ -11,6 +12,10 @@
   border-left-width: 4px;
   border-left-color: #e8e8e8 ;
 };
+
+.hover {
+  background-color: #f0fff4;
+}
 
 .time_box_checked {
   width: 496px;

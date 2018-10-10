@@ -29,7 +29,27 @@ export const FETCH_DOHOMEWORK_QUESTION = 'FETCH_DOHOMEWORK_QUESTION';
 export const SUBMIT_DOHOMEWORK_ANSWER = 'SUBMIT_DOHOMEWORK_ANSWER';
 
 /**
- * ------------------------作业与考试详情页面-----------------------------------------
+ * -------------任务计划----------------
+ */
+// 更改模拟移动位置的坐标
+export const CHANGE_DROP_POSITION = 'CHANGE_DROP_POSITION';
+// 获取时间段的监听范围
+export const GET_DROP_LISTENER_RANGE = 'GET_DROP_LISTENER_RANGE';
+// 更改计划任务
+export const CHANGE_PLAN_TASK = 'CHANGE_PLAN_TASK';
+// 取消计划任务
+export const CHANGE_TODO_TASK = 'CHANGE_TODO_TASK';
+// 正在拖拽的元素
+export const CHANGE_DRAG_INDEX = 'CHANGE_DRAG_INDEX';
+// 更改拖拽任务对应的时间段索引
+export const CHANGE_DRAGING_TASK_CORRESPOND_PERIOD = 'CHANGE_DRAGING_TASK_CORRESPOND_PERIOD';
+// 最后一次操作时间段的索引
+export const CHANGE_LAST_HANDLE_PERIOD_INDEX = 'CHANGE_LAST_HANDLE_PERIOD_INDEX';
+// 重新获取时间段的监听范围
+export const REGET_DROP_LISTENER_RANGE = 'REGET_DROP_LISTENER_RANGE';
+
+/**
+ *------------------------作业与考试详情页面-----------------------------------------
  */
 // '考试或者作业页面--请求考试数据--全部返回'
 export const FETCH_RECORD_DETAIL_EXAM = 'FETCH_RECORD_DETAIL_EXAM';

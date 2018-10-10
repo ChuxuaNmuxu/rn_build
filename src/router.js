@@ -49,7 +49,7 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
-      <Stack key="WelcomeStack">
+      <Stack key="WelcomeStack" initial>
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
       </Stack>
       <Stack key="Account">
@@ -58,7 +58,6 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        initial
       >
         <Tabs
           key="StudentTabs"
@@ -95,12 +94,10 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
-            // initial
           >
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
-              // initial
             />
           </Stack>
           {/* 错题本 */}
@@ -112,7 +109,6 @@ const RouteMap = props => (
             // titleStyle={styles.navigationBarStyle_title}
             // navigationBarStyle={styles.navigationBarStyle_problemOverview} // 导航条的样式
             hideNavBar // 是否隐藏整个导航条
-            // initial
           >
             <Scene
               key="ProblemOverview"
@@ -148,7 +144,6 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
