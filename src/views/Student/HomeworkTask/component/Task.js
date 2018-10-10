@@ -138,8 +138,6 @@ class TaskItem extends React.Component {
           onRegetDropListenerRange(true);
         }
       }
-    } else {
-      console.log('排期失败');
     }
 
     // 取消任务排期
@@ -196,10 +194,10 @@ class TaskItem extends React.Component {
 
   render() {
     const {
-      wrapStyle, iconWrapStyle, iconStyle, isShowSpendTime, dragIndex,
+      wrapStyle, iconWrapStyle, iconStyle, dragIndex, type,
     } = this.props;
     const data = this.props.data.item ? this.props.data.item : this.props.data;
-
+    console.log(200, type);
     return (
       <Animated.View
         {...this.panResponder.panHandlers}
@@ -216,16 +214,17 @@ class TaskItem extends React.Component {
                       <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
                         <CIcon style={mergeStyles(styles.icon, iconStyle)} name="wendang1" size={25} />
                       </View>
+                      {type !== 'showIconOnlyTask' && (
                       <View>
-                        <Text>{data.data}</Text>
                         <Text style={[styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
-                          6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业
+                          {data.data} -- 6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业
                         </Text>
                         {
-                          isShowSpendTime && <Text style={styles.details}>预计耗时：15′</Text>
+                          type === 'detailsTask' && <Text style={styles.details}>预计耗时：15′</Text>
                         }
                         <Text style={styles.details}>截止提交时间：6-24 24:00</Text>
                       </View>
+                      )}
                     </View>
                   )
               }
@@ -261,6 +260,7 @@ TaskItem.propTypes = {
   lastHandlePeriodIndex: PropTypes.number,
   onRegetDropListenerRange: PropTypes.func,
   planList: PropTypes.array,
+  type: PropTypes.string,
 };
 
 TaskItem.defaultProps = {
@@ -280,6 +280,7 @@ TaskItem.defaultProps = {
   lastHandlePeriodIndex: null,
   onRegetDropListenerRange: () => {},
   planList: [],
+  type: 'detailsTask',
 };
 
 export default TaskItem;

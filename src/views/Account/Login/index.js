@@ -39,7 +39,8 @@ export default class Login extends Component {
       username,
       password,
     } = this.state;
-    Fetch.post('/unlogin/login', {
+
+    Fetch.post('https://dev-cjyun-api.ecaicn.com/unlogin/login', {
       userName: username,
       password: md5(password),
     })
