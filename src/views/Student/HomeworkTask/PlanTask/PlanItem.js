@@ -9,26 +9,15 @@ const PlanItem = (props) => {
   const onPress = () => { console.log('做作业'); };
   const { type, ...rest } = props;
 
-  const renderTask = () => {
-    if (type === 2) {
-      return (
-        <Task
-          {...rest}
-          iconWrapStyle={styles.icon_wrap_style}
-          iconStyle={styles.icon}
-          wrapStyle={styles.wrap_style}
-          isShowSpendTime={false}
-        />
-      );
-    }
-    return (
-      <View style={styles.box}>
-        <View style={styles.border}>
-          <CIcon style={styles.icon} name="wendang1" size={25} />
-        </View>
-      </View>
-    );
-  };
+  const renderTask = () => (
+    <Task
+      {...rest}
+      iconWrapStyle={type === 'breviaryTask' ? styles.icon_wrap_style : styles.showIconOnlyTask_icon_style}
+      iconStyle={type === 'breviaryTask' ? styles.icon : styles.icon}
+      wrapStyle={type === 'breviaryTask' ? styles.wrap_style : styles.showIconOnlyTask_wrap_style}
+      type={type}
+    />
+  );
 
   return (
     <TouchableOpacity onPress={onPress}>
@@ -42,7 +31,7 @@ const PlanItem = (props) => {
 };
 
 PlanItem.propTypes = {
-  type: PropTypes.number,
+  type: PropTypes.string,
 };
 
 PlanItem.defaultProps = {

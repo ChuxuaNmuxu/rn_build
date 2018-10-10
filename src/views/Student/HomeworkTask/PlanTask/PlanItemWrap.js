@@ -37,7 +37,10 @@ class TodoItem extends Component {
     } = data;
     const checked = index === lastHandlePeriodIndex;
 
-    // breviary
+    /*
+     * breviaryTask 任务只显示简要
+     * showIconOnlyTask 任务只显示图标
+    */
     return (
       <TouchableNativeFeedback>
         <View
@@ -56,7 +59,7 @@ class TodoItem extends Component {
                 item.data.map((v, i) => (
                   <PlanItem
                     key={i}
-                    type={checked ? 2 : 1}
+                    type={checked ? 'breviaryTask' : 'showIconOnlyTask'}
                     {...v}
                   />
                 ))

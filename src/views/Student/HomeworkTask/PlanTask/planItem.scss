@@ -19,19 +19,20 @@
 }
 
 // 
-.box {
+.showIconOnlyTask_wrap_style {
   justify-content: center;
   align-items: center;
+  margin-left: 0;
   height: 96px;
   width: 96px;
   background-color: #54cc82;
   border-radius:8px;
 }
 
-
-.border {
+.showIconOnlyTask_icon_style {
   justify-content: center;
   align-items: center;
+  margin-right: 0;
   height: 71px;
   width: 71px;
   background-color: #ffffff;
