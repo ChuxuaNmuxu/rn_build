@@ -3,7 +3,6 @@ import { View, FlatList, Text } from 'react-native';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import R from 'ramda';
 import PlanItemWrap from './PlanItemWrap';
 import styles from './planList.scss';
 import { currentTimeToPeriod } from '../../../../utils/common';
@@ -12,6 +11,10 @@ import {
   GetDropListenerRange,
   ChangeLastHandlePeriodIndex,
   RegetDropListenerRange,
+  ChangeDropIndex,
+  ChangeTodoTask,
+  ChangePlanTask,
+  ChangeDragingTaskCorrespondPeriod,
 } from '../../../../actions/homeworkTask';
 import { adaptiveRotation } from '../../../../utils/resolution';
 
@@ -31,9 +34,13 @@ import { adaptiveRotation } from '../../../../utils/resolution';
   isRegetDropListenerRange,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
-  onGetDropListenerRange: bindActionCreators(GetDropListenerRange, dispatch),
+  onChangeDropIndex: bindActionCreators(ChangeDropIndex, dispatch),
+  onChangePlanTask: bindActionCreators(ChangePlanTask, dispatch),
+  onChangeTodoTask: bindActionCreators(ChangeTodoTask, dispatch),
+  onChangeDragingTaskCorrespondPeriod: bindActionCreators(ChangeDragingTaskCorrespondPeriod, dispatch),
   onChangeLastHandlePeriodIndex: bindActionCreators(ChangeLastHandlePeriodIndex, dispatch),
   onRegetDropListenerRange: bindActionCreators(RegetDropListenerRange, dispatch),
+  onGetDropListenerRange: bindActionCreators(GetDropListenerRange, dispatch),
 }))
 class PlanList extends Component {
   constructor(props) {
@@ -184,17 +191,29 @@ class PlanList extends Component {
       dragingTaskCorrespondPeriodIndex,
       lastHandlePeriodIndex,
       onRegetDropListenerRange,
+      onChangeDropIndex,
+      onChangeTodoTask,
+      onChangePlanTask,
+      onChangeDragingTaskCorrespondPeriod,
+      planList,
+      onChangeLastHandlePeriodIndex,
     } = this.props;
 
     return (
       <PlanItemWrap
         data={data}
+        planList={planList}
         onChangeDropPosition={onChangeDropPosition}
         listenerRangeList={listenerRangeList}
         getTimeItemRef={this.getTimeItemRef}
         dragingTaskCorrespondPeriodIndex={dragingTaskCorrespondPeriodIndex}
         lastHandlePeriodIndex={lastHandlePeriodIndex}
         onRegetDropListenerRange={onRegetDropListenerRange}
+        onChangeDropIndex={onChangeDropIndex}
+        onChangeTodoTask={onChangeTodoTask}
+        onChangePlanTask={onChangePlanTask}
+        onChangeDragingTaskCorrespondPeriod={onChangeDragingTaskCorrespondPeriod}
+        onChangeLastHandlePeriodIndex={onChangeLastHandlePeriodIndex}
       />
     );
   }
@@ -246,6 +265,10 @@ PlanList.propTypes = {
   onChangeLastHandlePeriodIndex: PropTypes.func,
   onRegetDropListenerRange: PropTypes.func,
   isRegetDropListenerRange: PropTypes.bool,
+  onChangeDropIndex: PropTypes.func,
+  onChangePlanTask: PropTypes.func,
+  onChangeTodoTask: PropTypes.func,
+  onChangeDragingTaskCorrespondPeriod: PropTypes.func,
 };
 
 PlanList.defaultProps = {
@@ -258,6 +281,10 @@ PlanList.defaultProps = {
   onChangeLastHandlePeriodIndex: () => {},
   onRegetDropListenerRange: () => {},
   isRegetDropListenerRange: false,
+  onChangeDropIndex: () => {},
+  onChangePlanTask: () => {},
+  onChangeTodoTask: () => {},
+  onChangeDragingTaskCorrespondPeriod: () => {},
 };
 
 export default PlanList;

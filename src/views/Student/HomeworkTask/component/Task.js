@@ -37,7 +37,7 @@ class TaskItem extends React.Component {
     // 防抖值
     this.antiShakeValue = 10;
     // 长按时间
-    this.longTouchTime = 400;
+    this.longTouchTime = 300;
     // 是否正在拖动
     this.isDraging = false;
     // 待操作元素的左边距
@@ -60,11 +60,23 @@ class TaskItem extends React.Component {
   }
 
   onPanResponderGrant = (evt, gestureState) => {
+    console.log('响应者');
     const { scale } = adaptiveRotation();
     this.touchStartX = gestureState.dx;
     this.touchStartY = gestureState.dy;
     this.touchStartTime = evt.nativeEvent.timestamp;
-    console.log('响应者');
+    const {
+      type,
+      onChangeLastHandlePeriodIndex,
+      periodIndex,
+      onRegetDropListenerRange,
+    } = this.props;
+
+    if (type === 'showIconOnlyTask') {
+      // type 类型为 showIconOnlyTask 时表示需要将点击的时间段选中
+      onChangeLastHandlePeriodIndex(periodIndex);
+      onRegetDropListenerRange(true);
+    }
     // 获取待操作元素的坐标值
     this.taskRef.measure((x, y, width, height, pageX, pageY) => {
       this.offsetX = pageX / scale;
@@ -75,7 +87,9 @@ class TaskItem extends React.Component {
   onPanResponderMove = (evt, gestureState) => {
     const { dx, dy } = gestureState;
     const nowTime = evt.nativeEvent.timestamp;
-    const { onChangeDropIndex } = this.props;
+    const {
+      onChangeDropIndex,
+    } = this.props;
 
     /**
      * 模拟长按
@@ -109,8 +123,6 @@ class TaskItem extends React.Component {
       lastHandlePeriodIndex,
     } = this.props;
 
-    // 取消hover状态
-    onChangeDragingTaskCorrespondPeriod();
 
     // 任务排期
     const findTask = this.findTaskCorrespondPeriod(evt);
@@ -120,6 +132,7 @@ class TaskItem extends React.Component {
       const { index } = findTask;
       console.log('排期成功：', findTask.index);
       // 每个时间段只能排5个任务
+      console.log(123, planList[index]);
       if (planList[index].data.length > 4) {
         console.log('超了');
         ModalApi.onOppen('TipsModal', {
@@ -128,7 +141,9 @@ class TaskItem extends React.Component {
           maskClosable: true,
         });
       } else {
+        console.log(131, 'todo', dragIndex, 'plan', { ...data, addIndex: index });
         onChangeTodoTask(dragIndex);
+        // 如果拖拽的 type 类型不是 detailsTask 则表示正在更改已排期任务的时间段
         onChangePlanTask({ ...data, addIndex: index });
         onChangeLastHandlePeriodIndex(index);
 
@@ -142,16 +157,20 @@ class TaskItem extends React.Component {
 
     // 取消任务排期
 
-    // 将拖拽元素定位到窗口外隐藏拖拽元素
-    onChangeDropPosition({
-      x: -500,
-      y: 0,
-    });
+    if (this.isDraging) {
+      // 取消hover状态
+      onChangeDragingTaskCorrespondPeriod();
+      // 将拖拽元素定位到窗口外隐藏拖拽元素
+      onChangeDropPosition({
+        x: -500,
+        y: 0,
+      });
 
-    // 将正在拖拽的元素索引置为空
-    onChangeDropIndex();
-    // 将正在拖拽状态改为停止拖拽
-    this.isDraging = false;
+      // 将正在拖拽的元素索引置为空
+      onChangeDropIndex();
+      // 将正在拖拽状态改为停止拖拽
+      this.isDraging = false;
+    }
   }
 
   // 查询任务对应的时间段
@@ -197,7 +216,7 @@ class TaskItem extends React.Component {
       wrapStyle, iconWrapStyle, iconStyle, dragIndex, type,
     } = this.props;
     const data = this.props.data.item ? this.props.data.item : this.props.data;
-    console.log(200, type);
+
     return (
       <Animated.View
         {...this.panResponder.panHandlers}
@@ -261,6 +280,7 @@ TaskItem.propTypes = {
   onRegetDropListenerRange: PropTypes.func,
   planList: PropTypes.array,
   type: PropTypes.string,
+  periodIndex: PropTypes.number,
 };
 
 TaskItem.defaultProps = {
@@ -281,6 +301,7 @@ TaskItem.defaultProps = {
   onRegetDropListenerRange: () => {},
   planList: [],
   type: 'detailsTask',
+  periodIndex: null,
 };
 
 export default TaskItem;

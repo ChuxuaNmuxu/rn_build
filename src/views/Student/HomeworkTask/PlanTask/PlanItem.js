@@ -2,7 +2,6 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import Task from '../component/Task';
-import CIcon from '../../../../components/Icon';
 import styles from './planItem.scss';
 
 const PlanItem = (props) => {
