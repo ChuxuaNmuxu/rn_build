@@ -21,9 +21,12 @@ export const COMMON_MODAL_OPPEN_OR_CLOSE = 'COMMON_MODAL_OPPEN_OR_CLOSE';
 export const FETCH_PROBLEM_OVERVIEW = 'FETCH_PROBLEM_OVERVIEW';
 
 /**
- * 做作业
+ * ------------------------做作业页面action-----------------------------------------
  */
+// 获取做作业的题目数据
 export const FETCH_DOHOMEWORK_QUESTION = 'FETCH_DOHOMEWORK_QUESTION';
+// 答题，提交小题答案
+export const SUBMIT_DOHOMEWORK_ANSWER = 'SUBMIT_DOHOMEWORK_ANSWER';
 
 /**
  * ------------------------作业与考试详情页面-----------------------------------------
