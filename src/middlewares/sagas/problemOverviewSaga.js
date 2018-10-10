@@ -5,6 +5,7 @@ import {
 import api from '../../utils/fetch';
 import * as actions from '../../actions/problemOverviewAction';
 import enhanceSaga from './enhanceSaga';
+import { strFormatterIconName } from '../../utils/common';
 
 export default function* problemOverviewSaga() {
   // 请求错题本
@@ -21,41 +22,13 @@ function* fetchDataSaga(action) {
       // pageSize: 100,
     });
     console.log(res);
-    // const { code, data: { items } } = res;
-    // yield call(delay, 1000);// 模拟异步 1秒延迟
-    // 模拟数据
-    const code = 0;
-    const result = [
-      {
-        subjectName: '语文',
-        count: 1,
-        icon: 'yuwen2',
-
-      },
-      {
-        subjectName: '数学',
-        count: 12,
-        icon: 'shuxue1',
-      },
-      {
-        subjectName: '英语',
-        count: 13,
-        icon: 'yuwen1',
-      },
-      {
-        subjectName: '化学',
-        count: 14,
-        icon: 'huaxue1',
-      },
-    ];
-    for (let i = 0; i < 50; i++) {
-      result.push(
-        {
-          subjectName: '语文',
-          count: i,
-          icon: 'yuwen2',
-        },
-      );
+    const { code, data } = res;
+    const result = [];
+    for (let i = 0; i < data.length; i++) {
+      result.push({
+        icon: strFormatterIconName(data[i].subjectName),
+        ...data[i],
+      });
     }
     // console.warn('年级接口res=', res)
     if (code === 0) {
