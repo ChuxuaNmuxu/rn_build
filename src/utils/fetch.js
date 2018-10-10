@@ -7,9 +7,9 @@ function apiUrl(url) {
   if (typeof url !== 'string') {
     console.log('url只能为字符串类型');
   } else if (url.charAt(0) === '/') {
-    return `${Config.apiUrl}/${url}`;
+    return `${Config.Api.baseApi}${url}`;
   }
-  return Config.apiUrl + url;
+  return `${Config.Api.baseApi}${url}`;
 }
 
 const errCode = (json) => {
@@ -56,7 +56,7 @@ const Fetch = {
     } else if (type === 'file') {
       options.body = params;
     }
-
+    console.log(url, options);
     return fetch(url, options)
       .then(res => res.text())
       .then(text => (text ? JSON.parse(text) : {}))

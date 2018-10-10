@@ -47,7 +47,7 @@ class ProblemOverview extends PureComponent {
           renderItem={
             (dataItem) => {
               const { item, index } = dataItem;
-              console.log(dataItem);
+              // console.log(dataItem);
               return (
                 <TouchableOpacity
                   onPress={this.goProblemListFun}

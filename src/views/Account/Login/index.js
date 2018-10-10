@@ -40,6 +40,8 @@ export default class Login extends Component {
       password,
     } = this.state;
     Fetch.post('/unlogin/login', {
+      // userName: '罗家健2017360449',
+      // password: md5(123456),
       userName: username,
       password: md5(password),
     })

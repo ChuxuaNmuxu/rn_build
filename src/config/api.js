@@ -1,4 +1,4 @@
 
 export default {
-  baseApi: __DEV__ ? 'dev-cjhms-api.ecaicn.com/api' : 'test-cjhms-api.ecaicn.com/api',
+  baseApi: __DEV__ ? 'https://dev-cjhms-api.ecaicn.com/api' : 'https://test-cjhms-api.ecaicn.com/api',
 };

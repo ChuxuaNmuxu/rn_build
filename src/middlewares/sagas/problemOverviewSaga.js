@@ -1,8 +1,8 @@
 import {
-  takeLatest, put,
+  takeLatest, put, call,
 } from 'redux-saga/effects';
-import { delay } from 'redux-saga';
-// import api from '../../utils/fetch';
+// import { delay } from 'redux-saga';
+import api from '../../utils/fetch';
 import * as actions from '../../actions/problemOverviewAction';
 import enhanceSaga from './enhanceSaga';
 
@@ -13,10 +13,14 @@ export default function* problemOverviewSaga() {
 
 function* fetchDataSaga(action) {
   try {
-    console.log(action);
-    // const url = '/analysis/grade/gradereport';
-    // const fetch = (params) => api.get(url, params);
-    // const res = yield call(fetch);
+    // console.log(action);
+    const url = '/app/api/student/failed-questions/subjects';
+    const fetch = params => api.get(url, params);
+    const res = yield call(fetch, {
+      // page: 1,
+      // pageSize: 100,
+    });
+    console.log(res);
     // const { code, data: { items } } = res;
     // yield call(delay, 1000);// 模拟异步 1秒延迟
     // 模拟数据
