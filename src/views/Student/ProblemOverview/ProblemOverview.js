@@ -47,7 +47,7 @@ class ProblemOverview extends PureComponent {
           renderItem={
             (dataItem) => {
               const { item, index } = dataItem;
-              console.log(dataItem);
+              // console.log(dataItem);
               return (
                 <TouchableOpacity
                   onPress={this.goProblemListFun}
@@ -62,7 +62,7 @@ class ProblemOverview extends PureComponent {
                     </View>
                     <View style={styles.item_right}>
                       <Text style={styles.item_right_number}>
-                        {item.count}
+                        {item.quantity}
                       </Text>
                       <Entypo name="chevron-thin-right" size={30} color="#30bf6c" />
                     </View>
@@ -72,31 +72,6 @@ class ProblemOverview extends PureComponent {
             }
           }
         />
-        {/* <View style={styles.title_wrap}>
-          <Text style={styles.title_content}>
-            错题本
-          </Text>
-        </View> */}
-        {/* {
-          data.map((item, index) => (
-            <TouchableOpacity onPress={this.goProblemListFun} key={index}>
-              <View style={styles.item}>
-                <View style={styles.item_left}>
-                  <View style={styles.item_left_icon}>
-                    <CIcon name={item.icon} size={40} color="white" />
-                  </View>
-                  <Text style={styles.item_left_subjectName}>{item.subjectName}</Text>
-                </View>
-                <View style={styles.item_right}>
-                  <Text style={styles.item_right_number}>
-                    {item.count}
-                  </Text>
-                  <Entypo name="chevron-thin-right" size={30} color="#30bf6c" />
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))
-        } */}
       </View>
     );
   }
