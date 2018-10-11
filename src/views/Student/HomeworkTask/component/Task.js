@@ -7,6 +7,7 @@ import {
   PanResponder,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import CIcon from '../../../../components/Icon';
 import styles from './task.scss';
 import { mergeStyles } from '../../../../utils/common';
@@ -75,6 +76,7 @@ class TaskItem extends React.Component {
     } = this.props;
 
     if (type === 'showIconOnlyTask') {
+      console.log('为啥没执行');
       // type 类型为 showIconOnlyTask 时表示需要将点击的时间段选中
       onChangeLastHandlePeriodIndex(periodIndex);
       onRegetDropListenerRange(true);
@@ -104,6 +106,7 @@ class TaskItem extends React.Component {
         this.dragHandle(evt, dx, dy);
         this.isDraging = true;
         onChangeDropIndex(this.props.data.index);
+        console.log('task 107:', this.props.data);
       }
     }
   }
@@ -278,12 +281,14 @@ class TaskItem extends React.Component {
                       {type !== 'showIconOnlyTask' && (
                       <View>
                         <Text style={[styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
-                          {data.data} -- 6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业6-22 语文作业
+                          {data.title || 'title'}
                         </Text>
                         {
-                          type === 'detailsTask' && <Text style={styles.details}>预计耗时：15′</Text>
+                          type === 'detailsTask' && <Text style={styles.details}>预计耗时：{data.estimatedCost || '不限时'}</Text>
                         }
-                        <Text style={styles.details}>截止提交时间：6-24 24:00</Text>
+                        <Text style={styles.details}>
+                          截止提交时间：{ moment(data.endTime).format('MM-DD HH:mm') || '无时间'}
+                        </Text>
                       </View>
                       )}
                     </View>

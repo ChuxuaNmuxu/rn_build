@@ -44,6 +44,8 @@ export const CHANGE_DRAGING_TASK_CORRESPOND_PERIOD = 'CHANGE_DRAGING_TASK_CORRES
 export const CHANGE_LAST_HANDLE_PERIOD_INDEX = 'CHANGE_LAST_HANDLE_PERIOD_INDEX';
 // 重新获取时间段的监听范围
 export const REGET_DROP_LISTENER_RANGE = 'REGET_DROP_LISTENER_RANGE';
+// 获取学生作业列表
+export const FETCH_STUDENT_TASK_LIST = 'FETCH_STUDENT_TASK_LIST';
 
 /**
  *------------------------作业与考试详情页面-----------------------------------------

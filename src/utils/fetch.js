@@ -4,9 +4,8 @@ import qs from 'qs';
 import Config from '../config';
 
 function apiUrl(url) {
-  // console.log(7, url.indexOf('http'));
   if (typeof url !== 'string') {
-    console.log('url只能为字符串类型');
+    console.error('url只能为字符串类型');
   } else if (url.indexOf('http') === 0) {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
@@ -60,12 +59,15 @@ const Fetch = {
       options.body = params;
     }
 
-    // console.log(53, url, options);
     return fetch(url, options)
       .then(res => res.text())
       .then(text => (text ? JSON.parse(text) : {}))
       .then(errCode)
-      .catch(err => console.log(71, new Error(err)));
+      .catch((err) => {
+        const error = new Error(err);
+        console.log(error);
+        return error; // 返回错误App会自动在界面上呈现报错模态
+      });
   },
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;
