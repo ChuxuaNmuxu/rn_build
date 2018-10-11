@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,
-  // Text,
+  Text,
   TouchableOpacity,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
@@ -26,6 +26,7 @@ class ProblemRecords extends Component {
     initialFetch({ currentRecordType: 0 }, 'REQUEST');
     // 拿下拉刷新的context,父组件使用子组件方法
     this.listVew = null;
+    this.page = 1;
     // 下拉刷新需要的参数
     this.moreParams = {
       allGrade: [],
@@ -41,7 +42,7 @@ class ProblemRecords extends Component {
     this.state = {
       showExtendView: false,
       currentRecordType: 0, // 默认为作业记录
-      currentSubjectId: 0,
+      currentSubjectId: 'allSub',
       // 这个数到时reducer数据直接替换就行了
     };
   }
@@ -111,6 +112,7 @@ class ProblemRecords extends Component {
       this.setVisibleFun(false);
     }
     // 这些参数重置
+    this.page = 1;
     this.moreParams = {
       allGrade: [],
       recordState: [],
@@ -119,13 +121,12 @@ class ProblemRecords extends Component {
     // 回调，切换时需要重新获取筛选数据
     this.setState({
       currentRecordType: type,
-      currentSubjectId: 0,
+      currentSubjectId: 'allSub',
     }, () => this.opreatedFetch({
       currentRecordType: type, currentSubjectId: 0, ...this.moreParams, page: 1,
     }));
 
     // 清空下拉刷新组件的状态，恢复默认
-    console.log(this.listVew, '123333333333333');
     this.listVew.setheaderState(freshListViewSate.Idle);
     this.listVew.setfooterState(freshListViewSate.Idle);
   }
@@ -138,6 +139,7 @@ class ProblemRecords extends Component {
         this.setVisibleFun(false);
       }
       // 这些参数重置
+      this.page = 1;
       this.moreParams = {
         allGrade: [],
         recordState: [],
@@ -156,11 +158,9 @@ class ProblemRecords extends Component {
     const { showExtendView, currentRecordType, currentSubjectId } = this.state;
     // 检测参数变化
     const isChange = _.equals(this.preMoreParams, this.moreParams);
-    console.log(isChange, 'isChangeisChangeisChange');
-    console.log(this.preMoreParams, 'this.preMoreParams');
-    console.log(this.moreParams, 'this.moreParams');
+
     if (showExtendView && !isChange) {
-      console.log('wtfffff');
+      this.page = 1;
       this.changeParamsfetch({
         currentRecordType, currentSubjectId, ...this.moreParams, page: 1,
       });
@@ -174,6 +174,7 @@ class ProblemRecords extends Component {
     const { showExtendView, currentRecordType, currentSubjectId } = this.state;
     const isChange = _.equals(this.preMoreParams, this.moreParams);
     if (showExtendView && !isChange) {
+      this.page = 1;
       this.changeParamsfetch({
         currentRecordType, currentSubjectId, ...this.moreParams, page: 1,
       });
@@ -194,11 +195,14 @@ class ProblemRecords extends Component {
   dropDownRefresh=() => {
     const { currentRecordType, currentSubjectId } = this.state;
     this.listVew.setheaderState(freshListViewSate.Refreshing);
+    this.page = 1;
     this.changeParamsfetch({
-      params: {
-        currentRecordType, currentSubjectId, ...this.moreParams, page: 1,
-      },
-      callback: () => this.listVew.setheaderState(freshListViewSate.RefreshSuccess),
+
+      currentRecordType,
+      currentSubjectId,
+      ...this.moreParams,
+      page: 1,
+      callback: () => this.listVew.setheaderState(freshListViewSate.RefreshSuccess).setheaderState(freshListViewSate.Idle),
     });
 
     console.log('曹尼玛的垃圾组件');
@@ -206,24 +210,35 @@ class ProblemRecords extends Component {
 
   upPullGetMore=() => {
     const { currentRecordType, currentSubjectId } = this.state;
+    const { recordData, total } = this.props;
+    console.log(total, recordData.length);
+    console.log(recordData);
+    if (recordData.length === total) {
+      this.listVew.setfooterState(freshListViewSate.NoMoreData);
+      return;
+    }
     this.listVew.setfooterState(freshListViewSate.Refreshing);
     this.dropDownFetch({
-      params: {
-        currentRecordType, currentSubjectId, ...this.moreParams, page: 1,
-      },
-      callback: () => this.listVew.setfooterState(freshListViewSate.CanLoadMore),
+
+      currentRecordType,
+      currentSubjectId,
+      ...this.moreParams,
+      page: ++this.page,
+
+      callback: () => this.listVew.setfooterState(freshListViewSate.RefreshSuccess).setfooterState(freshListViewSate.Idle),
     });
   }
 
   // 点击卡片进入对应的作业/考试详情页
-  gotoDetailFun = (id) => {
+  // 去到那边需要格式化时间和考试名字，在这里带过去就好了。
+  gotoDetailFun = (id, time, title) => {
     const { currentRecordType } = this.state;
     if (currentRecordType) {
       // 进入考试详情页
-      Actions.ExamRecordDetail({ id });
+      Actions.ExamRecordDetail({ id, time, title });
     } else {
       // 进入作业详情页
-      Actions.HomworkRecordDetail({ id });
+      Actions.HomworkRecordDetail({ id, time, title });
     }
   }
 
@@ -272,9 +287,9 @@ class ProblemRecords extends Component {
     if (_.isEmpty(subjectData)) {
       return null;
     }
-    if (_.isEmpty(recordData)) {
-      return 'YOU HAVE NOT DATA';
-    }
+    // if (_.isEmpty(recordData)) {
+    //   return <Text>YOU HAVE NOT DATA</Text>;
+    // }
     const {
       currentRecordType, showExtendView, currentSubjectId,
     } = this.state;
@@ -340,6 +355,7 @@ ProblemRecords.propTypes = {
   allGradeData: PropTypes.array.isRequired,
   recordStateData: PropTypes.array.isRequired,
   isRevisingData: PropTypes.array.isRequired,
+  total: PropTypes.any.isRequired,
 };
 
 ProblemRecords.defaultProps = {
@@ -348,7 +364,7 @@ ProblemRecords.defaultProps = {
 
 const mapStateToProps = (state) => {
   const {
-    problemRecordsReduecer: {
+    ProblemRecordsReducer: {
       subjectData,
       // 记录数据
       recordData,
@@ -358,6 +374,7 @@ const mapStateToProps = (state) => {
       recordStateData,
       // 修正状态
       isRevisingData,
+      total,
     },
   } = state;
   return {
@@ -366,6 +383,7 @@ const mapStateToProps = (state) => {
     allGradeData,
     recordStateData,
     isRevisingData,
+    total,
   };
 };
 

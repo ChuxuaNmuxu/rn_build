@@ -1,10 +1,11 @@
 import {
-  takeLatest, put,
+  takeLatest, put, call,
 } from 'redux-saga/effects';
-import { delay } from 'redux-saga';
-// import api from '../../utils/fetch';
+// import { delay } from 'redux-saga';
+import api from '../../utils/fetch';
 import * as actions from '../../actions/problemOverviewAction';
 import enhanceSaga from './enhanceSaga';
+import { strFormatterIconName } from '../../utils/common';
 
 export default function* problemOverviewSaga() {
   // 请求错题本
@@ -13,45 +14,21 @@ export default function* problemOverviewSaga() {
 
 function* fetchDataSaga(action) {
   try {
-    console.log(action);
-    // const url = '/analysis/grade/gradereport';
-    // const fetch = (params) => api.get(url, params);
-    // const res = yield call(fetch);
-    // const { code, data: { items } } = res;
-    // yield call(delay, 1000);// 模拟异步 1秒延迟
-    // 模拟数据
-    const code = 0;
-    const result = [
-      {
-        subjectName: '语文',
-        count: 1,
-        icon: 'yuwen2',
-
-      },
-      {
-        subjectName: '数学',
-        count: 12,
-        icon: 'shuxue1',
-      },
-      {
-        subjectName: '英语',
-        count: 13,
-        icon: 'yuwen1',
-      },
-      {
-        subjectName: '化学',
-        count: 14,
-        icon: 'huaxue1',
-      },
-    ];
-    for (let i = 0; i < 50; i++) {
-      result.push(
-        {
-          subjectName: '语文',
-          count: i,
-          icon: 'yuwen2',
-        },
-      );
+    // console.log(action);
+    const url = '/app/api/student/failed-questions/subjects';
+    const fetch = params => api.get(url, params);
+    const res = yield call(fetch, {
+      // page: 1,
+      // pageSize: 100,
+    });
+    console.log(res);
+    const { code, data } = res;
+    const result = [];
+    for (let i = 0; i < data.length; i++) {
+      result.push({
+        icon: strFormatterIconName(data[i].subjectName),
+        ...data[i],
+      });
     }
     // console.warn('年级接口res=', res)
     if (code === 0) {

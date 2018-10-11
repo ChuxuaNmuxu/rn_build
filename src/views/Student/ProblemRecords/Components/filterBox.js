@@ -72,7 +72,7 @@ class FilterBox extends Component {
 }
 
 FilterBox.propTypes = {
-  currentSubjectId: PropTypes.number.isRequired,
+  currentSubjectId: PropTypes.string.isRequired,
   subjectData: PropTypes.array.isRequired,
   filterSubjectFun: PropTypes.func.isRequired,
   filterMoreFun: PropTypes.func.isRequired,
