@@ -2195,10 +2195,6 @@ data-urls@^1.0.0:
     whatwg-mimetype "^2.0.0"
     whatwg-url "^6.4.0"
 
-dayjs@^1.7.5:
-  version "1.7.5"
-  resolved "http://registry.npm.taobao.org/dayjs/download/dayjs-1.7.5.tgz#14715cb565d1f8cb556a8531cb14bf1fc33067cc"
-
 debug@2.6.9, debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
   version "2.6.9"
   resolved "http://registry.npm.taobao.org/debug/download/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
@@ -4637,6 +4633,10 @@ mobx@^3.3.1:
   version "3.6.2"
   resolved "http://registry.npm.taobao.org/mobx/download/mobx-3.6.2.tgz#fb9f5ff5090539a1ad54e75dc4c098b602693320"
 
+moment@^2.22.2:
+  version "2.22.2"
+  resolved "http://registry.npm.taobao.org/moment/download/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
+
 morgan@^1.9.0:
   version "1.9.0"
   resolved "http://registry.npm.taobao.org/morgan/download/morgan-1.9.0.tgz#d01fa6c65859b76fcf31b3cb53a3821a311d8051"
@@ -4855,6 +4855,10 @@ number-is-nan@^1.0.0:
 nwsapi@^2.0.7:
   version "2.0.8"
   resolved "http://registry.npm.taobao.org/nwsapi/download/nwsapi-2.0.8.tgz#e3603579b7e162b3dbedae4fb24e46f771d8fa24"
+
+nzh@^1.0.3:
+  version "1.0.3"
+  resolved "http://registry.npm.taobao.org/nzh/download/nzh-1.0.3.tgz#fb0d1b5a78c6f6a2912fc4c4af233119060392ec"
 
 oauth-sign@~0.8.1, oauth-sign@~0.8.2:
   version "0.8.2"
@@ -5366,6 +5370,13 @@ react-native-animatable@^1.3.0:
   resolved "http://registry.npm.taobao.org/react-native-animatable/download/react-native-animatable-1.3.0.tgz#b5c3940fc758cfd9b2fe54613a457c4b6962b46e"
   dependencies:
     prop-types "^15.5.10"
+
+react-native-calendar-picker@^5.22.0:
+  version "5.22.0"
+  resolved "http://registry.npm.taobao.org/react-native-calendar-picker/download/react-native-calendar-picker-5.22.0.tgz#03e2bec556d80a3cd83ba7db704bca8e9e81dc69"
+  dependencies:
+    prop-types "^15.6.0"
+    uuid "3.2.1"
 
 react-native-camera-roll-picker@^1.2.1:
   version "1.2.3"
@@ -6779,6 +6790,10 @@ utils-merge@1.0.1:
 uuid@3.0.1:
   version "3.0.1"
   resolved "http://registry.npm.taobao.org/uuid/download/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
+
+uuid@3.2.1:
+  version "3.2.1"
+  resolved "http://registry.npm.taobao.org/uuid/download/uuid-3.2.1.tgz#12c528bb9d58d0b9265d9a2f6f0fe8be17ff1f14"
 
 uuid@^3.0.0, uuid@^3.1.0:
   version "3.3.2"

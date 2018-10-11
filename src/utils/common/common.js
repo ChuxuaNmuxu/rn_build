@@ -1,6 +1,7 @@
 // 工具方法
 
-import dayjs from 'dayjs';
+// import moment from 'moment';
+import moment from 'moment';
 import R from 'ramda';
 
 export const exampleOne = a => a + 1;
@@ -72,23 +73,23 @@ export const handleFormattingTime = (time) => { // 格式化计时
 // 对时间进行处理：两天以内用今天和昨天表示；超过两天且在当前周用星期X表示，再往前则按照日期显示。
 export const formatTimeToshow = (timeData) => {
   const today = new Date();
-  const yesterday = dayjs(new Date()).subtract(1, 'days');
-  const weekOfday = parseInt(dayjs().format('E')); // 计算今天是这周第几天
-  const lastSunday = dayjs().subtract(weekOfday, 'days').format('YYYY/MM/DD'); // 上周日日期
+  const yesterday = moment(new Date()).subtract(1, 'days');
+  const weekOfday = parseInt(moment().format('E')); // 计算今天是这周第几天
+  const lastSunday = moment().subtract(weekOfday, 'days').format('YYYY/MM/DD'); // 上周日日期
   let finalTime;
   // 还要判断下今天星期几，计算当前周要往前推几天
   const weekData = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const chineseWeekName = ['星期一', '星期二', '星期三', '星期四', '星期五'];
-  if (dayjs(today).isSame(timeData, 'day')) { // 判断 isSame方法
+  if (moment(today).isSame(timeData, 'day')) { // 判断 isSame方法
     finalTime = '今天';
-  } else if (dayjs(yesterday).isSame(timeData, 'day')) {
+  } else if (moment(yesterday).isSame(timeData, 'day')) {
     finalTime = '昨天';
-  } else if (dayjs(timeData).isAfter(lastSunday)) {
+  } else if (moment(timeData).isAfter(lastSunday)) {
     // 本周内--将英文的星期转中文
-    const index = weekData.indexOf(dayjs(timeData).format('dddd'));
+    const index = weekData.indexOf(moment(timeData).format('dddd'));
     finalTime = chineseWeekName[index];
   } else {
-    finalTime = dayjs(timeData).format('YYYY/MM/DD');
+    finalTime = moment(timeData).format('YYYY/MM/DD');
   }
   return finalTime;
 };
@@ -249,8 +250,8 @@ export const createHalfHourPeriod = () => (
  * 将当前时间与时间段对应
  */
 export const currentTimeToPeriod = () => {
-  const hour = dayjs().hour();
-  const minute = dayjs().minute();
+  const hour = moment().hour();
+  const minute = moment().minute();
   // 整点算两个时间段，分钟大于30算一个时间段
   const periodIndex = hour * 2 + (minute > 30 ? 1 : 0);
   return periodIndex;

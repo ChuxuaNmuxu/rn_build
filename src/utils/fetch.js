@@ -15,20 +15,18 @@ function apiUrl(url) {
   }
   return `${Config.Api.baseApi}/${url}`;
 }
-
 const errCode = (json) => {
   switch (json.code) {
     case 703:
       return console.log('登陆过期', json);
     case -1:
-      Toast.fail(`${json.code} ${json.message || json.data}`);
+      // Toast.fail(`${json.code} ${json.message || json.data}`); // 打印出来给鬼看啊！还容易造成调试的问题
       return Promise.reject(new Error(`${json.code} ${json.message || json.data}`));
     default:
       // console.log('json.code:', json.code);
   }
   return json;
 };
-
 const Fetch = {
   /**
  * param {Number} url 地址
@@ -55,17 +53,17 @@ const Fetch = {
       credentials: 'include',
     };
     if (type === 'json') {
+      headers['Content-Type'] = 'application/json';
       options.body = JSON.stringify(params);
     } else if (type === 'file') {
       options.body = params;
     }
-
-    // console.log(53, url, options);
+    console.log(60, url, options);
     return fetch(url, options)
       .then(res => res.text())
       .then(text => (text ? JSON.parse(text) : {}))
       .then(errCode)
-      .catch(err => console.log(71, new Error(err)));
+      .catch(err => console.log(65, new Error(err)));
   },
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;
@@ -84,5 +82,4 @@ const Fetch = {
     return this.fetch(apiUrl(_url), params, 'delete');
   },
 };
-
 export default Fetch;
