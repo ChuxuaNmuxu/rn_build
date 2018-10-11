@@ -21,6 +21,14 @@ export const COMMON_MODAL_OPPEN_OR_CLOSE = 'COMMON_MODAL_OPPEN_OR_CLOSE';
 export const FETCH_PROBLEM_OVERVIEW = 'FETCH_PROBLEM_OVERVIEW';
 
 /**
+ * ------------------------预览作业页面action-----------------------------------------
+ */
+// 获取预览作业页面的作业数据
+export const FETCH_PREVIEWHOMEWORK_QUESTION = 'FETCH_PREVIEWHOMEWORK_QUESTION';
+// 校验该份作业是否可做--开始做作业时需要先校验才行
+export const CHECK_HOMEWORK_ISOPERABLE = 'CHECK_HOMEWORK_ISOPERABLE';
+
+/**
  * ------------------------做作业页面action-----------------------------------------
  */
 // 获取做作业的题目数据

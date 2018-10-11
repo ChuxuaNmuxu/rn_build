@@ -20,7 +20,7 @@ function* fetchDoHomeworkSaga(action) {
     // const { homeworkId } = action.payload;
     // const params = {};
     // params.optType = 2;
-    // const url = '/student/homeworks/' + homeworkId';
+    // const url = 'app/api/student/homeworks/' + homeworkId';
     // const fetch = (params) => api.get(url, params);
     // const res = yield call(fetch);
     // const { code, data } = res;

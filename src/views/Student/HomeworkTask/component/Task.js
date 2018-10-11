@@ -7,6 +7,7 @@ import {
   PanResponder,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import { Actions } from 'react-native-router-flux';
 import CIcon from '../../../../components/Icon';
 import styles from './task.scss';
 import { mergeStyles } from '../../../../utils/common';
@@ -202,7 +203,9 @@ class TaskItem extends React.Component {
       <Animated.View
         {...this.panResponder.panHandlers}
       >
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => { Actions.TaskDetail({ homeworkId: data.id || '499598186277502976' }); }}
+        >
           {
                 dragIndex === data.data
                   ? <View style={styles.task_placeholder}><View /></View>

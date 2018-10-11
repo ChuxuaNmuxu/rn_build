@@ -19,13 +19,20 @@ class TaskDetail extends Component {
       endTime,
       beginTime,
       waitReadOver,
+      homeworkId,
     } = this.props;
     console.log(waitReadOver);
     return (
       <View style={styles.wrap}>
         <Title waitReadOver={waitReadOver} title={title} />
         <View style={styles.content_wrap}>
-          <Content beginTime={beginTime} endTime={endTime} waitReadOver={waitReadOver} useTime={useTime} />
+          <Content
+            beginTime={beginTime}
+            endTime={endTime}
+            waitReadOver={waitReadOver}
+            useTime={useTime}
+            homeworkId={homeworkId}
+          />
         </View>
       </View>
     );
@@ -43,6 +50,7 @@ TaskDetail.propTypes = {
   beginTime: PropTypes.string,
   // 是否待批阅(默认false，如果是true 则是待批阅)
   waitReadOver: PropTypes.bool,
+  homeworkId: PropTypes.string,
 };
 TaskDetail.defaultProps = {
   title: '6-22物理作业',
@@ -50,6 +58,7 @@ TaskDetail.defaultProps = {
   endTime: '9-20 24:00',
   beginTime: '今天',
   waitReadOver: false,
+  homeworkId: '499598186277502976',
 };
 
 export default TaskDetail;

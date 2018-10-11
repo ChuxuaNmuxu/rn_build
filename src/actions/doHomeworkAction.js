@@ -1,4 +1,4 @@
-// 获取做作业的数据
+// 做作业页面的相关操作
 import actionCreator from './actionCreator';
 import * as types from '../constants/actionType';
 

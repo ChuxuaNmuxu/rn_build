@@ -57,10 +57,9 @@ class DoHomeworks extends Component {
   }
 
   componentDidMount() {
-    // 拿到当前路由地址上携带的这份作业的id
-    const homeworkId = '23213232434';
     // 请求做作业的题目数据
-    const { actions: { fetchdoHomeworkAction } } = this.props;
+    const { actions: { fetchdoHomeworkAction }, homeworkId } = this.props;
+    console.log('当前这份作业id', homeworkId);
     fetchdoHomeworkAction({ homeworkId }, 'REQUEST');
     // 控制刚进入做作业页面是否弹框提示
     // this.setCheckModalVisibleFun(true);
@@ -205,7 +204,6 @@ class DoHomeworks extends Component {
   // 客观题答案发生改变的函数
   handleToClickRadio = (questionId, answer) => {
     console.log(111, '当前题目选择的答案是', answer);
-    const homeworkId = '23213232434';
     const answerParam = {};
     answerParam.answer = answer;
     answerParam.difficultyLevel = '1';
@@ -219,7 +217,7 @@ class DoHomeworks extends Component {
       answerParam.questionId = '1';
     }
     answerParam.startDate = '2018-10-10T01:41:14.153Z';
-    const { actions: { submitDoHomeworkAnswerAction } } = this.props;
+    const { actions: { submitDoHomeworkAnswerAction }, homeworkId } = this.props;
     submitDoHomeworkAnswerAction({ homeworkId, questionId, answerParam }, 'REQUEST');
   }
 
@@ -429,6 +427,11 @@ class DoHomeworks extends Component {
 DoHomeworks.propTypes = {
   data: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
+  homeworkId: PropTypes.string,
+};
+
+DoHomeworks.defaultProps = {
+  homeworkId: null,
 };
 
 const mapStateToProps = (state) => {
