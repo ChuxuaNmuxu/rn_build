@@ -50,6 +50,7 @@ class Content extends Component {
     this.setState({ showPicker: bol });
   }
 
+  // 取消 =》 清空、关闭
   cancelCalendar = () => {
     this.setState({
       selectedStartDate: null,
@@ -81,7 +82,7 @@ class Content extends Component {
 
   render() {
     const {
-      waitReadOver, endTime, useTime,
+      waitReadOver, endTime, useTime, homeworkId,
     } = this.props;
     const {
       beginTime, selectedStartDate, selectedEndDate, showPicker,
@@ -173,13 +174,13 @@ class Content extends Component {
         </View>
         <View style={[styles.content_child_btn]}>
           {/* 预览作业 */}
-          <TouchableOpacity onPress={() => Actions.PreviewHomework()}>
+          <TouchableOpacity onPress={() => Actions.PreviewHomework({ homeworkId })}>
             <I18nText style={styles.content_child_btn_normal}>
               TaskDetail.reviewHomework
             </I18nText>
           </TouchableOpacity>
           {/* 开始作业 */}
-          <TouchableOpacity onPress={() => Actions.DoHomework()}>
+          <TouchableOpacity onPress={() => Actions.DoHomework({ homeworkId })}>
             <I18nText style={[styles.content_child_btn_normal, styles.content_child_btn_color]}>
               TaskDetail.beginHomework
             </I18nText>
@@ -199,6 +200,8 @@ Content.propTypes = {
   beginTime: PropTypes.string.isRequired,
   // 是否待批阅(默认false，如果是true 则是待批阅)
   waitReadOver: PropTypes.bool.isRequired,
+  // 当前这份作业的id
+  homeworkId: PropTypes.string.isRequired,
 };
 
 export default Content;

@@ -12,6 +12,8 @@ const initState = {
   recordStateData: [],
   // 修正状态
   isRevisingData: [],
+  // 总数
+  total: 0,
 };
 
 const handle = {

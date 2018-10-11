@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import routes from './common/routes';
 import config from './common/config';
 import problemOverviewReducer from './problemOverviewReducer';
+import previewHomeworkReducer from './previewHomeworkReducer';
 import doHomeworkReducer from './doHomeworkReducer';
 import homeworkTaskReducer from './HomeworkTask';
 import recordDetailReducer from './recordDetailReducer';
@@ -13,6 +14,8 @@ export default combineReducers({
   config,
   // 错题本
   problemOverviewReducer,
+  // 作业预览
+  previewHomeworkReducer,
   // 做作业
   doHomeworkReducer,
   // 任务计划

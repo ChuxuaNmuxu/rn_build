@@ -66,10 +66,10 @@ class RecordCard extends PureComponent {
   // 判断zuoye状态
   getRecordState=(type, accuracyData) => {
     switch (type) {
-      case '0':
+      case 0:
         // console.log(type);
         return '批改中';
-      case '1':
+      case 1:
         // console.log(type);
         return `正确率：${accuracyData}`;
       default:
@@ -81,10 +81,10 @@ class RecordCard extends PureComponent {
     // 判断zuoye状态
     getExanState=(type, accuracyData) => {
       switch (type) {
-        case '0':
+        case 0:
           // console.log(type);
           return '批改中';
-        case '1':
+        case 1:
           // console.log(type);
           return `得分：${accuracyData}`;
         default:
@@ -101,7 +101,7 @@ class RecordCard extends PureComponent {
   // 点击卡片进入详情页
   gotoDetailFun = () => {
     const { gotoDetailFun, datas } = this.props;
-    gotoDetailFun(datas.id);
+    gotoDetailFun(datas.id, datas.publishTime, datas.subjectName);
   }
 
 
@@ -123,12 +123,12 @@ class RecordCard extends PureComponent {
             <Text style={[styles.subjectName]} ellipsizeMode="tail" numberOfLines={1}>{datas.title}</Text>
             <View style={styles.bottomInfo}>
               <Text
-                style={[styles.otherInfo, { color: datas.type === '0' ? '#f5a623' : '#999999' }]}
+                style={[styles.otherInfo, { color: datas.type === 0 ? '#f5a623' : '#999999' }]}
               >
                 {
                   recordType === 0
                     ? this.getRecordState(datas.type, accuracyData)
-                    : this.getExanState(datas.type, accuracyData)}
+                    : this.getExanState(datas.type, datas.accuracy)}
               </Text>
               <Text style={styles.otherInfo}>{formatTimeToshow(datas.publishTime)}</Text>
             </View>
@@ -152,7 +152,7 @@ class RecordCard extends PureComponent {
 
         </View>
         {
-            datas.resultRead === '1' && (
+            datas.resultRead === 1 && (
             <Image
               style={styles.notViewStyles}
               source={NotViewImg}

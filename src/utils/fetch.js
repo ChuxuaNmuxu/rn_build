@@ -15,7 +15,6 @@ function apiUrl(url) {
   }
   return `${Config.Api.baseApi}/${url}`;
 }
-
 const errCode = (json) => {
   switch (json.code) {
     case 703:
@@ -28,7 +27,6 @@ const errCode = (json) => {
   }
   return json;
 };
-
 const Fetch = {
   /**
  * param {Number} url 地址
@@ -59,7 +57,6 @@ const Fetch = {
     } else if (type === 'file') {
       options.body = params;
     }
-
     // console.log(53, url, options);
     return fetch(url, options)
       .then(res => res.text())
@@ -84,5 +81,4 @@ const Fetch = {
     return this.fetch(apiUrl(_url), params, 'delete');
   },
 };
-
 export default Fetch;
