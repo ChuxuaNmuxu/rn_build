@@ -1,11 +1,29 @@
 import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import Task from '../component/Task';
 import styles from './planItem.scss';
 
 const PlanItem = (props) => {
-  const onPress = () => { console.log('做作业'); };
+  const onPress = () => {
+    const {
+      title,
+      estimatedCost: useTime,
+      endTime,
+      // beginTime: scheduledNode,
+      taskType: waitReadOver,
+      homeworkId,
+    } = props.data;
+    Actions.TaskDetail({
+      title,
+      useTime: `${useTime}分钟`,
+      endTime: moment(endTime).format('MM-DD HH:mm'),
+      // beginTime: '占位',
+      waitReadOver: !(waitReadOver < 4),
+      homeworkId,
+    });
+  };
   const { type, ...rest } = props;
 
   const renderTask = () => (
@@ -30,10 +48,12 @@ const PlanItem = (props) => {
 
 PlanItem.propTypes = {
   type: PropTypes.string,
+  data: PropTypes.object,
 };
 
 PlanItem.defaultProps = {
   type: null,
+  data: {},
 };
 
 export default PlanItem;

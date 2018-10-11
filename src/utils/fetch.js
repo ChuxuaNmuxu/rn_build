@@ -1,5 +1,4 @@
 import { isEmpty } from 'ramda';
-import { Toast } from 'antd-mobile-rn';
 import qs from 'qs';
 import Config from '../config';
 
@@ -14,20 +13,18 @@ function apiUrl(url) {
   }
   return `${Config.Api.baseApi}/${url}`;
 }
-
 const errCode = (json) => {
   switch (json.code) {
     case 703:
       return console.log('登陆过期', json);
     case -1:
-      Toast.fail(`${json.code} ${json.message || json.data}`);
+      // Toast.fail(`${json.code} ${json.message || json.data}`); // 打印出来给鬼看啊！还容易造成调试的问题
       return Promise.reject(new Error(`${json.code} ${json.message || json.data}`));
     default:
       // console.log('json.code:', json.code);
   }
   return json;
 };
-
 const Fetch = {
   /**
  * param {Number} url 地址
@@ -54,6 +51,7 @@ const Fetch = {
       credentials: 'include',
     };
     if (type === 'json') {
+      headers['Content-Type'] = 'application/json';
       options.body = JSON.stringify(params);
     } else if (type === 'file') {
       options.body = params;
@@ -86,5 +84,4 @@ const Fetch = {
     return this.fetch(apiUrl(_url), params, 'delete');
   },
 };
-
 export default Fetch;

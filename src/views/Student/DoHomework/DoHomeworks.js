@@ -8,6 +8,7 @@ import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab
 import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import I18nText from '../../../components/I18nText';
 import Radio from '../../../components/Radio';
 import * as actions from '../../../actions/doHomeworkAction';
@@ -57,8 +58,9 @@ class DoHomeworks extends Component {
 
   componentDidMount() {
     // 请求做作业的题目数据
-    const { actions: { fetchdoHomeworkAction } } = this.props;
-    fetchdoHomeworkAction(null, 'REQUEST');
+    const { actions: { fetchdoHomeworkAction }, homeworkId } = this.props;
+    console.log('当前这份作业id', homeworkId);
+    fetchdoHomeworkAction({ homeworkId }, 'REQUEST');
     // 控制刚进入做作业页面是否弹框提示
     // this.setCheckModalVisibleFun(true);
   }
@@ -200,8 +202,23 @@ class DoHomeworks extends Component {
   }
 
   // 客观题答案发生改变的函数
-  handleToClickRadio = (i) => {
-    console.log(111, '当前题目选择的答案是', i);
+  handleToClickRadio = (questionId, answer) => {
+    console.log(111, '当前题目选择的答案是', answer);
+    const answerParam = {};
+    answerParam.answer = answer;
+    answerParam.difficultyLevel = '1';
+    answerParam.endDate = moment(new Date()).format();
+    answerParam.fileId = 0;
+    answerParam.needExplain = 0;
+    const optType = 'nextBtnClick';
+    if (optType === 'nextBtnClick') {
+      // 如果是点击下一题，则将下一题的number和questionId传给接口，否则这两个字段不用传
+      answerParam.number = 0;
+      answerParam.questionId = '1';
+    }
+    answerParam.startDate = '2018-10-10T01:41:14.153Z';
+    const { actions: { submitDoHomeworkAnswerAction }, homeworkId } = this.props;
+    submitDoHomeworkAnswerAction({ homeworkId, questionId, answerParam }, 'REQUEST');
   }
 
   // 主观题上传答案或者客观题上传解答过程答案的函数
@@ -410,6 +427,11 @@ class DoHomeworks extends Component {
 DoHomeworks.propTypes = {
   data: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
+  homeworkId: PropTypes.string,
+};
+
+DoHomeworks.defaultProps = {
+  homeworkId: null,
 };
 
 const mapStateToProps = (state) => {

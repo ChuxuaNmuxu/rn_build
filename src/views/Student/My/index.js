@@ -4,7 +4,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import Drag from '../../../components/Drag/test';
+import Drag from '../../../components/Drag/test-1';
 import Radio from '../../../components/Radio';
 import styles from '../DoHomework/Components/AnswerCard.scss';
 

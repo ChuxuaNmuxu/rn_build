@@ -268,32 +268,32 @@ class TaskItem extends React.Component {
       >
         <TouchableOpacity>
           {
-                dragIndex === data.data
-                  ? <View style={styles.task_placeholder}><View /></View>
-                  : (
-                    <View
-                      style={mergeStyles(styles.task, wrapStyle)}
-                      ref={(ref) => { this.taskRef = ref; }}
-                    >
-                      <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
-                        <CIcon style={mergeStyles(styles.icon, iconStyle)} name="wendang1" size={25} />
-                      </View>
-                      {type !== 'showIconOnlyTask' && (
-                      <View>
-                        <Text style={[styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
-                          {data.title || 'title'}
-                        </Text>
-                        {
-                          type === 'detailsTask' && <Text style={styles.details}>预计耗时：{data.estimatedCost || '不限时'}</Text>
-                        }
-                        <Text style={styles.details}>
-                          截止提交时间：{ moment(data.endTime).format('MM-DD HH:mm') || '无时间'}
-                        </Text>
-                      </View>
-                      )}
-                    </View>
-                  )
-              }
+            dragIndex === data.data
+              ? <View style={styles.task_placeholder}><View /></View>
+              : (
+                <View
+                  style={mergeStyles(styles.task, wrapStyle)}
+                  ref={(ref) => { this.taskRef = ref; }}
+                >
+                  <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
+                    <CIcon style={mergeStyles(styles.icon, iconStyle)} name="wendang1" size={25} />
+                  </View>
+                  {type !== 'showIconOnlyTask' && (
+                  <View>
+                    <Text style={[styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
+                      {data.title || 'title'}
+                    </Text>
+                    {
+                      type === 'detailsTask' && <Text style={styles.details}>预计耗时：{data.estimatedCost || '不限时'}</Text>
+                    }
+                    <Text style={styles.details}>
+                      截止提交时间：{ moment(data.endTime).format('MM-DD HH:mm') || '无时间'}
+                    </Text>
+                  </View>
+                  )}
+                </View>
+              )
+          }
         </TouchableOpacity>
       </Animated.View>
     );
