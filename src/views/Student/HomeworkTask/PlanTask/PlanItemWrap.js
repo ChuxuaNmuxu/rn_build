@@ -57,16 +57,19 @@ class TodoItem extends Component {
                 * 2.进入时自动居中状态或者当前正在操作状态
               */}
               {
-                item.data.map((v, i) => (
-                  <PlanItem
-                    {...rest}
-                    key={i}
-                    type={checked ? 'breviaryTask' : 'showIconOnlyTask'}
-                    data={v}
-                    lastHandlePeriodIndex={lastHandlePeriodIndex}
-                    periodIndex={index}
-                  />
-                ))
+                item.data.map((v, i) => {
+                  console.log(61, v);
+                  return (
+                    <PlanItem
+                      {...rest}
+                      key={i}
+                      type={checked ? 'breviaryTask' : 'showIconOnlyTask'}
+                      data={v}
+                      lastHandlePeriodIndex={lastHandlePeriodIndex}
+                      periodIndex={index}
+                    />
+                  );
+                })
               }
             </View>
             <View style={styles.time_scale}>

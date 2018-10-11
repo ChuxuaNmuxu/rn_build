@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import Task from '../component/Task';
 import styles from './planItem.scss';
@@ -15,17 +15,16 @@ const PlanItem = (props) => {
       iconStyle={type === 'breviaryTask' ? styles.icon : styles.icon}
       wrapStyle={type === 'breviaryTask' ? styles.wrap_style : styles.showIconOnlyTask_wrap_style}
       type={type}
+      onPress={onPress}
     />
   );
 
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.wrap}>
-        {
+    <View style={styles.wrap}>
+      {
           renderTask()
         }
-      </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 

@@ -38,6 +38,8 @@ class TaskItem extends React.Component {
     this.antiShakeValue = 10;
     // 长按时间
     this.longTouchTime = 300;
+    // 单击事件
+    this.touchTime = 80;
     // 是否正在拖动
     this.isDraging = false;
     // 待操作元素的左边距
@@ -106,7 +108,7 @@ class TaskItem extends React.Component {
     }
   }
 
-  onPanResponderRelease = (evt) => {
+  onPanResponderRelease = (evt, gestureState) => {
     const {
       onChangeDropPosition,
       onChangeTodoTask,
@@ -115,36 +117,53 @@ class TaskItem extends React.Component {
       data,
       planList,
       onRegetDropListenerRange,
-    } = this.props;
-    const {
+      onPress,
       onChangeDropIndex,
       onChangeDragingTaskCorrespondPeriod,
       onChangeLastHandlePeriodIndex,
       lastHandlePeriodIndex,
+      type,
     } = this.props;
-
-
+    const { scale } = adaptiveRotation();
+    const { dx, dy } = gestureState;
+    const { pageY, timestamp: nowTime } = evt.nativeEvent;
     // 任务排期
     const findTask = this.findTaskCorrespondPeriod(evt);
 
-    // 如果当前状态属于拖拽状态，并且任务正好拖拽到时间段内，表示排期成功
+    // 如果当前状态属于拖拽状态，并且任务正好拖拽到时间段内，表示任务排期或者任务切换排期时间成功
     if (this.isDraging && findTask) {
       const { index } = findTask;
       console.log('排期成功：', findTask.index);
+
+      // 如果lastHandlePeriodIndex === index相等表示没有拖拽出当前时间段，直接中止
+      if (lastHandlePeriodIndex === index) {
+        console.log('没有拖拽出当前时间段');
+        return;
+      }
+
       // 每个时间段只能排5个任务
-      console.log(123, planList[index]);
       if (planList[index].data.length > 4) {
-        console.log('超了');
         ModalApi.onOppen('TipsModal', {
           tipsContent: <Text>该时段任务已满，请先完成后再安排</Text>,
           bottomTips: '自动关闭',
           maskClosable: true,
         });
       } else {
-        console.log(131, 'todo', dragIndex, 'plan', { ...data, addIndex: index });
-        onChangeTodoTask(dragIndex);
-        // 如果拖拽的 type 类型不是 detailsTask 则表示正在更改已排期任务的时间段
-        onChangePlanTask({ ...data, addIndex: index });
+        /**
+         * 只有将未排期的任务进行排期或从排期任务中取消排期时才会对排期列表有影响
+         * 如果 type 为 detailsTask 并且排期成功时触发更改未排期任务列表action
+         */
+        if (type === 'detailsTask') onChangeTodoTask(dragIndex);
+
+        /**
+         * prevPeriodIndex 如果切换时间段，则有prevPeriodIndex属性，否则没有，通过该属性判断是排期还是切换排期
+         * currentPeriodIndex 当前时间段
+         */
+        const taskData = type === 'detailsTask'
+          ? { ...data, currentPeriodIndex: index }
+          : { ...data, currentPeriodIndex: index, prevPeriodIndex: lastHandlePeriodIndex };
+
+        onChangePlanTask(taskData);
         onChangeLastHandlePeriodIndex(index);
 
         // 如果释放的时间段索引不等于最后操作的索引就重新获取时间段监听范围
@@ -155,8 +174,30 @@ class TaskItem extends React.Component {
       }
     }
 
-    // 取消任务排期
+    /**
+     * 取消任务排期：失去响应时间时，如果当前处于拖拽状态，任务类型不是detailsTask并且手指的当前pageY在指定位置
+     * 96 hander 高，218 todoList 高
+     * 未排期列表：将取消排期任务的数据添加到未分类任务列表
+     * 已排期别表：将 leavePeriodIndex
+     */
+    if (this.isDraging && type !== 'detailsTask' && pageY >= 96 * scale && pageY <= (96 + 218) * scale) {
+      console.log('取消排期');
+      console.log(185, data);
+      onChangeTodoTask(data);
+      onChangePlanTask({ ...data, leavePeriodIndex: lastHandlePeriodIndex });
+    }
 
+    /**
+     * 模拟单击
+     * 单击事件小于 80ms 并且手指移动范围在 8px 以内
+     */
+    if (Math.abs(dx - this.touchStartX) < 8 || Math.abs(dy - this.touchStartY) < 8) {
+      if (nowTime - this.touchStartTime < this.touchTime) {
+        onPress();
+      }
+    }
+
+    // 如果当前为拖拽状态，则还原拖拽时所改变的所有状态
     if (this.isDraging) {
       // 取消hover状态
       onChangeDragingTaskCorrespondPeriod();
@@ -215,7 +256,8 @@ class TaskItem extends React.Component {
     const {
       wrapStyle, iconWrapStyle, iconStyle, dragIndex, type,
     } = this.props;
-    const data = this.props.data.item ? this.props.data.item : this.props.data;
+    let { data } = this.props;
+    data = data.item ? data.item : data;
 
     return (
       <Animated.View
@@ -281,6 +323,7 @@ TaskItem.propTypes = {
   planList: PropTypes.array,
   type: PropTypes.string,
   periodIndex: PropTypes.number,
+  onPress: PropTypes.func,
 };
 
 TaskItem.defaultProps = {
@@ -300,8 +343,15 @@ TaskItem.defaultProps = {
   lastHandlePeriodIndex: null,
   onRegetDropListenerRange: () => {},
   planList: [],
+  /**
+   * type有三种状态：
+   * detailsTask 显示任务的详细信息，表示未排期的任务
+   * breviaryTask 已排期，任务显示简要信息
+   * showIconOnlyTask 已排期，任务只显示图标
+   */
   type: 'detailsTask',
   periodIndex: null,
+  onPress: () => {},
 };
 
 export default TaskItem;
