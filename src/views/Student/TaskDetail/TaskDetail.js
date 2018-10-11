@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import {
   View,
 } from 'react-native';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import styles from './TaskDetail.scss';
 import Title from './Components/Title';
 import Content from './Components/Content';
 import { formatTimeToshow } from '../../../utils/common';
+import * as taskActions from '../../../actions/taskDetailAction';
 
 class TaskDetail extends Component {
   componentDidMount() {
@@ -21,6 +24,7 @@ class TaskDetail extends Component {
       beginTime,
       waitReadOver,
       homeworkId,
+      actions,
     } = this.props;
     return (
       <View style={styles.wrap}>
@@ -32,6 +36,7 @@ class TaskDetail extends Component {
             waitReadOver={waitReadOver}
             useTime={useTime}
             homeworkId={homeworkId}
+            actions={actions}
           />
         </View>
       </View>
@@ -51,6 +56,7 @@ TaskDetail.propTypes = {
   // 是否待批阅(默认false，如果是true 则是待批阅)
   waitReadOver: PropTypes.bool,
   homeworkId: PropTypes.string,
+  actions: PropTypes.object.isRequired,
 };
 TaskDetail.defaultProps = {
   title: '6-22物理作业',
@@ -61,4 +67,16 @@ TaskDetail.defaultProps = {
   homeworkId: '499598186277502976',
 };
 
-export default TaskDetail;
+const mapStateToProps = (state) => {
+  const { beginTime } = state.taskDetailReducer;
+  return {
+    beginTime,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(taskActions, dispatch),
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskDetail);

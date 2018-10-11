@@ -2,13 +2,13 @@ import createReducer from '../createReducer';
 import * as fn from './fn';
 
 const initState = {
-  // 错题本数据
-  data: [],
+  // 执行日期
+  beginTime: '今天',
 };
 
 const handle = {
-  // 请求错题本成功了
-  FETCH_PROBLEM_OVERVIEW_SUCCESS: fn.fetchDataSuccess,
+  // 提交日期成功了
+  PUT_HOMEWORK_DATE_SUCCESS: fn.putDateSuccess,
 };
 
 export default createReducer(initState, handle);

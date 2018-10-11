@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   DatePickerAndroid,
 } from 'react-native';
+import moment from 'moment';
 import Entypo from 'react-native-vector-icons/Entypo';
-import { Actions } from 'react-native-router-flux';
+// import { Actions } from 'react-native-router-flux';
 import I18nText from '../../../../../components/I18nText';
 import styles from './Content.scss';
 
@@ -55,9 +56,33 @@ class Content extends Component {
     this.setState({
       selectedStartDate: null,
       selectedEndDate: null,
-    }, () => {
-      this.controlCalendarVisible(false);
-    });
+    }, () => this.controlCalendarVisible(false));
+  }
+
+  confirmCalendar = () => {
+    const { selectedStartDate, selectedEndDate } = this.state;
+    // console.log(selectedStartDate, selectedEndDate);
+    const { actions, homeworkId } = this.props;
+    if (selectedStartDate) {
+      let time = ''; // 本地显示用的
+      const params = { homeworkId }; // 传给后台大佬的
+      time = moment(selectedStartDate).format('YYYY-MM-DD');
+      params.startDate = moment((`${time} 00:00:01`)).format();
+      params.endDate = moment((`${time} 23:59:59`)).format();
+      console.log(params);
+      if (selectedEndDate) {
+        const endDate = moment(selectedEndDate).format('YYYY-MM-DD');
+        time += `~${endDate}`;
+        params.endDate = moment((`${endDate} 23:59:59`)).format();
+      }
+      this.setState({
+        beginTime: time,
+      }, () => {
+        actions.putHomeworkDateAction(params, 'REQUEST');
+        this.controlCalendarVisible(false);
+      });
+    }
+    this.controlCalendarVisible(false);
   }
 
   // 进行创建时间日期选择器
@@ -85,13 +110,13 @@ class Content extends Component {
       waitReadOver, endTime, useTime, homeworkId,
     } = this.props;
     const {
-      beginTime, selectedStartDate, selectedEndDate, showPicker,
+      beginTime, showPicker,
     } = this.state;
     const minDate = new Date(); // Today
     const maxDate = new Date(2018, 11 - 1, 3);
-    const startDate = selectedStartDate ? selectedStartDate.toString() : '';
-    const endDate = selectedEndDate ? selectedEndDate.toString() : '';
-    console.log(minDate, this.state);
+    // const startDate = selectedStartDate ? selectedStartDate.toString() : '';
+    // const endDate = selectedEndDate ? selectedEndDate.toString() : '';
+    // console.log(minDate, this.state);
     // 待批阅的显示
     if (waitReadOver) {
       return (
@@ -99,7 +124,7 @@ class Content extends Component {
           <View style={styles.content_child}>
             <I18nText style={styles.content_child_left}>TaskDetail.endTime</I18nText>
             <Text style={styles.content_child_right}>{endTime}</Text>
-          </View>yarn
+          </View>
           <View style={[styles.content_child_btn]}>
             {/* 去批阅 */}
             <TouchableOpacity onPress={() => console.log('去批阅')}>
@@ -134,7 +159,7 @@ class Content extends Component {
                 </I18nText>
               </TouchableOpacity>
               {/* 确定 */}
-              <TouchableOpacity onPress={() => this.controlCalendarVisible(false)}>
+              <TouchableOpacity onPress={this.confirmCalendar}>
                 <I18nText style={[styles.content_child_btn_normal, styles.content_child_btn_color]}>
                   confirm
                 </I18nText>
@@ -202,6 +227,7 @@ Content.propTypes = {
   waitReadOver: PropTypes.bool.isRequired,
   // 当前这份作业的id
   homeworkId: PropTypes.string.isRequired,
+  actions: PropTypes.object.isRequired,
 };
 
 export default Content;

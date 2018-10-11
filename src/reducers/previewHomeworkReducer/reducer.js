@@ -11,6 +11,4 @@ const handle = {
   FETCH_PREVIEWHOMEWORK_QUESTION_SUCCESS: fn.fetchDataSuccess,
 };
 
-const previewHomeworkReducer = createReducer(initState, handle);
-
-export default previewHomeworkReducer;
+export default createReducer(initState, handle);
