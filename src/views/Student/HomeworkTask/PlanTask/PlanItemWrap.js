@@ -14,12 +14,19 @@ class TodoItem extends Component {
     this.state = {};
   }
 
+  shouldComponentUpdate(nextProps) {
+    const { dragingTaskCorrespondPeriodIndex } = this.props;
+    if (dragingTaskCorrespondPeriodIndex === nextProps.data.index) return false;
+    return true;
+  }
+
   render() {
     const {
       data,
       getTimeItemRef,
       dragingTaskCorrespondPeriodIndex,
       lastHandlePeriodIndex,
+      ...rest
     } = this.props;
     // console.log(23, data);
 
@@ -58,9 +65,12 @@ class TodoItem extends Component {
               {
                 item.data.map((v, i) => (
                   <PlanItem
+                    {...rest}
                     key={i}
                     type={checked ? 'breviaryTask' : 'showIconOnlyTask'}
-                    {...v}
+                    data={v}
+                    lastHandlePeriodIndex={lastHandlePeriodIndex}
+                    periodIndex={index}
                   />
                 ))
               }

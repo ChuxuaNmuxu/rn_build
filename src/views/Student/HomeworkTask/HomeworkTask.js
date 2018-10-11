@@ -6,15 +6,13 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { merge } from 'ramda';
 import { bindActionCreators } from 'redux';
 import styles from './homeworkTask.scss';
 import PlanList from './PlanTask/PlanList';
 import TodoList from './TodoTask/TodoList';
 import I18nText from '../../../components/I18nText';
 import Drag from './component/Drag';
-import { createHalfHourPeriod, currentTimeToPeriod } from '../../../utils/common';
-import { ChangePlanTask, ChangeTodoTask } from '../../../actions/homeworkTask';
+import { FetchStudentTaskList } from '../../../actions/homeworkTask';
 import Modal from '../../../components/Modal';
 
 @connect((state) => {
@@ -27,36 +25,18 @@ import Modal from '../../../components/Modal';
     position,
   };
 }, dispatch => ({
-  onChangePlanTask: bindActionCreators(ChangePlanTask, dispatch),
-  onChangeTodoTask: bindActionCreators(ChangeTodoTask, dispatch),
+  onFetchStudentTaskList: bindActionCreators(FetchStudentTaskList, dispatch),
 }))
 class HomeworkTask extends Component {
   constructor(props) {
     super(props);
-    this.periods = createHalfHourPeriod() || []; // 生成半小时时间段数组
-    this.currentPeriodIndex = currentTimeToPeriod(); // 获取当前时间段
     this.state = {};
   }
 
   componentDidMount() {
-    const { onChangePlanTask, onChangeTodoTask } = this.props;
-    const todoListData = Array(16).fill({}).map((v, i) => (merge(v, {
-      data: i,
-    })));
-
-    const planListData = this.periods.map(v => ({
-      data: [],
-      period: v,
-      currentPeriod: this.periods[this.currentPeriodIndex],
-    }));
-
-    setTimeout(() => {
-      console.log('模拟请求');
-      onChangePlanTask(planListData);
-      onChangeTodoTask(todoListData);
-    });
+    const { onFetchStudentTaskList } = this.props;
+    onFetchStudentTaskList();
   }
-
 
   renderHeader = () => (
     <View style={[styles.header]}>
@@ -93,14 +73,12 @@ class HomeworkTask extends Component {
 
 HomeworkTask.propTypes = {
   position: PropTypes.object,
-  onChangePlanTask: PropTypes.func,
-  onChangeTodoTask: PropTypes.func,
+  onFetchStudentTaskList: PropTypes.func,
 };
 
 HomeworkTask.defaultProps = {
   position: {},
-  onChangePlanTask: () => {},
-  onChangeTodoTask: () => {},
+  onFetchStudentTaskList: () => {},
 };
 
 export default HomeworkTask;

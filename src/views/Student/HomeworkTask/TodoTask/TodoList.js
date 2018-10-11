@@ -121,7 +121,7 @@ class TodoList extends Component {
   }
 
   // key
-  keyExtractor = item => item.data.toString()
+  keyExtractor = item => item.homeworkId
 
   // 列表每项
   renderItem = (item) => {
@@ -170,6 +170,7 @@ class TodoList extends Component {
 
   render() {
     const { todoList } = this.props;
+    console.log(173, todoList);
 
     return (
       <View

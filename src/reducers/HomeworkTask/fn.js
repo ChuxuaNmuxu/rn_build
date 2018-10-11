@@ -22,15 +22,30 @@ export const changePlanTask = (state, action) => {
   if (R.type(action.payload) === 'Array') {
     action.payload.forEach(v => state.planList.push(v));
   } else if (R.type(action.payload) === 'Object') {
-    if ('addIndex' in action.payload) {
-      // 排期
-      const current = state.planList[action.payload.addIndex];
-      delete action.payload.addIndex;
-      current.data.push(action.payload);
+    if ('prevPeriodIndex' in action.payload) {
+      //  切换排期
+      const prevPeriodData = state.planList[action.payload.prevPeriodIndex];
+      const currentPeriodData = state.planList[action.payload.currentPeriodIndex];
+      const prevPeriodChildDragingIndex = prevPeriodData.data.findIndex(v => v.item.data === action.payload.item.data);
+      prevPeriodData.data.splice(prevPeriodChildDragingIndex, 1);
+      currentPeriodData.data.push(action.payload);
+      delete action.payload.currentPeriodIndex;
+      delete action.payload.prevPeriodIndex;
+      return;
     }
-    if ('delIndex' in action.payload) {
-      // 取消排期或切换排期
+    if ('leavePeriodIndex' in action.payload) {
+      const periodData = state.planList[action.payload.leavePeriodIndex];
+      const periodChildDragingIndex = periodData.data.findIndex(v => v.item.data === action.payload.item.data);
+      periodData.data.splice(periodChildDragingIndex, 1);
+      // todo 应该要通过事件来重新排序
+      delete action.payload.leavePeriodIndex;
+      // 取消排期
+      return;
     }
+    // 排期
+    const current = state.planList[action.payload.currentPeriodIndex];
+    delete action.payload.currentPeriodIndex;
+    current.data.push(action.payload);
   }
 };
 
@@ -40,7 +55,7 @@ export const changeTodoTask = (state, action) => {
   } else if (R.type(action.payload) === 'Object') {
     // 取消排期
 
-
+    state.todoList.push(action.payload.item);
   } else if (R.type(action.payload) === 'Number') {
     // 排期
     state.todoList.splice(action.payload, 1);
