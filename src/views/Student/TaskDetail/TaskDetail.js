@@ -6,6 +6,7 @@ import {
 import styles from './TaskDetail.scss';
 import Title from './Components/Title';
 import Content from './Components/Content';
+import { formatTimeToshow } from '../../../utils/common';
 
 class TaskDetail extends Component {
   componentDidMount() {
@@ -20,7 +21,6 @@ class TaskDetail extends Component {
       beginTime,
       waitReadOver,
     } = this.props;
-    console.log(waitReadOver);
     return (
       <View style={styles.wrap}>
         <Title waitReadOver={waitReadOver} title={title} />
@@ -48,7 +48,7 @@ TaskDetail.defaultProps = {
   title: '6-22物理作业',
   useTime: '15分钟',
   endTime: '9-20 24:00',
-  beginTime: '今天',
+  beginTime: formatTimeToshow(new Date()), // 默认今天
   waitReadOver: false,
 };
 

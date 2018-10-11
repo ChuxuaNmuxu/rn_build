@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import CalendarPicker from 'react-native-calendar-picker';
 import {
   View,
   Text,
@@ -20,8 +21,42 @@ class Content extends Component {
       endTime,
       // maxText: '选择日期,不能比今日再晚',
       // presetText: '选择日期,指定2016/3/5',
+      selectedStartDate: null,
+      selectedEndDate: null,
+      showPicker: false,
     };
     this.showPicker = this.showPicker.bind(this);
+    this.onDateChange = this.onDateChange.bind(this);
+  }
+
+  // 日期选择的回调（包含开始与结束）
+  onDateChange(date, type) {
+    console.log(type);
+    console.log(date.toString());
+    if (type === 'START_DATE') {
+      this.setState({
+        selectedStartDate: date,
+      });
+    }
+    if (type === 'END_DATE') {
+      this.setState({
+        selectedEndDate: date,
+      });
+    }
+  }
+
+  // 控制Calendar的显示隐藏（但是取消的时候有额外的操作）
+  controlCalendarVisible= (bol) => {
+    this.setState({ showPicker: bol });
+  }
+
+  cancelCalendar = () => {
+    this.setState({
+      selectedStartDate: null,
+      selectedEndDate: null,
+    }, () => {
+      this.controlCalendarVisible(false);
+    });
   }
 
   // 进行创建时间日期选择器
@@ -48,14 +83,22 @@ class Content extends Component {
     const {
       waitReadOver, endTime, useTime,
     } = this.props;
-    const { beginTime } = this.state;
+    const {
+      beginTime, selectedStartDate, selectedEndDate, showPicker,
+    } = this.state;
+    const minDate = new Date(); // Today
+    const maxDate = new Date(2018, 11 - 1, 3);
+    const startDate = selectedStartDate ? selectedStartDate.toString() : '';
+    const endDate = selectedEndDate ? selectedEndDate.toString() : '';
+    console.log(minDate, this.state);
+    // 待批阅的显示
     if (waitReadOver) {
       return (
         <View>
           <View style={styles.content_child}>
             <I18nText style={styles.content_child_left}>TaskDetail.endTime</I18nText>
             <Text style={styles.content_child_right}>{endTime}</Text>
-          </View>
+          </View>yarn
           <View style={[styles.content_child_btn]}>
             {/* 去批阅 */}
             <TouchableOpacity onPress={() => console.log('去批阅')}>
@@ -65,9 +108,43 @@ class Content extends Component {
         </View>
       );
     }
+    // 日期选择器的显示
+    if (showPicker) {
+      return (
+        <View>
+          <CalendarPicker
+            // selectedStartDate
+            // selectedEndDate
+            startFromMonday
+            allowRangeSelection
+            minDate={minDate}
+            maxDate={maxDate}
+            todayBackgroundColor="#f2e6ff"
+            selectedDayColor="#7300e6"
+            selectedDayTextColor="#FFFFFF"
+            onDateChange={this.onDateChange}
+          />
+          <View>
+            <View style={[styles.content_child_btn]}>
+              {/* 取消 */}
+              <TouchableOpacity onPress={this.cancelCalendar}>
+                <I18nText style={styles.content_child_btn_normal}>
+                  cancel
+                </I18nText>
+              </TouchableOpacity>
+              {/* 确定 */}
+              <TouchableOpacity onPress={() => this.controlCalendarVisible(false)}>
+                <I18nText style={[styles.content_child_btn_normal, styles.content_child_btn_color]}>
+                  confirm
+                </I18nText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      );
+    }
     return (
       <View>
-        {/* <View style={{ justifyContent: 'center', alignItems: 'center' }}> */}
         <View style={styles.content_child}>
           <I18nText style={styles.content_child_left}>TaskDetail.useTime</I18nText>
           <Text style={styles.content_child_right}>{useTime}</Text>
@@ -80,11 +157,14 @@ class Content extends Component {
           <I18nText style={styles.content_child_left}>TaskDetail.beginTime</I18nText>
           <TouchableOpacity
             // 日期选择器
-            onPress={() => this.showPicker({
-              minDate: new Date(),
-              maxDate: new Date(2018, 9 - 1, 20),
-              mode: 'spinner',
-            })}
+            // onPress={() => this.showPicker({
+            //   minDate: new Date(),
+            //   maxDate: new Date(2018, 10 - 1, 20),
+            //   mode: 'spinner',
+            //   // mode: 'clock', // 直接死机
+            //   // mode: 'default',
+            // })}
+            onPress={() => this.controlCalendarVisible(true)}
           >
             <Text style={[styles.content_child_right, styles.content_child_beginTime]}>
               {beginTime}<Entypo name="chevron-thin-right" size={50} color="#30bf6c" />

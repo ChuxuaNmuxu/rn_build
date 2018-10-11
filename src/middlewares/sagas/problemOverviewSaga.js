@@ -14,7 +14,6 @@ export default function* problemOverviewSaga() {
 
 function* fetchDataSaga(action) {
   try {
-    // console.log(action);
     const url = '/app/api/student/failed-questions/subjects';
     const fetch = params => api.get(url, params);
     const res = yield call(fetch, {
