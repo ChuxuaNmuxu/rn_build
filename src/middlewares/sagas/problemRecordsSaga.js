@@ -1,8 +1,9 @@
 import {
-  takeLatest, put,
+  takeLatest, put, call, all,
 } from 'redux-saga/effects';
 // import { delay } from 'redux-saga';
-// import api from '../../utils/fetch';
+import _ from 'ramda';
+import api from '../../utils/fetch';
 import * as actions from '../../actions/problemRecordsAction';
 import enhanceSaga from './enhanceSaga';
 
@@ -12,50 +13,96 @@ export default function* problemOverviewSaga() {
   yield takeLatest('FETCH_PROBLEM_RECORDS_DROP_DOWN_REFRESH_DATA_REQUEST', enhanceSaga(dropDownSaga));
 }
 
+function callFetch(urlArr, payload) {
+  const allPormise = urlArr.map(
+    (urlItem) => {
+      // console.log(api.get(urlItem, payload), 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+      const fetch = params => api.get(urlItem, params);
+      return call(fetch, payload);
+    },
+  );
+  return allPormise;
+}
+
 function* initailSaga(action) {
   try {
     console.log(action.payload, '初始化啦');
-    const { currentRecordType } = action.payload;
-    // const url = '/analysis/grade/gradereport';
-    // const fetch = (params) => api.get(url, params);
-    // const res = yield call(fetch);
-    // const { code, data: { items } } = res;
-    // yield call(delay, 1000);// 模拟异步 1秒延迟
-    // 模拟数据
-    const code = 0;
-    // console.warn('年级接口res=', res)
-    if (code === 0) {
+    const {
+      currentRecordType,
+    } = action.payload;
+    // recordState, page, isRevising, allGrade, currentSubjectId,
+    const homeWorkUrl = [
+      '/student/homeworks/history',
+      '/student/homeworks/screening',
+    ];
+    const examUrl = [
+      '/student/exam/record',
+      '/student/exam/screening',
+    ];
+
+    // 根据切换作业或考试选择不同的URL全家桶
+    const allPormise = callFetch(
+      currentRecordType === 0 ? homeWorkUrl : examUrl, { page: '1', pageSize: '12' },
+    );
+    const [
+      getRecordData,
+      getSubjectAndGrade,
+    ] = yield all([...allPormise]);
+    console.log(getRecordData, 'getRecordDatagetRecordData');
+    console.log(getSubjectAndGrade, 'getSubjectAndGradegetSubjectAndGrade');
+    if (getRecordData.code === 0 && getSubjectAndGrade.code === 0) {
+      const { grades, subjects } = getSubjectAndGrade.data;
+      // 初始化结果转换，注释里有前端开发需要的字段，转换结果就是酱紫。
       yield put(actions.initialFetch({
-        subjectData: getSubjectData(),
+        subjectData: getSubjectData(subjects),
         recordStateData: getRecordStateData(currentRecordType),
-        recordData,
-        isRevising,
-        allGrade,
+        recordData: transfromRecordData(getRecordData.data, currentRecordType),
+        isRevisingData,
+        allGrade: getAllGrade(grades),
+        total: getRecordData.total,
       }, 'SUCCESS'));
     } else {
-      yield put(actions.initialFetch(code, 'ERROR'));
+      yield put(actions.initialFetch({}, 'ERROR'));
     }
   } catch (e) {
+    console.log(e);
     yield put(actions.initialFetch(e, 'ERROR'));
   }
 }
 
 function* changeParamsSaga(action) {
   try {
-    console.log(action.payload, '初始化啦');
-    const { callback } = action.payload;
+    console.log(action.payload, '改变参数啦');
+    const {
+      callback, recordState, page, isRevising, allGrade, currentSubjectId, currentRecordType,
+    } = action.payload;
+    // 作业和考试参数不一样
+    const homeworkParams = {
+      status: recordState,
+      page,
+      revise: isRevising,
+      uniGradeId: allGrade[0],
+      subjectId: currentSubjectId === 'allSub' ? undefined : currentSubjectId,
+      pageSize: 12,
+    };
+    const examParams = {
+      status: recordState,
+      page,
+      uniGradeId: allGrade[0],
+      subjectId: currentSubjectId === 'allSub' ? undefined : currentSubjectId,
+      pageSize: 12,
+    };
     // const { currentRecordType } = action.payload;
-    // const url = '/analysis/grade/gradereport';
-    // const fetch = (params) => api.get(url, params);
-    // const res = yield call(fetch);
-    // const { code, data: { items } } = res;
-    // yield call(delay, 1000);// 模拟异步 1秒延迟
-    // 模拟数据
-    const code = 0;
-    // console.warn('年级接口res=', res)
+    // 接口也是不一样
+    const url = currentRecordType === 0 ? '/student/homeworks/history' : '/student/exam/record';
+    const fetch = params => api.get(url, params);
+    const res = yield call(fetch, currentRecordType === 0 ? homeworkParams : examParams);
+    const { code, data, total } = res;
+    console.log(res, '改变参数啦改变参数啦改变参数啦');
     if (code === 0) {
       yield put(actions.changeParamsfresh({
-        recordData,
+        recordData: transfromRecordData(data, currentRecordType),
+        total,
       }, 'SUCCESS'));
       callback();
     } else {
@@ -68,20 +115,36 @@ function* changeParamsSaga(action) {
 
 function* dropDownSaga(action) {
   try {
-    console.log(action.payload, '初始化啦');
-    const { callback } = action.payload;
+    console.log(action.payload, '上啦获取更多啦');
+    const {
+      callback, recordState, page, isRevising, allGrade, currentSubjectId, currentRecordType,
+    } = action.payload;
+    const homeworkParams = {
+      status: recordState,
+      page,
+      revise: isRevising,
+      uniGradeId: allGrade[0],
+      subjectId: currentSubjectId === 'allSub' ? undefined : currentSubjectId,
+      pageSize: 12,
+    };
+    const examParams = {
+      status: recordState,
+      page,
+      uniGradeId: allGrade[0],
+      subjectId: currentSubjectId === 'allSub' ? undefined : currentSubjectId,
+      pageSize: 12,
+    };
     // const { currentRecordType } = action.payload;
-    // const url = '/analysis/grade/gradereport';
-    // const fetch = (params) => api.get(url, params);
-    // const res = yield call(fetch);
-    // const { code, data: { items } } = res;
-    // yield call(delay, 1000);// 模拟异步 1秒延迟
-    // 模拟数据
-    const code = 0;
+    const url = currentRecordType === 0 ? '/student/homeworks/history' : '/student/exam/record';
+    const fetch = params => api.get(url, params);
+    const res = yield call(fetch, currentRecordType === 0 ? homeworkParams : examParams);
+    const { code, data, total } = res;
+    console.log(res);
     // console.warn('年级接口res=', res)
     if (code === 0) {
       yield put(actions.dropDownRefresh({
-        recordData,
+        recordData: transfromRecordData(data, currentRecordType),
+        total,
       }, 'SUCCESS'));
       callback();
     } else {
@@ -92,109 +155,130 @@ function* dropDownSaga(action) {
   }
 }
 
-const subjectData = [{
-  // 筛选数据
-  subjectId: 0,
-  subjectName: '全部学科',
-}, {
-  subjectId: 1,
-  subjectName: '语文',
-}, {
-  subjectId: 2,
-  subjectName: '数学',
-}, {
-  subjectId: 3,
-  subjectName: '英语',
-}, {
-  subjectId: 4,
-  subjectName: '历史',
-}, {
-  subjectId: 5,
-  subjectName: '地理',
-}, {
-  subjectId: 6,
-  subjectName: '语文6',
-}, {
-  subjectId: 7,
-  subjectName: '数学7',
-}, {
-  subjectId: 8,
-  subjectName: '英语8',
-}, {
-  subjectId: 9,
-  subjectName: '历史9',
-}, {
-  subjectId: 10,
-  subjectName: '地理10',
-}, {
-  subjectId: 11,
-  subjectName: '英语11',
-}, {
-  subjectId: 12,
-  subjectName: '历史12',
-}, {
-  subjectId: 13,
-  subjectName: '地理13',
-}];
-function getSubjectData() {
+// const subjectData = [{
+//   // 筛选数据
+//   subjectId: 0,
+//   subjectName: '全部学科',
+// }, {
+//   subjectId: 1,
+//   subjectName: '语文',
+// }, {
+//   subjectId: 2,
+//   subjectName: '数学',
+// }, {
+//   subjectId: 3,
+//   subjectName: '英语',
+// }];
+function getSubjectData(data) {
+  if (_.isEmpty(data)) {
+    return [
+      {
+        // 筛选数据
+        subjectId: 'allSub',
+        subjectName: '全部学科',
+      },
+    ];
+  }
+  const subjectData = [
+    {
+      // 筛选数据
+      subjectId: 'allSub',
+      subjectName: '全部学科',
+    },
+    ...data,
+  ];
+
   return subjectData;
 }
 // recordStateData = [{ id: 5, text: type === 0 ? '未提交' : '未参加' }, { id: 6, text: '批改中' }, { id: 7, text: '未批改' }];
+// 写死的数据
 function getRecordStateData(type) {
-  return [{ id: 5, text: type === 0 ? '未提交' : '未参加' }, { id: 6, text: '批改中' }, { id: 7, text: '未批改' }];
+  return [{ id: 5, text: type === 0 ? '未提交' : '未参加' }, { id: 4, text: '批改中' }, { id: 3, text: '未批改' }];
 }
-const allGrade = [{ id: 1, text: '一年级' }, { id: 2, text: '二年级' }, { id: 3, text: '九年级' }, { id: 4, text: '六年级' }];
-console.log(allGrade);
-const isRevising = [{ id: 8, text: '已订正' }, { id: 9, text: '未订正' }];
-console.log(isRevising);
+// const allGrade = [{ id: 1, text: '一年级' }, { id: 2, text: '二年级' }, { id: 3, text: '九年级' }, { id: 4, text: '六年级' }];
+function getAllGrade(data) {
+  const arr = [];
+  if (_.isEmpty(data)) {
+    return [];
+  }
+  data.map(
+    item => (arr.push({
+      id: item.uniGradeId,
+      text: item.gradeName,
+    })),
+  );
+  return arr;
+}
+// 写死的数据
+const isRevisingData = [{ id: 1, text: '已订正' }, { id: 0, text: '未订正' }];
+console.log(isRevisingData);
 
-const recordData = [{ // 记录的数据
-  id: '0',
-  subjectName: '语文',
-  title: '语文作业',
-  accuracy: '0.5882',
-  resultRead: '0',
-  publishTime: '2018-08-16T11:27:09+08:00',
-  type: '0',
-}, {
-  id: '1',
-  subjectName: '生物',
-  title: '生物作业',
-  accuracy: '0.4555',
-  resultRead: '1',
-  publishTime: '2018-08-16T11:27:09+08:00',
-  type: '1',
-}, {
-  id: '2',
-  subjectName: '化学',
-  title: '化学作业',
-  accuracy: '0.9866',
-  resultRead: '0',
-  publishTime: '2018-08-16T11:27:09+08:00',
-  type: '2',
-}, {
-  id: '3',
-  subjectName: '英语',
-  title: '英语作业',
-  accuracy: '0.2323',
-  resultRead: '1',
-  publishTime: '2018-09-03T11:27:09+08:00',
-  type: '0',
-}, {
-  id: '4',
-  subjectName: '音乐',
-  title: '音乐作业',
-  accuracy: '1',
-  resultRead: '1',
-  publishTime: '2018-09-03T11:27:09+08:00',
-  type: '2',
-}, {
-  id: '5',
-  subjectName: '物理',
-  title: '物理作业',
-  accuracy: '1',
-  resultRead: '1',
-  publishTime: '2018-09-03T11:27:09+08:00',
-  type: '1',
-}];
-console.log(recordData);
+function transfromRecordData(data, type) {
+  const arr = [];
+  if (_.isEmpty(data)) {
+    return [];
+  }
+  if (type === 0) {
+    data.map(item => (
+      arr.push({
+        id: item.homeworkId,
+        subjectName: item.subjectName,
+        title: `${item.subjectName}作业`,
+        accuracy: item.accuracy,
+        resultRead: item.resultRead,
+        publishTime: item.publishTime,
+        type: getHomeWorkType(item),
+      })
+    ));
+  } else {
+    data.map(item => (
+      arr.push({
+        id: item.examId,
+        subjectName: item.subjectName,
+        title: `${item.examName}`,
+        accuracy: item.score,
+        resultRead: item.resultRead,
+        publishTime: item.examStartAt,
+        type: getExamType(item),
+      })
+    ));
+  }
+
+  return arr;
+}
+
+function getHomeWorkType(item) {
+  const { status, submitted } = item;
+  // if (status === 5) {
+  //   // 逾期
+  //   return 'yuqi';
+  // }
+  // 批改且有成绩
+  if (status === 4) {
+    return 1;
+  }
+  // 提交了，未批改||批改都=批改中
+  if (submitted === 1) {
+    return 0;
+  }
+  // 其他都当做逾期
+  return 'yuqi';
+}
+
+function getExamType(item) {
+  const { isMarked, submitStatus } = item;
+  // if (status === 5) {
+  //   // 逾期
+  //   return 'yuqi';
+  // }
+  // 批改且有成绩
+  if (isMarked === 1) {
+    return 1;
+  }
+  // 提交了，未批改||批改都=批改中
+  if (submitStatus === 1) {
+    return 0;
+  }
+  // 其他都当做mei kaoshi
+  return 'yuqi';
+}

@@ -7,9 +7,11 @@ function apiUrl(url) {
   if (typeof url !== 'string') {
     console.log('url只能为字符串类型');
   } else if (url.charAt(0) === '/') {
-    return `${Config.apiUrl}/${url}`;
+    console.log(`${Config.Api.baseApi}/${url}`);
+    return `${Config.Api.baseApi}/${url}`;
   }
-  return Config.apiUrl + url;
+  console.log(`${Config.Api.baseApi}/${url}`);
+  return Config.Api.baseApi + url;
 }
 
 const errCode = (json) => {
