@@ -12,6 +12,8 @@ const initState = {
   recordStateData: [],
   // 修正状态
   isRevisingData: [],
+  // 总数
+  total: 0,
 };
 
 const handle = {
@@ -23,6 +25,6 @@ const handle = {
   FETCH_PROBLEM_RECORDS_CHANGE_PARAMS_REFRESH_DATA_SUCCESS: fn.fetchChangeParamsRefreshDataSuccess,
 };
 
-const problemRecordsReduecer = createReducer(initState, handle);
+const problemRecordsReducer = createReducer(initState, handle);
 
-export default problemRecordsReduecer;
+export default problemRecordsReducer;

@@ -255,3 +255,39 @@ export const currentTimeToPeriod = () => {
   const periodIndex = hour * 2 + (minute > 30 ? 1 : 0);
   return periodIndex;
 };
+
+/**
+ * 后端不给回对应的科目icon名称 语文 => yuwen2
+ */
+export const strFormatterIconName = (str) => {
+  switch (str) {
+    case '物理':
+      return 'wuli1';
+    case '语文':
+      return 'yuwen2';
+    case '英语':
+      return 'yingyu1';
+    case '思品':
+      return 'sixiangpinde';
+    case '思想品德':
+      return 'sixiangpinde';
+    case '音乐':
+      return 'yinyue';
+    case '数学':
+      return 'shuxue1';
+    case '地理':
+      return 'dili1';
+    case '化学':
+      return 'huaxue1';
+    case '美术':
+      return 'meishu';
+    case '生物':
+      return 'shengwu1';
+    case '计算机':
+      return 'jisuanji';
+    case '历史':
+      return 'lishi1';
+    default:
+      return '';
+  }
+};
