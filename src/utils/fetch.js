@@ -4,14 +4,16 @@ import qs from 'qs';
 import Config from '../config';
 
 function apiUrl(url) {
+  // console.log(7, url.indexOf('http'));
   if (typeof url !== 'string') {
     console.log('url只能为字符串类型');
+  } else if (url.indexOf('http') === 0) {
+    // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
+    return url;
   } else if (url.charAt(0) === '/') {
-    console.log(`${Config.Api.baseApi}/${url}`);
-    return `${Config.Api.baseApi}/${url}`;
+    return Config.Api.baseApi + url;
   }
-  console.log(`${Config.Api.baseApi}/${url}`);
-  return Config.Api.baseApi + url;
+  return `${Config.Api.baseApi}/${url}`;
 }
 
 const errCode = (json) => {
@@ -22,7 +24,7 @@ const errCode = (json) => {
       Toast.fail(`${json.code} ${json.message || json.data}`);
       return Promise.reject(new Error(`${json.code} ${json.message || json.data}`));
     default:
-      console.log('json.code:', json.code);
+      // console.log('json.code:', json.code);
   }
   return json;
 };
@@ -52,18 +54,18 @@ const Fetch = {
       headers,
       credentials: 'include',
     };
-
     if (type === 'json') {
       options.body = JSON.stringify(params);
     } else if (type === 'file') {
       options.body = params;
     }
 
+    // console.log(53, url, options);
     return fetch(url, options)
       .then(res => res.text())
       .then(text => (text ? JSON.parse(text) : {}))
       .then(errCode)
-      .catch(err => new Error(err));
+      .catch(err => console.log(71, new Error(err)));
   },
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;

@@ -1,12 +1,22 @@
-.task {
+@mixin task_common {
   flex-direction: row;
   align-items: center;
   padding: 24px;
   margin-left: 24px;
   width: 450px;
   height: 168px;
-  background-color: #54cc82;
   border-radius: 5px;
+}
+
+.task {
+ @include task_common();
+  background-color: #54cc82;
+}
+
+.task_placeholder {
+  @include task_common();
+  background-color: #fafafa;
+  border:1px solid #dbdbdb;
 }
 
 .icon_box {

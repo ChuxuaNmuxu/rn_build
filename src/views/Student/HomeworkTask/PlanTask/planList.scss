@@ -1,0 +1,23 @@
+.time_list_box {
+  flex: 1;
+  justify-content: center;
+  padding-bottom: 20px;
+  margin-bottom: 12px;
+  background-color: #fff;
+};
+
+.empty {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  // width: 100vw;
+}
+
+.empty_text {
+  font-size:21px;
+  color:#bfbfbf;
+}
+
+.flatList { 
+  flex: 1;
+}

@@ -32,12 +32,12 @@ function* initailSaga(action) {
     } = action.payload;
     // recordState, page, isRevising, allGrade, currentSubjectId,
     const homeWorkUrl = [
-      '/student/homeworks/history',
-      '/student/homeworks/screening',
+      '/app/api/student/homeworks/history',
+      '/app/api/student/homeworks/screening',
     ];
     const examUrl = [
-      '/student/exam/record',
-      '/student/exam/screening',
+      '/app/api/student/exam/record',
+      '/app/api/student/exam/screening',
     ];
 
     // 根据切换作业或考试选择不同的URL全家桶
@@ -94,7 +94,7 @@ function* changeParamsSaga(action) {
     };
     // const { currentRecordType } = action.payload;
     // 接口也是不一样
-    const url = currentRecordType === 0 ? '/student/homeworks/history' : '/student/exam/record';
+    const url = currentRecordType === 0 ? '/app/api/student/homeworks/history' : '/app/api/student/exam/record';
     const fetch = params => api.get(url, params);
     const res = yield call(fetch, currentRecordType === 0 ? homeworkParams : examParams);
     const { code, data, total } = res;
@@ -135,7 +135,7 @@ function* dropDownSaga(action) {
       pageSize: 12,
     };
     // const { currentRecordType } = action.payload;
-    const url = currentRecordType === 0 ? '/student/homeworks/history' : '/student/exam/record';
+    const url = currentRecordType === 0 ? '/app/api/student/homeworks/history' : '/app/api/student/exam/record';
     const fetch = params => api.get(url, params);
     const res = yield call(fetch, currentRecordType === 0 ? homeworkParams : examParams);
     const { code, data, total } = res;

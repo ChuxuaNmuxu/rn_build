@@ -364,7 +364,7 @@ ProblemRecords.defaultProps = {
 
 const mapStateToProps = (state) => {
   const {
-    problemRecordsReduecer: {
+    ProblemRecordsReducer: {
       subjectData,
       // 记录数据
       recordData,
