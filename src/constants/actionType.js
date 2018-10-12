@@ -14,6 +14,8 @@ export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
  * ---------------公共组件ACTIONS-----------------------
  */
 export const COMMON_MODAL_OPPEN_OR_CLOSE = 'COMMON_MODAL_OPPEN_OR_CLOSE';
+// 错误原因返回
+export const WRONG_REASON_RETURN_FAIL_REASON = 'WRONG_REASON_RETURN_FAIL_REASON';
 
 /**
  * 错题本

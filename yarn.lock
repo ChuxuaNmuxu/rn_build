@@ -508,6 +508,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
+"@cjfed/draftjs-to-html@^0.7.7":
+  version "0.7.7"
+  resolved "http://registry.npm.taobao.org/@cjfed/draftjs-to-html/download/@cjfed/draftjs-to-html-0.7.7.tgz#9f74fd1d9ad14c424613e54084e6631a65d43e3f"
+
 "@types/prop-types@*", "@types/prop-types@^15.5.5":
   version "15.5.5"
   resolved "http://registry.npm.taobao.org/@types/prop-types/download/@types/prop-types-15.5.5.tgz#17038dd322c2325f5da650a94d5f9974943625e3"
