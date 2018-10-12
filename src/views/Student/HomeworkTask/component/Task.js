@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import CIcon from '../../../../components/Icon';
 import styles from './task.scss';
-import { mergeStyles } from '../../../../utils/common';
+import { mergeStyles, strFormatterIconName } from '../../../../utils/common';
 import { adaptiveRotation } from '../../../../utils/resolution';
 import { ModalApi } from '../../../../components/Modal';
 
@@ -277,21 +277,28 @@ class TaskItem extends React.Component {
       <Animated.View
         {...this.panResponder.panHandlers}
       >
-
         {/**
           data.dragTask=true 表示模拟的拖拽元素
         */}
         <TouchableOpacity>
           {
             (dragData.homeworkId === data.homeworkId) && !data.dragTask
-              ? <View style={type === 'detailsTask' ? styles.task_placeholder : styles.task_placeholde_breviaryTask}><View /></View>
+              ? (
+                <View style={type === 'detailsTask' ? styles.task_placeholder : styles.task_placeholde_breviaryTask}>
+                  <View />
+                </View>
+              )
               : (
                 <View
                   style={mergeStyles(styles.task, wrapStyle)}
                   ref={(ref) => { this.taskRef = ref; }}
                 >
                   <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
-                    <CIcon style={mergeStyles(styles.icon, iconStyle)} name="wendang1" size={25} />
+                    <CIcon
+                      style={mergeStyles(styles.icon, iconStyle)}
+                      name={strFormatterIconName(data.subjectName || 'jinggao')}
+                      size={40}
+                    />
                   </View>
                   {type !== 'showIconOnlyTask' && (
                   <View>
