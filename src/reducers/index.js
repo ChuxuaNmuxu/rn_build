@@ -9,6 +9,7 @@ import recordDetailReducer from './recordDetailReducer';
 import mistakeReformReducer from './mistakeReformReducer';
 import ProblemRecordsReducer from './problemRecordsReducer';
 import taskDetailReducer from './taskDetailReducer';
+import incorrectProblemDetail from './incorrectProblemDetail';
 
 export default combineReducers({
   routes,
@@ -29,4 +30,6 @@ export default combineReducers({
   ProblemRecordsReducer,
   // 任务详情
   taskDetailReducer,
+  // 错题详情
+  incorrectProblemDetail,
 });
