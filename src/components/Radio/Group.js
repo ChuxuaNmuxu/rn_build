@@ -21,6 +21,7 @@ class GroupRadio extends Component {
     };
   }
 
+
   // 重写 onChange 方法
   onChangeGroup = (value) => {
     const { onChange } = this.props;
@@ -29,10 +30,20 @@ class GroupRadio extends Component {
     }, onChange(value));
   };
 
+  static getDerivedStateFromProps(props, state) {
+    const { defaultValue, value } = props;
+    const checked = state.checked || value || defaultValue || false;
+    if (checked !== state.checked) {
+      return {
+        checked,
+      };
+    }
+    return null;
+  }
+
   renderDom = () => {
     const { children, options } = this.props;
     if (!children) return null;
-
     if (type(children) === 'String') {
       return <Text>{children}</Text>;
     }
@@ -50,7 +61,6 @@ class GroupRadio extends Component {
     const {
       children, defaultValue, value, style, childStyle, onChange, horizontal, options, ...rest
     } = this.props;
-
     return React.Children.map(children,
       child => (React.cloneElement(child,
         compose(

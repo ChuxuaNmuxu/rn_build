@@ -24,8 +24,10 @@ class Radio extends Component {
       if (isEmpty(custemStyle)) {
         return defaultStyle;
       }
+      // console.log(27, defaultStyle, custemStyle);
       return mergeStyles(defaultStyle, custemStyle);
     }
+    // console.log(27, defaultStyle, custemStyle);
     return {};
   }
 
@@ -48,7 +50,7 @@ class Radio extends Component {
       style,
       checked,
     } = this.props;
-    // console.log(51, this.props.style);
+    // console.log(52, checkedIconWrapStyle);
     return (
       <TouchableOpacity onPress={() => this.handleClick(value)} disabled={disabled}>
         <View style={mergeStyles(styles.wrapper, style)}>

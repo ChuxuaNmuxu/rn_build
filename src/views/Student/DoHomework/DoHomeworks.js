@@ -8,6 +8,7 @@ import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab
 import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import I18nText from '../../../components/I18nText';
 import Radio from '../../../components/Radio';
 import * as actions from '../../../actions/doHomeworkAction';
@@ -22,6 +23,7 @@ import CommitHomeworkModal from './Components/Modals/CommitHomeworkModal';
 import CommitSuccessAndnoRemark from './Components/Modals/CommitSuccessAndnoRemark';
 import CommitSuccessAndhasRemark from './Components/Modals/CommitSuccessAndhasRemark';
 import DifficultLevelModal from './Components/Modals/DifficultLevelModal';
+import Modal, { ModalApi } from '../../../components/Modal';
 
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
@@ -56,10 +58,11 @@ class DoHomeworks extends Component {
 
   componentDidMount() {
     // 请求做作业的题目数据
-    const { actions: { fetchdoHomeworkAction } } = this.props;
-    fetchdoHomeworkAction(null, 'REQUEST');
+    const { actions: { fetchdoHomeworkAction }, homeworkId } = this.props;
+    console.log('当前这份作业id', homeworkId);
+    fetchdoHomeworkAction({ homeworkId }, 'REQUEST');
     // 控制刚进入做作业页面是否弹框提示
-    this.setCheckModalVisibleFun(true);
+    // this.setCheckModalVisibleFun(true);
   }
 
   // 点击做作业头部时隐藏扩列表视图层
@@ -157,10 +160,13 @@ class DoHomeworks extends Component {
   // 左右滑动(切换tab)页面切换题目
   changeQuestionFun = (obj) => {
     const changeIndex = obj.i;
-    if (obj.i > 0) {
-      this.setState({
-        difficultModalStatus: true,
-      });
+    const { currentIndex } = this.state;
+    if (currentIndex < changeIndex) {
+      if (obj.i > 0) {
+        this.setState({
+          difficultModalStatus: true,
+        });
+      }
     }
     this.setState({
       currentIndex: changeIndex,
@@ -195,6 +201,49 @@ class DoHomeworks extends Component {
     this.setCheckModalVisibleFun(false);
   }
 
+  // 客观题答案发生改变的函数
+  handleToClickRadio = (questionId, answer) => {
+    console.log(111, '当前题目选择的答案是', answer);
+    const answerParam = {};
+    answerParam.answer = answer;
+    answerParam.difficultyLevel = '1';
+    answerParam.endDate = moment(new Date()).format();
+    answerParam.fileId = 0;
+    answerParam.needExplain = 0;
+    const optType = 'nextBtnClick';
+    if (optType === 'nextBtnClick') {
+      // 如果是点击下一题，则将下一题的number和questionId传给接口，否则这两个字段不用传
+      answerParam.number = 0;
+      answerParam.questionId = '1';
+    }
+    answerParam.startDate = '2018-10-10T01:41:14.153Z';
+    const { actions: { submitDoHomeworkAnswerAction }, homeworkId } = this.props;
+    submitDoHomeworkAnswerAction({ homeworkId, questionId, answerParam }, 'REQUEST');
+  }
+
+  // 主观题上传答案或者客观题上传解答过程答案的函数
+  updateImage = (source) => {
+    console.log(222, source);
+  }
+
+  // 删除图片答案的函数
+  deleteImg = (qid) => {
+    console.log('当前删除图片对应的题目id为：', qid);
+  }
+
+  // 上传图片后展示正在加载的loading状态
+  showLoadingFun = () => {
+    const data = {
+      svgName: 'finger',
+      animationType: 'loading',
+      bottomTips: '正在加载...',
+      maskClosable: false,
+    };
+    ModalApi.onOppen('AnimationsModal', data);
+    setTimeout(() => {
+      ModalApi.onClose();
+    }, 2000);
+  }
 
   // 渲染需要展示在扩展列表视图中的组件
   renderQuestionOrder = (questionList, currentIndex) => (
@@ -308,7 +357,14 @@ class DoHomeworks extends Component {
               questionList.map((item, index) => (
                 <ScrollView key={index}>
                   <QuestionCard questions={item} />
-                  <AnswerCard questions={item} handleDifficultLevel={this.handleDifficultLevel} />
+                  <AnswerCard
+                    questions={item}
+                    handleDifficultLevel={this.handleDifficultLevel}
+                    handleToClickRadio={this.handleToClickRadio}
+                    updateImage={this.updateImage}
+                    deleteImg={this.deleteImg}
+                    showLoadingFun={this.showLoadingFun}
+                  />
                 </ScrollView>
               ))
               }
@@ -361,6 +417,8 @@ class DoHomeworks extends Component {
         {
           difficultModalStatus && <DifficultLevelModal handleDifficultLevel={this.handleDifficultLevel} />
         }
+        {/* 图片正在加载中的模态 */}
+        <Modal key={Math.random()} />
       </View>
     );
   }
@@ -369,6 +427,11 @@ class DoHomeworks extends Component {
 DoHomeworks.propTypes = {
   data: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
+  homeworkId: PropTypes.string,
+};
+
+DoHomeworks.defaultProps = {
+  homeworkId: null,
 };
 
 const mapStateToProps = (state) => {

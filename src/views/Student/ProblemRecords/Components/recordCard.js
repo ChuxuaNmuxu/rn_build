@@ -63,6 +63,36 @@ class RecordCard extends PureComponent {
     };
   }
 
+  // 判断zuoye状态
+  getRecordState=(type, accuracyData) => {
+    switch (type) {
+      case 0:
+        // console.log(type);
+        return '批改中';
+      case 1:
+        // console.log(type);
+        return `正确率：${accuracyData}`;
+      default:
+        console.log(type);
+        return '过截止时间未提交';
+    }
+  }
+
+    // 判断zuoye状态
+    getExanState=(type, accuracyData) => {
+      switch (type) {
+        case 0:
+          // console.log(type);
+          return '批改中';
+        case 1:
+          // console.log(type);
+          return `得分：${accuracyData}`;
+        default:
+          console.log(type);
+          return '未考试';
+      }
+    }
+
   // 点击 去订正/去补做
   toReviseFun = () => {
     console.log(666, '去订正');
@@ -71,11 +101,12 @@ class RecordCard extends PureComponent {
   // 点击卡片进入详情页
   gotoDetailFun = () => {
     const { gotoDetailFun, datas } = this.props;
-    gotoDetailFun(datas.id);
+    gotoDetailFun(datas.id, datas.publishTime, datas.subjectName);
   }
 
+
   render() {
-    const { datas } = this.props;
+    const { datas, recordType } = this.props;
     const accuracyData = `${Math.round(parseInt(datas.accuracy) * 100)}%`;
     const randomNum = Math.random();
     return (
@@ -90,29 +121,43 @@ class RecordCard extends PureComponent {
           </View>
           <View style={styles.subjectInfo}>
             <Text style={[styles.subjectName]} ellipsizeMode="tail" numberOfLines={1}>{datas.title}</Text>
-            <Text style={styles.otherInfo}>正确率：{accuracyData}</Text>
-            <Text style={styles.otherInfo}>{formatTimeToshow(datas.publishTime)}</Text>
+            <View style={styles.bottomInfo}>
+              <Text
+                style={[styles.otherInfo, { color: datas.type === 0 ? '#f5a623' : '#999999' }]}
+              >
+                {
+                  recordType === 0
+                    ? this.getRecordState(datas.type, accuracyData)
+                    : this.getExanState(datas.type, datas.accuracy)}
+              </Text>
+              <Text style={styles.otherInfo}>{formatTimeToshow(datas.publishTime)}</Text>
+            </View>
           </View>
         </View>
         <View style={styles.cardRight}>
-          <TouchableOpacity
-            disabled={randomNum > 0.5}
-            onPress={() => this.toReviseFun()}
-          >
-            <View style={[styles.toReviseBox, randomNum > 0.5 && styles.disabledBox]}>
-              <Text style={[styles.toReviseText, randomNum > 0.5 && styles.disabledText]}>
-                去订正
-              </Text>
-            </View>
-          </TouchableOpacity>
           {
-            datas.resultRead === '1' && (
+            recordType === 0 ? (
+              <TouchableOpacity
+                disabled={randomNum > 0.5}
+                onPress={() => this.toReviseFun()}
+              >
+                <View style={[styles.toReviseBox, randomNum > 0.5 && styles.disabledBox]}>
+                  <Text style={[styles.toReviseText, randomNum > 0.5 && styles.disabledText]}>
+                去订正
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ) : null
+          }
+
+        </View>
+        {
+            datas.resultRead === 1 && (
             <Image
               style={styles.notViewStyles}
               source={NotViewImg}
             />)
           }
-        </View>
       </TouchableOpacity>
     );
   }
@@ -121,6 +166,7 @@ class RecordCard extends PureComponent {
 RecordCard.propTypes = {
   datas: PropTypes.object.isRequired,
   gotoDetailFun: PropTypes.func.isRequired,
+  recordType: PropTypes.number.isRequired,
 };
 
 export default RecordCard;

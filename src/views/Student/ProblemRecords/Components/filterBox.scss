@@ -1,9 +1,11 @@
 .filterContainer {
   width: 100%;
   background-color: #fff;
+  display: flex;
+  flex-direction: row;
 }
 .filterBox {
-  width: 100%;
+  flex: 1;
   display: flex;
   padding-left: 24px;
   flex-direction: row;
@@ -39,7 +41,7 @@
 .filterMoreBox {
   display: flex;
   flex-direction: row;
-  margin-right: 24px;
+  margin: 0 24px;
   justify-content: center;
   align-items: center;
 }

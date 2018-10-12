@@ -4,16 +4,38 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import styles from './homeworkTask.scss';
-import TaskList from './TaskList';
-import TimeList from './TimeList';
+import PlanList from './PlanTask/PlanList';
+import TodoList from './TodoTask/TodoList';
 import I18nText from '../../../components/I18nText';
-import Drag from './Drag';
+import Drag from './component/Drag';
+import { FetchStudentTaskList } from '../../../actions/homeworkTask';
+import Modal from '../../../components/Modal';
 
-class MyHomework extends Component {
+@connect((state) => {
+  const {
+    homeworkTaskReducer: {
+      position,
+    },
+  } = state;
+  return {
+    position,
+  };
+}, dispatch => ({
+  onFetchStudentTaskList: bindActionCreators(FetchStudentTaskList, dispatch),
+}))
+class HomeworkTask extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    const { onFetchStudentTaskList } = this.props;
+    onFetchStudentTaskList();
   }
 
   renderHeader = () => (
@@ -31,17 +53,32 @@ class MyHomework extends Component {
   )
 
   render() {
+    const {
+      position,
+    } = this.props;
+
     return (
       <View style={styles.container}>
         {
           this.renderHeader()
         }
-        <TaskList />
-        <Drag />
-        <TimeList />
+        <TodoList />
+        <Drag position={position} />
+        <PlanList />
+        <Modal />
       </View>
     );
   }
 }
 
-export default MyHomework;
+HomeworkTask.propTypes = {
+  position: PropTypes.object,
+  onFetchStudentTaskList: PropTypes.func,
+};
+
+HomeworkTask.defaultProps = {
+  position: {},
+  onFetchStudentTaskList: () => {},
+};
+
+export default HomeworkTask;

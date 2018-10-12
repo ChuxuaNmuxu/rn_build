@@ -11,6 +11,4 @@ const handle = {
   FETCH_PROBLEM_OVERVIEW_SUCCESS: fn.fetchDataSuccess,
 };
 
-const problemOverviewReducer = createReducer(initState, handle);
-
-export default problemOverviewReducer;
+export default createReducer(initState, handle);

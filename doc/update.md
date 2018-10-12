@@ -11,7 +11,7 @@ Required by:
 QuickChinese:lottie-react-native:unspecified > com.airbnb.android:lottie:2.2.5
 `
 #### 问题1：[解决方案](https://github.com/react-community/lottie-react-native/issues/203)
-![图片](./img/appcompat-v x.x.x.jpg)
+![图片](./img/appcompat-v_x.x.x.jpg)
 
 #### 问题2：报错 
 `
