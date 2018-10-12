@@ -203,6 +203,7 @@ class PlanList extends Component {
       planList,
       onChangeLastHandlePeriodIndex,
       onSaveTask,
+      dragData,
     } = this.props;
 
     return (
@@ -222,6 +223,7 @@ class PlanList extends Component {
         onChangeLastHandlePeriodIndex={onChangeLastHandlePeriodIndex}
         onSaveTask={onSaveTask}
         focus={data.index === dragingTaskCorrespondPeriodIndex}
+        dragData={dragData}
       />
     );
   }

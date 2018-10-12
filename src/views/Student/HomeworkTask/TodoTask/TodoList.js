@@ -175,7 +175,6 @@ class TodoList extends Component {
 
   render() {
     const { todoList, dragData } = this.props;
-    console.log(173, todoList);
 
     return (
       <View
