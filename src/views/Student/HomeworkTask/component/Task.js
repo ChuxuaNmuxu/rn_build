@@ -92,7 +92,7 @@ class TaskItem extends React.Component {
     const { dx, dy } = gestureState;
     const nowTime = evt.nativeEvent.timestamp;
     const {
-      onChangeDropIndex,
+      onChangeDropingData, data,
     } = this.props;
 
     /**
@@ -105,8 +105,9 @@ class TaskItem extends React.Component {
       if (nowTime - this.touchStartTime > this.longTouchTime) {
         this.dragHandle(evt, dx, dy);
         this.isDraging = true;
-        onChangeDropIndex(this.props.data.index);
-        console.log('task 107:', this.props.data);
+        console.log(108, data);
+        onChangeDropingData(data);
+        console.log('task 107:', data);
       }
     }
   }
@@ -116,16 +117,17 @@ class TaskItem extends React.Component {
       onChangeDropPosition,
       onChangeTodoTask,
       onChangePlanTask,
-      dragIndex,
+      dragData,
       data,
       planList,
       onRegetDropListenerRange,
       onPress,
-      onChangeDropIndex,
+      onChangeDropingData,
       onChangeDragingTaskCorrespondPeriod,
       onChangeLastHandlePeriodIndex,
       lastHandlePeriodIndex,
       type,
+      onSaveTask,
     } = this.props;
     const { scale } = adaptiveRotation();
     const { dx, dy } = gestureState;
@@ -156,7 +158,7 @@ class TaskItem extends React.Component {
          * 只有将未排期的任务进行排期或从排期任务中取消排期时才会对排期列表有影响
          * 如果 type 为 detailsTask 并且排期成功时触发更改未排期任务列表action
          */
-        if (type === 'detailsTask') onChangeTodoTask(dragIndex);
+        if (type === 'detailsTask') onChangeTodoTask({ ...dragData, cancelTask: true });
 
         /**
          * prevPeriodIndex 如果切换时间段，则有prevPeriodIndex属性，否则没有，通过该属性判断是排期还是切换排期
@@ -168,6 +170,13 @@ class TaskItem extends React.Component {
 
         onChangePlanTask(taskData);
         onChangeLastHandlePeriodIndex(index);
+        // 将操作完的数据保存至服务器
+        const { homeworkId, taskType } = data;
+        onSaveTask({
+          id: homeworkId,
+          taskType,
+          scheduledNode: index,
+        });
 
         // 如果释放的时间段索引不等于最后操作的索引就重新获取时间段监听范围
         if (index !== lastHandlePeriodIndex) {
@@ -188,6 +197,11 @@ class TaskItem extends React.Component {
       console.log(185, data);
       onChangeTodoTask(data);
       onChangePlanTask({ ...data, leavePeriodIndex: lastHandlePeriodIndex });
+      const { homeworkId, taskType } = data;
+      onSaveTask({
+        id: homeworkId,
+        taskType,
+      });
     }
 
     /**
@@ -211,7 +225,7 @@ class TaskItem extends React.Component {
       });
 
       // 将正在拖拽的元素索引置为空
-      onChangeDropIndex();
+      onChangeDropingData();
       // 将正在拖拽状态改为停止拖拽
       this.isDraging = false;
     }
@@ -257,10 +271,9 @@ class TaskItem extends React.Component {
 
   render() {
     const {
-      wrapStyle, iconWrapStyle, iconStyle, dragIndex, type,
+      wrapStyle, iconWrapStyle, iconStyle, dragData, type,
     } = this.props;
-    let { data } = this.props;
-    data = data.item ? data.item : data;
+    const { data } = this.props;
 
     return (
       <Animated.View
@@ -268,7 +281,7 @@ class TaskItem extends React.Component {
       >
         <TouchableOpacity>
           {
-            dragIndex === data.data
+            dragData.homeworkId === data.homeworkId && !data.dragTask
               ? <View style={styles.task_placeholder}><View /></View>
               : (
                 <View
@@ -316,8 +329,8 @@ TaskItem.propTypes = {
   isShowSpendTime: PropTypes.bool,
   onChangeDropPosition: PropTypes.func,
   listenerRangeList: PropTypes.array,
-  onChangeDropIndex: PropTypes.func,
-  dragIndex: PropTypes.number,
+  onChangeDropingData: PropTypes.func,
+  dragData: PropTypes.object,
   onChangeTodoTask: PropTypes.func,
   onChangePlanTask: PropTypes.func,
   data: PropTypes.object,
@@ -329,6 +342,7 @@ TaskItem.propTypes = {
   type: PropTypes.string,
   periodIndex: PropTypes.number,
   onPress: PropTypes.func,
+  onSaveTask: PropTypes.func,
 };
 
 TaskItem.defaultProps = {
@@ -338,8 +352,8 @@ TaskItem.defaultProps = {
   isShowSpendTime: true,
   onChangeDropPosition: () => {},
   listenerRangeList: [],
-  onChangeDropIndex: () => {},
-  dragIndex: null,
+  onChangeDropingData: () => {},
+  dragData: {},
   onChangeTodoTask: () => {},
   onChangePlanTask: () => {},
   data: {},
@@ -357,6 +371,7 @@ TaskItem.defaultProps = {
   type: 'detailsTask',
   periodIndex: null,
   onPress: () => {},
+  onSaveTask: () => {},
 };
 
 export default TaskItem;

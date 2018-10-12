@@ -48,7 +48,7 @@ export const CHANGE_PLAN_TASK = 'CHANGE_PLAN_TASK';
 // 取消计划任务
 export const CHANGE_TODO_TASK = 'CHANGE_TODO_TASK';
 // 正在拖拽的元素
-export const CHANGE_DRAG_INDEX = 'CHANGE_DRAG_INDEX';
+export const CHANGE_DRAGING_DATA = 'CHANGE_DRAGING_DATA';
 // 更改拖拽任务对应的时间段索引
 export const CHANGE_DRAGING_TASK_CORRESPOND_PERIOD = 'CHANGE_DRAGING_TASK_CORRESPOND_PERIOD';
 // 最后一次操作时间段的索引
@@ -57,6 +57,8 @@ export const CHANGE_LAST_HANDLE_PERIOD_INDEX = 'CHANGE_LAST_HANDLE_PERIOD_INDEX'
 export const REGET_DROP_LISTENER_RANGE = 'REGET_DROP_LISTENER_RANGE';
 // 获取学生作业列表
 export const FETCH_STUDENT_TASK_LIST = 'FETCH_STUDENT_TASK_LIST';
+// 保存任务
+export const SAVE_TASK = 'SAVE_TASK';
 
 /**
  *------------------------作业与考试详情页面-----------------------------------------
