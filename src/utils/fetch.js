@@ -11,6 +11,7 @@ function apiUrl(url) {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
   } else if (url.charAt(0) === '/') {
+    console.log(Config.Api.baseApi + url);
     return Config.Api.baseApi + url;
   }
   return `${Config.Api.baseApi}/${url}`;
@@ -55,6 +56,7 @@ const Fetch = {
       credentials: 'include',
     };
     if (type === 'json') {
+      headers['Content-Type'] = 'application/json';
       options.body = JSON.stringify(params);
     } else if (type === 'file') {
       options.body = params;
@@ -75,7 +77,7 @@ const Fetch = {
     return this.fetch(apiUrl(_url), {}, 'get', '', mock, headerParams);
   },
   post(url, params, type = 'json', mock = false) { return this.fetch(apiUrl(url), params, 'post', type, mock); },
-  put(url, params, type = '') { return this.fetch(apiUrl(url), params, 'put', type); },
+  put(url, params, type = 'json') { return this.fetch(apiUrl(url), params, 'put', type); },
   delete(url, params) {
     let _url = url;
     if (!isEmpty(params)) {

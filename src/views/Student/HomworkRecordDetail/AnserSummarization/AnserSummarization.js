@@ -36,20 +36,21 @@ class AnserSummarization extends Component {
     // :#fa5656 :#30bf6c; :#f5a623; :#ffffff
     // 0 错误   1正确   2对一些   3默认
     const color = ['#fa5656', '#30bf6c', '#f5a623', '#666666'];
-    if ([0, 3, 4].includes(status)) {
+    // 假如未批改完，都是灰色
+    if (status === 0) {
       return color[3];
     }
-    // 默认是被教师和学生操作过的()
+    // 批改完了，有颜色()
     return color[isItCorrect];
   }
 
   getText = (status, isItCorrect) => {
     const {
-      correctAnser, studentAnser, score, questionType,
+      correctAnser, studentAnser, score, questionType, isQuestionSubmited,
     } = this.props;
     console.log(questionType, 'getTextgetTextgetText');
     // 主观题客观题的展示效果不一样，五种状态下的展示也不一样。文档敢写详细点？
-    let text = null;
+    let text = '';
     const [
       wrongtext,
       corecttext,
@@ -63,22 +64,19 @@ class AnserSummarization extends Component {
       `部分正确，答案是${correctAnser}，你的答案是${studentAnser}，得分：${score}分`,
       questionType === 'obj' ? `答案是${correctAnser}，你的答案是${studentAnser}` : '解答过程',
     ];
-    switch (status) {
-      case 0:
-        text = unanser;
-        break;
-      case 1:
-        text = [wrongtext, corecttext, partialCorrect][isItCorrect];
-        break;
-      case 2:
-        text = [wrongtext, corecttext, partialCorrect][isItCorrect];
-        break;
-      case 3:
-        text = unCorrect;
-        break;
-      default:
-        text = unCorrect;
+    if (!isQuestionSubmited) {
+      text = unanser;
+      return text;
     }
+    if (status === 0) {
+      text = unCorrect;
+      return text;
+    }
+    if (status === 1) {
+      text = [wrongtext, corecttext, partialCorrect][isItCorrect];
+      return text;
+    }
+
     return text;
   }
 
@@ -103,10 +101,10 @@ class AnserSummarization extends Component {
     const { isItCorrect, status } = this.props;
     const iconArr = ['wrongIcon', 'corectIcon', 'partialCorrect'];
     return (
-      <View style={styles.AnserSummarization}>
+      <View style={[styles.AnserSummarization, { justifyContent: 'flex-start' }]}>
         {
           // icon不一定会展示,没教师或者同学修改不展示
-          [0, 3, 4].includes(status)
+          status === 0
             ? null
             : <Svg height="40" width="40" source={iconArr[isItCorrect]} fill="#fff" />
         }
@@ -125,7 +123,7 @@ class AnserSummarization extends Component {
   homeworkSummary=() => {
     console.log('垃圾ESlint标准');
     const {
-      isItCorrect, status, difficultyDegree, questionType,
+      isItCorrect, status, difficultyDegree, questionType, studentMarked,
     } = this.props;
     const iconArr = ['wrongIcon', 'corectIcon', 'partialCorrect'];
     const colorArr = ['#fa5656', '#30bf6c', '#f5a623'];
@@ -134,7 +132,7 @@ class AnserSummarization extends Component {
         <View style={styles.leftTips}>
           {
           // icon不一定会展示,没教师或者同学修改不展示
-          [0, 3, 4].includes(status)
+          status === 0
             ? null
             : <Svg height="40" width="40" source={iconArr[isItCorrect]} fill="#fff" />
         }
@@ -154,7 +152,7 @@ class AnserSummarization extends Component {
         </View>
         {
           // 同学批阅才会出现的
-          questionType === 'sub' && status === 2 && this.popoverComponent()
+          questionType === 'sub' && studentMarked === 1 && this.popoverComponent()
         }
 
       </View>
@@ -190,7 +188,7 @@ class AnserSummarization extends Component {
           visible={showPopover}
           fromRect={popoverAnchor}
           onClose={this.closePopover}
-          placement="top"
+          placement="auto"
           backgroundStyle={{ opacity: 0, backgroundColor: 'rgba(0,0,0,0)' }}
           // arrowStyle={[{
           //   shadowOffset: { width: 0, height: 0 },
@@ -257,6 +255,8 @@ AnserSummarization.propTypes = {
   studentAnser: PropTypes.string,
   // 得分
   score: PropTypes.number,
+  isQuestionSubmited: PropTypes.bool,
+  studentMarked: PropTypes.number,
 };
 
 AnserSummarization.defaultProps = {
@@ -271,6 +271,8 @@ AnserSummarization.defaultProps = {
   studentAnser: '',
   // 得分
   score: 0,
+  isQuestionSubmited: false,
+  studentMarked: 0,
 };
 
 export default AnserSummarization;
