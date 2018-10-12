@@ -58,7 +58,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        initial
+        // initial
       >
         <Tabs
           key="StudentTabs"
@@ -145,6 +145,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
+        initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
@@ -161,11 +162,11 @@ const RouteMap = props => (
         {/* 考试记录详情页 */}
         <Scene key="ExamRecordDetail" component={HomworkRecordDetail} hideNavBar />
         {/* 作业批阅 */}
-        <Scene key="HomeworkCorrecting" component={HomeworkCorrecting} hideNavBar />
+        <Scene key="HomeworkCorrecting" component={HomeworkCorrecting} hideNavBar initial />
         {/* 错题明细 */}
         <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar />
         {/* 任务详情 */}
-        <Scene key="TaskDetail" component={TaskDetail} hideNavBar initial />
+        <Scene key="TaskDetail" component={TaskDetail} hideNavBar />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />
