@@ -10,36 +10,39 @@ import Task from '../component/Task';
 import styles from './todoList.scss';
 import {
   ChangeDropPosition,
-  ChangeDropIndex,
+  ChangeDropingData,
   ChangeTodoTask,
   ChangePlanTask,
   ChangeDragingTaskCorrespondPeriod,
   ChangeLastHandlePeriodIndex,
   RegetDropListenerRange,
+  SaveTask,
+
 } from '../../../../actions/homeworkTask';
 
 @connect(({
   homeworkTaskReducer: {
     listenerRangeList,
     todoList,
-    dragIndex,
+    dragData,
     planList,
     lastHandlePeriodIndex,
   },
 }) => ({
   listenerRangeList,
   todoList,
-  dragIndex,
+  dragData,
   planList,
   lastHandlePeriodIndex,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
-  onChangeDropIndex: bindActionCreators(ChangeDropIndex, dispatch),
+  onChangeDropingData: bindActionCreators(ChangeDropingData, dispatch),
   onChangePlanTask: bindActionCreators(ChangePlanTask, dispatch),
   onChangeTodoTask: bindActionCreators(ChangeTodoTask, dispatch),
   onChangeDragingTaskCorrespondPeriod: bindActionCreators(ChangeDragingTaskCorrespondPeriod, dispatch),
   onChangeLastHandlePeriodIndex: bindActionCreators(ChangeLastHandlePeriodIndex, dispatch),
   onRegetDropListenerRange: bindActionCreators(RegetDropListenerRange, dispatch),
+  onSaveTask: bindActionCreators(SaveTask, dispatch),
 }))
 class TodoList extends Component {
   constructor(props) {
@@ -47,7 +50,7 @@ class TodoList extends Component {
     this.state = {
       flatlistWidth: 0,
       listenerRangeList: props.listenerRangeList,
-      dragIndex: props.dragIndex,
+      dragData: props.dragData,
     };
     this.flatList = null;
   }
@@ -81,20 +84,20 @@ class TodoList extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const {
-      dragIndex: stateDragIndex,
+      dragData: stateDragData,
       listenerRangeList: stateListenerRangeList,
       planList: statePlanList,
       lastHandlePeriodIndex: stateLastHandlePeriodIndex,
     } = prevState;
     const {
-      dragIndex: propsDragIndex,
+      dragData: propsDragData,
       listenerRangeList: propsListenerRangeList,
       planList: propsPlanList,
       lastHandlePeriodIndex: propsLastHandlePeriodIndex,
     } = nextProps;
 
-    if (stateDragIndex !== propsDragIndex) {
-      return { dragIndex: propsDragIndex };
+    if (stateDragData !== propsDragData) {
+      return { dragData: propsDragData };
     }
     if (propsListenerRangeList.length && !R.equals(propsListenerRangeList, stateListenerRangeList)) {
       return { listenerRangeList: propsListenerRangeList };
@@ -124,10 +127,10 @@ class TodoList extends Component {
   keyExtractor = item => item.homeworkId
 
   // 列表每项
-  renderItem = (item) => {
+  renderItem = (data) => {
     const {
       onChangeDropPosition,
-      onChangeDropIndex,
+      onChangeDropingData,
       onChangeTodoTask,
       onChangePlanTask,
       onChangeDragingTaskCorrespondPeriod,
@@ -135,15 +138,16 @@ class TodoList extends Component {
       planList,
       lastHandlePeriodIndex,
       onRegetDropListenerRange,
+      onSaveTask,
     } = this.props;
-    const { listenerRangeList, dragIndex } = this.state;
+    const { listenerRangeList, dragData } = this.state;
     return (
       <Task
-        data={item}
+        data={data.item}
         onChangeDropPosition={onChangeDropPosition}
         listenerRangeList={listenerRangeList}
-        onChangeDropIndex={onChangeDropIndex}
-        dragIndex={dragIndex}
+        onChangeDropingData={onChangeDropingData}
+        dragData={dragData}
         onChangeTodoTask={onChangeTodoTask}
         onChangePlanTask={onChangePlanTask}
         onChangeDragingTaskCorrespondPeriod={onChangeDragingTaskCorrespondPeriod}
@@ -151,6 +155,7 @@ class TodoList extends Component {
         lastHandlePeriodIndex={lastHandlePeriodIndex}
         planList={planList}
         onRegetDropListenerRange={onRegetDropListenerRange}
+        onSaveTask={onSaveTask}
       />
     );
   }
@@ -169,7 +174,7 @@ class TodoList extends Component {
 
 
   render() {
-    const { todoList } = this.props;
+    const { todoList, dragData } = this.props;
     console.log(173, todoList);
 
     return (
@@ -188,6 +193,7 @@ class TodoList extends Component {
           // initialNumToRender={planList.length}
           ListEmptyComponent={this.renderListEmpty}
           extraData={this.state}
+          scrollEnabled={R.isEmpty(dragData)}
         />
       </View>
     );
@@ -198,8 +204,8 @@ TodoList.defaultProps = {
   onChangeDropPosition: () => {},
   listenerRangeList: [],
   todoList: [],
-  onChangeDropIndex: () => {},
-  dragIndex: null,
+  onChangeDropingData: () => {},
+  dragData: {},
   onChangePlanTask: () => {},
   onChangeTodoTask: () => {},
   onChangeDragingTaskCorrespondPeriod: () => {},
@@ -207,14 +213,15 @@ TodoList.defaultProps = {
   planList: [],
   lastHandlePeriodIndex: null,
   onRegetDropListenerRange: () => {},
+  onSaveTask: () => {},
 };
 
 TodoList.propTypes = {
   onChangeDropPosition: PropTypes.func,
   listenerRangeList: PropTypes.array,
   todoList: PropTypes.array,
-  onChangeDropIndex: PropTypes.func,
-  dragIndex: PropTypes.number,
+  onChangeDropingData: PropTypes.func,
+  dragData: PropTypes.object,
   onChangePlanTask: PropTypes.func,
   onChangeTodoTask: PropTypes.func,
   onChangeDragingTaskCorrespondPeriod: PropTypes.func,
@@ -222,6 +229,7 @@ TodoList.propTypes = {
   planList: PropTypes.array,
   lastHandlePeriodIndex: PropTypes.number,
   onRegetDropListenerRange: PropTypes.func,
+  onSaveTask: PropTypes.func,
 };
 
 export default TodoList;

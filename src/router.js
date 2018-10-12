@@ -49,7 +49,7 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
-      <Stack key="WelcomeStack">
+      <Stack key="WelcomeStack" initial>
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
       </Stack>
       <Stack key="Account">
@@ -58,7 +58,6 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        initial
       >
         <Tabs
           key="StudentTabs"
