@@ -49,7 +49,7 @@ const RouteMap = props => (
       hideNavBar
       key="modal"
     >
-      <Stack key="WelcomeStack" initial>
+      <Stack key="WelcomeStack">
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
       </Stack>
       <Stack key="Account">
@@ -58,6 +58,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
+        initial
       >
         <Tabs
           key="StudentTabs"
@@ -94,14 +95,17 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
+            initial
           >
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
+              initial
             />
           </Stack>
           {/* 错题本 */}
           <Stack
+            // initial
             title="wrongNotes" // 配好在zh.js、en.js那边了
             key="ProblemOverviewStack"
             image="cuotiben1"

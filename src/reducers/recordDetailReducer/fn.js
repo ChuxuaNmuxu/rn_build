@@ -1,8 +1,12 @@
 
 export function fetchExamDataSuccess(state, action) {
-  const { headerList, detailsDataList } = action.payload;
+  const {
+    headerList, detailsDataList, status, title,
+  } = action.payload;
   state.headerList = headerList;
   state.detailsDataList = detailsDataList;
+  state.status = status;
+  state.title = title;
 }
 
 export function initailState(state) {
@@ -11,9 +15,11 @@ export function initailState(state) {
 }
 
 export function fetchHomeworkListDataSuccess(state, action) {
-  const { headerList, detailsDataList } = action.payload;
+  const { headerList, status, title } = action.payload;
   state.headerList = headerList;
-  state.detailsDataList = detailsDataList;
+  state.status = status;
+  state.title = title;
+  state.detailsDataList = new Array(headerList.length).fill(null);
 }
 
 export function fetchHomeworkDataSuccess(state, action) {

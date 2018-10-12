@@ -18,39 +18,41 @@ class ScrollSelectedBar extends Component {
     };
   }
 
-  getBtnBGColor=(status, isItCorrect, index) => {
+  getBtnBGColor=(isItCorrect, index) => {
+    const { status } = this.props;
     const { selectTion } = this.state;
     // --------------红色---------绿色--------橙色-------灰色-------无色----
     const color = ['#fa5656', '#30bf6c', '#f5a623', '#bfbfbf', '#ffffff'];
-    if ([0, 3, 4].includes(status) && selectTion === index) {
+    if (status === 0 && selectTion === index) {
       return color[3];
     }
-    if ([1, 2].includes(status) && selectTion === index) {
+    if (status !== 0 && selectTion === index) {
       return color[isItCorrect];
     }
     return color[4];
   }
 
-  getBtnTextColor=(status, isItCorrect, index) => {
+  getBtnTextColor=(isItCorrect, index) => {
     // :#fa5656 :#30bf6c; :#f5a623; :#ffffff
     // 0 错误   1正确   2对一些   3默认
+    const { status } = this.props;
     const { selectTion } = this.state;
     const color = ['#fa5656', '#30bf6c', '#f5a623', '#999999', '#ffffff'];
     if (selectTion === index) {
       return color[4];
     }
-    if ([0, 3, 4].includes(status)) {
+    if (status === 0) {
       return color[3];
     }
-    // 默认是被教师和学生操作过的
+    // 默认，既然全部批改了，颜色就得有
     return color[isItCorrect];
   }
 
-  _onClick=(index) => {
+  _onClick=(index, questionId) => {
     const { moveIndex } = this.props;
     this.setState({
       selectTion: index,
-    }, () => moveIndex(index));
+    }, () => moveIndex(index, questionId));
   }
 
   /**
@@ -100,26 +102,25 @@ class ScrollSelectedBar extends Component {
                   styles.btn,
                   {
                     backgroundColor: this.getBtnBGColor(
-                      item.status,
                       item.isItCorrect, index,
                     ),
                     borderColor: this.getBtnTextColor(
-                      item.status, item.isItCorrect, index,
+                      item.isItCorrect, index,
                     ),
                   },
                 ]}
-                onPress={() => this._onClick(index)}
+                onPress={() => this._onClick(index, item.id)}
               >
                 <Text style={[
                   styles.btnText,
                   {
                     color: this.getBtnTextColor(
-                      item.status, item.isItCorrect, index,
+                      item.isItCorrect, index,
                     ),
                   },
                 ]}
                 >
-                  {index + 1}
+                  {item.questionNum}
                 </Text>
               </TouchableOpacity>
             ),
@@ -148,6 +149,7 @@ class ScrollSelectedBar extends Component {
 ScrollSelectedBar.propTypes = {
   data: PropTypes.array.isRequired,
   moveIndex: PropTypes.func.isRequired,
+  status: PropTypes.number.isRequired,
 };
 
 export default ScrollSelectedBar;

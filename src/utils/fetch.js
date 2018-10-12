@@ -9,6 +9,7 @@ function apiUrl(url) {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
   } else if (url.charAt(0) === '/') {
+    console.log(Config.Api.baseApi + url);
     return Config.Api.baseApi + url;
   }
   return `${Config.Api.baseApi}/${url}`;

@@ -16,7 +16,7 @@ const RadioButton = (props) => {
     }
     return <Text style={mergeStyles(styles.default_text, checkedTextStyle)}>{children}</Text>;
   };
-  console.log('Radio.Button:', rest);
+  // console.log('Radio.Button:', rest);
   return (
     <Radio
       {...rest}
