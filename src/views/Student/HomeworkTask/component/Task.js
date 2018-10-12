@@ -76,7 +76,6 @@ class TaskItem extends React.Component {
     } = this.props;
 
     if (type === 'showIconOnlyTask') {
-      console.log('为啥没执行');
       // type 类型为 showIconOnlyTask 时表示需要将点击的时间段选中
       onChangeLastHandlePeriodIndex(periodIndex);
       onRegetDropListenerRange(true);
@@ -90,6 +89,7 @@ class TaskItem extends React.Component {
 
   onPanResponderMove = (evt, gestureState) => {
     const { dx, dy } = gestureState;
+
     const nowTime = evt.nativeEvent.timestamp;
     const {
       onChangeDropingData, data,
@@ -105,9 +105,7 @@ class TaskItem extends React.Component {
       if (nowTime - this.touchStartTime > this.longTouchTime) {
         this.dragHandle(evt, dx, dy);
         this.isDraging = true;
-        console.log(108, data);
         onChangeDropingData(data);
-        console.log('task 107:', data);
       }
     }
   }
@@ -142,7 +140,7 @@ class TaskItem extends React.Component {
 
       // 如果lastHandlePeriodIndex === index相等表示没有拖拽出当前时间段，直接中止
       if (lastHandlePeriodIndex === index) {
-        console.log('没有拖拽出当前时间段');
+        console.log('没有拖拽出当前时间段，返回原始位置');
         return;
       }
 
@@ -279,10 +277,14 @@ class TaskItem extends React.Component {
       <Animated.View
         {...this.panResponder.panHandlers}
       >
+
+        {/**
+          data.dragTask=true 表示模拟的拖拽元素
+        */}
         <TouchableOpacity>
           {
-            dragData.homeworkId === data.homeworkId && !data.dragTask
-              ? <View style={styles.task_placeholder}><View /></View>
+            (dragData.homeworkId === data.homeworkId) && !data.dragTask
+              ? <View style={type === 'detailsTask' ? styles.task_placeholder : styles.task_placeholde_breviaryTask}><View /></View>
               : (
                 <View
                   style={mergeStyles(styles.task, wrapStyle)}

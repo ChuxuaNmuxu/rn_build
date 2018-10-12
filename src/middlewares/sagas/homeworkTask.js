@@ -50,13 +50,16 @@ function* getStudentTaskList(pageSize) {
 }
 
 // 更改任务
-function* saveTaskSaga({ payload: { id, ...rest } }) {
+function* saveTaskSaga({ payload: { id, scheduledNode, taskType } }) {
   try {
-    const url = `/app/api/student/homeworks/${id}/schedule`;
-    const fetch = arg => Fetch.put(url, arg);
-    const res = yield call(fetch, rest);
+    let url = `/app/api/student/homeworks/${id}/schedule?taskType=${taskType}`;
+    if (scheduledNode) {
+      url += `&scheduledNode=${scheduledNode}`;
+    }
+    const fetch = () => Fetch.put(url);
+    const res = yield call(fetch);
+
     const { code } = res;
-    console.log(55, res);
     if (code !== 0) {
       yield put(actions.SaveTask(null, 'ERROR'));
       console.log('更改任务失败：', res);

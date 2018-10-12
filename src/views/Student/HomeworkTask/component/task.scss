@@ -8,15 +8,25 @@
   border-radius: 5px;
 }
 
+@mixin task_placeholder {
+  @include task_common();
+  background-color: #fafafa;
+  border:1px solid #dbdbdb;
+}
+
 .task {
  @include task_common();
   background-color: #54cc82;
 }
 
 .task_placeholder {
-  @include task_common();
-  background-color: #fafafa;
-  border:1px solid #dbdbdb;
+  @include task_placeholder();
+}
+
+.task_placeholde_breviaryTask{
+  @include task_placeholder();
+  height: 96px;
+  margin-left: 0;
 }
 
 .icon_box {
