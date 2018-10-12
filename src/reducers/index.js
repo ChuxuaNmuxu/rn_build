@@ -2,17 +2,21 @@ import { combineReducers } from 'redux';
 import routes from './common/routes';
 import config from './common/config';
 import problemOverviewReducer from './problemOverviewReducer';
+import previewHomeworkReducer from './previewHomeworkReducer';
 import doHomeworkReducer from './doHomeworkReducer';
 import homeworkTaskReducer from './HomeworkTask';
 import recordDetailReducer from './recordDetailReducer';
 import mistakeReformReducer from './mistakeReformReducer';
 import ProblemRecordsReducer from './problemRecordsReducer';
+import taskDetailReducer from './taskDetailReducer';
 
 export default combineReducers({
   routes,
   config,
   // 错题本
   problemOverviewReducer,
+  // 作业预览
+  previewHomeworkReducer,
   // 做作业
   doHomeworkReducer,
   // 任务计划
@@ -23,4 +27,6 @@ export default combineReducers({
   mistakeReformReducer,
   // 做题记录
   ProblemRecordsReducer,
+  // 任务详情
+  taskDetailReducer,
 });

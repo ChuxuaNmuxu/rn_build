@@ -4,7 +4,9 @@ export default {
   problemRecords: '做题记录',
   wrongNotes: '错题本',
   my: '我的',
-
+  // 公用的
+  cancel: '取消',
+  confirm: '确认',
   // home
   home: {
     header: {

@@ -22,6 +22,4 @@ const handle = {
   INIT_RECORD_DETAIL_ALL_DATA: fn.initailState,
 };
 
-const problemOverviewReducer = createReducer(initState, handle);
-
-export default problemOverviewReducer;
+export default createReducer(initState, handle);

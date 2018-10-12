@@ -14,6 +14,7 @@ import DifficultLevelView from '../../../../components/DifficultLevelView';
 import UploadImgBefore from './UploadImgBefore';
 import UploadImgSuccess from './UploadImgSuccess';
 import I18nText from '../../../../components/I18nText';
+import { parseCorrespondingValue } from '../../../../components/LineTo/utils';
 
 
 const RadioGroup = Radio.Group;
@@ -25,7 +26,6 @@ class AnswerCard extends Component {
     super(props);
     this.state = {
       optionCount: 4,
-      answer: null,
       answered: false, // 客观题是否选择了答案
       source: null,
       showCropper: false,
@@ -37,12 +37,17 @@ class AnswerCard extends Component {
 
   // 单选题、多选、判断、对应答案发生改变的函数
   handleToClickRadio = (i) => {
-    const { handleToClickRadio } = this.props;
+    const { handleToClickRadio, questions: { id, type } } = this.props;
     this.setState({
       answered: true,
     });
-    // sb eslint
-    if (handleToClickRadio) handleToClickRadio(i);
+    let answer = i;
+    if (type === 2) {
+      // 数组转字符串
+      answer = i.join('');
+    }
+    // 对客观题答案进行处理再传给接口
+    if (handleToClickRadio) handleToClickRadio(id, answer);
   }
 
   // 难易程度选项发生改变的函数
@@ -144,9 +149,10 @@ class AnswerCard extends Component {
   render() {
     const { questions, mistakeReform } = this.props;
     const {
-      optionCount, answer,
+      optionCount,
       source, showCropper,
     } = this.state;
+    const { answer } = questions;
     return (
       <View style={styles.answerCard_container}>
         <View style={styles.question_title}>
@@ -181,7 +187,7 @@ class AnswerCard extends Component {
             {
               questions.type === 3 && (
                 <RadioGroup
-                  value={answer}
+                  value={parseInt(answer)}
                   onChange={this.handleToClickRadio}
                   style={styles.radio_wrapper}
                   iconWrapStyle={styles.radioStyle}
@@ -199,6 +205,7 @@ class AnswerCard extends Component {
               questions.type === 4 && (
                 <View style={styles.lineToStyle}>
                   <LineTo
+                    value={parseCorrespondingValue(answer)}
                     optionSize={optionCount}
                     onChange={this.handleToClickRadio}
                   />

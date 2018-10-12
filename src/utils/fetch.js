@@ -1,12 +1,10 @@
 import { isEmpty } from 'ramda';
-import { Toast } from 'antd-mobile-rn';
 import qs from 'qs';
 import Config from '../config';
 
 function apiUrl(url) {
-  // console.log(7, url.indexOf('http'));
   if (typeof url !== 'string') {
-    console.log('url只能为字符串类型');
+    console.error('url只能为字符串类型');
   } else if (url.indexOf('http') === 0) {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
@@ -16,20 +14,18 @@ function apiUrl(url) {
   }
   return `${Config.Api.baseApi}/${url}`;
 }
-
 const errCode = (json) => {
   switch (json.code) {
     case 703:
       return console.log('登陆过期', json);
     case -1:
-      Toast.fail(`${json.code} ${json.message || json.data}`);
+      // Toast.fail(`${json.code} ${json.message || json.data}`); // 打印出来给鬼看啊！还容易造成调试的问题
       return Promise.reject(new Error(`${json.code} ${json.message || json.data}`));
     default:
       // console.log('json.code:', json.code);
   }
   return json;
 };
-
 const Fetch = {
   /**
  * param {Number} url 地址
@@ -62,12 +58,15 @@ const Fetch = {
       options.body = params;
     }
 
-    // console.log(53, url, options);
     return fetch(url, options)
       .then(res => res.text())
       .then(text => (text ? JSON.parse(text) : {}))
       .then(errCode)
-      .catch(err => console.log(71, new Error(err)));
+      .catch((err) => {
+        const error = new Error(err);
+        console.log(error);
+        return error; // 返回错误App会自动在界面上呈现报错模态
+      });
   },
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;
@@ -86,5 +85,4 @@ const Fetch = {
     return this.fetch(apiUrl(_url), params, 'delete');
   },
 };
-
 export default Fetch;

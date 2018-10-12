@@ -1,12 +1,29 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import Task from '../component/Task';
-import CIcon from '../../../../components/Icon';
 import styles from './planItem.scss';
 
 const PlanItem = (props) => {
-  const onPress = () => { console.log('做作业'); };
+  const onPress = () => {
+    const {
+      title,
+      estimatedCost: useTime,
+      endTime,
+      // beginTime: scheduledNode,
+      taskType: waitReadOver,
+      homeworkId,
+    } = props.data;
+    Actions.TaskDetail({
+      title,
+      useTime: `${useTime}分钟`,
+      endTime: moment(endTime).format('MM-DD HH:mm'),
+      // beginTime: '占位',
+      waitReadOver: !(waitReadOver < 4),
+      homeworkId,
+    });
+  };
   const { type, ...rest } = props;
 
   const renderTask = () => (
@@ -16,26 +33,27 @@ const PlanItem = (props) => {
       iconStyle={type === 'breviaryTask' ? styles.icon : styles.icon}
       wrapStyle={type === 'breviaryTask' ? styles.wrap_style : styles.showIconOnlyTask_wrap_style}
       type={type}
+      onPress={onPress}
     />
   );
 
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.wrap}>
-        {
+    <View style={styles.wrap}>
+      {
           renderTask()
         }
-      </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
 PlanItem.propTypes = {
   type: PropTypes.string,
+  data: PropTypes.object,
 };
 
 PlanItem.defaultProps = {
   type: null,
+  data: {},
 };
 
 export default PlanItem;

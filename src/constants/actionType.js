@@ -23,9 +23,20 @@ export const WRONG_REASON_RETURN_FAIL_REASON = 'WRONG_REASON_RETURN_FAIL_REASON'
 export const FETCH_PROBLEM_OVERVIEW = 'FETCH_PROBLEM_OVERVIEW';
 
 /**
- * 做作业
+ * ------------------------预览作业页面action-----------------------------------------
  */
+// 获取预览作业页面的作业数据
+export const FETCH_PREVIEWHOMEWORK_QUESTION = 'FETCH_PREVIEWHOMEWORK_QUESTION';
+// 校验该份作业是否可做--开始做作业时需要先校验才行
+export const CHECK_HOMEWORK_ISOPERABLE = 'CHECK_HOMEWORK_ISOPERABLE';
+
+/**
+ * ------------------------做作业页面action-----------------------------------------
+ */
+// 获取做作业的题目数据
 export const FETCH_DOHOMEWORK_QUESTION = 'FETCH_DOHOMEWORK_QUESTION';
+// 答题，提交小题答案
+export const SUBMIT_DOHOMEWORK_ANSWER = 'SUBMIT_DOHOMEWORK_ANSWER';
 
 /**
  * -------------任务计划----------------
@@ -39,13 +50,17 @@ export const CHANGE_PLAN_TASK = 'CHANGE_PLAN_TASK';
 // 取消计划任务
 export const CHANGE_TODO_TASK = 'CHANGE_TODO_TASK';
 // 正在拖拽的元素
-export const CHANGE_DRAG_INDEX = 'CHANGE_DRAG_INDEX';
+export const CHANGE_DRAGING_DATA = 'CHANGE_DRAGING_DATA';
 // 更改拖拽任务对应的时间段索引
 export const CHANGE_DRAGING_TASK_CORRESPOND_PERIOD = 'CHANGE_DRAGING_TASK_CORRESPOND_PERIOD';
 // 最后一次操作时间段的索引
 export const CHANGE_LAST_HANDLE_PERIOD_INDEX = 'CHANGE_LAST_HANDLE_PERIOD_INDEX';
 // 重新获取时间段的监听范围
 export const REGET_DROP_LISTENER_RANGE = 'REGET_DROP_LISTENER_RANGE';
+// 获取学生作业列表
+export const FETCH_STUDENT_TASK_LIST = 'FETCH_STUDENT_TASK_LIST';
+// 保存任务
+export const SAVE_TASK = 'SAVE_TASK';
 
 /**
  *------------------------作业与考试详情页面-----------------------------------------
@@ -82,3 +97,8 @@ export const MISTAKE_SUBMIT_ANSWER_ERROR_SUBMIT_RADIO = 'MISTAKE_SUBMIT_ANSWER_E
 export const MISTAKE_UPLOAD_IMAGE = 'MISTAKE_UPLOAD_IMAGE';
 export const MISTAKE_CHANGE_SUBJECTIVE_SHOWALL = 'MISTAKE_CHANGE_SUBJECTIVE_SHOWALL';
 export const MISTAKE_CHANGE_SUBJECTIVE_SHOWBUTTON = 'MISTAKE_CHANGE_SUBJECTIVE_SHOWBUTTON';
+
+/**
+ * 任务详情
+ */
+export const PUT_HOMEWORK_DATE = 'PUT_HOMEWORK_DATE';

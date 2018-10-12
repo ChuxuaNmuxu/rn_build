@@ -11,13 +11,13 @@ class PreviewQuesCard extends PureComponent {
       <View style={styles.preview_box}>
         <View style={styles.question_header}>
           <Text style={styles.title_order}>
-            第{questionData.questionNum}题
+            第{questionData.number}题
           </Text>
           <View style={styles.title_border} />
-          <Text style={styles.title_txt}>{getQuestionTypeName(parseInt(Math.random() * 10))}</Text>
+          <Text style={styles.title_txt}>{getQuestionTypeName(questionData.type)}</Text>
         </View>
         <View style={styles.question_content}>
-          <Text style={styles.content_txt}>{questionData.content}</Text>
+          <Text>{questionData.content}</Text>
         </View>
       </View>
     );

@@ -22,12 +22,9 @@ export const parseCorrespondingValue = (strValue) => {
   let tmp;
   for (let i = 0; i < strValue.length; i += 2) {
     tmp = strValue.substr(i, 2).split('');
-  }
-
-  for (let i = 0; i < strValue.length; i += 2) {
-    tmp = strValue.substr(i, 2).split('');
-    const { key, value } = tmp;
-    objValue[key] = tmp[value];
+    const key = tmp[0];
+    const value = tmp[1];
+    objValue[key] = value;
   }
   return objValue;
 };

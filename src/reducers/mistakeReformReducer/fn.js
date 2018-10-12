@@ -1,7 +1,6 @@
 export const fetchDataSuccess = (state, action) => {
   // 只需要按原生js写就好了，且不需要return出去！
   state.questions = action.payload;
-  state.test.c = { f: { g: '改变后' } };
 };
 
 export const selectAnswer = (state, action) => {

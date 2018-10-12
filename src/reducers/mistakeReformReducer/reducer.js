@@ -4,20 +4,6 @@ import * as fn from './fn';
 const initState = {
   // 错题
   questions: [],
-  test: {
-    a: 1,
-    b: 2,
-    c: {
-      d: 3,
-      e: [
-        {
-          f: {
-            g: '变化前',
-          },
-        },
-      ],
-    },
-  },
 };
 
 const handle = {
@@ -32,6 +18,4 @@ const handle = {
   MISTAKE_CHANGE_SUBJECTIVE_SHOWBUTTON: fn.controlSubjectButton,
 };
 
-const problemOverviewReducer = createReducer(initState, handle);
-
-export default problemOverviewReducer;
+export default createReducer(initState, handle);

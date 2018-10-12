@@ -2,7 +2,7 @@ import {
   takeLatest, put, call,
 } from 'redux-saga/effects';
 // import { delay } from 'redux-saga';
-import api from '../../utils/fetch';
+// import api from '../../utils/fetch';
 import * as actions from '../../actions/problemOverviewAction';
 import enhanceSaga from './enhanceSaga';
 import { strFormatterIconName } from '../../utils/common';
@@ -14,9 +14,8 @@ export default function* problemOverviewSaga() {
 
 function* fetchDataSaga(action) {
   try {
-    // console.log(action);
     const url = '/app/api/student/failed-questions/subjects';
-    const fetch = params => api.get(url, params);
+    const fetch = params => Fetch.get(url, params);
     const res = yield call(fetch, {
       // page: 1,
       // pageSize: 100,

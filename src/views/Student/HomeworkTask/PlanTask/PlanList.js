@@ -12,6 +12,11 @@ import {
   GetDropListenerRange,
   ChangeLastHandlePeriodIndex,
   RegetDropListenerRange,
+  ChangeDropingData,
+  ChangeTodoTask,
+  ChangePlanTask,
+  ChangeDragingTaskCorrespondPeriod,
+  SaveTask,
 } from '../../../../actions/homeworkTask';
 import { adaptiveRotation } from '../../../../utils/resolution';
 
@@ -22,6 +27,7 @@ import { adaptiveRotation } from '../../../../utils/resolution';
     dragingTaskCorrespondPeriodIndex,
     lastHandlePeriodIndex,
     isRegetDropListenerRange,
+    dragData,
   },
 }) => ({
   listenerRangeList,
@@ -29,11 +35,17 @@ import { adaptiveRotation } from '../../../../utils/resolution';
   dragingTaskCorrespondPeriodIndex,
   lastHandlePeriodIndex,
   isRegetDropListenerRange,
+  dragData,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
-  onGetDropListenerRange: bindActionCreators(GetDropListenerRange, dispatch),
+  onChangeDropingData: bindActionCreators(ChangeDropingData, dispatch),
+  onChangePlanTask: bindActionCreators(ChangePlanTask, dispatch),
+  onChangeTodoTask: bindActionCreators(ChangeTodoTask, dispatch),
+  onChangeDragingTaskCorrespondPeriod: bindActionCreators(ChangeDragingTaskCorrespondPeriod, dispatch),
   onChangeLastHandlePeriodIndex: bindActionCreators(ChangeLastHandlePeriodIndex, dispatch),
   onRegetDropListenerRange: bindActionCreators(RegetDropListenerRange, dispatch),
+  onGetDropListenerRange: bindActionCreators(GetDropListenerRange, dispatch),
+  onSaveTask: bindActionCreators(SaveTask, dispatch),
 }))
 class PlanList extends Component {
   constructor(props) {
@@ -184,17 +196,32 @@ class PlanList extends Component {
       dragingTaskCorrespondPeriodIndex,
       lastHandlePeriodIndex,
       onRegetDropListenerRange,
+      onChangeDropingData,
+      onChangeTodoTask,
+      onChangePlanTask,
+      onChangeDragingTaskCorrespondPeriod,
+      planList,
+      onChangeLastHandlePeriodIndex,
+      onSaveTask,
     } = this.props;
 
     return (
       <PlanItemWrap
         data={data}
+        planList={planList}
         onChangeDropPosition={onChangeDropPosition}
         listenerRangeList={listenerRangeList}
         getTimeItemRef={this.getTimeItemRef}
         dragingTaskCorrespondPeriodIndex={dragingTaskCorrespondPeriodIndex}
         lastHandlePeriodIndex={lastHandlePeriodIndex}
         onRegetDropListenerRange={onRegetDropListenerRange}
+        onChangeDropingData={onChangeDropingData}
+        onChangeTodoTask={onChangeTodoTask}
+        onChangePlanTask={onChangePlanTask}
+        onChangeDragingTaskCorrespondPeriod={onChangeDragingTaskCorrespondPeriod}
+        onChangeLastHandlePeriodIndex={onChangeLastHandlePeriodIndex}
+        onSaveTask={onSaveTask}
+        focus={data.index === dragingTaskCorrespondPeriodIndex}
       />
     );
   }
@@ -212,7 +239,7 @@ class PlanList extends Component {
   }
 
   render() {
-    const { planList } = this.props;
+    const { planList, dragData } = this.props;
 
     return (
       <View
@@ -230,6 +257,7 @@ class PlanList extends Component {
           ListEmptyComponent={this.renderListEmpty}
           extraData={this.state}
           onMomentumScrollEnd={this.onMomentumScrollEnd}
+          scrollEnabled={R.isEmpty(dragData)}
         />
       </View>
     );
@@ -246,6 +274,12 @@ PlanList.propTypes = {
   onChangeLastHandlePeriodIndex: PropTypes.func,
   onRegetDropListenerRange: PropTypes.func,
   isRegetDropListenerRange: PropTypes.bool,
+  onChangeDropingData: PropTypes.func,
+  onChangePlanTask: PropTypes.func,
+  onChangeTodoTask: PropTypes.func,
+  onChangeDragingTaskCorrespondPeriod: PropTypes.func,
+  dragData: PropTypes.object,
+  onSaveTask: PropTypes.func,
 };
 
 PlanList.defaultProps = {
@@ -258,6 +292,12 @@ PlanList.defaultProps = {
   onChangeLastHandlePeriodIndex: () => {},
   onRegetDropListenerRange: () => {},
   isRegetDropListenerRange: false,
+  onChangeDropingData: () => {},
+  onChangePlanTask: () => {},
+  onChangeTodoTask: () => {},
+  onChangeDragingTaskCorrespondPeriod: () => {},
+  dragData: {},
+  onSaveTask: () => {},
 };
 
 export default PlanList;

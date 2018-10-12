@@ -25,6 +25,4 @@ const handle = {
   FETCH_PROBLEM_RECORDS_CHANGE_PARAMS_REFRESH_DATA_SUCCESS: fn.fetchChangeParamsRefreshDataSuccess,
 };
 
-const problemRecordsReducer = createReducer(initState, handle);
-
-export default problemRecordsReducer;
+export default createReducer(initState, handle);

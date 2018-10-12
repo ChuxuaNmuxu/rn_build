@@ -20,39 +20,59 @@ export const getDropListenerReducer = (state, action) => {
  */
 export const changePlanTask = (state, action) => {
   if (R.type(action.payload) === 'Array') {
-    action.payload.forEach(v => state.planList.push(v));
+    // action.payload.forEach(v => state.planList.push(v));
+    state.planList = action.payload;
   } else if (R.type(action.payload) === 'Object') {
-    if ('addIndex' in action.payload) {
-      // 排期
-      const current = state.planList[action.payload.addIndex];
-      delete action.payload.addIndex;
-      current.data.push(action.payload);
+    if ('prevPeriodIndex' in action.payload) {
+      //  切换排期
+      const prevPeriodData = state.planList[action.payload.prevPeriodIndex];
+      const currentPeriodData = state.planList[action.payload.currentPeriodIndex];
+      const prevPeriodChildDragingIndex = prevPeriodData.data.findIndex(v => v.data === action.payload.data);
+      prevPeriodData.data.splice(prevPeriodChildDragingIndex, 1);
+      currentPeriodData.data.push(action.payload);
+      delete action.payload.currentPeriodIndex;
+      delete action.payload.prevPeriodIndex;
+      return;
     }
-    if ('delIndex' in action.payload) {
-      // 取消排期或切换排期
+    if ('leavePeriodIndex' in action.payload) {
+      // 取消排期
+      const periodData = state.planList[action.payload.leavePeriodIndex];
+      const periodChildDragingIndex = periodData.data.findIndex(v => v.data === action.payload.data);
+      periodData.data.splice(periodChildDragingIndex, 1);
+      // todo 应该要通过事件来重新排序
+      delete action.payload.leavePeriodIndex;
+      return;
     }
+    // 排期
+    const current = state.planList[action.payload.currentPeriodIndex];
+    delete action.payload.currentPeriodIndex;
+    current.data.push(action.payload);
   }
 };
 
 export const changeTodoTask = (state, action) => {
   if (R.type(action.payload) === 'Array') {
-    action.payload.forEach(v => state.todoList.push(v));
+    // action.payload.forEach(v => state.todoList.push(v));
+    state.todoList = action.payload;
   } else if (R.type(action.payload) === 'Object') {
-    // 取消排期
-
-
-  } else if (R.type(action.payload) === 'Number') {
-    // 排期
-    state.todoList.splice(action.payload, 1);
+    if (action.payload.cancelTask) {
+      // 排期
+      const cancelTaskIndex = state.todoList.findIndex(v => v.homeworkId === action.payload.homeworkId);
+      state.todoList.splice(cancelTaskIndex, 1);
+      delete action.payload.cancelTask;
+    } else {
+      // 取消排期
+      state.todoList.push(action.payload);
+    }
   }
 };
 
 // 可以不传参数，如果不传默认设为null
-export const changeDragingIndex = (state, action) => {
+export const changeDragingData = (state, action) => {
   if (action.payload || action.payload === 0) {
-    state.dragIndex = action.payload;
+    state.dragData = action.payload;
   } else {
-    state.dragIndex = null;
+    state.dragData = {};
   }
 };
 
