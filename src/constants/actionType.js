@@ -21,6 +21,8 @@ export const COMMON_MODAL_OPPEN_OR_CLOSE = 'COMMON_MODAL_OPPEN_OR_CLOSE';
 export const FETCH_PROBLEM_OVERVIEW = 'FETCH_PROBLEM_OVERVIEW';
 export const FETCH_INCORRECT_PROPBLEM_DETAIL = 'FETCH_INCORRECT_PROPBLEM_DETAIL';
 export const FETCH_MISTAKE_LIST = 'FETCH_MISTAKE_LIST';
+export const ADD_MISTAKE_LIST = 'ADD_MISTAKE_LIST';
+export const PUT_FAIL_PROBLEM_REASON = 'PUT_FAIL_PROBLEM_REASON';
 
 /**
  * ------------------------预览作业页面action-----------------------------------------

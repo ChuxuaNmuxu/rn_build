@@ -4,12 +4,14 @@ import { View } from 'react-native';
 import RefreshListView from '../../../components/RefreshListView';
 import RefreshState from '../../../components/RefreshListView/RefreshState';
 import ProblemCard from './Components/ProblemCard';
+import { addMistakeList } from '../../../actions/mistakeListAction';
 
 class ProblemList extends Component {
   constructor(props) {
     super(props);
     this.state = {
     };
+    this.page = 1;
   }
 
   _keyExtractor = (item, index) => item.id;
@@ -18,6 +20,7 @@ class ProblemList extends Component {
   _renderItem = ({ item, index }) => (
     <ProblemCard
       key={index}
+      index={index}
       id={item.id}
       datas={item}
     />
@@ -26,22 +29,26 @@ class ProblemList extends Component {
    // 渲染一个空白页，当列表无数据的时候显示。这里简单写成一个View控件
    _renderEmptyView = item => <View />;
 
-  // 上拉加载更多
-  loadMoreFun = () => {
-    setTimeout(() => {
-      this.listView.endRefreshing(RefreshState.NoMoreData);
-    }, 2000);
+  // 加载更多
+  RefreshListFunc = () => {
+    const { refreshList } = this.props;
+    refreshList({}, () => {
+      console.log(38);
+      this.listView.endHeaderRefreshing(RefreshState.RefreshSuccess);
+      this.listView.endHeaderRefreshing(RefreshState.Idle);
+    }, () => {
+      this.listView.endHeaderRefreshing(RefreshState.Failure);
+    });
   }
 
-  // 下拉刷新
-  RefreshListFunc = () => {
-    setTimeout(() => {
-      this.listView.endHeaderRefreshing(RefreshState.Failure);
-      // 刷新成功后隐藏提示
-      // setTimeout(() => {
-      //   this.listView.endHeaderRefreshing(RefreshState.Idle);
-      // }, 1000);
-    }, 2000);
+  // 刷新
+  loadMoreFun = () => {
+    const { refreshList } = this.props;
+    refreshList({ page: ++this.page }, () => {
+      this.listView.endRefreshing(RefreshState.NoMoreData);
+    }, () => {
+      this.listView.endRefreshing(RefreshState.NoMoreData);
+    }, addMistakeList);
   }
 
   render() {
@@ -62,6 +69,7 @@ class ProblemList extends Component {
 
 ProblemList.propTypes = {
   mistakeList: PropTypes.array.isRequired,
+  refreshList: PropTypes.func.isRequired,
 };
 
 export default ProblemList;

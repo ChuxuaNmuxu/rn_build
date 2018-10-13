@@ -92,30 +92,38 @@ class ProblemListOverview extends Component {
   }
 
   getMoreParms = (Arr, objKey) => {
-    const { onGetMistakeList } = this.props;
-    const { currentSubjectId } = this.state;
     this.moreParams[objKey] = Arr;
     console.log(this.moreParams);
-
-    const { category, difficultyLevel, uniGradeId } = this.moreParams;
-    const params = {
-      subjectId: currentSubjectId,
-      difficultyLevel,
-      uniGradeId: uniGradeId[0],
-    };
-    if (category.length === 1) {
-      Object.assign(params, {
-        category: category[0],
-      });
-    }
-
-    onGetMistakeList({ params });
+    this.refreshList();
   }
 
   // 控制更多筛选层的显隐
   setVisibleFun = (visible) => {
     this.setState({
       showExtendView: visible,
+    });
+  }
+
+  refreshList = (params = {}, successFn, failureFn, action) => {
+    const { onGetMistakeList } = this.props;
+    const { currentSubjectId } = this.state;
+    const { category, difficultyLevel, uniGradeId } = this.moreParams;
+    const initParams = {
+      subjectId: currentSubjectId,
+      difficultyLevel,
+      uniGradeId: uniGradeId[0],
+    };
+    if (category.length === 1) {
+      Object.assign(initParams, {
+        category: category[0],
+      });
+    }
+
+    onGetMistakeList({
+      params: Object.assign(initParams, params),
+      successFn,
+      failureFn,
+      action,
     });
   }
 
@@ -198,7 +206,7 @@ class ProblemListOverview extends Component {
           filterSubjectFun={this.filterSubjectFun}
           filterMoreFun={this.filterMoreFun}
         />
-        <ProblemList mistakeList={mistakeList} />
+        <ProblemList refreshList={this.refreshList} mistakeList={mistakeList} />
         {
           showExtendView && (
           <ExtendListView setVisibleFun={this.setVisibleFun} setTop={144}>

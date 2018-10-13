@@ -7,7 +7,9 @@ import {
 } from 'react-native';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import styles from './ProblemCard.scss';
-import { formatTimeToshow, getQuestionTypeName, convertToDifficultyLevel } from '../../../../utils/common/common';
+import {
+  formatTimeToshow, getQuestionTypeName, convertToDifficultyLevel, failReason,
+} from '../../../../utils/common/common';
 import I18nText from '../../../../components/I18nText';
 
 class ProblemCard extends PureComponent {
@@ -37,7 +39,7 @@ class ProblemCard extends PureComponent {
   }
 
   render() {
-    const { datas } = this.props;
+    const { datas, index } = this.props;
     console.log(35, datas);
     return (
       <SwipeRow
@@ -61,7 +63,7 @@ class ProblemCard extends PureComponent {
           <View style={styles.problemCard}>
             <View style={styles.question_header}>
               <Text style={styles.title_order}>
-                第{datas.questionNum}题
+                第{ index + 1 }题
               </Text>
               <View style={styles.title_border} />
               <Text style={styles.title_txt}>{getQuestionTypeName(datas.type)}</Text>
@@ -79,7 +81,7 @@ class ProblemCard extends PureComponent {
                     <I18nText>
                       ProblemListOverview.ProblemCard.wrongReason
                     </I18nText>
-                    审题不仔细
+                    {failReason[datas.failReason]}
                   </Text>
                 </View>
               </View>
@@ -89,7 +91,7 @@ class ProblemCard extends PureComponent {
                   <I18nText>
                     ProblemListOverview.ProblemCard.form
                   </I18nText>
-                  语文第一章作业
+                  {datas.name}
                 </Text>
               </View>
             </View>

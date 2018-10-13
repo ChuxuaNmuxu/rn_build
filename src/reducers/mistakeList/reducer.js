@@ -8,6 +8,7 @@ const initState = {
 
 const handle = {
   FETCH_MISTAKE_LIST_SUCCESS: fn.getMistakeList,
+  ADD_MISTAKE_LIST_SUCCESS: fn.addMistakeList,
   // FETCH_INCORRECT_PROPBLEM_DETAIL_ERROR: fn.getIncorrectInfo,
 };
 
