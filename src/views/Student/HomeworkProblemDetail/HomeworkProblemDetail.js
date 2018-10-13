@@ -22,10 +22,14 @@ import WrongReason from '../../../components/WrongReason';
     incorrectProblemDetail: {
       problems,
     },
+    mistakeListReducer: {
+      mistakeList,
+    },
   } = state;
 
   return {
     problems,
+    mistakeList,
   };
 }, dispatch => ({
   onFetchProblemDetail: bindActionCreators(getIncorrectInfo, dispatch),
@@ -39,12 +43,10 @@ class HomeworkProblemDetail extends Component {
     //   // incorrectIdList
     // } = props;
 
-    const incorrectIdList = [
-      '455676721924931584',
-      '455676721933320192',
-      '455679873348796416',
-      '455744442263928832',
-      '455748672576028672'];
+    const { mistakeList = [] } = props;
+    const incorrectIdList = mistakeList.map(v => v.id);
+
+    console.log(48, incorrectIdList);
 
     this.state = {
       incorrectIdList,
@@ -54,8 +56,8 @@ class HomeworkProblemDetail extends Component {
   }
 
   componentDidMount() {
-    const { id, onFetchProblemDetail } = this.props;
-    onFetchProblemDetail(id);
+    const { id, category, onFetchProblemDetail } = this.props;
+    onFetchProblemDetail({ params: { id, category } });
   }
 
   // static getDerivedStateFromProps(props, state) {
@@ -184,6 +186,8 @@ HomeworkProblemDetail.propTypes = {
   id: PropTypes.string.isRequired,
   onFetchProblemDetail: PropTypes.func.isRequired,
   problems: PropTypes.object,
+  category: PropTypes.string,
+  mistakeList: PropTypes.array,
 };
 
 HomeworkProblemDetail.defaultProps = {

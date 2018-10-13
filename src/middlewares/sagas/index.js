@@ -20,6 +20,9 @@ import taskDetailSaga from './taskDetailSaga';
 import homeworkCorrectingSaga from './homeworkCorrectingSaga';
 // 错题详情
 import inCorrectProblemDetail from './inCorrectProblemDetail';
+// 错题列表
+import mistakeList from './mistakeList';
+
 
 function* rootSaga() {
   yield all([
@@ -34,6 +37,7 @@ function* rootSaga() {
     fork(taskDetailSaga),
     fork(homeworkCorrectingSaga),
     fork(inCorrectProblemDetail),
+    fork(mistakeList),
   ]);
 }
 export default rootSaga;

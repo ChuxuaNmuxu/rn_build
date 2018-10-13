@@ -45,11 +45,11 @@ class ProblemList extends Component {
   }
 
   render() {
-    const { problemData } = this.props;
+    const { mistakeList } = this.props;
     return (
       <RefreshListView
         ref={(ref) => { this.listView = ref; }}
-        data={problemData}
+        data={mistakeList}
         renderItem={this._renderItem}
         keyExtractor={this._keyExtractor}
         ListEmptyComponent={this._renderEmptyView}
@@ -61,7 +61,7 @@ class ProblemList extends Component {
 }
 
 ProblemList.propTypes = {
-  problemData: PropTypes.array.isRequired,
+  mistakeList: PropTypes.array.isRequired,
 };
 
 export default ProblemList;

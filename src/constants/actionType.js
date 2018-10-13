@@ -20,6 +20,7 @@ export const COMMON_MODAL_OPPEN_OR_CLOSE = 'COMMON_MODAL_OPPEN_OR_CLOSE';
  */
 export const FETCH_PROBLEM_OVERVIEW = 'FETCH_PROBLEM_OVERVIEW';
 export const FETCH_INCORRECT_PROPBLEM_DETAIL = 'FETCH_INCORRECT_PROPBLEM_DETAIL';
+export const FETCH_MISTAKE_LIST = 'FETCH_MISTAKE_LIST';
 
 /**
  * ------------------------预览作业页面action-----------------------------------------
