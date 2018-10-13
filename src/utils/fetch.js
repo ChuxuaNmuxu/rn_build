@@ -53,9 +53,13 @@ const Fetch = {
       credentials: 'include',
     };
     if (type === 'json') {
+      headers['Content-Type'] = 'application/json';
       options.body = JSON.stringify(params);
     } else if (type === 'file') {
+      headers['Content-Type'] = 'multipart/form-data';
       options.body = params;
+      options.processData = false;
+      options.contentType = false;
     }
     // console.log(53, url, options);
     return fetch(url, options)
