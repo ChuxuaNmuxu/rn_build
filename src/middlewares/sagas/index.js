@@ -20,6 +20,8 @@ import taskDetailSaga from './taskDetailSaga';
 import inCorrectProblemDetail from './inCorrectProblemDetail';
 // 错题列表
 import mistakeList from './mistakeList';
+// 标记错题原因
+import markFailReason from './markFailReason';
 
 
 function* rootSaga() {
@@ -35,6 +37,7 @@ function* rootSaga() {
     fork(taskDetailSaga),
     fork(inCorrectProblemDetail),
     fork(mistakeList),
+    fork(markFailReason),
   ]);
 }
 export default rootSaga;

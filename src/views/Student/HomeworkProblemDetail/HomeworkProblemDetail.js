@@ -11,11 +11,14 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Swiper from 'react-native-swiper';
-import { getIncorrectInfo } from '../../../actions/incorrectProblemDetail';
+import { getIncorrectInfo, markFailReason } from '../../../actions/incorrectProblemDetail';
 import CIcon from '../../../components/Icon';
 import styles from './HomeworkProblemDetail.scss';
 import ThumbnailImage from '../../../components/ThumbnailImage';
 import WrongReason from '../../../components/WrongReason';
+import {
+  convertToDifficultyLevel,
+} from '../../../utils/common';
 
 @connect((state) => {
   const {
@@ -33,6 +36,7 @@ import WrongReason from '../../../components/WrongReason';
   };
 }, dispatch => ({
   onFetchProblemDetail: bindActionCreators(getIncorrectInfo, dispatch),
+  onMarkFailReason: bindActionCreators(markFailReason, dispatch),
 }))
 class HomeworkProblemDetail extends Component {
   constructor(props) {
@@ -72,12 +76,25 @@ class HomeworkProblemDetail extends Component {
   //   return null;
   // }
 
+  onChange = (reason) => {
+    console.log(90, reason);
+    const { onMarkFailReason, id, category } = this.props;
+
+    onMarkFailReason({
+      id,
+      category,
+      params: {
+        reason,
+      },
+    });
+  }
+
   swiper = (nextIndex) => {
     const { incorrectIdList } = this.state;
     const nextId = incorrectIdList[nextIndex];
     console.log('nextId', nextId);
-    const { onFetchProblemDetail } = this.props;
-    onFetchProblemDetail(nextId);
+    const { onFetchProblemDetail, category } = this.props;
+    onFetchProblemDetail({ params: { id: nextId, category } });
     // this.setState({
     //   currentId: nextId,
     // });
@@ -126,10 +143,13 @@ class HomeworkProblemDetail extends Component {
                 )
                 : (
                   <View key={id}>
-                    <Image
+                    {/* <Image
                       style={{ width: '100%', height: 225 }}
                       source={{ uri: `${problem.titleUrl}` }}
-                    />
+                    /> */}
+                    <View>
+                      <Text>{problem.content}</Text>
+                    </View>
                     <View style={styles.space} />
                     <View style={styles.reason_wrap}>
                       <View style={styles.reason_word}>
@@ -146,7 +166,7 @@ class HomeworkProblemDetail extends Component {
                       难易程度:
                           </Text>
                           <Text style={[styles.reason_difficult, styles.reason_difficult_result]}>
-                            {problem.difficult}
+                            {convertToDifficultyLevel(problem.difficultyLevel)}
                           </Text>
                         </View>
                       </View>
@@ -167,7 +187,7 @@ class HomeworkProblemDetail extends Component {
                       />
                     </View>
                     <View style={styles.space} />
-                    <WrongReason onChange={this.onChange} />
+                    <WrongReason onChange={this.onChange} defaultValue={problem.failReason} />
                   </View>
                 );
             })

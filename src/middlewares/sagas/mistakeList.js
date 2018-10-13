@@ -8,7 +8,7 @@ import * as actionTypes from '../../constants/actionType';
 import enhanceSaga from './enhanceSaga';
 
 export default function* mistakeList() {
-  yield takeLatest(actionTypes.FETCH_MISTAKE_LIST, enhanceSaga(fetchDetailSaga));
+  yield takeLatest(actionTypes.FETCH_MISTAKE_LIST, enhanceSaga(getData));
 }
 
 const defaultParams = {
@@ -17,9 +17,11 @@ const defaultParams = {
 };
 
 // 更改最后一次操作的时间段saga
-function* fetchDetailSaga(action) {
+function* getData(action) {
   console.log(16, action);
-  const { params } = action.payload;
+  const {
+    params, successFn = R.identity, failureFn = R.identity, action: costomAction = actions.getMistakeList,
+  } = action.payload;
 
   const fetchParam = qs.stringify(Object.assign(defaultParams, params));
   console.log(32, fetchParam);
@@ -30,11 +32,16 @@ function* fetchDetailSaga(action) {
     const { code, data } = res;
 
     if (code !== 0) {
-      yield put(actions.getMistakeList(code, 'ERROR'));
+      failureFn(code);
+      yield put(costomAction(code, 'ERROR'));
     } else {
-      yield put(actions.getMistakeList({ data }, 'SUCCESS'));
+      // const { page, pageSize } = fetchParam;
+      successFn(data);
+      yield put(costomAction({ data }, 'SUCCESS'));
+      console.log(40, successFn);
     }
   } catch (e) {
-    yield put(actions.getMistakeList(e, 'ERROR'));
+    failureFn(e);
+    yield put(costomAction(e, 'ERROR'));
   }
 }
