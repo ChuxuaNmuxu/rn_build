@@ -10,7 +10,7 @@ import mistakeReformReducer from './mistakeReformReducer';
 import ProblemRecordsReducer from './problemRecordsReducer';
 import taskDetailReducer from './taskDetailReducer';
 import homeworkCorrectingReducer from './homeworkCorrectingReducer';
-
+import incorrectProblemDetail from './incorrectProblemDetail';
 
 export default combineReducers({
   routes,
@@ -33,4 +33,6 @@ export default combineReducers({
   taskDetailReducer,
   // 作业批阅
   homeworkCorrectingReducer,
+  // 错题详情
+  incorrectProblemDetail,
 });

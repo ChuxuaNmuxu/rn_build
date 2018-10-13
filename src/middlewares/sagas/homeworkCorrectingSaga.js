@@ -3,6 +3,7 @@ import {
 } from 'redux-saga/effects';
 import * as actions from '../../actions/homeworkCorrectingAction';
 import enhanceSaga from './enhanceSaga';
+import draftToHtml from '../../utils/draftjsToHtml';
 
 export default function* homeworkCorrectingSaga() {
   // 获取list
@@ -68,6 +69,7 @@ function* fetchListSaga(action) {
     };
     const { code } = res;
     if (code === 0) {
+      console.log(72, res.data[0].content, draftToHtml(res.data[0].content));
       yield put(actions.fetchListAction(res.data, 'SUCCESS'));
     } else {
       yield put(actions.fetchListAction(code, 'ERROR'));

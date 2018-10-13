@@ -19,7 +19,10 @@ class ProblemCard extends PureComponent {
 
   // 点击错题卡片进入错题详情页
   goProblemDetail = () => {
-    console.log(123, '点击进入详情页');
+    const { id } = this.props;
+    Actions.HomeworkProblemDetail({
+      id,
+    });
   }
 
   // 点击复习错题进入错题重做页面
@@ -30,24 +33,24 @@ class ProblemCard extends PureComponent {
   render() {
     const { datas } = this.props;
     return (
-      <TouchableOpacity
-        activeOpacity={1}
-        style={styles.problemCard_box}
-        onPress={this.goProblemDetail}
+      <SwipeRow
+        disableRightSwipe
+        rightOpenValue={-270}
       >
-        <SwipeRow
-          disableRightSwipe
-          rightOpenValue={-270}
+        <TouchableOpacity
+          style={styles.hidenBtn}
+          onPress={this.doErrWorkAgain}
         >
-          <TouchableOpacity
-            style={styles.hidenBtn}
-            onPress={this.doErrWorkAgain}
-          >
-            <Text />
-            <I18nText style={styles.hideText}>
+          <Text />
+          <I18nText style={styles.hideText}>
               ProblemListOverview.ProblemCard.reviewQuestion
-            </I18nText>
-          </TouchableOpacity>
+          </I18nText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.problemCard_box}
+          onPress={this.goProblemDetail}
+        >
           <View style={styles.problemCard}>
             <View style={styles.question_header}>
               <Text style={styles.title_order}>
@@ -84,14 +87,15 @@ class ProblemCard extends PureComponent {
               </View>
             </View>
           </View>
-        </SwipeRow>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </SwipeRow>
     );
   }
 }
 
 ProblemCard.propTypes = {
   datas: PropTypes.object.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default ProblemCard;

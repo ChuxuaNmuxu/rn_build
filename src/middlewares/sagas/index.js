@@ -18,6 +18,8 @@ import homeworkTask from './homeworkTask';
 import taskDetailSaga from './taskDetailSaga';
 // 作业批阅
 import homeworkCorrectingSaga from './homeworkCorrectingSaga';
+// 错题详情
+import inCorrectProblemDetail from './inCorrectProblemDetail';
 
 function* rootSaga() {
   yield all([
@@ -31,6 +33,7 @@ function* rootSaga() {
     fork(homeworkTask),
     fork(taskDetailSaga),
     fork(homeworkCorrectingSaga),
+    fork(inCorrectProblemDetail),
   ]);
 }
 export default rootSaga;
