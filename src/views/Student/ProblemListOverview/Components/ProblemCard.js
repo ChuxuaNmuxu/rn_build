@@ -27,7 +27,11 @@ class ProblemCard extends PureComponent {
 
   // 点击复习错题进入错题重做页面
   doErrWorkAgain = () => {
-    Actions.MistakeReform();
+    const { datas } = this.props;
+    // console.log(datas);
+    Actions.MistakeReform({
+      problemCardInfo: [datas],
+    });
   }
 
   render() {

@@ -29,18 +29,20 @@ class MistakeReform extends Component {
     this.state = {
       index: 0,
     };
+    const {
+      actions: {
+        saveQuestionsAction,
+      },
+      // isRandom,
+      problemCardInfo,
+    } = props;
+    console.log(39, problemCardInfo);
+    // 发送action保存到redux中，且在saga保存的时候加入一些页面需要的逻辑
+    saveQuestionsAction(problemCardInfo);
   }
 
   componentDidMount() {
     console.log('调用 错题重做 MistakeReform 组件', this.props);
-    const {
-      actions: {
-        fetchDataAction,
-      },
-      isRandom,
-    } = this.props;
-    // 请求数据
-    fetchDataAction({ isRandom }, 'REQUEST');
   }
 
   // 导航条右侧是否有 index
@@ -463,15 +465,17 @@ class MistakeReform extends Component {
 }
 MistakeReform.propTypes = {
   // 是否是随机题
-  isRandom: PropTypes.bool,
+  // isRandom: PropTypes.bool,
   actions: PropTypes.object.isRequired,
   // 错题的数据
   questions: PropTypes.array.isRequired,
+  // 上游传过来的数据
+  problemCardInfo: PropTypes.array.isRequired,
 };
 
-MistakeReform.defaultProps = {
-  isRandom: false,
-};
+// MistakeReform.defaultProps = {
+//   isRandom: false,
+// };
 
 const mapStateToProps = (state) => {
   const {
