@@ -20,7 +20,7 @@ class ProblemCard extends PureComponent {
   // 点击错题卡片进入错题详情页
   goProblemDetail = (category) => {
     const { id } = this.props;
-    console.log(23, id);
+    // console.log(23, id);
     Actions.HomeworkProblemDetail({
       id,
       category,

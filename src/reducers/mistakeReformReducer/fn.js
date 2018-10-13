@@ -18,15 +18,17 @@ export const selectAnswer = (state, action) => {
 };
 
 export const answerCorrect = (state, action) => {
-  const { index, showAnswer } = action.payload;
+  const { index, showAnswer, result } = action.payload;
   state.questions[index].controlComponent.showCorrectInfo.showAll = true;
   state.questions[index].controlComponent.showCorrectInfo.showAnswer = showAnswer;
+  state.questions[index].controlComponent.showCorrectInfo.result = result;
 };
 
 export const answerError = (state, action) => {
-  const { index } = action.payload;
+  const { index, result } = action.payload;
   // 显示错误的全部提示
   state.questions[index].controlComponent.showErrorInfo.showAll = true;
+  state.questions[index].controlComponent.showErrorInfo.result = result;
 };
 
 export const showAnswerErrorRadio = (state, action) => {
@@ -59,4 +61,9 @@ export const controlSubjectButton = (state, action) => {
   } = action.payload;
   // 把那个可点击‘对的’'错的'隐藏掉
   state.questions[index].controlComponent.showSubjectiveInfo.showTrueOrFalseButton = showTrueOrFalseButton;
+};
+
+export const saveSingleSelect = (state, action) => {
+  const { value, index } = action.payload;
+  state.questions[index].controlComponent.objectiveAnswer.value = value;
 };

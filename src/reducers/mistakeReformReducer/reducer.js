@@ -9,7 +9,6 @@ const initState = {
 };
 
 const handle = {
-  // 请求错题本成功了
   SAVE_QUESTIONS_SUCCESS: fn.saveQuestions,
   MISTAKE_SELECT_ANSWER: fn.selectAnswer,
   MISTAKE_SUBMIT_ANSWER_CORRECT: fn.answerCorrect,
@@ -18,6 +17,8 @@ const handle = {
   MISTAKE_UPLOAD_IMAGE: fn.updateImage,
   MISTAKE_CHANGE_SUBJECTIVE_SHOWALL_SUCCESS: fn.changeSubjectiveShowall,
   MISTAKE_CHANGE_SUBJECTIVE_SHOWBUTTON: fn.controlSubjectButton,
+  // 保存单选题答案
+  MISTAKE_CHANGE_SAVE_SINGLE_ANSWER: fn.saveSingleSelect,
 };
 
 export default createReducer(initState, handle);

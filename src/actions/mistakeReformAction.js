@@ -27,3 +27,7 @@ export const controlSubjectiveButtonAction = actionCreator(
   types.MISTAKE_CHANGE_SUBJECTIVE_SHOWBUTTON,
   '错题重做-主观题-点击那个错误的按钮，把这一行隐藏掉',
 );
+export const saveObjectiveAnswerAction = actionCreator(
+  types.MISTAKE_CHANGE_SAVE_SINGLE_ANSWER,
+  '错题重做-保存单选题答案',
+);

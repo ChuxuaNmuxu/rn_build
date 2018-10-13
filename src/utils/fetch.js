@@ -75,7 +75,7 @@ const Fetch = {
     return this.fetch(apiUrl(_url), {}, 'get', '', mock, headerParams);
   },
   post(url, params, type = 'json', mock = false) { return this.fetch(apiUrl(url), params, 'post', type, mock); },
-  put(url, params, type = '') { return this.fetch(apiUrl(url), params, 'put', type); },
+  put(url, params, type = 'json') { return this.fetch(apiUrl(url), params, 'put', type); },
   delete(url, params) {
     let _url = url;
     if (!isEmpty(params)) {

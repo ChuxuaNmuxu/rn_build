@@ -59,12 +59,19 @@ class MistakeReform extends Component {
   }
 
   // 点击题目
-  handleToClickRadio = (value) => {
+  handleToClickRadio = (id, value, item) => {
     console.log(value);
-    const { actions: { selectAnswerAction } } = this.props;
+    const { actions: { selectAnswerAction, saveObjectiveAnswerAction } } = this.props;
     const { index } = this.state;
+    // 单选题
+    const { type } = item;
+    if (type === 1 || type === 2 || type === 3 || type === 4) {
+      saveObjectiveAnswerAction({
+        index,
+        value,
+      });
+    }
     selectAnswerAction({
-      value,
       index,
     });
   }
@@ -96,19 +103,20 @@ class MistakeReform extends Component {
   }
 
   // 显示提交正确答案信息
-  showCorrectInfo = ({ bol }) => {
-    if (bol.showAll) {
+  showCorrectInfo = (item) => {
+    const { result, showAll, showAnswer } = item.controlComponent.showCorrectInfo;
+    if (showAll) {
       return (
         <View style={styles.submit_container}>
           <View style={styles.result_word}>
             {
-              bol.showAnswer ? (
+              showAnswer ? (
                 <View style={styles.result_word_child}>
                   <Text style={[styles.result_icon, styles.result_icon_right]}>
                     <CIcon name="dui" size={20} color="white" />
                   </Text>
                   <Text style={[styles.result_answer, styles.result_right]}>
-                    回答正确，答案是A
+                    {`回答正确，答案是${result.rightAnswer}`}
                   </Text>
                 </View>
               ) : null
@@ -124,7 +132,7 @@ class MistakeReform extends Component {
                 <Text
                   style={[styles.result_difficult, styles.result_right]}
                   onPress={() => {
-                    this.showConfirmModal();
+                    this.showConfirmModal(item);
                   }}
                 >
                       移除错题本
@@ -144,11 +152,11 @@ class MistakeReform extends Component {
     ModalApi.onClose();
   }
 
-  rightFn = () => {
+  rightFn = (item) => {
     const { actions: { correctConfirmAction } } = this.props;
     const { index } = this.state;
     this.showLoading();
-    correctConfirmAction({ index, callback: this.pressT }, 'REQUEST');
+    correctConfirmAction({ index, callback: this.pressT, item }, 'REQUEST');
   }
 
   // 自动关闭tips
@@ -181,10 +189,10 @@ class MistakeReform extends Component {
   )
 
   // demo的函数名乱搞的，写代码的大佬别乱copy
-  showConfirmModal = () => {
+  showConfirmModal = (item) => {
     const data = {
       lCallbakFn: this.leftFn,
-      rCallbakFn: this.rightFn,
+      rCallbakFn: () => this.rightFn(item),
       activeBtn: 'R',
       rightBtnText: '确定',
       leftBtnText: '取消',
@@ -195,9 +203,11 @@ class MistakeReform extends Component {
   }
 
   // 提交返回的错误答案信息
-  showErrorInfo = ({ bol, index }) => {
+  showErrorInfo = (item) => {
     const { actions: { showWrongInfoRadioAction } } = this.props;
-    if (bol.showAll) {
+    const { index } = this.state;
+    const { showAll, showWord, result } = item.controlComponent.showErrorInfo;
+    if (showAll) {
       return (
         <View style={styles.submit_container}>
           <View style={styles.result_word}>
@@ -206,11 +216,11 @@ class MistakeReform extends Component {
                 <CIcon name="cuowu" size={20} color="white" />
               </Text>
               <Text style={[styles.result_answer, styles.result_wrong]}>
-            回答错误,答案是B,你的答案是A
+                {`回答错误,答案是${result.rightAnswer},你的答案是${result.studentAnswer}`}
               </Text>
             </View>
             {
-                bol.showWord ? (
+                showWord ? (
                   <View style={styles.result_word_child}>
                     <Text style={[styles.result_difficult]}>
                       你可以对该题进行
@@ -235,15 +245,16 @@ class MistakeReform extends Component {
   }
 
   // 错误信息的单选
-  showErrorRadio = ({ bol, index }) => {
+  showErrorRadio = (item, index) => {
+    const { showRadio } = item.controlComponent.showErrorInfo;
     const { actions: { submitRadioAction } } = this.props;
-    if (bol.showRadio) {
+    if (showRadio) {
       return (
         <View>
           <View style={styles.space} />
           <WrongReason
             onChange={(value) => {
-              submitRadioAction({ index, value }, 'REQUEST');
+              submitRadioAction({ index, value, item }, 'REQUEST');
             }}
           />
         </View>
@@ -253,7 +264,7 @@ class MistakeReform extends Component {
   }
 
   // 上传的图片
-  showImage = ({ item, index }) => {
+  showImageOrTitle = ({ item }) => {
     const {
       showSubjectiveInfo: {
         urlSource,
@@ -289,7 +300,7 @@ class MistakeReform extends Component {
         <AnswerCard
           questions={item}
           mistakeReform
-          handleToClickRadio={this.handleToClickRadio}
+          handleToClickRadio={(id, value) => this.handleToClickRadio(id, value, item)}
           updateImage={this.updateImage}
         />
       </View>
@@ -429,30 +440,31 @@ class MistakeReform extends Component {
                     {/* 题目 */}
                     <View style={styles.questionCard_container}>
                       <View style={styles.question_title}>
-                        <Text style={styles.question_title_txt}>{getQuestionTypeName(1)}</Text>
+                        <Text style={styles.question_title_txt}>{getQuestionTypeName(item.type)}</Text>
                       </View>
                       <View style={styles.question_content_wrap}>
-                        <Image
+                        {/* <Image
                           style={{ width: '100%', height: '100%' }}
                           source={{ uri: item.url }}
-                        />
+                        /> */}
+                        <Text>{item.content}</Text>
                       </View>
                     </View>
                     <View style={styles.space} />
                     {/* 主观题上传图片后的图片显示,如果有图片,就显示图片，如果没有就显示题型 */}
-                    {this.showImage({ item, index })}
+                    {this.showImageOrTitle({ item })}
                     {/* 答案 */}
                     <View />
                     {/* 提交按钮 */}
                     { this.showSubmitBtn({ item, index: i }) }
                     {/* 错误答案信息 */}
-                    { this.showErrorInfo({ bol: item.controlComponent.showErrorInfo, index: i }) }
+                    { this.showErrorInfo(item) }
                     {/* 显示主观题的题目答案、别人家的答案等 */}
                     { this.showSubjective({ item, index: i }) }
                     {/* 正确答案信息 */}
-                    { this.showCorrectInfo({ bol: item.controlComponent.showCorrectInfo, index: i }) }
+                    { this.showCorrectInfo(item) }
                     {/* 错误信息的总结(radio) */}
-                    { this.showErrorRadio({ bol: item.controlComponent.showErrorInfo, index: i }) }
+                    { this.showErrorRadio(item, i) }
                   </View>
                 ))
             }
