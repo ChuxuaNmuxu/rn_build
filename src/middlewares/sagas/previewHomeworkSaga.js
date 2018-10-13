@@ -18,12 +18,14 @@ export default function* previewHomeworkSaga() {
 // 请求作业数据---optType(操作类型  1:预览 2:作答)
 function* fetchPreviewHomeworkSaga(action) {
   try {
+    console.log(action);
     const { homeworkId } = action.payload;
     const params = {};
     params.optType = 1;
     const url = `app/api/student/homeworks/${homeworkId}`;
     const fetch = arg => api.get(url, arg);
     const res = yield call(fetch, params);
+    console.log(888881, res);
     const { code, data } = res;
     console.log(888881, res);
     if (code === 0) {

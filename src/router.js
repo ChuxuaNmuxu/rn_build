@@ -48,8 +48,9 @@ const RouteMap = props => (
     <Modal
       hideNavBar
       key="modal"
+      // initial
     >
-      <Stack key="WelcomeStack" initial>
+      <Stack key="WelcomeStack">
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
       </Stack>
       <Stack key="Account">
@@ -58,7 +59,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        // initial
+        initial
       >
         <Tabs
           key="StudentTabs"
@@ -95,15 +96,17 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
+            // initial
           >
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
+              // initial
             />
           </Stack>
           {/* 错题本 */}
           <Stack
-            initial
+            // initial
             title="wrongNotes" // 配好在zh.js、en.js那边了
             key="ProblemOverviewStack"
             image="cuotiben1"
@@ -146,7 +149,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        initial
+        // initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />

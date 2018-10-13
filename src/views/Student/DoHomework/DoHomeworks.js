@@ -4,8 +4,7 @@ import {
   Text, View, ScrollView, TouchableOpacity,
 } from 'react-native';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
-// import { PropTypes } from 'prop-types';
-import { Actions } from 'react-native-router-flux';
+// import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import R from 'ramda';
@@ -432,7 +431,7 @@ class DoHomeworks extends Component {
       unAnswerQuesList,
     } = this.state;
     const { showUnAnswerQues } = this.props;
-    console.log('做作业的数据有了', homeworkData);
+    // console.log('做作业的数据有了', homeworkData);
     const { finalQuestionList } = homeworkData;
     // 作答题目情况,拿到题目总数，已作答题数，未作答题数
     const countQuesNum = finalQuestionList && finalQuestionList.length;
@@ -559,7 +558,7 @@ const mapStateToProps = (state) => {
   return {
     data,
     uploadImgSuccess,
-    needMark
+    needMark,
   };
 };
 

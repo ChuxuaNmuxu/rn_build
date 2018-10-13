@@ -6,6 +6,9 @@ const initState = {
   // 思路为，作业假如存在数据则不请求，不存在反之。考试的话直接拿缓存起来的数据，每次点击模拟请求返回。
   headerList: [],
   detailsDataList: [],
+  // 假如存在一道未批改，则全灰，下面简要也灰色字体且同学修改的也不展示气泡
+  status: 0,
+  title: '',
 };
 
 const handle = {
@@ -19,6 +22,4 @@ const handle = {
   INIT_RECORD_DETAIL_ALL_DATA: fn.initailState,
 };
 
-const problemOverviewReducer = createReducer(initState, handle);
-
-export default problemOverviewReducer;
+export default createReducer(initState, handle);

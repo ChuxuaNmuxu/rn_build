@@ -14,12 +14,19 @@ class TodoItem extends Component {
     this.state = {};
   }
 
+  shouldComponentUpdate(nextProps) {
+    const { focus } = nextProps;
+    if (focus === this.props) return false;
+    return true;
+  }
+
   render() {
     const {
       data,
       getTimeItemRef,
-      dragingTaskCorrespondPeriodIndex,
+      focus,
       lastHandlePeriodIndex,
+      ...rest
     } = this.props;
     // console.log(23, data);
 
@@ -44,7 +51,7 @@ class TodoItem extends Component {
     return (
       <TouchableNativeFeedback>
         <View
-          style={[styles.time_wrap, dragingTaskCorrespondPeriodIndex === index ? styles.hover : {}]}
+          style={[styles.time_wrap, focus ? styles.hover : {}]}
           ref={getTimeItemRef}
         >
           <View style={styles.time_content} />
@@ -58,9 +65,12 @@ class TodoItem extends Component {
               {
                 item.data.map((v, i) => (
                   <PlanItem
+                    {...rest}
                     key={i}
                     type={checked ? 'breviaryTask' : 'showIconOnlyTask'}
-                    {...v}
+                    data={v}
+                    lastHandlePeriodIndex={lastHandlePeriodIndex}
+                    periodIndex={index}
                   />
                 ))
               }
@@ -81,14 +91,14 @@ class TodoItem extends Component {
 TodoItem.propTypes = {
   data: PropTypes.object,
   getTimeItemRef: PropTypes.func,
-  dragingTaskCorrespondPeriodIndex: PropTypes.number,
+  focus: PropTypes.bool,
   lastHandlePeriodIndex: PropTypes.number,
 };
 
 TodoItem.defaultProps = {
   data: {},
   getTimeItemRef: () => {},
-  dragingTaskCorrespondPeriodIndex: null,
+  focus: false,
   lastHandlePeriodIndex: null,
 };
 
