@@ -6,11 +6,9 @@ import {
   Image,
   // TouchableHighlight,
   ScrollView,
-  findNodeHandle,
-  NativeModules,
 } from 'react-native';
 import immer from 'immer';
-import Popover from 'react-native-modal-popover';
+import PopupDialog from 'react-native-popup-dialog';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -21,17 +19,16 @@ import I18nText from '../../../components/I18nText';
 import styles from './HomeworkCorrecting.scss';
 import * as correctingActions from '../../../actions/homeworkCorrectingAction';
 
+// function showToastNoMask() {
+//   Toast.info(<WrongReason />, 1, null, false);
+// }
+
 class HomeworkCorrecting extends Component {
   constructor(props) {
     super(props);
     this.state = {
       index: 0,
       // isVisible: false,
-      popInfo: {
-        score: undefined,
-        visible: false,
-        anchor: {},
-      },
     };
   }
 
@@ -41,28 +38,35 @@ class HomeworkCorrecting extends Component {
     actions.fetchListAction(homeworkId, 'REQUEST');
   }
 
-  setPopScore = (score) => {
-    this.setState(immer((state) => {
-      state.popInfo.score = score;
-    }));
+  // componentWillUnmount() {
+  //   DeviceEventEmitter.removeAllListeners('navigatorBack');
+  //   if (this.timer) {
+  //     clearTimeout(this.timer);
+  //     this.timer = null;
+  //   }
+  // }
+
+  setPopScore = (score, index) => {
+    const { actions } = this.props;
+    actions.setCorrectResultAction({ score, index });
   }
 
-  setButton = (index) => {
-    const handle = findNodeHandle(this[`partOfTheError${index}`]);
-    if (handle) {
-      NativeModules.UIManager.measure(handle, (x0, y0, width, height, x, y) => {
-        console.log(x, y, width, height);
-        this.setState(immer((state) => {
-          state.popInfo.anchor = {
-            x, y, width, height,
-          };
-        }));
-      });
-    }
-  };
+  // setButton = (index) => {
+  //   const handle = findNodeHandle(this[`partOfTheError${index}`]);
+  //   if (handle) {
+  //     NativeModules.UIManager.measure(handle, (x0, y0, width, height, x, y) => {
+  //       console.log(x, y, width, height);
+  //       this.setState(immer((state) => {
+  //         state.popInfo.anchor = {
+  //           x, y, width, height,
+  //         };
+  //       }));
+  //     });
+  //   }
+  // };
 
   openPop = (index) => {
-    this.setButton(index);
+    // this.setButton(index);
     this.setState(immer((state) => {
       state.popInfo.visible = true;
     }));
@@ -79,6 +83,23 @@ class HomeworkCorrecting extends Component {
   //     isVisible: !isVisible,
   //   });
   // }
+
+  // 完成批阅
+  finishReadOver = (item, index) => {
+    const { actions, list } = this.props;
+    const params = {
+      homeworkId: item.homeworkId,
+      studentId: item.studentId,
+      questionId: item.questionId,
+      score: item.popInfo.score,
+    };
+    // const newIndex = index < list.length - 1 ? index + 1 : index;
+    const bol = index < list.length - 1;
+    console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol);
+    if (bol) this.swiperRef.scrollBy(1);
+    // 这个scrollBy会触发 onIndexChanged 所以不需要在这边设置 this.setState({})
+    actions.saveCorrectResultAction(params, 'REQUEST');
+  }
 
   render() {
     const { list } = this.props;
@@ -176,7 +197,7 @@ class HomeworkCorrecting extends Component {
                         </I18nText>
                       </View>
                       {/* 错误 */}
-                      <TouchableOpacity onPress={() => this.setPopScore(10)}>
+                      <TouchableOpacity onPress={() => this.setPopScore(10, index1)}>
                         <I18nText style={[styles.foot_btn, styles.btn_color_green]}>
                           homeworkCorrecting.correct
                         </I18nText>
@@ -185,27 +206,15 @@ class HomeworkCorrecting extends Component {
                       {/* 部分正确 */}
                       <View>
                         {/* 气泡弹出框 */}
-                        <Popover
-                          contentStyle={[styles.contentStyle, {
-                            shadowOffset: { width: 0, height: 5 },
-                            shadowOpacity: 0.5,
-                            shadowRadius: 5,
-                            shadowColor: 'rgba(87,163,222,0.13)',
-                            elevation: 4,
-                          }]}
-                          visible={popInfo.visible}
-                          fromRect={popInfo.anchor}
-                          onClose={this.closePopover}
-                          placement="auto"
-                          backgroundStyle={{ opacity: 0, backgroundColor: 'rgba(0,0,0,0)' }}
+                        {/* <Button onClick={}>Without mask</Button> */}
+                        <PopupDialog
+                          ref={(popupDialog) => { this.popupDialog = popupDialog; }}
                         >
-                          {/* 模拟的 */}
-                          <WrongReason onChange={this.closePop} />
-                          {/* <Text>123</Text> */}
-                        </Popover>
+                          <WrongReason />
+                        </PopupDialog>
                         <TouchableOpacity
-                          onPress={() => this.openPop(index1)}
-                          ref={(node) => { this[`partOfTheError${index1}`] = node; }}
+                          onPress={() => this.popupDialog.show()}
+                          // ref={(node) => { this[`partOfTheError${index1}`] = node; }}
                         >
                           <I18nText style={[styles.foot_btn, styles.btn_color_orange]}>
                               homeworkCorrecting.partOfTheError
@@ -214,7 +223,7 @@ class HomeworkCorrecting extends Component {
                       </View>
                       <View style={styles.space_2} />
                       {/* 正确 */}
-                      <TouchableOpacity onPress={() => this.setPopScore(0)}>
+                      <TouchableOpacity onPress={() => this.setPopScore(0, index1)}>
                         <I18nText style={[styles.foot_btn, styles.btn_color_pink]}>
                           homeworkCorrecting.error
                         </I18nText>
@@ -222,13 +231,7 @@ class HomeworkCorrecting extends Component {
                     </View>
                     <View style={styles.foot_child_right}>
                       <TouchableOpacity
-                        onPress={() => {
-                          // const newIndex = index < list.length - 1 ? index + 1 : index;
-                          const bol = index < list.length - 1;
-                          console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol);
-                          if (bol) this.swiperRef.scrollBy(1);
-                          // 这个scrollBy会触发 onIndexChanged 所以不需要在这边设置 this.setState({})
-                        }}
+                        onPress={() => this.finishReadOver(item, index1)}
                       >
                         <I18nText style={[styles.foot_btn, styles.btn_color_right]}>
                           homeworkCorrecting.finishCorrectingAndNext

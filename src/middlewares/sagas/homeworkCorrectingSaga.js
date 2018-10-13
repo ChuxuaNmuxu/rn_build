@@ -7,6 +7,8 @@ import enhanceSaga from './enhanceSaga';
 export default function* homeworkCorrectingSaga() {
   // 获取list
   yield takeLatest('FETCH_HOMEWORK_CORRECTING_LIST_REQUEST', enhanceSaga(fetchListSaga));
+  // 保存分数
+  yield takeLatest('HOMEWORK_CORRECTING_SAVE_SCORE_REQUEST', enhanceSaga(saveScoreSaga));
 }
 
 function* fetchListSaga(action) {
@@ -37,6 +39,10 @@ function* fetchListSaga(action) {
           materialContent: '{"blocks":[{"key":"681f5","text":"材料哦啦啦啦啦啦啦啦啦","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
           questionNum: '5',
           parentId: '500245896731033600',
+          popInfo: {
+            score: undefined,
+            visible: false,
+          },
         },
         {
           id: '500248291653451784',
@@ -53,6 +59,10 @@ function* fetchListSaga(action) {
           materialContent: null,
           questionNum: '10',
           parentId: '500245896848474112',
+          popInfo: {
+            score: undefined,
+            visible: false,
+          },
         },
       ],
     };
@@ -64,5 +74,19 @@ function* fetchListSaga(action) {
     }
   } catch (e) {
     yield put(actions.fetchListAction(e, 'ERROR'));
+  }
+}
+
+function* saveScoreSaga(action) {
+  try {
+    const {
+      studentId, homeworkId, questionId, score,
+    } = action.payload;
+    const url = `/app/api/student/homeworks/${studentId}/${homeworkId}/${questionId}/mark?score=${score}`;
+    const fetch = arg => Fetch.post(url, arg);
+    const res = yield call(fetch);
+    console.log(res);
+  } catch (e) {
+    yield put(actions.saveCorrectResultAction(e, 'ERROR'));
   }
 }
