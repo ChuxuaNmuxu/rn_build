@@ -1,5 +1,5 @@
 import {
-  takeLatest, put, call, select,
+  takeLatest, put, call,
 } from 'redux-saga/effects';
 import R from 'ramda';
 import * as actions from '../../actions/homeworkTask';
@@ -9,9 +9,10 @@ import enhanceSaga from './enhanceSaga';
 
 export default function* homeworkTask() {
   yield takeLatest(actionTypes.FETCH_STUDENT_TASK_LIST, enhanceSaga(fetchStudentTaskListSaga));
+  yield takeLatest(actionTypes.SAVE_TASK, enhanceSaga(saveTaskSaga));
 }
 
-// 更改最后一次操作的时间段saga
+// 获取任务
 function* fetchStudentTaskListSaga() {
   const data = yield call(getStudentTaskList);
   const { plan, todo } = data;
@@ -39,9 +40,35 @@ function* getStudentTaskList(pageSize) {
       return false;
     }
 
+    yield put(actions.FetchStudentTaskList(null, 'SUCCESS'));
+
     return data;
   } catch (e) {
     yield put(actions.FetchStudentTaskList(null, 'ERROR'));
     return false;
+  }
+}
+
+// 更改任务
+function* saveTaskSaga({ payload: { id, scheduledNode, taskType } }) {
+  try {
+    let url = `/app/api/student/homeworks/${id}/schedule?taskType=${taskType}`;
+    if (scheduledNode) {
+      url += `&scheduledNode=${scheduledNode}`;
+    }
+    const fetch = () => Fetch.put(url);
+    const res = yield call(fetch);
+
+    const { code } = res;
+    if (code !== 0) {
+      yield put(actions.SaveTask(null, 'ERROR'));
+      console.log('更改任务失败：', res);
+    } else {
+      console.log('成功啦');
+      yield put(actions.SaveTask(null, 'SUCCESS'));
+    }
+  } catch (err) {
+    yield put(actions.SaveTask(null, 'ERROR'));
+    console.log('更改任务失败：', err);
   }
 }

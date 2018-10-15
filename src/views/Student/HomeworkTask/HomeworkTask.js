@@ -19,10 +19,12 @@ import Modal from '../../../components/Modal';
   const {
     homeworkTaskReducer: {
       position,
+      dragData,
     },
   } = state;
   return {
     position,
+    dragData,
   };
 }, dispatch => ({
   onFetchStudentTaskList: bindActionCreators(FetchStudentTaskList, dispatch),
@@ -54,7 +56,7 @@ class HomeworkTask extends Component {
 
   render() {
     const {
-      position,
+      position, dragData,
     } = this.props;
 
     return (
@@ -63,7 +65,7 @@ class HomeworkTask extends Component {
           this.renderHeader()
         }
         <TodoList />
-        <Drag position={position} />
+        <Drag position={position} data={dragData} />
         <PlanList />
         <Modal />
       </View>
@@ -74,11 +76,13 @@ class HomeworkTask extends Component {
 HomeworkTask.propTypes = {
   position: PropTypes.object,
   onFetchStudentTaskList: PropTypes.func,
+  dragData: PropTypes.object,
 };
 
 HomeworkTask.defaultProps = {
   position: {},
   onFetchStudentTaskList: () => {},
+  dragData: {},
 };
 
 export default HomeworkTask;

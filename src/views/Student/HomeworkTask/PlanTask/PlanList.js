@@ -3,6 +3,7 @@ import { View, FlatList, Text } from 'react-native';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import R from 'ramda';
 import PlanItemWrap from './PlanItemWrap';
 import styles from './planList.scss';
 import { currentTimeToPeriod } from '../../../../utils/common';
@@ -11,10 +12,11 @@ import {
   GetDropListenerRange,
   ChangeLastHandlePeriodIndex,
   RegetDropListenerRange,
-  ChangeDropIndex,
+  ChangeDropingData,
   ChangeTodoTask,
   ChangePlanTask,
   ChangeDragingTaskCorrespondPeriod,
+  SaveTask,
 } from '../../../../actions/homeworkTask';
 import { adaptiveRotation } from '../../../../utils/resolution';
 
@@ -25,6 +27,7 @@ import { adaptiveRotation } from '../../../../utils/resolution';
     dragingTaskCorrespondPeriodIndex,
     lastHandlePeriodIndex,
     isRegetDropListenerRange,
+    dragData,
   },
 }) => ({
   listenerRangeList,
@@ -32,15 +35,17 @@ import { adaptiveRotation } from '../../../../utils/resolution';
   dragingTaskCorrespondPeriodIndex,
   lastHandlePeriodIndex,
   isRegetDropListenerRange,
+  dragData,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
-  onChangeDropIndex: bindActionCreators(ChangeDropIndex, dispatch),
+  onChangeDropingData: bindActionCreators(ChangeDropingData, dispatch),
   onChangePlanTask: bindActionCreators(ChangePlanTask, dispatch),
   onChangeTodoTask: bindActionCreators(ChangeTodoTask, dispatch),
   onChangeDragingTaskCorrespondPeriod: bindActionCreators(ChangeDragingTaskCorrespondPeriod, dispatch),
   onChangeLastHandlePeriodIndex: bindActionCreators(ChangeLastHandlePeriodIndex, dispatch),
   onRegetDropListenerRange: bindActionCreators(RegetDropListenerRange, dispatch),
   onGetDropListenerRange: bindActionCreators(GetDropListenerRange, dispatch),
+  onSaveTask: bindActionCreators(SaveTask, dispatch),
 }))
 class PlanList extends Component {
   constructor(props) {
@@ -191,12 +196,14 @@ class PlanList extends Component {
       dragingTaskCorrespondPeriodIndex,
       lastHandlePeriodIndex,
       onRegetDropListenerRange,
-      onChangeDropIndex,
+      onChangeDropingData,
       onChangeTodoTask,
       onChangePlanTask,
       onChangeDragingTaskCorrespondPeriod,
       planList,
       onChangeLastHandlePeriodIndex,
+      onSaveTask,
+      dragData,
     } = this.props;
 
     return (
@@ -209,11 +216,14 @@ class PlanList extends Component {
         dragingTaskCorrespondPeriodIndex={dragingTaskCorrespondPeriodIndex}
         lastHandlePeriodIndex={lastHandlePeriodIndex}
         onRegetDropListenerRange={onRegetDropListenerRange}
-        onChangeDropIndex={onChangeDropIndex}
+        onChangeDropingData={onChangeDropingData}
         onChangeTodoTask={onChangeTodoTask}
         onChangePlanTask={onChangePlanTask}
         onChangeDragingTaskCorrespondPeriod={onChangeDragingTaskCorrespondPeriod}
         onChangeLastHandlePeriodIndex={onChangeLastHandlePeriodIndex}
+        onSaveTask={onSaveTask}
+        focus={data.index === dragingTaskCorrespondPeriodIndex}
+        dragData={dragData}
       />
     );
   }
@@ -231,7 +241,7 @@ class PlanList extends Component {
   }
 
   render() {
-    const { planList } = this.props;
+    const { planList, dragData } = this.props;
 
     return (
       <View
@@ -249,6 +259,7 @@ class PlanList extends Component {
           ListEmptyComponent={this.renderListEmpty}
           extraData={this.state}
           onMomentumScrollEnd={this.onMomentumScrollEnd}
+          scrollEnabled={R.isEmpty(dragData)}
         />
       </View>
     );
@@ -265,10 +276,12 @@ PlanList.propTypes = {
   onChangeLastHandlePeriodIndex: PropTypes.func,
   onRegetDropListenerRange: PropTypes.func,
   isRegetDropListenerRange: PropTypes.bool,
-  onChangeDropIndex: PropTypes.func,
+  onChangeDropingData: PropTypes.func,
   onChangePlanTask: PropTypes.func,
   onChangeTodoTask: PropTypes.func,
   onChangeDragingTaskCorrespondPeriod: PropTypes.func,
+  dragData: PropTypes.object,
+  onSaveTask: PropTypes.func,
 };
 
 PlanList.defaultProps = {
@@ -281,10 +294,12 @@ PlanList.defaultProps = {
   onChangeLastHandlePeriodIndex: () => {},
   onRegetDropListenerRange: () => {},
   isRegetDropListenerRange: false,
-  onChangeDropIndex: () => {},
+  onChangeDropingData: () => {},
   onChangePlanTask: () => {},
   onChangeTodoTask: () => {},
   onChangeDragingTaskCorrespondPeriod: () => {},
+  dragData: {},
+  onSaveTask: () => {},
 };
 
 export default PlanList;

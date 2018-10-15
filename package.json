@@ -26,6 +26,7 @@
     "gradle-stacktrace": "cd android && gradlew compiledebug --stacktrace"
   },
   "dependencies": {
+    "@cjfed/draftjs-to-html": "^0.7.7",
     "antd-mobile-rn": "^2.2.0",
     "immer": "^1.7.2",
     "md5": "^2.2.1",

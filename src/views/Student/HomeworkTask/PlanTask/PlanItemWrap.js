@@ -15,8 +15,8 @@ class TodoItem extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dragingTaskCorrespondPeriodIndex } = this.props;
-    if (dragingTaskCorrespondPeriodIndex === nextProps.data.index) return false;
+    const { focus } = nextProps;
+    if (focus === this.props) return false;
     return true;
   }
 
@@ -24,7 +24,7 @@ class TodoItem extends Component {
     const {
       data,
       getTimeItemRef,
-      dragingTaskCorrespondPeriodIndex,
+      focus,
       lastHandlePeriodIndex,
       ...rest
     } = this.props;
@@ -51,7 +51,7 @@ class TodoItem extends Component {
     return (
       <TouchableNativeFeedback>
         <View
-          style={[styles.time_wrap, dragingTaskCorrespondPeriodIndex === index ? styles.hover : {}]}
+          style={[styles.time_wrap, focus ? styles.hover : {}]}
           ref={getTimeItemRef}
         >
           <View style={styles.time_content} />
@@ -91,14 +91,14 @@ class TodoItem extends Component {
 TodoItem.propTypes = {
   data: PropTypes.object,
   getTimeItemRef: PropTypes.func,
-  dragingTaskCorrespondPeriodIndex: PropTypes.number,
+  focus: PropTypes.bool,
   lastHandlePeriodIndex: PropTypes.number,
 };
 
 TodoItem.defaultProps = {
   data: {},
   getTimeItemRef: () => {},
-  dragingTaskCorrespondPeriodIndex: null,
+  focus: false,
   lastHandlePeriodIndex: null,
 };
 

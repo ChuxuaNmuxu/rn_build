@@ -26,8 +26,9 @@ class UploadImgBefore extends Component {
   render() {
     const {
       type,
-      answered,
     } = this.props;
+    let { answered } = this.props;
+    answered = 1;
     let subjective;
     if (type >= 10) {
       subjective = true;
@@ -120,7 +121,7 @@ class UploadImgBefore extends Component {
 
 UploadImgBefore.propTypes = {
   type: PropTypes.number.isRequired,
-  answered: PropTypes.bool, // 客观题是否作答了的标识
+  answered: PropTypes.number, // 客观题是否作答了的标识
   updateImage: PropTypes.func, // 上传图片后的回调函数
 };
 

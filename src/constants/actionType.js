@@ -14,6 +14,8 @@ export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
  * ---------------公共组件ACTIONS-----------------------
  */
 export const COMMON_MODAL_OPPEN_OR_CLOSE = 'COMMON_MODAL_OPPEN_OR_CLOSE';
+// 错误原因返回
+export const WRONG_REASON_RETURN_FAIL_REASON = 'WRONG_REASON_RETURN_FAIL_REASON';
 
 /**
  * 错题本
@@ -39,6 +41,24 @@ export const CHECK_HOMEWORK_ISOPERABLE = 'CHECK_HOMEWORK_ISOPERABLE';
 export const FETCH_DOHOMEWORK_QUESTION = 'FETCH_DOHOMEWORK_QUESTION';
 // 答题，提交小题答案
 export const SUBMIT_DOHOMEWORK_ANSWER = 'SUBMIT_DOHOMEWORK_ANSWER';
+// 需要检查作业
+export const TOCHECK_HOMEWORK_QUESTION = 'TOCHECK_HOMEWORK_QUESTION';
+// 保存检查耗时
+export const TOSAVE_HOMEWORK_CHECKTIME = 'TOSAVE_HOMEWORK_CHECKTIME';
+// 提交作业
+export const SUBMIT_THIS_HOMEWORK = 'SUBMIT_THIS_HOMEWORK';
+
+// 客观题答案改变
+export const CHANGE_OBJECTIVE_ANSWER = 'CHANGE_OBJECTIVE_ANSWER';
+// 删除主观题或者客观题上传的解答过程答案
+export const DELETE_IMAGEURL_ANSWER = 'DELETE_IMAGEURL_ANSWER';
+// 改变对应题目的难易程度
+export const CHANGE_QUESTION_DIFFICULTLEVEL = 'CHANGE_QUESTION_DIFFICULTLEVEL';
+// 是否需要老师讲解
+export const CHANGE_NEEDEXPLAIN_STATUS = 'CHANGE_NEEDEXPLAIN_STATUS';
+// 一键上传图片
+export const UPLOAD_IMAGE_TOOSS = 'UPLOAD_IMAGE_TOOSS';
+
 
 /**
  * -------------任务计划----------------
@@ -52,7 +72,7 @@ export const CHANGE_PLAN_TASK = 'CHANGE_PLAN_TASK';
 // 取消计划任务
 export const CHANGE_TODO_TASK = 'CHANGE_TODO_TASK';
 // 正在拖拽的元素
-export const CHANGE_DRAG_INDEX = 'CHANGE_DRAG_INDEX';
+export const CHANGE_DRAGING_DATA = 'CHANGE_DRAGING_DATA';
 // 更改拖拽任务对应的时间段索引
 export const CHANGE_DRAGING_TASK_CORRESPOND_PERIOD = 'CHANGE_DRAGING_TASK_CORRESPOND_PERIOD';
 // 最后一次操作时间段的索引
@@ -61,6 +81,8 @@ export const CHANGE_LAST_HANDLE_PERIOD_INDEX = 'CHANGE_LAST_HANDLE_PERIOD_INDEX'
 export const REGET_DROP_LISTENER_RANGE = 'REGET_DROP_LISTENER_RANGE';
 // 获取学生作业列表
 export const FETCH_STUDENT_TASK_LIST = 'FETCH_STUDENT_TASK_LIST';
+// 保存任务
+export const SAVE_TASK = 'SAVE_TASK';
 
 /**
  *------------------------作业与考试详情页面-----------------------------------------

@@ -37,7 +37,7 @@ class UploadImgSuccess extends Component {
         </View>
         <Image
           source={{ uri: answerFileUrl }}
-          style={{ width, height, maxWidth: '100%' }}
+          style={{ width: width || '80%', height: height || 300, maxWidth: '100%' }}
         />
       </View>
     );

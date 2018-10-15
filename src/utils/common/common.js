@@ -1,6 +1,5 @@
 // 工具方法
 
-// import moment from 'moment';
 import moment from 'moment';
 import R from 'ramda';
 
@@ -304,5 +303,20 @@ export const strFormatterIconName = (str) => {
       return 'lishi1';
     default:
       return '';
+  }
+};
+
+// 任务类型对应的颜色 taskType (string, optional): 任务类型[1:作业任务,2:补做任务3:订正任务,4:批阅任务]
+export const taskTypeMapColor = (num) => {
+  switch (num) {
+    case 1:
+      return '#1ad982';
+    case 2:
+      return '#1ad982';
+    case 3:
+      return '#f86471';
+    case 4:
+      return '';
+    default:
   }
 };

@@ -27,7 +27,7 @@ export class Drop extends Component {
 
   render() {
     const { position: { x, y } } = this.state;
-    const { wrapStyle } = this.props;
+    const { wrapStyle, data } = this.props;
 
     return (
       <View style={{
@@ -36,9 +36,7 @@ export class Drop extends Component {
       >
         <Task
           wrapStyle={wrapStyle}
-          data={{
-            data: '我是拖拽元素',
-          }}
+          data={{ ...data, dragTask: true }}
         />
       </View>
     );
@@ -48,11 +46,13 @@ export class Drop extends Component {
 Drop.propTypes = {
   position: PropTypes.object,
   wrapStyle: PropTypes.object,
+  data: PropTypes.object,
 };
 
 Drop.defaultProps = {
   position: {},
   wrapStyle: {},
+  data: {},
 };
 
 export default Drop;

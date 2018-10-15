@@ -48,6 +48,7 @@ const RouteMap = props => (
     <Modal
       hideNavBar
       key="modal"
+      // initial
     >
       <Stack key="WelcomeStack" initial>
         <Scene title="welcome" hideNavBar key="Welcome" component={Welcome} />
@@ -58,7 +59,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        initial
+        // initial
       >
         <Tabs
           key="StudentTabs"
@@ -95,10 +96,12 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
+            // initial
           >
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
+              // initial
             />
           </Stack>
           {/* 错题本 */}
