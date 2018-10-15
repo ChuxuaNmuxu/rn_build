@@ -60,14 +60,13 @@ class PreviewHomework extends Component {
     if (homeworkId) {
       checkHomeworkAction({ homeworkId }, 'REQUEST');
     }
-    Actions.DoHomework({ homeworkId });
   }
 
   render() {
     const { previewTime } = this.state;
     const { data } = this.props;
     const { questionList } = data;
-    let content = '<div><p>内容文字</p></div>';
+    const content = '<div><p>内容文字</p></div>';
     return (
       <View style={styles.previewHomework_container}>
         <View style={styles.previewHomework_header}>

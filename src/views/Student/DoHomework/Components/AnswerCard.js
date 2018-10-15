@@ -25,26 +25,26 @@ class AnswerCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      optionCount: 4,
-      answered: false, // 客观题是否选择了答案
       source: null,
       showCropper: false,
       testUri: null,
       width: null,
       height: null,
+      fileName: null, // 图片名
     };
   }
 
   // 单选题、多选、判断、对应答案发生改变的函数
   handleToClickRadio = (i) => {
     const { handleToClickRadio, questions: { id, type } } = this.props;
-    this.setState({
-      answered: true,
-    });
     let answer = i;
     if (type === 2) {
       // 数组转字符串
       answer = i.join('');
+    }
+    if (type === 3 && i === -1) {
+      // 判断题选择错误时拿到的i为-1，要转为0给接口
+      answer = 0;
     }
     // 对客观题答案进行处理再传给接口
     if (handleToClickRadio) handleToClickRadio(id, answer);
@@ -54,33 +54,37 @@ class AnswerCard extends Component {
   difficultLevelChange = (a) => {
     // console.log(555, '当前选择的难易程度是', a);
     const { handleDifficultLevel, questions } = this.props;
-    handleDifficultLevel(a, questions.number);
+    handleDifficultLevel(questions.id, a);
   }
 
   // 不是很懂
-  handleCheckboxChange = (a) => {
-    console.log(666, '当前是否选择了不是很懂', a);
+  handleCheckboxChange = (e) => {
+    const { handleCheckboxChange, questions } = this.props;
+    handleCheckboxChange(questions.id, e);
   }
 
   // 上传图片后的回调函数
   updateImage = (source) => {
-    const { updateImage } = this.props;
-    if (updateImage) updateImage(source);
     this.setState({
       source,
+      fileName: source.fileName,
       showCropper: true,
     });
   }
 
   // 确定裁剪图片
   croppedImage = (uri, width, height) => {
-    const { showLoadingFun } = this.props;
+    const { showLoadingFun, questions } = this.props;
+    const { fileName } = this.state;
     showLoadingFun();
     this.setState({
       showCropper: false,
       testUri: uri,
       width,
       height,
+    }, () => {
+      const { handlePreviewImage } = this.props;
+      handlePreviewImage(questions.id, uri, fileName);
     });
   }
 
@@ -107,18 +111,20 @@ class AnswerCard extends Component {
     const {
       questions: {
         type,
+        answered,
+        answerFileUrl,
       },
       mistakeReform,
     } = this.props;
     const {
-      testUri, width, height, answered,
+      testUri, width, height,
     } = this.state;
     // 客观题的上传解答过程，错题重做页面调用时不显示
     if ((mistakeReform && type > 4) || !mistakeReform) {
-      if (testUri) {
+      if ((answerFileUrl && answerFileUrl.length) || testUri) {
         UpdateImgDiv = (
           <UploadImgSuccess
-            answerFileUrl={testUri}
+            answerFileUrl={answerFileUrl || testUri}
             width={parseInt(width)}
             height={parseInt(height)}
             deleteImg={this.deleteImg}
@@ -149,10 +155,9 @@ class AnswerCard extends Component {
   render() {
     const { questions, mistakeReform } = this.props;
     const {
-      optionCount,
       source, showCropper,
     } = this.state;
-    const { answer } = questions;
+    const { studentAnswer } = questions;
     return (
       <View style={styles.answerCard_container}>
         <View style={styles.question_title}>
@@ -165,10 +170,10 @@ class AnswerCard extends Component {
             {/* 单选 */}
             {questions.type === 1 && (
             <RadioComponent
-              options={optionCount}
+              options={questions.optionCount}
               childStyle={styles.radioStyle}
               handleRadioChange={this.handleToClickRadio}
-              radioAnswer={answer}
+              radioAnswer={studentAnswer}
             />
             )
             }
@@ -176,10 +181,10 @@ class AnswerCard extends Component {
             {
               questions.type === 2 && (
               <CheckboxComponent
-                options={optionCount}
+                options={questions.optionCount}
                 childStyle={styles.radioStyle}
                 handleMultiSelectChange={this.handleToClickRadio}
-                multiSelectAnswer={answer}
+                multiSelectAnswer={studentAnswer}
               />
               )
             }
@@ -187,7 +192,7 @@ class AnswerCard extends Component {
             {
               questions.type === 3 && (
                 <RadioGroup
-                  value={parseInt(answer)}
+                  value={parseInt(studentAnswer) === 1 ? 1 : -1}
                   onChange={this.handleToClickRadio}
                   style={styles.radio_wrapper}
                   iconWrapStyle={styles.radioStyle}
@@ -205,8 +210,8 @@ class AnswerCard extends Component {
               questions.type === 4 && (
                 <View style={styles.lineToStyle}>
                   <LineTo
-                    value={parseCorrespondingValue(answer)}
-                    optionSize={optionCount}
+                    value={parseCorrespondingValue(studentAnswer)}
+                    optionSize={questions.optionCount}
                     onChange={this.handleToClickRadio}
                   />
                 </View>
@@ -219,13 +224,19 @@ class AnswerCard extends Component {
         </View>
         {/* 难易程度---不默认且必选，错题重做页面调用时不显示 */}
         {
-          !mistakeReform && <DifficultLevelView onChange={this.difficultLevelChange} />
+          !mistakeReform
+          && (
+          <DifficultLevelView
+            onChange={this.difficultLevelChange}
+            defaultValue={questions.difficultyLevel}
+          />
+          )
         }
         {/* 不是很懂---错题重做页面调用时不显示 */}
         {
           !mistakeReform && (
           <Checkbox
-            // checked={checkboxDefaultChecked === 1}
+            checked={questions.needsExplain === 1}
             onChange={this.handleCheckboxChange}
             style={styles.notUnderstood}
             iconWrapStyle={styles.iconStyle}
@@ -252,8 +263,9 @@ AnswerCard.propTypes = {
   mistakeReform: PropTypes.bool, // 错题重做页面调用时用来标识调用方的
   handleDifficultLevel: PropTypes.func, // 难易程度发生改变的函数
   handleToClickRadio: PropTypes.func, // 单选题的回调函数
-  updateImage: PropTypes.func, // 上传图片后的回调函数
+  handlePreviewImage: PropTypes.func, // 上传图片后的回调函数
   deleteImg: PropTypes.func, // 删除图片答案的函数
+  handleCheckboxChange: PropTypes.func, // 改变不是很懂，请老师解答的复选框
   showLoadingFun: PropTypes.func, // 显示正在loading状态的函数
 };
 
@@ -261,7 +273,8 @@ AnswerCard.defaultProps = {
   mistakeReform: false,
   handleToClickRadio: () => {},
   handleDifficultLevel: () => {},
-  updateImage: () => {},
+  handlePreviewImage: () => {},
+  handleCheckboxChange: () => {},
   deleteImg: () => {},
   showLoadingFun: () => {},
 };

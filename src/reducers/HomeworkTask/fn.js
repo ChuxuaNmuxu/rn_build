@@ -20,7 +20,7 @@ export const getDropListenerReducer = (state, action) => {
  */
 export const changePlanTask = (state, action) => {
   if (R.type(action.payload) === 'Array') {
-    // action.payload.forEach(v => state.planList.push(v));
+    // action.payload.forEach(v => state.planList.unshift(v));
     state.planList = action.payload;
   } else if (R.type(action.payload) === 'Object') {
     if ('prevPeriodIndex' in action.payload) {
@@ -29,7 +29,7 @@ export const changePlanTask = (state, action) => {
       const currentPeriodData = state.planList[action.payload.currentPeriodIndex];
       const prevPeriodChildDragingIndex = prevPeriodData.data.findIndex(v => v.data === action.payload.data);
       prevPeriodData.data.splice(prevPeriodChildDragingIndex, 1);
-      currentPeriodData.data.push(action.payload);
+      currentPeriodData.data.unshift(action.payload);
       delete action.payload.currentPeriodIndex;
       delete action.payload.prevPeriodIndex;
       return;
@@ -46,13 +46,13 @@ export const changePlanTask = (state, action) => {
     // 排期
     const current = state.planList[action.payload.currentPeriodIndex];
     delete action.payload.currentPeriodIndex;
-    current.data.push(action.payload);
+    current.data.unshift(action.payload);
   }
 };
 
 export const changeTodoTask = (state, action) => {
   if (R.type(action.payload) === 'Array') {
-    // action.payload.forEach(v => state.todoList.push(v));
+    // action.payload.forEach(v => state.todoList.unshift(v));
     state.todoList = action.payload;
   } else if (R.type(action.payload) === 'Object') {
     if (action.payload.cancelTask) {
@@ -62,7 +62,7 @@ export const changeTodoTask = (state, action) => {
       delete action.payload.cancelTask;
     } else {
       // 取消排期
-      state.todoList.push(action.payload);
+      state.todoList.unshift(action.payload);
     }
   }
 };

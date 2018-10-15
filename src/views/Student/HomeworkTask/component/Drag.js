@@ -28,7 +28,7 @@ export class Drop extends Component {
   render() {
     const { position: { x, y } } = this.state;
     const { wrapStyle, data } = this.props;
-    console.log('drag-3111111111', data);
+
     return (
       <View style={{
         left: x, top: y, position: 'absolute', zIndex: 1,
