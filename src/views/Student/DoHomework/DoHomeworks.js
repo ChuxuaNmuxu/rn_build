@@ -39,26 +39,24 @@ class DoHomeworks extends Component {
       showExtendView: false, // 是否显示该份作业所有题目序号的扩展视图
       preveId: null, // 滑动切换题目前的题目id
       currentIndex: 0, // 当前题目index
-      showCommitBtn: true, // 当选择想检查时展示按钮--查看已答题目，选择不想检查则展示按钮--提交
+      checkStatus: 0, // 做作业右上角展示的按钮：0：作业还未选择是否想检查，1--查看已答题目，2--提交
       homeworkData: props.data || {}, // 本份作业的数据
       unAnswerQuesList: null, // 未作答的题目集合
       currentStartTime: moment(new Date()).format(), // 当前题目的开始时间
       uploadImgQuesId: null, // 上传图片要保存答案的题目id
     };
-    this.commitHomework = false;
+    this.commitHomework = false; // 是否点击了提交作业按钮
+    this.fetchHomeworkStatus = false; // 刚进入页面时是否请求到作业数据
   }
 
 
   componentDidMount() {
     // 请求做作业的题目数据
     const { actions: { fetchdoHomeworkAction }, homeworkId, showUnAnswerQues } = this.props;
-    console.log('当前这份作业id', homeworkId, showUnAnswerQues);
+    // console.log('当前这份作业id', homeworkId, showUnAnswerQues);
     fetchdoHomeworkAction({ homeworkId }, 'REQUEST');
-    // 控制刚进入做作业页面是否弹框提示
-    // this.setCheckModalVisibleFun(true);
     // 判断是否只需要展示未作答的题目，如果是，此时redux中一定有题目数据，直接取出放入unAnswerQuesList中，后续不要更新
     if (showUnAnswerQues) {
-      // console.log(7777, this.props.data);
       const unAnswerQuesList = [];
       const { data: { finalQuestionList } } = this.props;
       for (let i = 0; i < finalQuestionList.length; i++) {
@@ -74,12 +72,11 @@ class DoHomeworks extends Component {
 
   componentDidUpdate() {
     const { uploadImgSuccess, needMark } = this.props;
-    const { uploadImgQuesId } = this.state;
+    const { uploadImgQuesId, homeworkData } = this.state;
     // 上传图片成功后提交答案
     if (uploadImgSuccess && uploadImgQuesId) {
       this.fetchSaveQuestion(uploadImgQuesId);
     }
-    // console.log(233123421, needMark);
     // 提交作业成功后是否有互批作业
     if (this.commitHomework) {
       if (needMark) {
@@ -89,6 +86,17 @@ class DoHomeworks extends Component {
       }
 
       this.commitHomework = false;
+    }
+    // 在页面请求到作业数据后在此判断是否要展示 是否想检查 的模态框
+    if (!this.fetchHomeworkStatus && !R.isEmpty(homeworkData)) {
+      this.fetchHomeworkStatus = true;
+      // checkStatus---0：作业还未选择是否想检查，1--查看已答题目，2--提交
+      const { checkStatus } = homeworkData;
+      if (!checkStatus) {
+        // 未标记是否想检查作业--弹框提示
+        this.setCheckModalVisibleFun(true);
+      }
+      this.setBtnText(checkStatus);
     }
   }
 
@@ -144,9 +152,9 @@ class DoHomeworks extends Component {
   }
 
   // 控制右上角展示的按钮
-  setBtnText = (bool) => {
+  setBtnText = (num) => {
     this.setState({
-      showCommitBtn: bool,
+      checkStatus: num,
     });
   }
 
@@ -158,7 +166,6 @@ class DoHomeworks extends Component {
 
   // 点击提交的函数
   submitFun = () => {
-    // console.log(111, '提交函数');
     this.setVisibleFun(false);
     this.setCommitModalVisbleFun(true);
   }
@@ -173,9 +180,6 @@ class DoHomeworks extends Component {
 
   // 点击查看已答题目/检查---进入作业检查页面
   viewAnsweredQuesFun = () => {
-    // 去检查页面时请求需要检查作业的接口用于标识
-    const { actions: { checkHomeworkAction }, homeworkId } = this.props;
-    checkHomeworkAction({ homeworkId }, 'REQUEST');
     Actions.ReviewHomework();
     this.setCommitModalVisbleFun(false);
   }
@@ -237,19 +241,27 @@ class DoHomeworks extends Component {
 
   // 首次进入做作业页面时提示是否愿意检查---想检查--展示查看已答题目按钮
   willToCheckFun = () => {
-    this.setBtnText(false);
+    this.setBtnText(1);
+    this.toCheckHomeworkFun(1);
     this.setCheckModalVisibleFun(false);
   }
 
   // 不想检查--展示提交按钮
   notToCheckFun = () => {
-    this.setBtnText(true);
+    this.setBtnText(2);
+    this.toCheckHomeworkFun(2);
     this.setCheckModalVisibleFun(false);
+  }
+
+  // 请求 保存检查意愿 的接口
+  toCheckHomeworkFun = (checkStatus) => {
+    const { actions: { checkHomeworkAction }, homeworkId } = this.props;
+    checkHomeworkAction({ homeworkId, checkStatus }, 'REQUEST');
   }
 
   // 客观题答案发生改变的函数
   handleToClickRadio = (questionId, answer) => {
-    console.log(111, '当前题目选择的答案是', answer);
+    // console.log(111, '当前题目选择的答案是', answer);
     const { actions: { changeObjectiveAnswerAction } } = this.props;
     changeObjectiveAnswerAction({ questionId, answer });
     setTimeout(() => {
@@ -259,7 +271,7 @@ class DoHomeworks extends Component {
 
   // 不是很懂，请老师解答
   handleCheckboxChange = (questionId, e) => {
-    console.log(44444, '当前是否选择了不是很懂', e);
+    // console.log(22222, '当前是否选择了不是很懂', e);
     const { actions: { changeNeedExplainStatusAction } } = this.props;
     const needsExplain = e ? 1 : 0;
     changeNeedExplainStatusAction({ questionId, needsExplain });
@@ -309,7 +321,7 @@ class DoHomeworks extends Component {
 
   // 主观题上传答案或者客观题上传解答过程答案的函数
   handlePreviewImage = (questionId, e, imgName) => {
-    console.log(222, questionId, e, imgName);
+    // console.log(33333, questionId, e, imgName);
     const { actions: { uploadImageToOssAction } } = this.props;
     uploadImageToOssAction({ questionId, file: e, imgName });
     // 当从检查页面点击 未作答 热区 进来此页面时上传图片答案的题目id应该从此处给提交答案那，否则保存时题目id不对
@@ -320,7 +332,7 @@ class DoHomeworks extends Component {
 
   // 删除图片答案的函数
   deleteImg = (qid) => {
-    console.log('当前删除图片对应的题目id为：', qid);
+    // console.log('当前删除图片对应的题目id为：', qid);
     const { actions: { deleteImageUrlAnswwerAction } } = this.props;
     const { currentIndex, homeworkData: { finalQuestionList } } = this.state;
     deleteImageUrlAnswwerAction({ questionId: qid, type: finalQuestionList[currentIndex].type });
@@ -371,7 +383,7 @@ class DoHomeworks extends Component {
 
   // 渲染作业头部组件
   renderDohomeworkTop = (homeworkData, currentIndex, finalQuestionList) => {
-    const { showCommitBtn } = this.state;
+    const { checkStatus } = this.state;
     const { showUnAnswerQues } = this.props;
     return (
       <TouchableOpacity
@@ -398,7 +410,7 @@ class DoHomeworks extends Component {
             </View>
           </View>
           {
-            showCommitBtn
+            checkStatus === 2
               ? (
                 <CustomButton warpStyle={styles.submitBtn} style={styles.btnText} onPress={() => this.submitFun()}>
                   <I18nText>
@@ -438,7 +450,6 @@ class DoHomeworks extends Component {
       unAnswerQuesList,
     } = this.state;
     const { showUnAnswerQues } = this.props;
-    // console.log('做作业的数据有了', homeworkData);
     const { finalQuestionList } = homeworkData;
     // 作答题目情况,拿到题目总数，已作答题数，未作答题数
     const countQuesNum = finalQuestionList && finalQuestionList.length;
@@ -455,7 +466,6 @@ class DoHomeworks extends Component {
     }
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
-    console.log(8980, showQuesArray);
     return (
       <View style={styles.containers}>
         {this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}

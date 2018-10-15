@@ -5,8 +5,7 @@ import { View, Text, ScrollView } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import nzhcn from 'nzh/cn';
-import HTMLView from 'react-native-htmlview';
-// import draftToHtml from 'draftjs-to-html';
+// import HTMLView from 'react-native-htmlview';
 import PreviewQuesCard from './Components/PreviewQuesCard';
 import { handleFormattingTime } from '../../../utils/common';
 import { CustomButton } from '../../../components/Icon';
@@ -56,9 +55,9 @@ class PreviewHomework extends Component {
 
   // 跳转到做作业页面时需要请求检查该份作业状态的接口
   doHomeWork = () => {
-    const { actions: { checkHomeworkAction }, homeworkId } = this.props;
+    const { actions: { checkHomeworkStatusAction }, homeworkId } = this.props;
     if (homeworkId) {
-      checkHomeworkAction({ homeworkId }, 'REQUEST');
+      checkHomeworkStatusAction({ homeworkId }, 'REQUEST');
     }
   }
 
@@ -66,7 +65,6 @@ class PreviewHomework extends Component {
     const { previewTime } = this.state;
     const { data } = this.props;
     const { questionList } = data;
-    const content = '<div><p>内容文字</p></div>';
     return (
       <View style={styles.previewHomework_container}>
         <View style={styles.previewHomework_header}>
@@ -88,6 +86,13 @@ class PreviewHomework extends Component {
                   {`${nzhcn.encodeS(indexs + 1)}、${items.title}`}(本大题共{items.childrenList.length}小题)
                 </Text>
               </View>
+              {
+                items.content && (
+                <View>
+                  <Text>{items.content}</Text>
+                </View>
+                )
+              }
               {/*
                 items.content && (
                   <HTMLView
@@ -95,10 +100,6 @@ class PreviewHomework extends Component {
                     stylesheet={styles}
                   />)
                 */}
-              <HTMLView
-                value={content}
-                stylesheet={styles}
-              />
               {
                 items.childrenList.map((item, index) => <PreviewQuesCard key={index} questionData={item} />)
               }

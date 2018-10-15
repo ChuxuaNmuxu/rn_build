@@ -4,4 +4,4 @@ import * as types from '../constants/actionType';
 
 export const fetchPreviewHomeworkAction = actionCreator(types.FETCH_PREVIEWHOMEWORK_QUESTION, '请求预览作业页面的数据');
 
-export const checkHomeworkAction = actionCreator(types.CHECK_HOMEWORK_ISOPERABLE, '检查作业是否可做');
+export const checkHomeworkStatusAction = actionCreator(types.CHECK_HOMEWORK_ISOPERABLE, '检查作业是否可做');
