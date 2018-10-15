@@ -9,7 +9,10 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 // import { Actions } from 'react-native-router-flux';
+import * as actions from '../../../../../actions/previewHomeworkAction';
 import I18nText from '../../../../../components/I18nText';
 import styles from './Content.scss';
 
@@ -85,6 +88,15 @@ class Content extends Component {
     this.controlCalendarVisible(false);
   }
 
+  // 跳转到做作业页面时需要请求检查该份作业状态的接口
+  doHomeWork = () => {
+    const { actions: { checkHomeworkAction }, homeworkId } = this.props;
+    if (homeworkId) {
+      checkHomeworkAction({ homeworkId }, 'REQUEST');
+    }
+    Actions.DoHomework({ homeworkId });
+  }
+
   // 进行创建时间日期选择器
   async showPicker(options) {
     try {
@@ -104,6 +116,7 @@ class Content extends Component {
       console.warn('Error', message);
     }
   }
+
 
   render() {
     const {
@@ -205,7 +218,7 @@ class Content extends Component {
             </I18nText>
           </TouchableOpacity>
           {/* 开始作业 */}
-          <TouchableOpacity onPress={() => Actions.DoHomework({ homeworkId })}>
+          <TouchableOpacity onPress={this.doHomeWork}>
             <I18nText style={[styles.content_child_btn_normal, styles.content_child_btn_color]}>
               TaskDetail.beginHomework
             </I18nText>
@@ -225,9 +238,20 @@ Content.propTypes = {
   beginTime: PropTypes.string.isRequired,
   // 是否待批阅(默认false，如果是true 则是待批阅)
   waitReadOver: PropTypes.bool.isRequired,
+  actions: PropTypes.object.isRequired,
   // 当前这份作业的id
   homeworkId: PropTypes.string.isRequired,
-  actions: PropTypes.object.isRequired,
 };
 
-export default Content;
+const mapStateToProps = (state) => {
+  const { data } = state.previewHomeworkReducer;
+  return {
+    data,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

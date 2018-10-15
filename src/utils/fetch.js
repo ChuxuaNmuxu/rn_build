@@ -55,7 +55,10 @@ const Fetch = {
       headers['Content-Type'] = 'application/json';
       options.body = JSON.stringify(params);
     } else if (type === 'file') {
+      headers['Content-Type'] = 'multipart/form-data';
       options.body = params;
+      options.processData = false;
+      options.contentType = false;
     }
 
     return fetch(url, options)

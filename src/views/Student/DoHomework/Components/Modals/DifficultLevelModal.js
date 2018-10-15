@@ -25,8 +25,8 @@ class DifficultLevelModal extends Component {
   // 难易程度改变
   difficultLevelChange = (a) => {
     ModalApi.onClose();
-    const { handleDifficultLevel } = this.props;
-    handleDifficultLevel(a);
+    const { handleDifficultLevel, questionId } = this.props;
+    handleDifficultLevel(questionId, a);
   }
 
   // 提示内容
@@ -45,6 +45,7 @@ class DifficultLevelModal extends Component {
 
 DifficultLevelModal.propTypes = {
   handleDifficultLevel: PropTypes.func.isRequired,
+  questionId: PropTypes.string.isRequired,
 };
 
 export default DifficultLevelModal;

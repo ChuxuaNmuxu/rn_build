@@ -1,6 +1,5 @@
 // 工具方法
 
-// import moment from 'moment';
 import moment from 'moment';
 import R from 'ramda';
 
