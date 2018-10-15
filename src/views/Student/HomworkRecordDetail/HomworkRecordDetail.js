@@ -9,12 +9,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
-// import draftToHtml from '@cjfed/draftjs-to-html';
 import HTMLView from 'react-native-htmlview';
 // import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'ramda';
+import draftToHtml from './lib/draftjs-to-html';
 import * as actions from '../../../actions/recordDetailActions';
 import * as commonActions from '../../../actions/commonActions';
 import { CustomButton } from '../../../components/Icon';
@@ -174,7 +174,7 @@ class HomworkRecordDetail extends Component {
 
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
-    // console.log(draftToHtml(JSON.parse(htmlContent)), 'htmlViewComponent');
+    console.log(draftToHtml(JSON.parse(htmlContent)), 'htmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponent');
     const htmlViewStyles = StyleSheet.create({
       p: {
         fontSize: 24,
@@ -188,7 +188,7 @@ class HomworkRecordDetail extends Component {
     return (
       <View style={styles.htmlViewComponent}>
         <HTMLView
-          value={htmlContent}
+          value={draftToHtml(JSON.parse(htmlContent))}
           stylesheet={htmlViewStyles}
         />
       </View>
