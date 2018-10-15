@@ -1,7 +1,7 @@
 import actionCreator from './actionCreator';
 import * as types from '../constants/actionType';
 
-export const fetchDataAction = actionCreator(types.FETCH_MISTAKE, '错题重做-请求错题');
+export const saveQuestionsAction = actionCreator(types.SAVE_QUESTIONS, '错题重做-保存且修改上游传过来的数据');
 export const showWrongInfoAction = actionCreator(types.MISTAKE_SUBMIT_ANSWER_ERROR, '错题重做-显示错误答案提示');
 export const showWrongInfoRadioAction = actionCreator(
   types.MISTAKE_SUBMIT_ANSWER_ERROR_SHOW_RADIO,
@@ -26,4 +26,8 @@ export const fetchSubjectiveAnswerAction = actionCreator(
 export const controlSubjectiveButtonAction = actionCreator(
   types.MISTAKE_CHANGE_SUBJECTIVE_SHOWBUTTON,
   '错题重做-主观题-点击那个错误的按钮，把这一行隐藏掉',
+);
+export const saveObjectiveAnswerAction = actionCreator(
+  types.MISTAKE_CHANGE_SAVE_SINGLE_ANSWER,
+  '错题重做-保存单选题答案',
 );

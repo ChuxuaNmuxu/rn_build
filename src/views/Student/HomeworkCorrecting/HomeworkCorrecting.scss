@@ -111,3 +111,54 @@
 .space_2 {
   width: 12px;
 }
+
+.contentStyle {
+  background:#ffffff;
+  border-radius:8px;
+  width:421px;
+  height:259px;
+}
+// 模拟胜文的
+.customContent {
+  width: 400px;
+  height: 164px;
+  // background-color: blue;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 19px 24px;
+}
+
+.customContentItem {
+  flex: 2;
+  width: 400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: aqua;
+}
+
+.btn {
+  border:1px solid #dbdbdb;
+  border-radius:50px;
+  width:208px;
+  height:70px;
+  line-height: 70px;
+  text-align: center;
+  margin-right: 30px;
+}
+
+.radio_wrapper {
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+}
+
+.radio_childStyle {
+  margin: 6px;
+  // width: 88px;
+  // height: 71px;
+}

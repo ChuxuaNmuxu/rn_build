@@ -96,17 +96,17 @@ const RouteMap = props => (
             image="jilu"
             selectedImage="jilu"
             hideNavBar
-            initial
+            // initial
           >
             <Scene
               key="ProblemRecords"
               component={ProblemRecords}
-              initial
+              // initial
             />
           </Stack>
           {/* 错题本 */}
           <Stack
-            // initial
+            initial
             title="wrongNotes" // 配好在zh.js、en.js那边了
             key="ProblemOverviewStack"
             image="cuotiben1"
