@@ -67,3 +67,7 @@ export const saveSingleSelect = (state, action) => {
   const { value, index } = action.payload;
   state.questions[index].controlComponent.objectiveAnswer.value = value;
 };
+
+export const confirmDelete = (state, action) => {
+  state.questions = action.payload;
+};

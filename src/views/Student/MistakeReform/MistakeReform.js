@@ -22,6 +22,7 @@ import CIcon from '../../../components/Icon';
 import AnswerCard from '../DoHomework/Components/AnswerCard';
 import WrongReason from '../../../components/WrongReason';
 import styles from './MistakeReform.scss';
+import problemImg from '../../../public/img/problem.png';
 
 class MistakeReform extends Component {
   constructor(props) {
@@ -188,7 +189,6 @@ class MistakeReform extends Component {
     </View>
   )
 
-  // demo的函数名乱搞的，写代码的大佬别乱copy
   showConfirmModal = (item) => {
     const data = {
       lCallbakFn: this.leftFn,
@@ -435,7 +435,7 @@ class MistakeReform extends Component {
               }}
             >
               {
-                questions.map((item, i) => (
+                questions.length !== 0 ? questions.map((item, i) => (
                   <View key={i}>
                     {/* 题目 */}
                     <View style={styles.questionCard_container}>
@@ -466,7 +466,17 @@ class MistakeReform extends Component {
                     {/* 错误信息的总结(radio) */}
                     { this.showErrorRadio(item, i) }
                   </View>
-                ))
+                )) : (
+                  <View className="finish_picture">
+                    <View className="finish_picture_child_view">
+                      <Image
+                        style={{ width: '100%', height: '100%' }}
+                        source={require('../../../public/img/problem.png')}
+                      />
+                      <Text>错题已复习完毕</Text>
+                    </View>
+                  </View>
+                )
             }
             </Swiper>
           </View>

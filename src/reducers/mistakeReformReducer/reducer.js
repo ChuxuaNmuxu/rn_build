@@ -19,6 +19,8 @@ const handle = {
   MISTAKE_CHANGE_SUBJECTIVE_SHOWBUTTON: fn.controlSubjectButton,
   // 保存单选题答案
   MISTAKE_CHANGE_SAVE_SINGLE_ANSWER: fn.saveSingleSelect,
+  // 确认删除此错题
+  MISTAKE_SUBMIT_ANSWER_CORRECT_CONFIRM_SUCCESS: fn.confirmDelete,
 };
 
 export default createReducer(initState, handle);

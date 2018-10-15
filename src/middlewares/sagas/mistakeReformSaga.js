@@ -1,8 +1,9 @@
 import {
   takeLatest, put, fork, call, select,
 } from 'redux-saga/effects';
-// import { delay } from 'redux-saga';
+import { delay } from 'redux-saga';
 // import api from '../../utils/fetch';
+import R from 'ramda';
 import immer from 'immer';
 import moment from 'moment';
 import * as actions from '../../actions/mistakeReformAction';
@@ -63,10 +64,12 @@ function* submitAnswerSaga(action) {
     const { item: { type } } = action.payload;
     // 0:综合题 1:单选题 2:多选题 3:判断题 4:对应题, 10:填空题 11:主观题
     if (type === 1 || type === 2 || type === 3 || type === 4) {
+      // 客观题
       yield fork(objectiveSaga, action);
     }
-    if (type === 11) {
-      yield fork(type11Saga, action);
+    if (type === 10 || type === 11) {
+      // 主观题
+      yield fork(subjectiveSaga, action);
     }
   } catch (e) {
     yield put(actions.submitAnswerAction(e, 'ERROR'));
@@ -85,7 +88,7 @@ function* submitRadioSaga(action) {
     console.log('错题radio', res);
     const { code } = res;
     if (res.code === 0) {
-      yield put(actions.submitRadioAction({ value, index }, 'SUCCESS'));
+      yield put(actions.submitRadioAction({ value, index }, 'SUCCESS')); // 目前没做什么操作
     } else {
       yield put(actions.submitRadioAction(code, 'ERROR'));
     }
@@ -103,9 +106,14 @@ function* confirmDeleteSaga(action) {
     console.log('移除错题本', res);
     const { code } = res;
     if (code === 0) {
-      yield put(actions.correctConfirmAction({ index }, 'SUCCESS')); // 目前没做什么操作
-      // 成功后的回调
       callback();
+      yield call(delay, 3000); // 试试等callback函数那边执行完后（那边的执行是2秒），再执行这边
+      const state = yield select(getState);
+      const { questions } = state.mistakeReformReducer;
+      // 成功后删除
+      const newQuestions = R.remove(index, 1, questions);
+      yield put(actions.correctConfirmAction(newQuestions, 'SUCCESS')); // 目前没做什么操作
+      // 成功后的回调
     } else {
       yield put(actions.correctConfirmAction(code, 'ERROR'));
     }
@@ -116,7 +124,7 @@ function* confirmDeleteSaga(action) {
 
 function* objectiveSaga(action) {
   try {
-    console.log('主观题saga', action.payload);
+    console.log('客观题saga', action.payload);
     const { index, item } = action.payload;
     // console.log(action);
     const state = yield select(getState);
@@ -160,21 +168,33 @@ function* objectiveSaga(action) {
     yield put(actions.submitAnswerAction(error, 'ERROR'));
   }
 }
-function* type11Saga(action) {
+function* subjectiveSaga(action) {
   // 请求正确答案、别人答案
   try {
-    const { index } = action.payload;
-    // console.log(action);
-    // const url = '/analysis/grade/gradereport';
-    // const fetch = (params) => api.get(url, params);
-    // const res = yield call(fetch);
-    // const { code, data: { items } } = res;
-    // yield call(delay, 100);// 模拟异步 1秒延迟
+    const { index, item } = action.payload;
+    console.log('主观题saga', action.payload);
+    const state = yield select(getState);
+    const startTime = moment(new Date()).format();
+    const endTime = moment(new Date()).format();
+    console.log(startTime, endTime);
+    console.log(state.mistakeReformReducer.questions[index].controlComponent.objectiveAnswer.value);
+    const params = {
+      startTime,
+      endTime,
+      // answer: state.mistakeReformReducer.questions[index].controlComponent.objectiveAnswer.value,
+      answerFileId: item.answerFileId, // 没有图片就不需要传
+    };
+    const url = `/app/api/student/failed-questions/${item.id}/answer?category=${item.category}`;
+    const fetch = arg => Fetch.post(url, arg);
+    const res = yield call(fetch, params);
+    console.log(120, res);
     // 模拟数据
     const code = 0;
     // console.warn('年级接口res=', res)
     if (code === 0) {
+      // 老师的答案
       const teacherAnswer = 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png';
+      // 学生的答案
       const otherStudentAnswer = [
         'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
         'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
