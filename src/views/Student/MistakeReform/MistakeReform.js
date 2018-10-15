@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  StyleSheet,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import HTMLView from 'react-native-htmlview';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -22,7 +24,8 @@ import CIcon from '../../../components/Icon';
 import AnswerCard from '../DoHomework/Components/AnswerCard';
 import WrongReason from '../../../components/WrongReason';
 import styles from './MistakeReform.scss';
-import problemImg from '../../../public/img/problem.png';
+import draftToHtml from '../../../utils/draftjsToHtml';
+// import problemImg from '../../../public/img/problem.png';
 
 class MistakeReform extends Component {
   constructor(props) {
@@ -44,6 +47,29 @@ class MistakeReform extends Component {
 
   componentDidMount() {
     console.log('调用 错题重做 MistakeReform 组件', this.props);
+  }
+
+  // 富文本数据展示框
+  htmlViewComponent=(htmlContent) => {
+    // console.log(draftToHtml(JSON.parse(htmlContent)), 'htmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponent');
+    const htmlViewStyles = StyleSheet.create({
+      p: {
+        fontSize: 24,
+        color: '#999999',
+      },
+    });
+    // const htmlContent = '<p>zhazhazha</p>'
+    // + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
+    // + 'alt="undefined" style="float:none;height: auto;width: auto"/>'
+    // + '<p>曹尼玛的富文本</p>';
+    return (
+      <View style={styles.htmlViewComponent}>
+        <HTMLView
+          value={draftToHtml(JSON.parse(htmlContent))}
+          stylesheet={htmlViewStyles}
+        />
+      </View>
+    );
   }
 
   // 导航条右侧是否有 index
@@ -263,36 +289,44 @@ class MistakeReform extends Component {
     return null;
   }
 
+  // 主观题上传答案或者客观题上传解答过程答案的函数
+  handlePreviewImage = (questionId, e, imgName) => {
+    console.log(222, questionId, e, imgName);
+    const { actions: { updateImageAction, selectAnswerAction } } = this.props;
+    const { index } = this.state;
+    updateImageAction({ index, urlSource: { questionId, file: e, imgName } });
+    selectAnswerAction({ index });
+    // uploadImageToOssAction({ questionId, file: e, imgName });
+    // 当从检查页面点击 未作答 热区 进来此页面时上传图片答案的题目id应该从此处给提交答案那，否则保存时题目id不对
+    // this.setState({
+    //   uploadImgQuesId: questionId,
+    // });
+  }
+
   // 上传的图片
   showImageOrTitle = ({ item }) => {
     const {
-      showSubjectiveInfo: {
-        urlSource,
-      },
-    } = item.controlComponent;
-    if (urlSource) {
-      const {
-        uri = null,
-        // width = null,
-        // height = null,
-      } = urlSource;
-      if (uri && uri.length > 0) {
-        return (
-          <View style={styles.updateImage_container}>
-            <View style={styles.question_title}>
-              <I18nText style={styles.question_title_txt}>
-            DoHomeworks.answerCard.toAnswer
-              </I18nText>
-            </View>
-            <View style={styles.image_container}>
-              <Image
-                source={{ uri }}
-                style={{ width: '100%', height: '100%' }}
-              />
-            </View>
-          </View>
-        );
-      }
+      studentAnswer,
+    } = item.controlComponent.showSubjectiveInfo;
+    if (studentAnswer) {
+      console.log(319, studentAnswer);
+    //   if (studentAnswer) {
+    //     return (
+    //       <View style={styles.updateImage_container}>
+    //         <View style={styles.question_title}>
+    //           <I18nText style={styles.question_title_txt}>
+    //         DoHomeworks.answerCard.toAnswer
+    //           </I18nText>
+    //         </View>
+    //         <View style={styles.image_container}>
+    //           <Image
+    //             source={{ uri: studentAnswer }}
+    //             style={{ width: '100%', height: '100%' }}
+    //           />
+    //         </View>
+    //       </View>
+    //     );
+    //   }
     }
     return (
       <View>
@@ -301,19 +335,17 @@ class MistakeReform extends Component {
           questions={item}
           mistakeReform
           handleToClickRadio={(id, value) => this.handleToClickRadio(id, value, item)}
-          updateImage={this.updateImage}
+          // updateImage={this.updateImage}
+          handlePreviewImage={this.handlePreviewImage}
         />
       </View>
     );
   }
 
   // 上传图片的回调函数
-  updateImage = (source) => {
-    const { actions: { updateImageAction, selectAnswerAction } } = this.props;
-    const { index } = this.state;
-    updateImageAction({ index, urlSource: source });
-    selectAnswerAction({ index });
-  }
+  // updateImage = (source) => {
+
+  // }
 
   // 显示主观题的题目答案、别人家的答案等
   showSubjective = ({ item, index }) => {
@@ -329,24 +361,34 @@ class MistakeReform extends Component {
             <View>
               <View style={styles.answer_wrap}>
                 <Text style={styles.answer_title}>题目答案:</Text>
-                <ThumbnailImage
-                  option={{
-                    url: teacherAnswer,
-                  }}
-                />
+                {
+              // 后台可能返回null给我
+              teacherAnswer && (
+              <ThumbnailImage
+                option={{
+                  url: teacherAnswer,
+                }}
+              />
+              )
+                }
               </View>
             </View>
             <View style={styles.dotted_line} />
+            {/* {
+              // 后台可能返回空数组给我
+              otherStudentAnswer.length && ( */}
             <View>
               <View style={styles.answer_wrap}>
                 <Text style={styles.answer_title}>看看其他同学的解答过程:</Text>
                 <View style={styles.other_student_answer}>
                   {
+                    // 缩略图:thumbUrl 大图: fileUrl 名称: studentName
                   otherStudentAnswer.map((item2, i) => (
                     <View style={{ marginRight: 25 }} key={i}>
                       <ThumbnailImage
                         option={{
-                          url: item2,
+                          url: item2.fileUrl,
+                          studentName: item2.studentName,
                         }}
                       />
                     </View>
@@ -355,6 +397,8 @@ class MistakeReform extends Component {
                 </View>
               </View>
             </View>
+            {/* )
+            } */}
           </View>
           {
               showTrueOrFalseButton ? (

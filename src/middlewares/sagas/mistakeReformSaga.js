@@ -41,6 +41,7 @@ function* saveQeustionsSaga(action) {
           },
           showSubjectiveInfo: {
             urlSource: {},
+            answerInfo: {}, // 主观题的返回信息
             showAll: false,
             otherStudentAnswer: [],
             teacherAnswer: '',
@@ -174,42 +175,81 @@ function* subjectiveSaga(action) {
     const { index, item } = action.payload;
     console.log('主观题saga', action.payload);
     const state = yield select(getState);
-    const startTime = moment(new Date()).format();
-    const endTime = moment(new Date()).format();
-    console.log(startTime, endTime);
-    console.log(state.mistakeReformReducer.questions[index].controlComponent.objectiveAnswer.value);
-    const params = {
-      startTime,
-      endTime,
-      // answer: state.mistakeReformReducer.questions[index].controlComponent.objectiveAnswer.value,
-      answerFileId: item.answerFileId, // 没有图片就不需要传
-    };
-    const url = `/app/api/student/failed-questions/${item.id}/answer?category=${item.category}`;
-    const fetch = arg => Fetch.post(url, arg);
-    const res = yield call(fetch, params);
-    console.log(120, res);
-    // 模拟数据
-    const code = 0;
-    // console.warn('年级接口res=', res)
+    const { urlSource } = state.mistakeReformReducer.questions[index].controlComponent.showSubjectiveInfo;
+    console.log(181, urlSource);
+    // OSS的操作
+    const { questionId, file, imgName } = urlSource;
+    const imgNameType = imgName ? imgName.substring(imgName.lastIndexOf('.'), imgName.length) : '.png';
+    const url = '/api/oss-upload-parameters';
+    const fetch = (arg, type) => Fetch.post(url, arg, type);
+    const res = yield call(fetch, {}, 'json');
+    console.log('OSS第一步res=', res);
+    const { code, data } = res;
+    // 第二部
     if (code === 0) {
-      // 老师的答案
-      const teacherAnswer = 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png';
-      // 学生的答案
-      const otherStudentAnswer = [
-        'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
-        'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
-        'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
-      ];
-      yield put(actions.fetchSubjectiveAnswerAction(
-        {
-          index, showAll: true, teacherAnswer, otherStudentAnswer,
-        },
-        'SUCCESS',
-      ));
-      // 这步是判断是否还要显示提交按钮，因为正确与错误信息显示以后，就不需要再显示提交按钮了
-      yield put(actions.selectAnswerAction({ index }));
-    } else {
-      yield put(actions.fetchSubjectiveAnswerAction(code, 'ERROR'));
+      const formData = new FormData();
+      const i = {
+        key: data.objectKey,
+        OSSAccessKeyId: data.accessId,
+        callback: data.callback,
+        signature: data.signature,
+        success_action_status: 200,
+        policy: data.policy,
+        'x:filename': 9 + imgNameType,
+      };
+      R.forEachObjIndexed((value, key) => {
+        formData.append(key, value);
+      })(i);
+      formData.append('file', { uri: file, type: `image/${imgNameType}`, name: 9 + imgNameType }, 9 + imgNameType);
+      const fetch2 = (arg, type) => Fetch.post(data.uploadUrl, arg, type);
+      const res2 = yield call(fetch2, formData, 'file');
+      const code2 = res2.code;
+      const data2 = res2.data;
+      // 第三部
+      console.log('OSS第二部res2=', res2);
+      if (code2 === 0) {
+        const startTime = moment(new Date()).format();
+        const endTime = moment(new Date()).format();
+        const thirdParams = {
+          startTime,
+          endTime,
+          answer: data2.url,
+          answerFileId: data2.fileId,
+        };
+        const thirdUrl = `/app/api/student/failed-questions/${item.id}/answer?category=${item.category}`;
+        console.log(220, thirdUrl);
+        const thirdFetch = arg => Fetch.post(thirdUrl, arg);
+        // const res333 = yield thirdFetch(thirdParams);
+        // console.log('res333=', res333);
+        const res3 = yield call(thirdFetch, thirdParams);
+        console.log('OSS 第三部 res3=', res3);
+        const code3 = res3.code;
+        const data3 = res3.data;
+        if (code3 === 0) {
+          const studentAnswer = data3.answerFileUrl; // 截图的时候就有了
+          const teacherAnswer = data3.explainImageUrl;
+          const otherStudentAnswer = data3.classMatesAnswers;
+          // if (otherStudentAnswer && otherStudentAnswer.length > 0) {
+          //     for (let j = 0; j < otherStudentAnswer.length; j++) {
+          //         let excellAnswer = {};
+          //         excellAnswer.smallSrc = otherStudentAnswer[j].thumbUrl;
+          //         excellAnswer.bigSrc = otherStudentAnswer[j].fileUrl;
+          //         excellAnswer.studentName = otherStudentAnswer[j].studentName;
+          //         excellAnswerImgArr.push(excellAnswer)
+          //     }
+          // }
+          yield put(actions.fetchSubjectiveAnswerAction(
+            {
+              index, showAll: true, teacherAnswer, otherStudentAnswer, studentAnswer,
+            },
+            'SUCCESS',
+          ));
+          // 这步是判断是否还要显示提交按钮，因为正确与错误信息显示以后，就不需要再显示提交按钮了
+          yield put(actions.selectAnswerAction({ index }));
+        } else {
+          yield put(actions.fetchSubjectiveAnswerAction(code, 'ERROR'));
+        }
+      }
     }
   } catch (error) {
     yield put(actions.fetchSubjectiveAnswerAction(error, 'ERROR'));
