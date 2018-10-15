@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import CIcon from '../../../../components/Icon';
 import styles from './task.scss';
-import { mergeStyles, strFormatterIconName } from '../../../../utils/common';
+import { mergeStyles, strFormatterIconName, taskTypeMapColor } from '../../../../utils/common';
 import { adaptiveRotation } from '../../../../utils/resolution';
 import { ModalApi } from '../../../../components/Modal';
 
@@ -296,7 +296,7 @@ class TaskItem extends React.Component {
               )
               : (
                 <View
-                  style={mergeStyles(styles.task, wrapStyle)}
+                  style={mergeStyles(styles.task, wrapStyle, { backgroundColor: taskTypeMapColor(data.taskType) })}
                   ref={(ref) => { this.taskRef = ref; }}
                 >
                   <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>

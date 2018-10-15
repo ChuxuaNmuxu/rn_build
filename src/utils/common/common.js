@@ -299,11 +299,10 @@ export const taskTypeMapColor = (num) => {
     case 1:
       return '#1ad982';
     case 2:
-      return '#1ad982';
+      return '#fad961';
     case 3:
       return '#f86471';
-    case 4:
-      return '';
     default:
+      return '#1ad982';
   }
 };

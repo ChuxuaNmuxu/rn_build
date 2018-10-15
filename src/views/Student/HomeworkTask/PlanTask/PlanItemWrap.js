@@ -57,7 +57,6 @@ class TodoItem extends Component {
           <View style={styles.time_content} />
           <View style={[styles.time_box, checked ? styles.time_box_checked : {}]}>
             <View style={styles.task_list}>
-              <Text>{index}</Text>
               {/*
                 * 1.有任务状态
                 * 2.进入时自动居中状态或者当前正在操作状态
