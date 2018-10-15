@@ -45,6 +45,7 @@ class DoHomeworks extends Component {
       currentStartTime: moment(new Date()).format(), // 当前题目的开始时间
       uploadImgQuesId: null, // 上传图片要保存答案的题目id
     };
+    this.commitHomework = false;
   }
 
 
@@ -78,11 +79,16 @@ class DoHomeworks extends Component {
     if (uploadImgSuccess && uploadImgQuesId) {
       this.fetchSaveQuestion(uploadImgQuesId);
     }
+    // console.log(233123421, needMark);
     // 提交作业成功后是否有互批作业
-    if (needMark) {
-      this.setRemarkModalVisibleFun(true);
-    } else {
-      this.setTipModalVisibleFun(true);
+    if (this.commitHomework) {
+      if (needMark) {
+        this.setRemarkModalVisibleFun(true);
+      } else {
+        this.setTipModalVisibleFun(true);
+      }
+
+      this.commitHomework = false;
     }
   }
 
@@ -162,6 +168,7 @@ class DoHomeworks extends Component {
     // 提交整份作业的操作--请求提交作业的接口
     const { actions: { submitHomeworkAction }, homeworkId } = this.props;
     submitHomeworkAction({ homeworkId }, 'REQUEST');
+    this.commitHomework = true;
   }
 
   // 点击查看已答题目/检查---进入作业检查页面
@@ -448,6 +455,7 @@ class DoHomeworks extends Component {
     }
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
+    console.log(8980, showQuesArray);
     return (
       <View style={styles.containers}>
         {this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
@@ -542,7 +550,7 @@ class DoHomeworks extends Component {
 DoHomeworks.propTypes = {
   data: PropTypes.object.isRequired,
   uploadImgSuccess: PropTypes.bool.isRequired, // 上传图片并成功改变redux数据的标识
-  needMark: PropTypes.bool.isRequired, // 提交作业后是否有互批作业的标识
+  needMark: PropTypes.number.isRequired, // 提交作业后是否有互批作业的标识
   actions: PropTypes.object.isRequired,
   homeworkId: PropTypes.string,
   showUnAnswerQues: PropTypes.bool,

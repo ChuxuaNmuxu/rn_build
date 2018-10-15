@@ -5,7 +5,7 @@ const initState = {
   // 做作业数据
   data: {},
   uploadImgSuccess: false, // 是否完成上传图片后改变题目数据的action
-  needMark: false, // 用来标识提交作业成功后是否有互批作业 
+  needMark: 0, // 用来标识提交作业成功后是否有互批作业 
 };
 
 const handle = {
