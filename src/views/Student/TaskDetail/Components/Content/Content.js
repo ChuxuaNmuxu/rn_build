@@ -88,13 +88,12 @@ class Content extends Component {
     this.controlCalendarVisible(false);
   }
 
-  // 跳转到做作业页面时需要请求检查该份作业状态的接口
+  // 跳转到做作业页面时需要请求检查该份作业状态的接口,在saga中会根据接口返回的作业状态判断是否要跳到做作业页面，作业无效则会跳回首页
   doHomeWork = () => {
-    const { actions: { checkHomeworkAction }, homeworkId } = this.props;
+    const { actions: { checkHomeworkStatusAction }, homeworkId } = this.props;
     if (homeworkId) {
-      checkHomeworkAction({ homeworkId }, 'REQUEST');
+      checkHomeworkStatusAction({ homeworkId }, 'REQUEST');
     }
-    Actions.DoHomework({ homeworkId });
   }
 
   // 进行创建时间日期选择器

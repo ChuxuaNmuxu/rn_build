@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { PropTypes } from 'prop-types';
+import HTMLView from 'react-native-htmlview';
+import draftToHtml from '../../HomworkRecordDetail/lib/draftjs-to-html';
 import nzhcn from 'nzh/cn';
 import styles from './QuestionCard.scss';
 import { getQuestionTypeName } from '../../../../utils/common';
@@ -29,9 +31,12 @@ class QuestionCard extends Component {
               <View style={styles.question_content}>
                 {
                   questions.materialContent && (
-                  <View style={styles.material_box}>
-                    <Text>{questions.materialContent}</Text>
-                  </View>
+                    <View style={styles.material_box}>
+                      <HTMLView
+                        value={draftToHtml(JSON.parse(questions.materialContent))}
+                        stylesheet={styles}
+                      />
+                    </View>
                   )
                 }
               </View>
@@ -67,7 +72,10 @@ class QuestionCard extends Component {
             }
           </View>
           <View style={styles.question_content}>
-            <Text>{questions.content}</Text>
+            <HTMLView
+              value={draftToHtml(JSON.parse(questions.content))}
+              stylesheet={styles}
+            />
           </View>
         </View>
       </View>

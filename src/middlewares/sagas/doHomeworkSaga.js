@@ -4,7 +4,6 @@ import {
 // import { delay } from 'redux-saga';
 import immer from 'immer';
 import R from 'ramda';
-import api from '../../utils/fetch';
 import * as actions from '../../actions/doHomeworkAction';
 import enhanceSaga from './enhanceSaga';
 
@@ -15,7 +14,7 @@ export default function* doHomeworkSaga() {
   yield takeLatest('FETCH_DOHOMEWORK_QUESTION_REQUEST', enhanceSaga(fetchDoHomeworkSaga));
   // 提交答题数据
   yield takeLatest('SUBMIT_DOHOMEWORK_ANSWER_REQUEST', enhanceSaga(submitDoHomeworkAnswerSaga));
-  // 需要检查作业
+  // 第一次进入该份作业时弹窗判断是否想检查作业
   yield takeLatest('TOCHECK_HOMEWORK_QUESTION_REQUEST', enhanceSaga(checkHomeworkSaga));
   // 保存检查耗时
   yield takeLatest('TOSAVE_HOMEWORK_CHECKTIME_REQUEST', enhanceSaga(saveHomeworkCheckTimeSaga));
@@ -40,7 +39,7 @@ function* fetchDoHomeworkSaga(action) {
     const params = {};
     params.optType = 2;
     const url = `app/api/student/homeworks/${homeworkId}`;
-    const fetch = arg => api.get(url, arg);
+    const fetch = arg => Fetch.get(url, arg);
     const res = yield call(fetch, params);
     const { code, data } = res;
     if (code === 0) {
@@ -81,7 +80,7 @@ function* submitDoHomeworkAnswerSaga(action) {
       console.log(77777, action.payload);
       console.log(88888, answerParam);
       const url = `app/api/student/homeworks/${homeworkId}/questions/${id}/answer`;
-      const fetch = (arg, type) => api.put(url, arg, type);
+      const fetch = (arg, type) => Fetch.put(url, arg, type);
       const res = yield call(fetch, answerParam, 'json');
       const { code } = res;
       if (code === 0) {
@@ -95,13 +94,13 @@ function* submitDoHomeworkAnswerSaga(action) {
   }
 }
 
-// 用来标记需要检查作业
+// 用来标记是否想检查作业
 function* checkHomeworkSaga(action) {
   try {
-    const { homeworkId } = action.payload;
-    const url = `app/api/student/homeworks/${homeworkId}/check`;
-    const fetch = (arg, type) => api.put(url, arg, type);
-    const res = yield call(fetch, 'json');
+    const { homeworkId, checkStatus } = action.payload;
+    const url = `app/api/student/homeworks/${homeworkId}/check?checkStatus=${checkStatus}`;
+    const fetch = (arg, type) => Fetch.put(url, arg, type);
+    const res = yield call(fetch, {}, 'json');
     const { code } = res;
     if (code === 0) {
       yield put(actions.checkHomeworkAction(code, 'SUCCESS'));
@@ -118,8 +117,8 @@ function* saveHomeworkCheckTimeSaga(action) {
   try {
     const { homeworkId, checkTime } = action.payload;
     const url = `app/api/student/homeworks/${homeworkId}/checktime/save?checkTime=${checkTime}`;
-    const fetch = (arg, type) => api.put(url, arg, type);
-    const res = yield call(fetch, 'json');
+    const fetch = (arg, type) => Fetch.put(url, arg, type);
+    const res = yield call(fetch, {}, 'json');
     const { code } = res;
     if (code === 0) {
       yield put(actions.saveHomeworkCheckTimeAction(code, 'SUCCESS'));
@@ -136,8 +135,8 @@ function* submitHomeworkSaga(action) {
   try {
     const { homeworkId } = action.payload;
     const url = `app/api/student/homeworks/${homeworkId}/commit`;
-    const fetch = (arg, type) => api.post(url, arg, type);
-    const res = yield call(fetch, 'json');
+    const fetch = (arg, type) => Fetch.post(url, arg, type);
+    const res = yield call(fetch, {}, 'json');
     const { code, data } = res;
     if (code === 0) {
       // 提交作业成功后判断是否有互批作业
@@ -212,8 +211,8 @@ function* uploadImageToOssSaga(action) {
     const { questionId, file, imgName } = action.payload;
     const imgNameType = imgName ? imgName.substring(imgName.lastIndexOf('.'), imgName.length) : '.png';
     const url = '/api/oss-upload-parameters';
-    const fetch = (arg, type) => api.post(url, arg, type);
-    const res = yield call(fetch, 'json');
+    const fetch = (arg, type) => Fetch.post(url, arg, type);
+    const res = yield call(fetch, {}, 'json');
     const { code, data } = res;
     if (code === 0) {
       const formData = new FormData();
@@ -230,7 +229,7 @@ function* uploadImageToOssSaga(action) {
         formData.append(key, value);
       })(i);
       formData.append('file', { uri: file, type: `image/${imgNameType}`, name: 9 + imgNameType }, 9 + imgNameType);
-      const fetch2 = (arg, type) => api.post(data.uploadUrl, arg, type);
+      const fetch2 = (arg, type) => Fetch.post(data.uploadUrl, arg, type);
       const res2 = yield call(fetch2, formData, 'file');
       const code2 = res2.code;
       const data2 = res2.data;
