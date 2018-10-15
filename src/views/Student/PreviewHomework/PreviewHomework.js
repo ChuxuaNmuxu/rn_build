@@ -5,13 +5,14 @@ import { View, Text, ScrollView } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import nzhcn from 'nzh/cn';
-// import HTMLView from 'react-native-htmlview';
+import HTMLView from 'react-native-htmlview';
 import PreviewQuesCard from './Components/PreviewQuesCard';
 import { handleFormattingTime } from '../../../utils/common';
 import { CustomButton } from '../../../components/Icon';
 import styles from './PreviewHomework.scss';
 import I18nText from '../../../components/I18nText';
 import * as actions from '../../../actions/previewHomeworkAction';
+import draftToHtml from '../HomworkRecordDetail/lib/draftjs-to-html';
 
 class PreviewHomework extends Component {
   constructor(props) {
@@ -88,18 +89,14 @@ class PreviewHomework extends Component {
               </View>
               {
                 items.content && (
-                <View>
-                  <Text>{items.content}</Text>
-                </View>
+                  <View style={styles.content_box}>
+                    <HTMLView
+                      value={draftToHtml(JSON.parse(items.content))}
+                      stylesheet={styles}
+                    />
+                  </View>
                 )
               }
-              {/*
-                items.content && (
-                  <HTMLView
-                    value={draftToHtml(JSON.parse(items.content))}
-                    stylesheet={styles}
-                  />)
-                */}
               {
                 items.childrenList.map((item, index) => <PreviewQuesCard key={index} questionData={item} />)
               }

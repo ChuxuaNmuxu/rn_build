@@ -101,7 +101,6 @@ class ReviewHomework extends Component {
     // 请求提交作业的接口
     const { actions: { submitHomeworkAction }, data } = this.props;
     submitHomeworkAction({ homeworkId: data.homeworkId }, 'REQUEST');
-    Actions.HomeworkTask();
   }
 
   // 保存草稿---回到首页
@@ -211,7 +210,12 @@ class ReviewHomework extends Component {
   }
 
   render() {
-    const { reviewQues, answeredNum, unAnsweredNum, data } = this.state;
+    const {
+      reviewQues,
+      answeredNum,
+      unAnsweredNum,
+      data,
+    } = this.state;
     return (
       <View style={styles.reviewHomework_container}>
         <View style={styles.reviewHomework_header}>
