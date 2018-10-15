@@ -284,8 +284,14 @@ class TaskItem extends React.Component {
           {
             (dragData.homeworkId === data.homeworkId) && !data.dragTask
               ? (
-                <View style={type === 'detailsTask' ? styles.task_placeholder : styles.task_placeholde_breviaryTask}>
-                  <View />
+                <View style={type === 'detailsTask' ? styles.task_placeholder : styles.task_placeholder_breviaryTask}>
+                  <CIcon
+                    style={mergeStyles(styles.icon, type === 'detailsTask'
+                      ? styles.placeholder_icon
+                      : styles.task_placeholder_breviaryTask_icon)}
+                    name="iconfont7"
+                    size={40}
+                  />
                 </View>
               )
               : (
