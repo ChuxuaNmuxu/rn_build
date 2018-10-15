@@ -7,7 +7,9 @@ import {
 } from 'react-native';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import styles from './ProblemCard.scss';
-import { formatTimeToshow, getQuestionTypeName, convertToDifficultyLevel } from '../../../../utils/common/common';
+import {
+  formatTimeToshow, getQuestionTypeName, convertToDifficultyLevel, failReason,
+} from '../../../../utils/common/common';
 import I18nText from '../../../../components/I18nText';
 
 class ProblemCard extends PureComponent {
@@ -18,40 +20,50 @@ class ProblemCard extends PureComponent {
   }
 
   // 点击错题卡片进入错题详情页
-  goProblemDetail = () => {
-    console.log(123, '点击进入详情页');
+  goProblemDetail = (category) => {
+    const { id } = this.props;
+    // console.log(23, id);
+    Actions.HomeworkProblemDetail({
+      id,
+      category,
+    });
   }
 
   // 点击复习错题进入错题重做页面
   doErrWorkAgain = () => {
-    Actions.MistakeReform();
+    const { datas } = this.props;
+    // console.log(datas);
+    Actions.MistakeReform({
+      problemCardInfo: [datas],
+    });
   }
 
   render() {
-    const { datas } = this.props;
+    const { datas, index } = this.props;
+    console.log(35, datas);
     return (
-      <TouchableOpacity
-        activeOpacity={1}
-        style={styles.problemCard_box}
-        onPress={this.goProblemDetail}
+      <SwipeRow
+        disableRightSwipe
+        rightOpenValue={-270}
       >
-        <SwipeRow
-          disableRightSwipe
-          rightOpenValue={-270}
+        <TouchableOpacity
+          style={styles.hidenBtn}
+          onPress={this.doErrWorkAgain}
         >
-          <TouchableOpacity
-            style={styles.hidenBtn}
-            onPress={this.doErrWorkAgain}
-          >
-            <Text />
-            <I18nText style={styles.hideText}>
+          <Text />
+          <I18nText style={styles.hideText}>
               ProblemListOverview.ProblemCard.reviewQuestion
-            </I18nText>
-          </TouchableOpacity>
+          </I18nText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={styles.problemCard_box}
+          onPress={() => this.goProblemDetail(datas.category)}
+        >
           <View style={styles.problemCard}>
             <View style={styles.question_header}>
               <Text style={styles.title_order}>
-                第{datas.questionNum}题
+                第{ index + 1 }题
               </Text>
               <View style={styles.title_border} />
               <Text style={styles.title_txt}>{getQuestionTypeName(datas.type)}</Text>
@@ -69,7 +81,7 @@ class ProblemCard extends PureComponent {
                     <I18nText>
                       ProblemListOverview.ProblemCard.wrongReason
                     </I18nText>
-                    审题不仔细
+                    {failReason[datas.failReason]}
                   </Text>
                 </View>
               </View>
@@ -79,19 +91,20 @@ class ProblemCard extends PureComponent {
                   <I18nText>
                     ProblemListOverview.ProblemCard.form
                   </I18nText>
-                  语文第一章作业
+                  {datas.name}
                 </Text>
               </View>
             </View>
           </View>
-        </SwipeRow>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </SwipeRow>
     );
   }
 }
 
 ProblemCard.propTypes = {
   datas: PropTypes.object.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default ProblemCard;

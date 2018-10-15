@@ -28,8 +28,10 @@ class ProblemOverview extends PureComponent {
   }
 
   // 点击进入错题列表页面
-  goProblemListFun = () => {
-    Actions.ProblemListOverview();
+  goProblemListFun = (subjectId) => {
+    Actions.ProblemListOverview({
+      subjectId,
+    });
   }
 
   render() {
@@ -47,10 +49,10 @@ class ProblemOverview extends PureComponent {
           renderItem={
             (dataItem) => {
               const { item, index } = dataItem;
-              // console.log(dataItem);
+
               return (
                 <TouchableOpacity
-                  onPress={this.goProblemListFun}
+                  onPress={() => this.goProblemListFun(item.subjectId)}
                   key={index}
                 >
                   <View style={styles.item}>

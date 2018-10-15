@@ -17,6 +17,9 @@ class RefreshListView extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log('调用 RefreshListView 组件', this.props);
+  }
 
   // 头部组件的状态，供外部调用，一般不会用到
   setheaderState = (headerState) => {
@@ -177,7 +180,7 @@ class RefreshListView extends Component {
 
   render() {
     const { isShowRefreshIcon, footerState, headerState } = this.state;
-    console.log(this.props, '草草草草草');
+    // console.log(this.props, '草草草草草');
     return (
       <FlatList
       // 传进所有参数

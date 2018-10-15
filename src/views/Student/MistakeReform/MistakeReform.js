@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  StyleSheet,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import HTMLView from 'react-native-htmlview';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -22,6 +24,8 @@ import CIcon from '../../../components/Icon';
 import AnswerCard from '../DoHomework/Components/AnswerCard';
 import WrongReason from '../../../components/WrongReason';
 import styles from './MistakeReform.scss';
+import draftToHtml from '../../../utils/draftjsToHtml';
+// import problemImg from '../../../public/img/problem.png';
 
 class MistakeReform extends Component {
   constructor(props) {
@@ -29,18 +33,43 @@ class MistakeReform extends Component {
     this.state = {
       index: 0,
     };
+    const {
+      actions: {
+        saveQuestionsAction,
+      },
+      // isRandom,
+      problemCardInfo,
+    } = props;
+    console.log(39, problemCardInfo);
+    // 发送action保存到redux中，且在saga保存的时候加入一些页面需要的逻辑
+    saveQuestionsAction(problemCardInfo);
   }
 
   componentDidMount() {
     console.log('调用 错题重做 MistakeReform 组件', this.props);
-    const {
-      actions: {
-        fetchDataAction,
+  }
+
+  // 富文本数据展示框
+  htmlViewComponent=(htmlContent) => {
+    // console.log(draftToHtml(JSON.parse(htmlContent)), 'htmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponent');
+    const htmlViewStyles = StyleSheet.create({
+      p: {
+        fontSize: 24,
+        color: '#999999',
       },
-      isRandom,
-    } = this.props;
-    // 请求数据
-    fetchDataAction({ isRandom }, 'REQUEST');
+    });
+    // const htmlContent = '<p>zhazhazha</p>'
+    // + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
+    // + 'alt="undefined" style="float:none;height: auto;width: auto"/>'
+    // + '<p>曹尼玛的富文本</p>';
+    return (
+      <View style={styles.htmlViewComponent}>
+        <HTMLView
+          value={draftToHtml(JSON.parse(htmlContent))}
+          stylesheet={htmlViewStyles}
+        />
+      </View>
+    );
   }
 
   // 导航条右侧是否有 index
@@ -57,12 +86,19 @@ class MistakeReform extends Component {
   }
 
   // 点击题目
-  handleToClickRadio = (value) => {
+  handleToClickRadio = (id, value, item) => {
     console.log(value);
-    const { actions: { selectAnswerAction } } = this.props;
+    const { actions: { selectAnswerAction, saveObjectiveAnswerAction } } = this.props;
     const { index } = this.state;
+    // 单选题
+    const { type } = item;
+    if (type === 1 || type === 2 || type === 3 || type === 4) {
+      saveObjectiveAnswerAction({
+        index,
+        value,
+      });
+    }
     selectAnswerAction({
-      value,
       index,
     });
   }
@@ -94,19 +130,20 @@ class MistakeReform extends Component {
   }
 
   // 显示提交正确答案信息
-  showCorrectInfo = ({ bol }) => {
-    if (bol.showAll) {
+  showCorrectInfo = (item) => {
+    const { result, showAll, showAnswer } = item.controlComponent.showCorrectInfo;
+    if (showAll) {
       return (
         <View style={styles.submit_container}>
           <View style={styles.result_word}>
             {
-              bol.showAnswer ? (
+              showAnswer ? (
                 <View style={styles.result_word_child}>
                   <Text style={[styles.result_icon, styles.result_icon_right]}>
                     <CIcon name="dui" size={20} color="white" />
                   </Text>
                   <Text style={[styles.result_answer, styles.result_right]}>
-                    回答正确，答案是A
+                    {`回答正确，答案是${result.rightAnswer}`}
                   </Text>
                 </View>
               ) : null
@@ -122,7 +159,7 @@ class MistakeReform extends Component {
                 <Text
                   style={[styles.result_difficult, styles.result_right]}
                   onPress={() => {
-                    this.showConfirmModal();
+                    this.showConfirmModal(item);
                   }}
                 >
                       移除错题本
@@ -142,11 +179,11 @@ class MistakeReform extends Component {
     ModalApi.onClose();
   }
 
-  rightFn = () => {
+  rightFn = (item) => {
     const { actions: { correctConfirmAction } } = this.props;
     const { index } = this.state;
     this.showLoading();
-    correctConfirmAction({ index, callback: this.pressT }, 'REQUEST');
+    correctConfirmAction({ index, callback: this.pressT, item }, 'REQUEST');
   }
 
   // 自动关闭tips
@@ -178,11 +215,10 @@ class MistakeReform extends Component {
     </View>
   )
 
-  // demo的函数名乱搞的，写代码的大佬别乱copy
-  showConfirmModal = () => {
+  showConfirmModal = (item) => {
     const data = {
       lCallbakFn: this.leftFn,
-      rCallbakFn: this.rightFn,
+      rCallbakFn: () => this.rightFn(item),
       activeBtn: 'R',
       rightBtnText: '确定',
       leftBtnText: '取消',
@@ -193,9 +229,11 @@ class MistakeReform extends Component {
   }
 
   // 提交返回的错误答案信息
-  showErrorInfo = ({ bol, index }) => {
+  showErrorInfo = (item) => {
     const { actions: { showWrongInfoRadioAction } } = this.props;
-    if (bol.showAll) {
+    const { index } = this.state;
+    const { showAll, showWord, result } = item.controlComponent.showErrorInfo;
+    if (showAll) {
       return (
         <View style={styles.submit_container}>
           <View style={styles.result_word}>
@@ -204,11 +242,11 @@ class MistakeReform extends Component {
                 <CIcon name="cuowu" size={20} color="white" />
               </Text>
               <Text style={[styles.result_answer, styles.result_wrong]}>
-            回答错误,答案是B,你的答案是A
+                {`回答错误,答案是${result.rightAnswer},你的答案是${result.studentAnswer}`}
               </Text>
             </View>
             {
-                bol.showWord ? (
+                showWord ? (
                   <View style={styles.result_word_child}>
                     <Text style={[styles.result_difficult]}>
                       你可以对该题进行
@@ -233,15 +271,16 @@ class MistakeReform extends Component {
   }
 
   // 错误信息的单选
-  showErrorRadio = ({ bol, index }) => {
+  showErrorRadio = (item, index) => {
+    const { showRadio } = item.controlComponent.showErrorInfo;
     const { actions: { submitRadioAction } } = this.props;
-    if (bol.showRadio) {
+    if (showRadio) {
       return (
         <View>
           <View style={styles.space} />
           <WrongReason
             onChange={(value) => {
-              submitRadioAction({ index, value }, 'REQUEST');
+              submitRadioAction({ index, value, item }, 'REQUEST');
             }}
           />
         </View>
@@ -250,36 +289,44 @@ class MistakeReform extends Component {
     return null;
   }
 
+  // 主观题上传答案或者客观题上传解答过程答案的函数
+  handlePreviewImage = (questionId, e, imgName) => {
+    console.log(222, questionId, e, imgName);
+    const { actions: { updateImageAction, selectAnswerAction } } = this.props;
+    const { index } = this.state;
+    updateImageAction({ index, urlSource: { questionId, file: e, imgName } });
+    selectAnswerAction({ index });
+    // uploadImageToOssAction({ questionId, file: e, imgName });
+    // 当从检查页面点击 未作答 热区 进来此页面时上传图片答案的题目id应该从此处给提交答案那，否则保存时题目id不对
+    // this.setState({
+    //   uploadImgQuesId: questionId,
+    // });
+  }
+
   // 上传的图片
-  showImage = ({ item, index }) => {
+  showImageOrTitle = ({ item }) => {
     const {
-      showSubjectiveInfo: {
-        urlSource,
-      },
-    } = item.controlComponent;
-    if (urlSource) {
-      const {
-        uri = null,
-        // width = null,
-        // height = null,
-      } = urlSource;
-      if (uri && uri.length > 0) {
-        return (
-          <View style={styles.updateImage_container}>
-            <View style={styles.question_title}>
-              <I18nText style={styles.question_title_txt}>
-            DoHomeworks.answerCard.toAnswer
-              </I18nText>
-            </View>
-            <View style={styles.image_container}>
-              <Image
-                source={{ uri }}
-                style={{ width: '100%', height: '100%' }}
-              />
-            </View>
-          </View>
-        );
-      }
+      studentAnswer,
+    } = item.controlComponent.showSubjectiveInfo;
+    if (studentAnswer) {
+      console.log(319, studentAnswer);
+    //   if (studentAnswer) {
+    //     return (
+    //       <View style={styles.updateImage_container}>
+    //         <View style={styles.question_title}>
+    //           <I18nText style={styles.question_title_txt}>
+    //         DoHomeworks.answerCard.toAnswer
+    //           </I18nText>
+    //         </View>
+    //         <View style={styles.image_container}>
+    //           <Image
+    //             source={{ uri: studentAnswer }}
+    //             style={{ width: '100%', height: '100%' }}
+    //           />
+    //         </View>
+    //       </View>
+    //     );
+    //   }
     }
     return (
       <View>
@@ -287,20 +334,18 @@ class MistakeReform extends Component {
         <AnswerCard
           questions={item}
           mistakeReform
-          handleToClickRadio={this.handleToClickRadio}
-          updateImage={this.updateImage}
+          handleToClickRadio={(id, value) => this.handleToClickRadio(id, value, item)}
+          // updateImage={this.updateImage}
+          handlePreviewImage={this.handlePreviewImage}
         />
       </View>
     );
   }
 
   // 上传图片的回调函数
-  updateImage = (source) => {
-    const { actions: { updateImageAction, selectAnswerAction } } = this.props;
-    const { index } = this.state;
-    updateImageAction({ index, urlSource: source });
-    selectAnswerAction({ index });
-  }
+  // updateImage = (source) => {
+
+  // }
 
   // 显示主观题的题目答案、别人家的答案等
   showSubjective = ({ item, index }) => {
@@ -316,24 +361,34 @@ class MistakeReform extends Component {
             <View>
               <View style={styles.answer_wrap}>
                 <Text style={styles.answer_title}>题目答案:</Text>
-                <ThumbnailImage
-                  option={{
-                    url: teacherAnswer,
-                  }}
-                />
+                {
+              // 后台可能返回null给我
+              teacherAnswer && (
+              <ThumbnailImage
+                option={{
+                  url: teacherAnswer,
+                }}
+              />
+              )
+                }
               </View>
             </View>
             <View style={styles.dotted_line} />
+            {/* {
+              // 后台可能返回空数组给我
+              otherStudentAnswer.length && ( */}
             <View>
               <View style={styles.answer_wrap}>
                 <Text style={styles.answer_title}>看看其他同学的解答过程:</Text>
                 <View style={styles.other_student_answer}>
                   {
+                    // 缩略图:thumbUrl 大图: fileUrl 名称: studentName
                   otherStudentAnswer.map((item2, i) => (
                     <View style={{ marginRight: 25 }} key={i}>
                       <ThumbnailImage
                         option={{
-                          url: item2,
+                          url: item2.fileUrl,
+                          studentName: item2.studentName,
                         }}
                       />
                     </View>
@@ -342,6 +397,8 @@ class MistakeReform extends Component {
                 </View>
               </View>
             </View>
+            {/* )
+            } */}
           </View>
           {
               showTrueOrFalseButton ? (
@@ -422,37 +479,48 @@ class MistakeReform extends Component {
               }}
             >
               {
-                questions.map((item, i) => (
+                questions.length !== 0 ? questions.map((item, i) => (
                   <View key={i}>
                     {/* 题目 */}
                     <View style={styles.questionCard_container}>
                       <View style={styles.question_title}>
-                        <Text style={styles.question_title_txt}>{getQuestionTypeName(1)}</Text>
+                        <Text style={styles.question_title_txt}>{getQuestionTypeName(item.type)}</Text>
                       </View>
                       <View style={styles.question_content_wrap}>
-                        <Image
+                        {/* <Image
                           style={{ width: '100%', height: '100%' }}
                           source={{ uri: item.url }}
-                        />
+                        /> */}
+                        <Text>{item.content}</Text>
                       </View>
                     </View>
                     <View style={styles.space} />
                     {/* 主观题上传图片后的图片显示,如果有图片,就显示图片，如果没有就显示题型 */}
-                    {this.showImage({ item, index })}
+                    {this.showImageOrTitle({ item })}
                     {/* 答案 */}
                     <View />
                     {/* 提交按钮 */}
                     { this.showSubmitBtn({ item, index: i }) }
                     {/* 错误答案信息 */}
-                    { this.showErrorInfo({ bol: item.controlComponent.showErrorInfo, index: i }) }
+                    { this.showErrorInfo(item) }
                     {/* 显示主观题的题目答案、别人家的答案等 */}
                     { this.showSubjective({ item, index: i }) }
                     {/* 正确答案信息 */}
-                    { this.showCorrectInfo({ bol: item.controlComponent.showCorrectInfo, index: i }) }
+                    { this.showCorrectInfo(item) }
                     {/* 错误信息的总结(radio) */}
-                    { this.showErrorRadio({ bol: item.controlComponent.showErrorInfo, index: i }) }
+                    { this.showErrorRadio(item, i) }
                   </View>
-                ))
+                )) : (
+                  <View className="finish_picture">
+                    <View className="finish_picture_child_view">
+                      <Image
+                        style={{ width: '100%', height: '100%' }}
+                        source={require('../../../public/img/problem.png')}
+                      />
+                      <Text>错题已复习完毕</Text>
+                    </View>
+                  </View>
+                )
             }
             </Swiper>
           </View>
@@ -463,15 +531,17 @@ class MistakeReform extends Component {
 }
 MistakeReform.propTypes = {
   // 是否是随机题
-  isRandom: PropTypes.bool,
+  // isRandom: PropTypes.bool,
   actions: PropTypes.object.isRequired,
   // 错题的数据
   questions: PropTypes.array.isRequired,
+  // 上游传过来的数据
+  problemCardInfo: PropTypes.array.isRequired,
 };
 
-MistakeReform.defaultProps = {
-  isRandom: false,
-};
+// MistakeReform.defaultProps = {
+//   isRandom: false,
+// };
 
 const mapStateToProps = (state) => {
   const {

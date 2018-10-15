@@ -61,3 +61,4 @@ android/gradle/wrapper/gradle-wrapper.properties
 
 # 配置.vscode
 .vscode/
+.settings.json

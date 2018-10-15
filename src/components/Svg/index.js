@@ -14,7 +14,7 @@ const Svg = ({
   const svgXmlData = svgs[source];
 
   if (!svgXmlData) {
-    throw new Error(`没有"${source}"这个icon，请下载最新的icomoo并 npm run svg-to-js`);
+    throw new Error(`没有"${source}"这个svg，请下载svg并放入public/svg下执行 npm run svg-to-xml`);
   }
 
   return (

@@ -23,7 +23,8 @@ import CommitHomeworkModal from './Components/Modals/CommitHomeworkModal';
 import CommitSuccessAndnoRemark from './Components/Modals/CommitSuccessAndnoRemark';
 import CommitSuccessAndhasRemark from './Components/Modals/CommitSuccessAndhasRemark';
 import DifficultLevelModal from './Components/Modals/DifficultLevelModal';
-import Modal, { ModalApi } from '../../../components/Modal';
+import Modal from '../../../components/Modal';
+// import Modal, { ModalApi } from '../../../components/Modal';
 
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
@@ -47,6 +48,12 @@ class DoHomeworks extends Component {
     };
     this.commitHomework = false; // 是否点击了提交作业按钮
     this.fetchHomeworkStatus = false; // 刚进入页面时是否请求到作业数据
+    this.switchQuesGuidData = { // 切换上下题手势指引的内容
+      svgName: 'hand-up',
+      animationType: 'slideInLeft',
+      bottomTips: '左右滑动，切换上下题',
+      maskClosable: true,
+    };
   }
 
 
@@ -244,6 +251,9 @@ class DoHomeworks extends Component {
     this.setBtnText(1);
     this.toCheckHomeworkFun(1);
     this.setCheckModalVisibleFun(false);
+    // 此时表示是第一次进入该份作业，在关闭 检查意愿模态框后展示 切换上下题的手势指引
+
+    // ModalApi.onOppen('AnimationsModal', this.switchQuesGuidData);
   }
 
   // 不想检查--展示提交按钮
@@ -251,6 +261,9 @@ class DoHomeworks extends Component {
     this.setBtnText(2);
     this.toCheckHomeworkFun(2);
     this.setCheckModalVisibleFun(false);
+    // 此时表示是第一次进入该份作业，在关闭 检查意愿模态框后展示 切换上下题的手势指引
+
+    // ModalApi.onOppen('AnimationsModal', this.switchQuesGuidData);
   }
 
   // 请求 保存检查意愿 的接口
@@ -343,16 +356,16 @@ class DoHomeworks extends Component {
 
   // 上传图片后展示正在加载的loading状态
   showLoadingFun = () => {
-    const data = {
-      svgName: 'finger',
-      animationType: 'loading',
-      bottomTips: '正在加载...',
-      maskClosable: false,
-    };
-    ModalApi.onOppen('AnimationsModal', data);
-    setTimeout(() => {
-      ModalApi.onClose();
-    }, 2000);
+    // const data = {
+    //   svgName: 'finger',
+    //   animationType: 'loading',
+    //   bottomTips: '正在加载...',
+    //   maskClosable: false,
+    // };
+    // ModalApi.onOppen('AnimationsModal', data);
+    // setTimeout(() => {
+    //   ModalApi.onClose();
+    // }, 2000);
   }
 
 
