@@ -21,10 +21,12 @@
 
 .task_placeholder {
   @include task_placeholder();
+  justify-content: center;
 }
 
-.task_placeholde_breviaryTask{
+.task_placeholder_breviaryTask{
   @include task_placeholder();
+  justify-content: center;
   height: 96px;
   margin-left: 0;
 }
@@ -42,6 +44,15 @@
   font-size: 100px;
   color: #ffffff;
   text-align: center;
+}
+
+.placeholder_icon {
+  color: #dbdbdb;
+}
+
+.task_placeholder_breviaryTask_icon {
+  font-size: 60px;
+  color: #dbdbdb;
 }
 
 .subject {

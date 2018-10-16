@@ -88,6 +88,11 @@ export const changeLastHandlePeriodIndex = (state, action) => {
   state.lastHandlePeriodIndex = action.payload;
 };
 
-export const regetDropListenerRange = (state, action) => {
+export const isGetDropListenerRange = (state, action) => {
   state.isRegetDropListenerRange = action.payload;
+};
+
+
+export const isFirstGetDropListenerRange = (state, action) => {
+  state.isFirstRegetDropListenerRange = action.payload;
 };
