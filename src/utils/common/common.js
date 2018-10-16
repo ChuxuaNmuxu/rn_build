@@ -1,6 +1,5 @@
 // 工具方法
 
-// import moment from 'moment';
 import moment from 'moment';
 import R from 'ramda';
 
@@ -96,6 +95,20 @@ export const formatTimeToshow = (timeData) => {
 
 // 各类题型
 export const subjectType = ['单选题', '多选题', '判断题', '对应题', '填空题', '主观题', '综合题'];
+
+/** *
+ * 错误原因
+ * 0:无, 1:知识记忆性错误, 2:理解性错误, 3:考虑不全面, 4:审题不仔细, 5:粗心大意, 65535:其他
+ *  */
+export const failReason = {
+  0: '无',
+  1: '知识记忆性错误',
+  2: '理解性错误',
+  3: '考虑不全面',
+  4: '审题不仔细',
+  5: '粗心大意',
+  65535: '其他',
+};
 
 /**
  * 根据小题类型转成对应的题型名称

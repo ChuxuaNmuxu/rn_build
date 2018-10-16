@@ -6,13 +6,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import nzhcn from 'nzh/cn';
 import HTMLView from 'react-native-htmlview';
-// import draftToHtml from 'draftjs-to-html';
 import PreviewQuesCard from './Components/PreviewQuesCard';
 import { handleFormattingTime } from '../../../utils/common';
 import { CustomButton } from '../../../components/Icon';
 import styles from './PreviewHomework.scss';
 import I18nText from '../../../components/I18nText';
 import * as actions from '../../../actions/previewHomeworkAction';
+import draftToHtml from '../HomworkRecordDetail/lib/draftjs-to-html';
 
 class PreviewHomework extends Component {
   constructor(props) {
@@ -56,18 +56,16 @@ class PreviewHomework extends Component {
 
   // 跳转到做作业页面时需要请求检查该份作业状态的接口
   doHomeWork = () => {
-    const { actions: { checkHomeworkAction }, homeworkId } = this.props;
+    const { actions: { checkHomeworkStatusAction }, homeworkId } = this.props;
     if (homeworkId) {
-      checkHomeworkAction({ homeworkId }, 'REQUEST');
+      checkHomeworkStatusAction({ homeworkId }, 'REQUEST');
     }
-    Actions.DoHomework({ homeworkId });
   }
 
   render() {
     const { previewTime } = this.state;
     const { data } = this.props;
     const { questionList } = data;
-    let content = '<div><p>内容文字</p></div>';
     return (
       <View style={styles.previewHomework_container}>
         <View style={styles.previewHomework_header}>
@@ -89,17 +87,16 @@ class PreviewHomework extends Component {
                   {`${nzhcn.encodeS(indexs + 1)}、${items.title}`}(本大题共{items.childrenList.length}小题)
                 </Text>
               </View>
-              {/*
+              {
                 items.content && (
-                  <HTMLView
-                    value={draftToHtml(JSON.parse(items.content))}
-                    stylesheet={styles}
-                  />)
-                */}
-              <HTMLView
-                value={content}
-                stylesheet={styles}
-              />
+                  <View style={styles.content_box}>
+                    <HTMLView
+                      value={draftToHtml(JSON.parse(items.content))}
+                      stylesheet={styles}
+                    />
+                  </View>
+                )
+              }
               {
                 items.childrenList.map((item, index) => <PreviewQuesCard key={index} questionData={item} />)
               }

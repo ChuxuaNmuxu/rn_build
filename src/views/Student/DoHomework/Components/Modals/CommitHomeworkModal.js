@@ -41,7 +41,7 @@ class CommitHomeworkModal extends Component {
 
  // 提示内容
  commitHomeworkContent=() => {
-   const { answeredQuesNum, notAnswerQuesNum } = this.props;
+   const { countQuesNum, answeredQuesNum, notAnswerQuesNum } = this.props;
    return (
      <View style={{
        flex: 1,
@@ -56,7 +56,7 @@ class CommitHomeworkModal extends Component {
          lineHeight: 46,
        }}
        >
-        此份作业共11题，已作答：
+        此份作业共{countQuesNum}题，已作答：
          <Text style={{ color: '#30bf6c' }}>{answeredQuesNum} 题</Text>
         &nbsp;&nbsp;&nbsp;&nbsp;未作答：
          <Text style={{ color: '#30bf6c' }}>{notAnswerQuesNum} 题</Text>
@@ -84,6 +84,7 @@ class CommitHomeworkModal extends Component {
 }
 
 CommitHomeworkModal.propTypes = {
+  countQuesNum: PropTypes.number.isRequired,
   answeredQuesNum: PropTypes.number.isRequired,
   notAnswerQuesNum: PropTypes.number.isRequired,
   checkAnsweredQuesFun: PropTypes.func.isRequired,

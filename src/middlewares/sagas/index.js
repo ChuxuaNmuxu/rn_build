@@ -16,6 +16,15 @@ import problemRecordsSaga from './problemRecordsSaga';
 import homeworkTask from './homeworkTask';
 // 任务详情
 import taskDetailSaga from './taskDetailSaga';
+// 作业批阅
+import homeworkCorrectingSaga from './homeworkCorrectingSaga';
+// 错题详情
+import inCorrectProblemDetail from './inCorrectProblemDetail';
+// 错题列表
+import mistakeList from './mistakeList';
+// 标记错题原因
+import markFailReason from './markFailReason';
+
 
 function* rootSaga() {
   yield all([
@@ -28,6 +37,10 @@ function* rootSaga() {
     fork(problemRecordsSaga),
     fork(homeworkTask),
     fork(taskDetailSaga),
+    fork(homeworkCorrectingSaga),
+    fork(inCorrectProblemDetail),
+    fork(mistakeList),
+    fork(markFailReason),
   ]);
 }
 export default rootSaga;
