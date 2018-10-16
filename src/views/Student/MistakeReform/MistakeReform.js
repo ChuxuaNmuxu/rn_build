@@ -4,7 +4,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   ScrollView,
   StyleSheet,
 } from 'react-native';
@@ -25,6 +24,7 @@ import AnswerCard from '../DoHomework/Components/AnswerCard';
 import WrongReason from '../../../components/WrongReason';
 import styles from './MistakeReform.scss';
 import draftToHtml from '../../../utils/draftjsToHtml';
+import NotResult from '../../../components/NotResult';
 // import problemImg from '../../../public/img/problem.png';
 
 class MistakeReform extends Component {
@@ -511,15 +511,10 @@ class MistakeReform extends Component {
                     { this.showErrorRadio(item, i) }
                   </View>
                 )) : (
-                  <View style={styles.finish_picture}>
-                    <View style={styles.finish_picture_child_view}>
-                      <Image
-                        // style={{ width: '100%', height: '100%' }}
-                        source={require('../../../public/img/problem.png')}
-                      />
-                      <Text style={styles.finish_picture_child_view_text}>错题已复习完毕</Text>
-                    </View>
-                  </View>
+                  <NotResult
+                    tips="错题已复习完毕"
+                    imgStyle={{}}
+                  />
                 )
             }
             </Swiper>
