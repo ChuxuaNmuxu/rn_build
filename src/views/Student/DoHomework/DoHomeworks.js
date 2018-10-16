@@ -479,6 +479,7 @@ class DoHomeworks extends Component {
     }
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
+    console.log(12345, showQuesArray);
     return (
       <View style={styles.containers}>
         {this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}

@@ -120,25 +120,31 @@ class AnswerCard extends Component {
       testUri, width, height,
     } = this.state;
     // 客观题的上传解答过程，错题重做页面调用时不显示
+    const hasImgUrl = (answerFileUrl && answerFileUrl.length) || testUri; // 是否有图片答案
     if ((mistakeReform && type > 4) || !mistakeReform) {
-      if ((answerFileUrl && answerFileUrl.length) || testUri) {
-        UpdateImgDiv = (
-          <UploadImgSuccess
-            answerFileUrl={answerFileUrl || testUri}
-            width={parseInt(width)}
-            height={parseInt(height)}
-            deleteImg={this.deleteImg}
-          />
-        );
-      } else {
-        UpdateImgDiv = (
-          <UploadImgBefore
-            type={type}
-            updateImage={this.updateImage}
-            answered={answered}
-          />
-        );
-      }
+      // UploadImgBefore必须在一开始就渲染出来，否则会出现删除图片答案后再点击上传图片区域时不弹出选择图片的文件选择，此时只能让页面发生setState后才能正常弹出
+      UpdateImgDiv = (
+        <View>
+          {
+            hasImgUrl
+            && (
+            <UploadImgSuccess
+              answerFileUrl={answerFileUrl || testUri}
+              width={parseInt(width)}
+              height={parseInt(height)}
+              deleteImg={this.deleteImg}
+            />
+            )
+          }
+          <View style={[hasImgUrl ? styles.notToShow : styles.needToshow]}>
+            <UploadImgBefore
+              type={type}
+              updateImage={this.updateImage}
+              answered={answered}
+            />
+          </View>
+        </View>
+      );
     }
     return UpdateImgDiv;
   }
