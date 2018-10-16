@@ -302,7 +302,7 @@ export const strFormatterIconName = (str) => {
     case '历史':
       return 'lishi1';
     default:
-      return '';
+      return 'jinggao';
   }
 };
 
