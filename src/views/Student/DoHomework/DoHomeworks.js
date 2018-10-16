@@ -23,8 +23,7 @@ import CommitHomeworkModal from './Components/Modals/CommitHomeworkModal';
 import CommitSuccessAndnoRemark from './Components/Modals/CommitSuccessAndnoRemark';
 import CommitSuccessAndhasRemark from './Components/Modals/CommitSuccessAndhasRemark';
 import DifficultLevelModal from './Components/Modals/DifficultLevelModal';
-import Modal from '../../../components/Modal';
-// import Modal, { ModalApi } from '../../../components/Modal';
+import { ModalApi } from '../../../components/Modal';
 
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
@@ -53,6 +52,12 @@ class DoHomeworks extends Component {
       animationType: 'slideInLeft',
       bottomTips: '左右滑动，切换上下题',
       maskClosable: true,
+    };
+    this.loadingData = {
+      // svgName: 'finger',
+      animationType: 'loading',
+      bottomTips: '正在加载...',
+      maskClosable: false,
     };
   }
 
@@ -174,6 +179,7 @@ class DoHomeworks extends Component {
   // 点击提交的函数
   submitFun = () => {
     this.setVisibleFun(false);
+    console.log(789, '点击了提交按钮');
     this.setCommitModalVisbleFun(true);
   }
 
@@ -252,8 +258,7 @@ class DoHomeworks extends Component {
     this.toCheckHomeworkFun(1);
     this.setCheckModalVisibleFun(false);
     // 此时表示是第一次进入该份作业，在关闭 检查意愿模态框后展示 切换上下题的手势指引
-
-    // ModalApi.onOppen('AnimationsModal', this.switchQuesGuidData);
+    ModalApi.onOppen('AnimationsModal', this.switchQuesGuidData);
   }
 
   // 不想检查--展示提交按钮
@@ -262,8 +267,7 @@ class DoHomeworks extends Component {
     this.toCheckHomeworkFun(2);
     this.setCheckModalVisibleFun(false);
     // 此时表示是第一次进入该份作业，在关闭 检查意愿模态框后展示 切换上下题的手势指引
-
-    // ModalApi.onOppen('AnimationsModal', this.switchQuesGuidData);
+    ModalApi.onOppen('AnimationsModal', this.switchQuesGuidData);
   }
 
   // 请求 保存检查意愿 的接口
@@ -356,16 +360,7 @@ class DoHomeworks extends Component {
 
   // 上传图片后展示正在加载的loading状态
   showLoadingFun = () => {
-    // const data = {
-    //   svgName: 'finger',
-    //   animationType: 'loading',
-    //   bottomTips: '正在加载...',
-    //   maskClosable: false,
-    // };
-    // ModalApi.onOppen('AnimationsModal', data);
-    // setTimeout(() => {
-    //   ModalApi.onClose();
-    // }, 2000);
+    // ModalApi.onOppen('AnimationsModal', this.loadingData);
   }
 
 
@@ -480,6 +475,7 @@ class DoHomeworks extends Component {
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
     console.log(12345, showQuesArray);
+    console.log(7890, commitHomeworkModalStatus);
     return (
       <View style={styles.containers}>
         {this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
@@ -564,8 +560,6 @@ class DoHomeworks extends Component {
               questionId={preveId}
             />)
         }
-        {/* 图片正在加载中的模态 */}
-        <Modal key={Math.random()} />
       </View>
     );
   }

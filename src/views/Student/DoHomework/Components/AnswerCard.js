@@ -198,7 +198,7 @@ class AnswerCard extends Component {
             {
               questions.type === 3 && (
                 <RadioGroup
-                  value={parseInt(studentAnswer) === 1 ? 1 : -1}
+                  value={studentAnswer && (parseInt(studentAnswer) === 1 ? 1 : -1)}
                   onChange={this.handleToClickRadio}
                   style={styles.radio_wrapper}
                   iconWrapStyle={styles.radioStyle}

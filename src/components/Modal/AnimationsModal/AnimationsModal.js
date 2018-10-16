@@ -20,11 +20,12 @@ class ButtonModal extends Component {
   }
 
 
-  svgContent=svgName => (
-
-    <Svg height="72" width="72" source={svgName} fill="#fff" />
-
-  )
+  svgContent=(svgName) => {
+    const { svgOption } = this.props;
+    return (
+      <Svg height={svgOption.height} width={svgOption.width} source={svgName} fill="#fff" />
+    );
+  }
 
   loadingComponent=() => {
     // const { svgName } = this.props;
@@ -121,7 +122,7 @@ class ButtonModal extends Component {
   }
 
   render() {
-    const { maskClosable } = this.props;
+    const { maskClosable, style, animationType } = this.props;
     return (
       <TouchableOpacity
         onPress={maskClosable ? this._onClose : this._preventDefault}
@@ -129,10 +130,12 @@ class ButtonModal extends Component {
         style={[
           Style.TouchableOpacity,
           Style.transparentTwo,
-          { backgroundColor: maskClosable ? 'rgba(0, 0, 0, 0)' : 'rgba(0, 0, 0, 0.2)' }]}
+          { backgroundColor: maskClosable ? 'rgba(0, 0, 0, 0)' : 'rgba(0, 0, 0, 0.2)' },
+          { alignItems: animationType === 'slideInLeft' ? 'flex-end' : 'center' },
+        ]}
       >
         <TouchableOpacity
-          style={[Style.content]}
+          style={[Style.content, style]}
           onPress={maskClosable ? this._onClose : this._preventDefault}
           activeOpacity={1}
         >
@@ -152,6 +155,8 @@ ButtonModal.propTypes = {
   closeFn: PropTypes.func,
   bottomTips: PropTypes.any,
   maskClosable: PropTypes.bool,
+  svgOption: PropTypes.object,
+  style: PropTypes.object,
 };
 
 ButtonModal.defaultProps = {
@@ -160,6 +165,11 @@ ButtonModal.defaultProps = {
   closeFn() {},
   bottomTips: '正在加载……',
   maskClosable: false,
+  svgOption: {
+    height: 60,
+    width: 60,
+  },
+  style: {},
 };
 
 export default ButtonModal;

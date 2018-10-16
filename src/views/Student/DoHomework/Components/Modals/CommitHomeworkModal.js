@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import Modal, { ModalApi } from '../../../../../components/Modal';
+import { ModalApi } from '../../../../../components/Modal';
 
 class CommitHomeworkModal extends Component {
   componentDidMount() {
@@ -34,7 +34,7 @@ class CommitHomeworkModal extends Component {
       rightBtnText: '提交',
       leftBtnText: '检查',
       content: this.commitHomeworkContent(),
-      closeBtn: false,
+      closeBtn: true,
     };
     ModalApi.onOppen('ButtomModal', data);
   }
@@ -76,9 +76,7 @@ class CommitHomeworkModal extends Component {
 
  render() {
    return (
-     <View>
-       <Modal />
-     </View>
+     <View />
    );
  }
 }

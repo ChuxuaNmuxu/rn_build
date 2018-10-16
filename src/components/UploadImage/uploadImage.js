@@ -15,7 +15,7 @@ export default class UploadImage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      source: null,
+      // source: null,
     };
   }
 
@@ -65,8 +65,8 @@ export default class UploadImage extends Component {
 
   render() {
     const { CustomComponent } = this.props;
-    const { source } = this.state;
-    console.log('image', source);
+    // const { source } = this.state;
+    // console.log('image', source);
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={this.selectPhotoTapped}>

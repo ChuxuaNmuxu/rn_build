@@ -11,12 +11,13 @@ import {
   ChangeDropPosition,
   GetDropListenerRange,
   ChangeLastHandlePeriodIndex,
-  RegetDropListenerRange,
+  IsgetDropListenerRange,
   ChangeDropingData,
   ChangeTodoTask,
   ChangePlanTask,
   ChangeDragingTaskCorrespondPeriod,
   SaveTask,
+  IsFirstGetDropListenerRange,
 } from '../../../../actions/homeworkTask';
 import { adaptiveRotation } from '../../../../utils/resolution';
 
@@ -28,6 +29,7 @@ import { adaptiveRotation } from '../../../../utils/resolution';
     lastHandlePeriodIndex,
     isRegetDropListenerRange,
     dragData,
+    isFirstRegetDropListenerRange,
   },
 }) => ({
   listenerRangeList,
@@ -36,6 +38,7 @@ import { adaptiveRotation } from '../../../../utils/resolution';
   lastHandlePeriodIndex,
   isRegetDropListenerRange,
   dragData,
+  isFirstRegetDropListenerRange,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
   onChangeDropingData: bindActionCreators(ChangeDropingData, dispatch),
@@ -43,9 +46,10 @@ import { adaptiveRotation } from '../../../../utils/resolution';
   onChangeTodoTask: bindActionCreators(ChangeTodoTask, dispatch),
   onChangeDragingTaskCorrespondPeriod: bindActionCreators(ChangeDragingTaskCorrespondPeriod, dispatch),
   onChangeLastHandlePeriodIndex: bindActionCreators(ChangeLastHandlePeriodIndex, dispatch),
-  onRegetDropListenerRange: bindActionCreators(RegetDropListenerRange, dispatch),
+  onIsgetDropListenerRange: bindActionCreators(IsgetDropListenerRange, dispatch),
   onGetDropListenerRange: bindActionCreators(GetDropListenerRange, dispatch),
   onSaveTask: bindActionCreators(SaveTask, dispatch),
+  onIsFirstGetDropListenerRange: bindActionCreators(IsFirstGetDropListenerRange, dispatch),
 }))
 class PlanList extends Component {
   constructor(props) {
@@ -64,33 +68,22 @@ class PlanList extends Component {
   componentDidMount() {
     const { onChangeLastHandlePeriodIndex } = this.props;
     onChangeLastHandlePeriodIndex(this.currentPeriodIndex);
-    /**
-     * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
-     * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中
-     */
-    const delay = new Promise(resolve => setTimeout(resolve, 500));
-    delay.then(() => {
-      // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
-      // 如果有展开并且展开的任务
-      this.flatList.scrollToIndex({
-        animated: false,
-        index: this.currentPeriodIndex,
-        viewOffset: (142 - 496) / 2,
-        viewPosition: 0.5,
-      });
-      this.saveListenerRangeToStore();
-    });
   }
-
 
   componentDidUpdate() {
     const {
       isRegetDropListenerRange,
-      onRegetDropListenerRange,
+      onIsgetDropListenerRange,
+      isFirstRegetDropListenerRange,
     } = this.props;
     if (isRegetDropListenerRange) {
       this.saveListenerRangeToStore()
-        .then(() => onRegetDropListenerRange(false));
+        .then(() => onIsgetDropListenerRange(false));
+    }
+    if (isFirstRegetDropListenerRange) {
+      const { onIsFirstGetDropListenerRange } = this.props;
+      onIsFirstGetDropListenerRange(false);
+      this.scrollToIndex();
     }
   }
 
@@ -177,6 +170,25 @@ class PlanList extends Component {
     this.timeItemRefList.push(ref);
   }
 
+  scrollToIndex = () => {
+    /**
+     * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
+     * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中
+     */
+    const delay = new Promise(resolve => setTimeout(resolve, 500));
+    delay.then(() => {
+      // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
+      // 如果有展开并且展开的任务
+      this.flatList.scrollToIndex({
+        animated: false,
+        index: this.currentPeriodIndex,
+        viewOffset: (142 - 496) / 2,
+        viewPosition: 0.5,
+      });
+      this.saveListenerRangeToStore();
+    });
+  }
+
   // 将获取的时间段范围保存在store中
   saveListenerRangeToStore = () => {
     const { onGetDropListenerRange } = this.props;
@@ -195,7 +207,7 @@ class PlanList extends Component {
       listenerRangeList,
       dragingTaskCorrespondPeriodIndex,
       lastHandlePeriodIndex,
-      onRegetDropListenerRange,
+      onIsgetDropListenerRange,
       onChangeDropingData,
       onChangeTodoTask,
       onChangePlanTask,
@@ -215,7 +227,7 @@ class PlanList extends Component {
         getTimeItemRef={this.getTimeItemRef}
         dragingTaskCorrespondPeriodIndex={dragingTaskCorrespondPeriodIndex}
         lastHandlePeriodIndex={lastHandlePeriodIndex}
-        onRegetDropListenerRange={onRegetDropListenerRange}
+        onIsgetDropListenerRange={onIsgetDropListenerRange}
         onChangeDropingData={onChangeDropingData}
         onChangeTodoTask={onChangeTodoTask}
         onChangePlanTask={onChangePlanTask}
@@ -274,14 +286,16 @@ PlanList.propTypes = {
   dragingTaskCorrespondPeriodIndex: PropTypes.number,
   lastHandlePeriodIndex: PropTypes.number,
   onChangeLastHandlePeriodIndex: PropTypes.func,
-  onRegetDropListenerRange: PropTypes.func,
+  onIsgetDropListenerRange: PropTypes.func,
   isRegetDropListenerRange: PropTypes.bool,
+  isFirstRegetDropListenerRange: PropTypes.bool,
   onChangeDropingData: PropTypes.func,
   onChangePlanTask: PropTypes.func,
   onChangeTodoTask: PropTypes.func,
   onChangeDragingTaskCorrespondPeriod: PropTypes.func,
   dragData: PropTypes.object,
   onSaveTask: PropTypes.func,
+  onIsFirstGetDropListenerRange: PropTypes.func,
 };
 
 PlanList.defaultProps = {
@@ -292,14 +306,16 @@ PlanList.defaultProps = {
   dragingTaskCorrespondPeriodIndex: null,
   lastHandlePeriodIndex: null,
   onChangeLastHandlePeriodIndex: () => {},
-  onRegetDropListenerRange: () => {},
+  onIsgetDropListenerRange: () => {},
   isRegetDropListenerRange: false,
+  isFirstRegetDropListenerRange: false,
   onChangeDropingData: () => {},
   onChangePlanTask: () => {},
   onChangeTodoTask: () => {},
   onChangeDragingTaskCorrespondPeriod: () => {},
   dragData: {},
   onSaveTask: () => {},
+  onIsFirstGetDropListenerRange: () => {},
 };
 
 export default PlanList;

@@ -4,7 +4,7 @@ import {
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import Modal, { ModalApi } from '../../../../../components/Modal';
+import { ModalApi } from '../../../../../components/Modal';
 import DifficultLevelView from '../../../../../components/DifficultLevelView';
 
 class DifficultLevelModal extends Component {
@@ -36,9 +36,7 @@ class DifficultLevelModal extends Component {
 
    render() {
      return (
-       <View>
-         <Modal />
-       </View>
+       <View />
      );
    }
 }
