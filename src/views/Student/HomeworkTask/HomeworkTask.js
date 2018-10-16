@@ -20,11 +20,13 @@ import Modal, { ModalApi } from '../../../components/Modal';
     homeworkTaskReducer: {
       position,
       dragData,
+      todoList,
     },
   } = state;
   return {
     position,
     dragData,
+    todoList,
   };
 }, dispatch => ({
   onFetchStudentTaskList: bindActionCreators(FetchStudentTaskList, dispatch),
@@ -46,19 +48,26 @@ class HomeworkTask extends Component {
     // });
   }
 
-  renderHeader = () => (
-    <View style={[styles.header]}>
-      <View style={styles.headle_left}>
-        <I18nText style={styles.title} option={{ count: 10 }}>home.header.title</I18nText>
-        <I18nText style={styles.small}>home.header.tip</I18nText>
+  renderHeader = () => {
+    const { todoList } = this.props;
+    return (
+      <View style={[styles.header]}>
+        <View style={styles.headle_left}>
+          <I18nText style={styles.title} option={{ count: todoList.length }}>home.header.title</I18nText>
+          {
+            todoList.length
+              ? <I18nText style={styles.small}>home.header.tip</I18nText>
+              : null
+          }
+        </View>
+        <TouchableOpacity
+          onPress={BackHandler.exitApp}
+        >
+          <I18nText style={styles.headle}>home.header.headle</I18nText>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        onPress={BackHandler.exitApp}
-      >
-        <I18nText style={styles.headle}>home.header.headle</I18nText>
-      </TouchableOpacity>
-    </View>
-  )
+    );
+  }
 
   render() {
     const {
@@ -83,12 +92,14 @@ HomeworkTask.propTypes = {
   position: PropTypes.object,
   onFetchStudentTaskList: PropTypes.func,
   dragData: PropTypes.object,
+  todoList: PropTypes.array,
 };
 
 HomeworkTask.defaultProps = {
   position: {},
   onFetchStudentTaskList: () => {},
   dragData: {},
+  todoList: [],
 };
 
 export default HomeworkTask;
