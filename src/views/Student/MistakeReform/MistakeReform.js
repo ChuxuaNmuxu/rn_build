@@ -51,7 +51,7 @@ class MistakeReform extends Component {
 
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
-    // console.log(draftToHtml(JSON.parse(htmlContent)), 'htmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponent');
+    console.log(draftToHtml(JSON.parse(htmlContent)));
     const htmlViewStyles = StyleSheet.create({
       p: {
         fontSize: 24,
@@ -491,7 +491,7 @@ class MistakeReform extends Component {
                           style={{ width: '100%', height: '100%' }}
                           source={{ uri: item.url }}
                         /> */}
-                        <Text>{item.content}</Text>
+                        { this.htmlViewComponent(item.content) }
                       </View>
                     </View>
                     <View style={styles.space} />
@@ -511,13 +511,13 @@ class MistakeReform extends Component {
                     { this.showErrorRadio(item, i) }
                   </View>
                 )) : (
-                  <View className="finish_picture">
-                    <View className="finish_picture_child_view">
+                  <View style={styles.finish_picture}>
+                    <View style={styles.finish_picture_child_view}>
                       <Image
-                        style={{ width: '100%', height: '100%' }}
+                        // style={{ width: '100%', height: '100%' }}
                         source={require('../../../public/img/problem.png')}
                       />
-                      <Text>错题已复习完毕</Text>
+                      <Text style={styles.finish_picture_child_view_text}>错题已复习完毕</Text>
                     </View>
                   </View>
                 )
@@ -536,12 +536,12 @@ MistakeReform.propTypes = {
   // 错题的数据
   questions: PropTypes.array.isRequired,
   // 上游传过来的数据
-  problemCardInfo: PropTypes.array.isRequired,
+  problemCardInfo: PropTypes.array,
 };
 
-// MistakeReform.defaultProps = {
-//   isRandom: false,
-// };
+MistakeReform.defaultProps = {
+  problemCardInfo: [],
+};
 
 const mapStateToProps = (state) => {
   const {
