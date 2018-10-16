@@ -88,6 +88,15 @@ class Content extends Component {
     this.controlCalendarVisible(false);
   }
 
+  // 点击预览作业
+  previewHomework = () => {
+    const { homeworkId, previewed } = this.props;
+    // 判断是否预览过，预览过则不跳预览页: 是否已预览[0:否,1:是] ,
+    if (!parseInt(previewed)) {
+      Actions.PreviewHomework({ homeworkId });
+    }
+  }
+
   // 跳转到做作业页面时需要请求检查该份作业状态的接口,在saga中会根据接口返回的作业状态判断是否要跳到做作业页面，作业无效则会跳回首页
   doHomeWork = () => {
     const { actions: { checkHomeworkStatusAction }, homeworkId } = this.props;
@@ -119,7 +128,7 @@ class Content extends Component {
 
   render() {
     const {
-      waitReadOver, endTime, useTime, homeworkId,
+      waitReadOver, endTime, useTime, previewed,
     } = this.props;
     const {
       beginTime, showPicker,
@@ -211,8 +220,11 @@ class Content extends Component {
         </View>
         <View style={[styles.content_child_btn]}>
           {/* 预览作业 */}
-          <TouchableOpacity onPress={() => Actions.PreviewHomework({ homeworkId })}>
-            <I18nText style={styles.content_child_btn_normal}>
+          <TouchableOpacity
+            onPress={this.previewHomework}
+            activeOpacity={!parseInt(previewed) ? 0.2 : 1}
+          >
+            <I18nText style={[styles.content_child_btn_normal, parseInt(previewed) && styles.disable_btn]}>
               TaskDetail.reviewHomework
             </I18nText>
           </TouchableOpacity>
@@ -240,10 +252,12 @@ Content.propTypes = {
   actions: PropTypes.object.isRequired,
   // 当前这份作业的id
   homeworkId: PropTypes.string.isRequired,
+  // 是否已预览
+  previewed: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => {
-  const { data } = state.previewHomeworkReducer;
+  const { data } = state.taskDetailReducer;
   return {
     data,
   };

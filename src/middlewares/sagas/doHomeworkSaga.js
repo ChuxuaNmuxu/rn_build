@@ -83,6 +83,7 @@ function* submitDoHomeworkAnswerSaga(action) {
       const fetch = (arg, type) => Fetch.put(url, arg, type);
       const res = yield call(fetch, answerParam, 'json');
       const { code } = res;
+      console.log(999999999, res);
       if (code === 0) {
         yield put(actions.submitDoHomeworkAnswerAction(code, 'SUCCESS'));
       } else {
