@@ -17,15 +17,22 @@ const PlanItem = (props) => {
       homeworkId,
       previewed,
     } = props.data;
-    Actions.TaskDetail({
-      title,
-      useTime: `${useTime}分钟`,
-      endTime: moment(endTime).format('MM-DD HH:mm'),
-      // beginTime: '占位',
-      waitReadOver: !(waitReadOver < 4),
-      homeworkId,
-      previewed,
-    });
+    if (waitReadOver === 4) {
+      // console.log();
+      Actions.HomeworkCorrecting({
+        homeworkId,
+      });
+    } else {
+      Actions.TaskDetail({
+        title,
+        useTime: `${useTime}分钟`,
+        endTime: moment(endTime).format('MM-DD HH:mm'),
+        // beginTime: '占位',
+        waitReadOver: !(waitReadOver < 4),
+        homeworkId,
+        previewed,
+      });
+    }
   };
   const { type, ...rest } = props;
 

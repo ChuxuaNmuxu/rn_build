@@ -238,12 +238,22 @@
 }
 
 .finish_picture {
+  // height: 1800px;
+  // flex: 1;
+  height: 100%;
   justify-content: center;
   align-items: center;
-  height: 100%;
 }
 
 .finish_picture_child_view {
-  width: 500;
-  height: 500;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 300px;
+}
+
+.finish_picture_child_view_text {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#999999;
 }

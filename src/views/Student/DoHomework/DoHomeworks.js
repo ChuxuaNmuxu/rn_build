@@ -92,7 +92,11 @@ class DoHomeworks extends Component {
       if (needMark) {
         this.setRemarkModalVisibleFun(true);
       } else {
+        // 没有互批作业2秒后跳到首页
         this.setTipModalVisibleFun(true);
+        setTimeout(() => {
+          Actions.HomeworkTask();
+        }, 2000);
       }
 
       this.commitHomework = false;

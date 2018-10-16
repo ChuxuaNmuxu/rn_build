@@ -20,12 +20,13 @@ class ProblemCard extends PureComponent {
   }
 
   // 点击错题卡片进入错题详情页
-  goProblemDetail = (category) => {
+  goProblemDetail = (category, index) => {
     const { id } = this.props;
     // console.log(23, id);
     Actions.HomeworkProblemDetail({
       id,
       category,
+      index,
     });
   }
 
@@ -58,7 +59,7 @@ class ProblemCard extends PureComponent {
         <TouchableOpacity
           activeOpacity={1}
           style={styles.problemCard_box}
-          onPress={() => this.goProblemDetail(datas.category)}
+          onPress={() => this.goProblemDetail(datas.category, index)}
         >
           <View style={styles.problemCard}>
             <View style={styles.question_header}>
