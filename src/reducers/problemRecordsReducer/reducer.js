@@ -14,6 +14,7 @@ const initState = {
   isRevisingData: [],
   // 总数
   total: 0,
+  isLaoding: true,
 };
 
 const handle = {
@@ -23,6 +24,7 @@ const handle = {
   FETCH_PROBLEM_RECORDS_DROP_DOWN_REFRESH_DATA_SUCCESS: fn.fetchDropDownRefreshDataSuccess,
   //  参数变化
   FETCH_PROBLEM_RECORDS_CHANGE_PARAMS_REFRESH_DATA_SUCCESS: fn.fetchChangeParamsRefreshDataSuccess,
+  //
 };
 
 export default createReducer(initState, handle);
