@@ -14,9 +14,12 @@
   border:1px solid #dbdbdb;
 }
 
+$width: (48px * 48px) * 2;
+
 .task {
  @include task_common();
   background-color: #54cc82;
+  overflow: hidden;
 }
 
 .task_placeholder {
@@ -63,5 +66,20 @@
 
 .details {
   font-size: 18 ;
+  color: #ffffff;
+}
+
+.no_review_task {
+  align-items: center;
+  position: absolute;
+  bottom: -35.355px;
+  right: -35.355px;
+  height: 70.71px;
+  width: 70.71px;
+  background-color: red;
+}
+
+.no_review_task_text {
+  font-size: 14px;
   color: #ffffff;
 }
