@@ -7,6 +7,7 @@ import {
 import Drag from '../../../components/Drag/test-1';
 import Radio from '../../../components/Radio';
 import styles from '../DoHomework/Components/AnswerCard.scss';
+import styles2 from './style.sass';
 
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
@@ -29,8 +30,18 @@ export default class Test3 extends Component {
         <Text>
           我的
         </Text>
+        <View style={styles2.wrap}>
+          <View
+            style={[styles2.box, {
+              transform: [{
+                rotateZ: '-45deg',
+              }],
+            }]}
+          ><Text>已阅</Text>
+          </View>
+        </View>
 
-        <RadioGroup
+        {/* <RadioGroup
           value={1}
           onChange={this.handleToClickRadio}
           style={styles.radio_wrapper}
@@ -42,7 +53,7 @@ export default class Test3 extends Component {
           <RadioButton value={1}>√</RadioButton>
           <RadioButton value={-1}>×</RadioButton>
         </RadioGroup>
-        <Drag />
+        <Drag /> */}
       </View>
     );
   }

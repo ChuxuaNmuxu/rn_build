@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import CIcon from '../../../../components/Icon';
 import styles from './task.scss';
-import { mergeStyles, strFormatterIconName } from '../../../../utils/common';
+import { mergeStyles, strFormatterIconName, taskTypeMapColor } from '../../../../utils/common';
 import { adaptiveRotation } from '../../../../utils/resolution';
 import { ModalApi } from '../../../../components/Modal';
 
@@ -72,13 +72,13 @@ class TaskItem extends React.Component {
       type,
       onChangeLastHandlePeriodIndex,
       periodIndex,
-      onRegetDropListenerRange,
+      onIsgetDropListenerRange,
     } = this.props;
 
     if (type === 'showIconOnlyTask') {
       // type 类型为 showIconOnlyTask 时表示需要将点击的时间段选中
       onChangeLastHandlePeriodIndex(periodIndex);
-      onRegetDropListenerRange(true);
+      onIsgetDropListenerRange(true);
     }
     // 获取待操作元素的坐标值
     this.taskRef.measure((x, y, width, height, pageX, pageY) => {
@@ -118,7 +118,7 @@ class TaskItem extends React.Component {
       dragData,
       data,
       planList,
-      onRegetDropListenerRange,
+      onIsgetDropListenerRange,
       onPress,
       onChangeDropingData,
       onChangeDragingTaskCorrespondPeriod,
@@ -179,7 +179,7 @@ class TaskItem extends React.Component {
         // 如果释放的时间段索引不等于最后操作的索引就重新获取时间段监听范围
         if (index !== lastHandlePeriodIndex) {
           console.log('重新获取时间段监听列表');
-          onRegetDropListenerRange(true);
+          onIsgetDropListenerRange(true);
         }
       }
     }
@@ -284,19 +284,25 @@ class TaskItem extends React.Component {
           {
             (dragData.homeworkId === data.homeworkId) && !data.dragTask
               ? (
-                <View style={type === 'detailsTask' ? styles.task_placeholder : styles.task_placeholde_breviaryTask}>
-                  <View />
+                <View style={type === 'detailsTask' ? styles.task_placeholder : styles.task_placeholder_breviaryTask}>
+                  <CIcon
+                    style={mergeStyles(styles.icon, type === 'detailsTask'
+                      ? styles.placeholder_icon
+                      : styles.task_placeholder_breviaryTask_icon)}
+                    name="iconfont7"
+                    size={40}
+                  />
                 </View>
               )
               : (
                 <View
-                  style={mergeStyles(styles.task, wrapStyle)}
+                  style={mergeStyles(styles.task, wrapStyle, { backgroundColor: taskTypeMapColor(data.taskType) })}
                   ref={(ref) => { this.taskRef = ref; }}
                 >
                   <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
                     <CIcon
                       style={mergeStyles(styles.icon, iconStyle)}
-                      name={strFormatterIconName(data.subjectName || 'jinggao')}
+                      name={strFormatterIconName(data.subjectName)}
                       size={40}
                     />
                   </View>
@@ -313,6 +319,19 @@ class TaskItem extends React.Component {
                     </Text>
                   </View>
                   )}
+                  {
+                    data.subjectName === 3
+                      ? (
+                        <View style={[styles.no_review_task, {
+                          transform: [{
+                            rotateZ: '-45deg',
+                          }],
+                        }]}
+                        ><Text style={styles.no_review_task_text}>未批</Text>
+                        </View>
+                      )
+                      : null
+                  }
                 </View>
               )
           }
@@ -346,7 +365,7 @@ TaskItem.propTypes = {
   onChangeDragingTaskCorrespondPeriod: PropTypes.func,
   onChangeLastHandlePeriodIndex: PropTypes.func,
   lastHandlePeriodIndex: PropTypes.number,
-  onRegetDropListenerRange: PropTypes.func,
+  onIsgetDropListenerRange: PropTypes.func,
   planList: PropTypes.array,
   type: PropTypes.string,
   periodIndex: PropTypes.number,
@@ -369,7 +388,7 @@ TaskItem.defaultProps = {
   onChangeDragingTaskCorrespondPeriod: () => {},
   onChangeLastHandlePeriodIndex: () => {},
   lastHandlePeriodIndex: null,
-  onRegetDropListenerRange: () => {},
+  onIsgetDropListenerRange: () => {},
   planList: [],
   /**
    * type有三种状态：

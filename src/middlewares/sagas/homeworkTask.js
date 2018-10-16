@@ -41,6 +41,7 @@ function* getStudentTaskList(pageSize) {
     }
 
     yield put(actions.FetchStudentTaskList(null, 'SUCCESS'));
+    yield put(actions.IsFirstGetDropListenerRange(true));
 
     return data;
   } catch (e) {

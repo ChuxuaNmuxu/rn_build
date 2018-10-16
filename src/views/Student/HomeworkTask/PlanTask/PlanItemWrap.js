@@ -54,31 +54,33 @@ class TodoItem extends Component {
           style={[styles.time_wrap, focus ? styles.hover : {}]}
           ref={getTimeItemRef}
         >
-          <View style={styles.time_content} />
+
           <View style={[styles.time_box, checked ? styles.time_box_checked : {}]}>
+            <View style={styles.border} />
             <View style={styles.task_list}>
-              <Text>{index}</Text>
               {/*
                 * 1.有任务状态
                 * 2.进入时自动居中状态或者当前正在操作状态
               */}
               {
-                item.data.map((v, i) => (
-                  <PlanItem
-                    {...rest}
-                    key={i}
-                    type={checked ? 'breviaryTask' : 'showIconOnlyTask'}
-                    data={v}
-                    lastHandlePeriodIndex={lastHandlePeriodIndex}
-                    periodIndex={index}
-                  />
-                ))
-              }
-            </View>
-            <View style={styles.time_scale}>
-              {
-                Array(6).fill().map((v, i) => <View key={i} style={[styles.scale_line, (i === 1 && styles.scale)]} />)
-              }
+                  item.data.map((v, i) => (
+                    <PlanItem
+                      {...rest}
+                      key={i}
+                      type={checked ? 'breviaryTask' : 'showIconOnlyTask'}
+                      data={v}
+                      lastHandlePeriodIndex={lastHandlePeriodIndex}
+                      periodIndex={index}
+                    />
+                  ))
+                }
+              <View style={styles.time_scale}>
+                {
+                  Array(6).fill().map((v, i) => (
+                    <View key={i} style={[i === 1 ? {} : styles.scale_line]} />
+                  ))
+                }
+              </View>
             </View>
           </View>
           <View style={styles.time_text}><Text>{item.period}</Text></View>

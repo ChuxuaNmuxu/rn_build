@@ -15,7 +15,7 @@ import {
   ChangePlanTask,
   ChangeDragingTaskCorrespondPeriod,
   ChangeLastHandlePeriodIndex,
-  RegetDropListenerRange,
+  IsgetDropListenerRange,
   SaveTask,
 
 } from '../../../../actions/homeworkTask';
@@ -41,7 +41,7 @@ import {
   onChangeTodoTask: bindActionCreators(ChangeTodoTask, dispatch),
   onChangeDragingTaskCorrespondPeriod: bindActionCreators(ChangeDragingTaskCorrespondPeriod, dispatch),
   onChangeLastHandlePeriodIndex: bindActionCreators(ChangeLastHandlePeriodIndex, dispatch),
-  onRegetDropListenerRange: bindActionCreators(RegetDropListenerRange, dispatch),
+  onIsgetDropListenerRange: bindActionCreators(IsgetDropListenerRange, dispatch),
   onSaveTask: bindActionCreators(SaveTask, dispatch),
 }))
 class TodoList extends Component {
@@ -137,7 +137,7 @@ class TodoList extends Component {
       onChangeLastHandlePeriodIndex,
       planList,
       lastHandlePeriodIndex,
-      onRegetDropListenerRange,
+      onIsgetDropListenerRange,
       onSaveTask,
     } = this.props;
     const { listenerRangeList, dragData } = this.state;
@@ -154,7 +154,7 @@ class TodoList extends Component {
         onChangeLastHandlePeriodIndex={onChangeLastHandlePeriodIndex}
         lastHandlePeriodIndex={lastHandlePeriodIndex}
         planList={planList}
-        onRegetDropListenerRange={onRegetDropListenerRange}
+        onIsgetDropListenerRange={onIsgetDropListenerRange}
         onSaveTask={onSaveTask}
       />
     );
@@ -211,7 +211,7 @@ TodoList.defaultProps = {
   onChangeLastHandlePeriodIndex: () => {},
   planList: [],
   lastHandlePeriodIndex: null,
-  onRegetDropListenerRange: () => {},
+  onIsgetDropListenerRange: () => {},
   onSaveTask: () => {},
 };
 
@@ -227,7 +227,7 @@ TodoList.propTypes = {
   onChangeLastHandlePeriodIndex: PropTypes.func,
   planList: PropTypes.array,
   lastHandlePeriodIndex: PropTypes.number,
-  onRegetDropListenerRange: PropTypes.func,
+  onIsgetDropListenerRange: PropTypes.func,
   onSaveTask: PropTypes.func,
 };
 

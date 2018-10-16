@@ -6,11 +6,10 @@
 };
 
 .time_box {
+  flex-direction: row;
   justify-content: flex-end ;
-  min-height: 360px;
+  height: 360px;
   width: 142px;
-  border-left-width: 4px;
-  border-left-color: #e8e8e8 ;
 };
 
 .hover {
@@ -21,16 +20,17 @@
   width: 496px;
 }
 
-.task_list {
-  align-items: center;
+.border {
+  height: 360px;
+  width: 4px;
+  background-color: #e8e8e8 ;
 }
 
-.time_content {
-  position: absolute ;
-  bottom: 80px;
-  height: 400px;
-  width: 143px;
-};
+.task_list {
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+}
 
 .time_scale {
   flex-direction: row ;

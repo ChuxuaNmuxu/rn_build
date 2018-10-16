@@ -80,7 +80,7 @@ class ButtonModal extends Component {
 
   render() {
     // 产品打佬说了，这个东西是不能点蒙版关闭的，但是会有个关闭按钮
-    const { closeBtn } = this.props;
+    const { closeBtn, svgOption } = this.props;
     return (
       <TouchableOpacity
         onPress={this._preventDefault}
@@ -96,7 +96,7 @@ class ButtonModal extends Component {
         {
           closeBtn ? (
             <TouchableOpacity onPress={this._onClose} style={Style.close}>
-              <Svg height="60" width="60" source="close" fill="#fff" />
+              <Svg height={svgOption.height} width={svgOption.width} source="close" fill="#fff" />
             </TouchableOpacity>
           ) : null
         }
@@ -114,6 +114,7 @@ ButtonModal.propTypes = {
   rightBtnText: PropTypes.string,
   content: PropTypes.any,
   closeBtn: PropTypes.bool,
+  svgOption: PropTypes.object,
 };
 
 ButtonModal.defaultProps = {
@@ -125,6 +126,10 @@ ButtonModal.defaultProps = {
   leftBtnText: '',
   content: null,
   closeBtn: false,
+  svgOption: {
+    height: 60,
+    width: 60,
+  },
 };
 
 export default ButtonModal;

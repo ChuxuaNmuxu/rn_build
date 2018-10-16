@@ -35,9 +35,7 @@
   color: #333;
 }
 .question_content {
-  height: 300px;
-  justify-content: center;
-  align-items: center;
+  padding: 12px 24px;
 }
 .material_container {
   border-bottom-width: 12px;
@@ -45,7 +43,8 @@
   border-color: #fafafa;
 }
 .material_box {
-  margin-bottom: 12px;
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 .question_info {
   color: #999;

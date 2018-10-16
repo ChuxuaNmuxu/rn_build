@@ -6,7 +6,7 @@ export const fetchdoHomeworkAction = actionCreator(types.FETCH_DOHOMEWORK_QUESTI
 
 export const submitDoHomeworkAnswerAction = actionCreator(types.SUBMIT_DOHOMEWORK_ANSWER, '提交所做题目的答案');
 
-export const checkHomeworkAction = actionCreator(types.TOCHECK_HOMEWORK_QUESTION, '需要检查作业');
+export const checkHomeworkAction = actionCreator(types.TOCHECK_HOMEWORK_QUESTION, '是否想检查作业');
 
 export const saveHomeworkCheckTimeAction = actionCreator(types.TOSAVE_HOMEWORK_CHECKTIME, '保存检查耗时');
 

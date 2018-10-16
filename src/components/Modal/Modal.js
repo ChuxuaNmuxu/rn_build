@@ -76,7 +76,7 @@ class MyModal extends Component {
 
   _ButtomModal=() => {
     const {
-      activeBtn, rightBtnText, leftBtnText, content, rCallbakFn, lCallbakFn, closeBtn,
+      activeBtn, rightBtnText, leftBtnText, content, rCallbakFn, lCallbakFn, closeBtn, style, svgOption,
     } = this.state;
     return (
       <ButtomModal
@@ -88,6 +88,8 @@ class MyModal extends Component {
         leftBtnText={leftBtnText}
         content={content}
         closeBtn={closeBtn}
+        style={style}
+        svgOption={svgOption}
       />
     );
   }
@@ -109,7 +111,7 @@ class MyModal extends Component {
 
   _AnimationsModal=() => {
     const {
-      bottomTips, maskClosable, svgName, animationType,
+      bottomTips, maskClosable, svgName, animationType, style, svgOption,
     } = this.state;
     return (
       <AnimationsModal
@@ -118,6 +120,8 @@ class MyModal extends Component {
         animationType={animationType}
         bottomTips={bottomTips}
         maskClosable={maskClosable}
+        style={style}
+        svgOption={svgOption}
       />
     );
   }
