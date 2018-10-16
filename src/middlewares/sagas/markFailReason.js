@@ -18,6 +18,7 @@ function* handleFailReason(action) {
     params: {
       reason,
     },
+    callback,
   } = action.payload;
 
   console.log(23, action);
@@ -28,10 +29,14 @@ function* handleFailReason(action) {
 
     console.log(26, res);
 
-    if (code !== 0) {
-      yield put(actions.markFailReason(code, 'ERROR'));
-    } else {
+    if (code === 0) {
       yield put(actions.markFailReason({ data, id }, 'SUCCESS'));
+      // 有时候存在需要重新刷新数据的可能性
+      if (callback) {
+        callback();
+      }
+    } else {
+      yield put(actions.markFailReason(code, 'ERROR'));
     }
   } catch (e) {
     yield put(actions.markFailReason(e, 'ERROR'));

@@ -25,6 +25,7 @@ export const FETCH_INCORRECT_PROPBLEM_DETAIL = 'FETCH_INCORRECT_PROPBLEM_DETAIL'
 export const FETCH_MISTAKE_LIST = 'FETCH_MISTAKE_LIST';
 export const ADD_MISTAKE_LIST = 'ADD_MISTAKE_LIST';
 export const PUT_FAIL_PROBLEM_REASON = 'PUT_FAIL_PROBLEM_REASON';
+export const HOMEWORK_PROBLEM_DETAIL_INNITAIL_STATE = 'HOMEWORK_PROBLEM_DETAIL_INNITAIL_STATE';
 
 /**
  * ------------------------预览作业页面action-----------------------------------------
