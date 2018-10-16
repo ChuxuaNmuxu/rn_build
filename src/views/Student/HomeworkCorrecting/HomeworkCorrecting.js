@@ -3,20 +3,22 @@ import {
   Text,
   View,
   TouchableOpacity,
-  // Image,
+  StyleSheet,
+  Image,
   // TouchableHighlight,
   ScrollView,
 } from 'react-native';
-import immer from 'immer';
+// import immer from 'immer';
 import PopupDialog from 'react-native-popup-dialog';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Swiper from 'react-native-swiper';
 import Entypo from 'react-native-vector-icons/Entypo';
+import HTMLView from 'react-native-htmlview';
+import draftToHtml from '../../../utils/draftjsToHtml';
 import Radio from '../../../components/Radio';
 import Modal, { ModalApi } from '../../../components/Modal';
-// import draftToHtml from '../../../utils/draftjsToHtml';
 // import WrongReason from '../../../components/WrongReason';
 import I18nText from '../../../components/I18nText';
 import styles from './HomeworkCorrecting.scss';
@@ -37,17 +39,28 @@ class HomeworkCorrecting extends Component {
     actions.fetchListAction(homeworkId, 'REQUEST');
   }
 
-  // componentWillUnmount() {
-  //   DeviceEventEmitter.removeAllListeners('navigatorBack');
-  //   if (this.timer) {
-  //     clearTimeout(this.timer);
-  //     this.timer = null;
-  //   }
-  // }
-
   setPopScore = (score, index) => {
     const { actions } = this.props;
     actions.setCorrectResultAction({ score, index });
+  }
+
+  // 富文本数据展示框
+  htmlViewComponent=(htmlContent) => {
+    // console.log(draftToHtml(JSON.parse(htmlContent)));
+    const htmlViewStyles = StyleSheet.create({
+      p: {
+        fontSize: 24,
+        color: '#999999',
+      },
+    });
+    return (
+      <View style={styles.htmlViewComponent}>
+        <HTMLView
+          value={draftToHtml(JSON.parse(htmlContent))}
+          stylesheet={htmlViewStyles}
+        />
+      </View>
+    );
   }
 
   // setButton = (index) => {
@@ -76,18 +89,6 @@ class HomeworkCorrecting extends Component {
     ModalApi.onOppen('CustomModal', data);
   }
 
-  closePop = () => {
-    this.setState(immer((state) => {
-      state.popInfo.visible = false;
-    }));
-  }
-  // showPopover = () => {
-  //   const { isVisible } = this.state;
-  //   this.setState({
-  //     isVisible: !isVisible,
-  //   });
-  // }
-
   customContent=() => (
     <View style={styles.customContent}>
       <View style={styles.customContentItem}>
@@ -107,7 +108,7 @@ class HomeworkCorrecting extends Component {
       homeworkId: item.homeworkId,
       studentId: item.studentId,
       questionId: item.questionId,
-      score: item.popInfo.score,
+      score: item.score,
     };
     // const newIndex = index < list.length - 1 ? index + 1 : index;
     const bol = index < list.length - 1;
@@ -161,6 +162,7 @@ class HomeworkCorrecting extends Component {
     // if (list.length > 0) {
     //   console.log(draft)
     // }
+    console.log(index, list.length);
     return (
       <View style={styles.wrapper}>
         <PopupDialog
@@ -256,43 +258,42 @@ class HomeworkCorrecting extends Component {
                           backgroundColor: '#30bf6c',
                         }}
                       >
-                        {/* {
-                          item.url.map((item2, index2) => ( */}
-                        <TouchableOpacity
+                        {
+                          item.newContent.map((item2, index2) => (
+                            <TouchableOpacity
                               // 返回首页
-                          onPress={() => {
-                            console.log('查看老师布置的作业！');
-                            // const data = { url: item.answerFileUrl, studentName: '老师布置的作业' };
-                            // ModalApi.onOppen('ImageViewer', data);
-                          }}
-                          // key={index2}
-                        >
-                          {/* <Image
+                              onPress={() => {
+                                console.log('查看老师布置的作业！');
+                                // const data = { url: item.answerFileUrl, studentName: '老师布置的作业' };
+                                // ModalApi.onOppen('ImageViewer', data);
+                              }}
+                              key={index2}
+                            >
+                              {/* <Image
                             style={{ width: '100%', height: '100%' }}
                             source={{ uri: item.answerFileUrl }}
                           /> */}
-                          <Text>{ item.content }</Text>
-                          <Text>{ item.materialContent }</Text>
-                        </TouchableOpacity>
-                        {/* ))
-                        } */}
+                              { this.htmlViewComponent(item2) }
+                            </TouchableOpacity>
+                          ))
+                        }
                       </Swiper>
                     </View>
                     <View style={styles.space} />
                     <TouchableOpacity
                       // 点击查看学生题目
                       onPress={() => {
-                        console.log('查看学生的答案');
-                        // const data = { url: item.answerFileUrl, studentName: '学生的答案' };
-                        // ModalApi.onOppen('ImageViewer', data);
+                        // console.log('查看学生的答案');
+                        const data = { url: item.answerFileUrl, studentName: '学生' };
+                        ModalApi.onOppen('ImageViewer', data);
                       }}
                     >
                       <View style={styles.body_homework_studentAnswer}>
-                        {/* <Image
+                        <Image
                           style={{ width: '100%', height: '100%' }}
                           source={{ uri: `${item.answerFileUrl}` }}
-                        /> */}
-                        <Text>{ item.answerContent }</Text>
+                        />
+                        {/* { this.htmlViewComponent(item.answerFileUrl) } */}
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -333,10 +334,20 @@ class HomeworkCorrecting extends Component {
                     <View style={styles.foot_child_right}>
                       <TouchableOpacity
                         onPress={() => this.finishReadOver(item, index1)}
+                        disabled={item.score === undefined}
                       >
-                        <I18nText style={[styles.foot_btn, styles.btn_color_right]}>
-                          homeworkCorrecting.finishCorrectingAndNext
-                        </I18nText>
+                        {
+                          index !== (list.length - 1) ? (
+                            <I18nText style={[styles.foot_btn, styles.btn_color_right]}>
+                              homeworkCorrecting.finishCorrectingAndNext
+                            </I18nText>
+                          ) : (
+                            <I18nText style={[styles.foot_btn, styles.btn_color_right]}>
+                            homeworkCorrecting.finishCorrectingNotNext
+                            </I18nText>
+                          )
+                        }
+
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -360,7 +371,7 @@ HomeworkCorrecting.propTypes = {
 };
 
 HomeworkCorrecting.defaultProps = {
-  homeworkId: '500245896139636736',
+  homeworkId: '500245896139636736', // 500245896139636736
 };
 
 const mapStateToProps = (state) => {
