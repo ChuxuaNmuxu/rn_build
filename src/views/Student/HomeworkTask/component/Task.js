@@ -302,7 +302,7 @@ class TaskItem extends React.Component {
                   <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
                     <CIcon
                       style={mergeStyles(styles.icon, iconStyle)}
-                      name={strFormatterIconName(data.subjectName || 'jinggao')}
+                      name={strFormatterIconName(data.subjectName)}
                       size={40}
                     />
                   </View>
