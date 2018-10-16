@@ -30,4 +30,13 @@ public class MainActivity extends ReactActivity {
             RNImmersiveModule.getInstance().emitImmersiveStateChangeEvent();
         }
     }
+
+    public void onResume() {
+    super.onResume();
+    MobclickAgent.onResume(this);
+    }
+    public void onPause() {
+    super.onPause();
+    MobclickAgent.onPause(this);
+    }
 }
