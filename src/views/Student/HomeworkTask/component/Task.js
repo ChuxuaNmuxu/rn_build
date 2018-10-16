@@ -72,13 +72,13 @@ class TaskItem extends React.Component {
       type,
       onChangeLastHandlePeriodIndex,
       periodIndex,
-      onRegetDropListenerRange,
+      onIsgetDropListenerRange,
     } = this.props;
 
     if (type === 'showIconOnlyTask') {
       // type 类型为 showIconOnlyTask 时表示需要将点击的时间段选中
       onChangeLastHandlePeriodIndex(periodIndex);
-      onRegetDropListenerRange(true);
+      onIsgetDropListenerRange(true);
     }
     // 获取待操作元素的坐标值
     this.taskRef.measure((x, y, width, height, pageX, pageY) => {
@@ -118,7 +118,7 @@ class TaskItem extends React.Component {
       dragData,
       data,
       planList,
-      onRegetDropListenerRange,
+      onIsgetDropListenerRange,
       onPress,
       onChangeDropingData,
       onChangeDragingTaskCorrespondPeriod,
@@ -179,7 +179,7 @@ class TaskItem extends React.Component {
         // 如果释放的时间段索引不等于最后操作的索引就重新获取时间段监听范围
         if (index !== lastHandlePeriodIndex) {
           console.log('重新获取时间段监听列表');
-          onRegetDropListenerRange(true);
+          onIsgetDropListenerRange(true);
         }
       }
     }
@@ -352,7 +352,7 @@ TaskItem.propTypes = {
   onChangeDragingTaskCorrespondPeriod: PropTypes.func,
   onChangeLastHandlePeriodIndex: PropTypes.func,
   lastHandlePeriodIndex: PropTypes.number,
-  onRegetDropListenerRange: PropTypes.func,
+  onIsgetDropListenerRange: PropTypes.func,
   planList: PropTypes.array,
   type: PropTypes.string,
   periodIndex: PropTypes.number,
@@ -375,7 +375,7 @@ TaskItem.defaultProps = {
   onChangeDragingTaskCorrespondPeriod: () => {},
   onChangeLastHandlePeriodIndex: () => {},
   lastHandlePeriodIndex: null,
-  onRegetDropListenerRange: () => {},
+  onIsgetDropListenerRange: () => {},
   planList: [],
   /**
    * type有三种状态：
