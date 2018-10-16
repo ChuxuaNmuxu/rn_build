@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { PropTypes } from 'prop-types';
 import HTMLView from 'react-native-htmlview';
-import draftToHtml from '../../HomworkRecordDetail/lib/draftjs-to-html';
 import nzhcn from 'nzh/cn';
+import draftToHtml from '../../HomworkRecordDetail/lib/draftjs-to-html';
 import styles from './QuestionCard.scss';
 import { getQuestionTypeName } from '../../../../utils/common';
 

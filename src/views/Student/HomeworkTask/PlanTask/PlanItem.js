@@ -15,14 +15,21 @@ const PlanItem = (props) => {
       taskType: waitReadOver,
       homeworkId,
     } = props.data;
-    Actions.TaskDetail({
-      title,
-      useTime: `${useTime}分钟`,
-      endTime: moment(endTime).format('MM-DD HH:mm'),
-      // beginTime: '占位',
-      waitReadOver: !(waitReadOver < 4),
-      homeworkId,
-    });
+    if (waitReadOver === 4) {
+      // console.log();
+      Actions.HomeworkCorrecting({
+        homeworkId,
+      });
+    } else {
+      Actions.TaskDetail({
+        title,
+        useTime: `${useTime}分钟`,
+        endTime: moment(endTime).format('MM-DD HH:mm'),
+        // beginTime: '占位',
+        waitReadOver: !(waitReadOver < 4),
+        homeworkId,
+      });
+    }
   };
   const { type, ...rest } = props;
 

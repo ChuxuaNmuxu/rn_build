@@ -5,5 +5,5 @@ export const fetchListSuccess = (state, action) => {
 export const setScore = (state, action) => {
   console.log(action.payload);
   const { score, index } = action.payload;
-  state.list[index].popInfo.score = score;
+  state.list[index].score = score;
 };

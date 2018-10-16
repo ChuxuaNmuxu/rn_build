@@ -31,6 +31,7 @@ export default {
     partOfTheError: '部分正确',
     error: '错误',
     finishCorrectingAndNext: '完成批阅,下一题',
+    finishCorrectingNotNext: '完成批阅',
     homeworkCorrecting: '批阅:',
   },
 
