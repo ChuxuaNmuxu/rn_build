@@ -7,8 +7,8 @@ import * as actions from '../../actions/mistakeListAction';
 import * as actionTypes from '../../constants/actionType';
 import enhanceSaga from './enhanceSaga';
 
-export default function* mistakeList() {
-  yield takeLatest(actionTypes.FETCH_MISTAKE_LIST, enhanceSaga(getData));
+export default function* mistakeListSaga() {
+  yield takeLatest(actionTypes.FETCH_MISTAKE_LIST, enhanceSaga(getDataSaga));
 }
 
 const defaultParams = {
@@ -17,7 +17,7 @@ const defaultParams = {
 };
 
 // 更改最后一次操作的时间段saga
-function* getData(action) {
+function* getDataSaga(action) {
   console.log(16, action);
   const {
     params, successFn = R.identity, failureFn = R.identity, action: costomAction = actions.getMistakeList,
@@ -26,7 +26,6 @@ function* getData(action) {
   const fetchParam = qs.stringify(Object.assign(defaultParams, params));
   console.log(32, fetchParam);
   const url = `/app/api/student/failed-questions/list?${fetchParam}`;
-
   try {
     const res = yield Fetch.get(url);
     const { code, data } = res;
