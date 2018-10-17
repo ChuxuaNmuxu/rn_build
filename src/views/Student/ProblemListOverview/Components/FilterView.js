@@ -75,7 +75,10 @@ class FilterView extends Component {
 }
 
 FilterView.propTypes = {
-  currentSubjectId: PropTypes.number.isRequired,
+  currentSubjectId: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]).isRequired,
   subjectData: PropTypes.array.isRequired,
   filterSubjectFun: PropTypes.func.isRequired,
   filterMoreFun: PropTypes.func.isRequired,

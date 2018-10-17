@@ -17,14 +17,17 @@ class ProblemList extends Component {
   _keyExtractor = (item, index) => item.id;
 
   // 渲染子组件
-  _renderItem = ({ item, index }) => (
-    <ProblemCard
-      key={index}
-      index={index}
-      id={item.id}
-      datas={item}
-    />
-  );
+  _renderItem = ({ item, index }) => {
+    console.log('ProblemList', item);
+    return (
+      <ProblemCard
+        key={index}
+        index={index}
+        id={item.id}
+        datas={item}
+      />
+    );
+  }
 
    // 渲染一个空白页，当列表无数据的时候显示。这里简单写成一个View控件
    _renderEmptyView = item => <View />;

@@ -107,6 +107,7 @@ export default {
       form: '来自：',
       reviewQuestion: '复习错题',
     },
+    random_mistake_reform: '错题随机复习',
   },
 
   // 错题重做

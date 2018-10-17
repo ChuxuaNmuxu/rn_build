@@ -8,11 +8,12 @@ import {
   StyleSheet,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import HTMLView from 'react-native-htmlview';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-native-swiper';
+import HTMLView from 'react-native-htmlview';
+import draftToHtml from '../../../utils/draftjsToHtml';
 import Modal, { ModalApi } from '../../../components/Modal';
 import ThumbnailImage from '../../../components/ThumbnailImage';
 import { getQuestionTypeName } from '../../../utils/common';
@@ -23,7 +24,6 @@ import CIcon from '../../../components/Icon';
 import AnswerCard from '../DoHomework/Components/AnswerCard';
 import WrongReason from '../../../components/WrongReason';
 import styles from './MistakeReform.scss';
-import draftToHtml from '../../../utils/draftjsToHtml';
 import NotResult from '../../../components/NotResult';
 // import problemImg from '../../../public/img/problem.png';
 
@@ -446,6 +446,7 @@ class MistakeReform extends Component {
   render() {
     const { questions } = this.props;
     const { index } = this.state;
+    const contentWrapStyle = questions.length > 0 ? styles.content_wrap : styles.content_wrap_not_result;
     return (
       <View style={styles.mistakeReform_container}>
         <Modal />
@@ -466,7 +467,7 @@ class MistakeReform extends Component {
           { this.haveIndex(index) }
         </View>
         <ScrollView>
-          <View style={styles.content_wrap}>
+          <View style={contentWrapStyle}>
             <Swiper
               ref={(node) => { this.swiperRef = node; }}
               loop={false}

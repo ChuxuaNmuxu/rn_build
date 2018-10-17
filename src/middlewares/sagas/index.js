@@ -21,7 +21,7 @@ import homeworkCorrectingSaga from './homeworkCorrectingSaga';
 // 错题详情
 import inCorrectProblemDetail from './inCorrectProblemDetail';
 // 错题列表
-import mistakeList from './mistakeList';
+import mistakeListSaga from './mistakeListSaga';
 // 标记错题原因
 import markFailReason from './markFailReason';
 
@@ -39,7 +39,7 @@ function* rootSaga() {
     fork(taskDetailSaga),
     fork(homeworkCorrectingSaga),
     fork(inCorrectProblemDetail),
-    fork(mistakeList),
+    fork(mistakeListSaga),
     fork(markFailReason),
   ]);
 }

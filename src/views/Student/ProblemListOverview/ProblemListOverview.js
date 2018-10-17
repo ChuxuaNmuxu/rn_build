@@ -5,41 +5,21 @@ import {
   View,
   Text,
   TouchableOpacity,
+  // ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getMistakeList } from '../../../actions/mistakeListAction';
 import { initialFetch } from '../../../actions/problemRecordsAction';
 import styles from './ProblemListOverview.scss';
+import I18nText from '../../../components/I18nText';
 import { CustomButton } from '../../../components/Icon';
 import FilterView from './Components/FilterView';
 import ProblemList from './ProblemList';
 import ExtendListView from '../../../components/ExtendListView';
 import SelectListButton from '../ProblemRecords/Components/SelectListButton';
+import { getRandomArrayItem } from '../../../utils/common';
 
-@connect((state) => {
-  const {
-    mistakeListReducer: {
-      mistakeList,
-    },
-    problemOverviewReducer: {
-      data,
-    },
-    ProblemRecordsReducer: {
-      // 年级
-      allGradeData,
-    },
-  } = state;
-
-  return {
-    mistakeList,
-    problemOverviewData: data,
-    allGradeData,
-  };
-}, dispatch => ({
-  onGetMistakeList: bindActionCreators(getMistakeList, dispatch),
-  getGrades: bindActionCreators(initialFetch, dispatch),
-}))
 class ProblemListOverview extends Component {
   static propTypes = {
     onGetMistakeList: PropTypes.func.isRequired,
@@ -148,6 +128,15 @@ class ProblemListOverview extends Component {
     this.setVisibleFun(!showExtendView);
   }
 
+  // 前往随机错题重做(传5个随机的数据过去)
+  randomMistakeReform = (list) => {
+    const datas = getRandomArrayItem(list, 5);
+    console.log('原数组list=', list, '随鸡5到题', datas);
+    Actions.MistakeReform({
+      problemCardInfo: datas,
+    });
+  }
+
   // 渲染需要展示在扩展列表视图中的组件
   renderFilterView = () => {
     const { allGradeData } = this.props;
@@ -206,17 +195,55 @@ class ProblemListOverview extends Component {
           filterSubjectFun={this.filterSubjectFun}
           filterMoreFun={this.filterMoreFun}
         />
+        {/* <ScrollView> */}
         <ProblemList refreshList={this.refreshList} mistakeList={mistakeList} />
+        {/* </ScrollView> */}
         {
+          // 更多筛选
           showExtendView && (
           <ExtendListView setVisibleFun={this.setVisibleFun} setTop={144}>
             {this.renderFilterView()}
           </ExtendListView>
           )
-         }
+        }
+        {/* <View style={{ height: 160 }} /> */}
+        <View style={styles.random_style}>
+          <Text style={styles.random_btn_normal}>{`<共${mistakeList.length}题>`}</Text>
+          <TouchableOpacity disabled={mistakeList.length === 0} onPress={() => this.randomMistakeReform(mistakeList)}>
+            <I18nText style={styles.random_btn}>
+            ProblemListOverview.random_mistake_reform
+            </I18nText>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
 }
 
-export default ProblemListOverview;
+const mapStateToProps = (state) => {
+  const {
+    mistakeListReducer: {
+      mistakeList,
+    },
+    problemOverviewReducer: {
+      data,
+    },
+    ProblemRecordsReducer: {
+      // 年级
+      allGradeData,
+    },
+  } = state;
+
+  return {
+    mistakeList,
+    problemOverviewData: data,
+    allGradeData,
+  };
+};
+const mapDispatchToProps = dispatch => ({
+  onGetMistakeList: bindActionCreators(getMistakeList, dispatch),
+  getGrades: bindActionCreators(initialFetch, dispatch),
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProblemListOverview);
