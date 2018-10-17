@@ -4,108 +4,101 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
+  // Image,
   ScrollView,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Swiper from 'react-native-swiper';
-import { getIncorrectInfo, markFailReason } from '../../../actions/incorrectProblemDetail';
-import CIcon from '../../../components/Icon';
+import _ from 'ramda';
+import { getIncorrectInfo, markFailReason, initialState } from '../../../actions/incorrectProblemDetail';
+// import CIcon from '../../../components/Icon';
 import styles from './HomeworkProblemDetail.scss';
-import ThumbnailImage from '../../../components/ThumbnailImage';
-import WrongReason from '../../../components/WrongReason';
-import {
-  convertToDifficultyLevel,
-} from '../../../utils/common';
+import DetailView from './DetailView';
 
-@connect((state) => {
-  const {
-    incorrectProblemDetail: {
-      problems,
-    },
-    mistakeListReducer: {
-      mistakeList,
-    },
-  } = state;
-
-  return {
-    problems,
-    mistakeList,
-  };
-}, dispatch => ({
-  onFetchProblemDetail: bindActionCreators(getIncorrectInfo, dispatch),
-  onMarkFailReason: bindActionCreators(markFailReason, dispatch),
-}))
 class HomeworkProblemDetail extends Component {
   constructor(props) {
     super(props);
     console.log(20, props);
-    // const {
-    //   id,
-    //   // incorrectIdList
-    // } = props;
-
+    const {
+      id, category, onFetchProblemDetail, index,
+    } = props;
     const { mistakeList = [] } = props;
-    const incorrectIdList = mistakeList.map(v => v.id);
-
-    console.log(48, incorrectIdList);
-
+    // 这个是个优化，避免每次更新都去重新定义图片的宽高
+    // fill是个神奇的东西，是地址引用
+    this.imageWHArr = new Array(mistakeList.length).fill({ W: 0, H: 0 }).map(item => JSON.parse(JSON.stringify(item)));
+    // 初始化
+    onFetchProblemDetail({
+      params: { id, category }, index, len: mistakeList.length, isInit: 'Y',
+    });
     this.state = {
-      incorrectIdList,
-      index: 0,
-      // currentId: id,
+      index,
     };
   }
 
-  componentDidMount() {
-    const { id, category, onFetchProblemDetail } = this.props;
-    onFetchProblemDetail({ params: { id, category } });
+  swiper = (nextIndex) => {
+    this.setState({
+      index: nextIndex,
+    }, () => this.swiperFetch(nextIndex));
   }
 
-  // static getDerivedStateFromProps(props, state) {
-  //   const { currentId } = state;
-  //   const { problems } = props;
-  //   const problem = problems[currentId];
-  //   if (problem) {
-  //     return {
-  //       problem,
-  //     };
-  //   }
-  //   return null;
-  // }
-
-  onChange = (reason) => {
-    console.log(90, reason);
-    const { onMarkFailReason, id, category } = this.props;
-
-    onMarkFailReason({
-      id,
-      category,
-      params: {
-        reason,
-      },
+  // 滚动后请求~~~
+  swiperFetch=(index) => {
+    const { detailDataList, mistakeList, onFetchProblemDetail } = this.props;
+    if (!_.isNil(detailDataList[index])) {
+      return;
+    }
+    const { id, category } = mistakeList[index];
+    onFetchProblemDetail({
+      params: { id, category }, index,
     });
   }
 
-  swiper = (nextIndex) => {
-    const { incorrectIdList } = this.state;
-    const nextId = incorrectIdList[nextIndex];
-    console.log('nextId', nextId);
-    const { onFetchProblemDetail, category } = this.props;
-    onFetchProblemDetail({ params: { id: nextId, category } });
-    // this.setState({
-    //   currentId: nextId,
-    // });
+  // 标记错误原因
+  returnFailReason=(params) => {
+    // 应该作为回调
+    const { index } = this.state;
+    const { mistakeList, onFetchProblemDetail } = this.props;
+    const { id, category } = mistakeList[index];
+
+    params.callback = () => onFetchProblemDetail({
+      params: { id, category }, index,
+    });
+    const { onMarkFailReason } = this.props;
+    onMarkFailReason(params);
+  }
+
+  saveImageWH=(W, H) => {
+    const { index } = this.state;
+    this.imageWHArr[index] = {
+      W, H,
+    };
+  }
+
+  myComponentWillUnmount=() => {
+    // 离开该页面清理数据，否则下次进来有缓存
+    const {
+      oninitialState,
+    } = this.props;
+    oninitialState(null);
+    Actions.pop();
+    console.log('caonika');
   }
 
   render() {
-    const { problems } = this.props;
-    const { incorrectIdList } = this.state;
+    const { detailDataList, mistakeList } = this.props;
+    const { index } = this.state;
+    if (_.isEmpty(detailDataList)) {
+      return null;
+    }
+    // 题型
+    const qsType = (mistakeList[index].type === 10 || mistakeList[index].type === 11) ? 'sub' : 'obj';
+    const type = mistakeList[index].category === 1 ? 'H' : 'E';
+    // const { incorrectIdList } = this.state;
 
     console.log(49, this.props);
-    const { index } = this.state;
+    // const { index } = this.state;
     return (
       <View style={styles.wrapper}>
         {/* 头部自定义导航条 */}
@@ -113,7 +106,7 @@ class HomeworkProblemDetail extends Component {
           <View style={styles.head_icon}>
             <TouchableOpacity
               // 返回首页
-              onPress={Actions.pop}
+              onPress={this.myComponentWillUnmount}
             >
               <Entypo name="chevron-thin-left" size={40} color="white" />
             </TouchableOpacity>
@@ -131,67 +124,23 @@ class HomeworkProblemDetail extends Component {
               onIndexChanged={this.swiper}
             >
               {
-            incorrectIdList.map((id) => {
-              const problem = problems[id];
-              return !problem
-                ? (
-                  <View key={id}>
-                    <Text>
-                      请求数据中...
-                    </Text>
-                  </View>
+                // 假设为null，则该组件LAODING
+                detailDataList.map(
+                  item => (
+                    <DetailView
+                      index={index}
+                      imageWHArr={this.imageWHArr}
+                      qsType={qsType}
+                      data={item}
+                      type={type}
+                      id={mistakeList[index].id}
+                      key={`${index}DetailView`}
+                      returnFailReason={this.returnFailReason}
+                      saveImageWH={this.saveImageWH}
+                    />
+                  ),
                 )
-                : (
-                  <View key={id}>
-                    {/* <Image
-                      style={{ width: '100%', height: 225 }}
-                      source={{ uri: `${problem.titleUrl}` }}
-                    /> */}
-                    <View>
-                      <Text>{problem.content}</Text>
-                    </View>
-                    <View style={styles.space} />
-                    <View style={styles.reason_wrap}>
-                      <View style={styles.reason_word}>
-                        <View style={styles.reason_word_child}>
-                          <Text style={styles.reason_icon}>
-                            <CIcon name="cuowu" size={20} color="white" />
-                          </Text>
-                          <Text style={styles.reason_answer}>
-                        回答错误答,案是B,你的答案是A
-                          </Text>
-                        </View>
-                        <View style={styles.reason_word_child}>
-                          <Text style={[styles.reason_difficult]}>
-                      难易程度:
-                          </Text>
-                          <Text style={[styles.reason_difficult, styles.reason_difficult_result]}>
-                            {convertToDifficultyLevel(problem.difficultyLevel)}
-                          </Text>
-                        </View>
-                      </View>
-                      <View style={styles.reason_image}>
-                        <Image
-                          style={{ height: 312 }}
-                          source={{ uri: `${problem.titleUrl}` }}
-                        />
-                      </View>
-                    </View>
-                    <View style={styles.space} />
-                    <View style={styles.answer_wrap}>
-                      <Text style={styles.answer_title}>题目答案:</Text>
-                      <ThumbnailImage
-                        option={{
-                          url: problem.titleUrl,
-                        }}
-                      />
-                    </View>
-                    <View style={styles.space} />
-                    <WrongReason onChange={this.onChange} defaultValue={problem.failReason} />
-                  </View>
-                );
-            })
-          }
+              }
             </Swiper>
           </View>
         </ScrollView>
@@ -202,33 +151,40 @@ class HomeworkProblemDetail extends Component {
 
 HomeworkProblemDetail.propTypes = {
   // 传进来的题目
-  title: PropTypes.array,
   id: PropTypes.string.isRequired,
   onFetchProblemDetail: PropTypes.func.isRequired,
-  problems: PropTypes.object,
-  category: PropTypes.string,
-  mistakeList: PropTypes.array,
+  category: PropTypes.number.isRequired,
+  mistakeList: PropTypes.array.isRequired,
+  index: PropTypes.number.isRequired,
+  detailDataList: PropTypes.array.isRequired,
+  onMarkFailReason: PropTypes.func.isRequired,
+  oninitialState: PropTypes.func.isRequired,
 };
 
 HomeworkProblemDetail.defaultProps = {
-  title: [
-    {
-      url: [1, 2, 3, 4],
-      difficult: '易',
-      titleUrl: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
-    },
-    {
-      url: [1, 2, 3, 4],
-      difficult: '难',
-      titleUrl: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
-    },
-    {
-      url: [1, 2, 3, 4],
-      difficult: null,
-      titleUrl: 'http://images3.c-ctrip.com/SBU/apph5/201505/16/app_home_ad16_640_128.png',
-    },
-  ],
-  problems: {},
+
 };
 
-export default HomeworkProblemDetail;
+const mapStateToProps = (state) => {
+  const {
+    incorrectProblemDetail: {
+      detailDataList,
+    },
+    mistakeListReducer: {
+      mistakeList,
+    },
+  } = state;
+
+  return {
+    detailDataList,
+    mistakeList,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  onFetchProblemDetail: bindActionCreators(getIncorrectInfo, dispatch),
+  onMarkFailReason: bindActionCreators(markFailReason, dispatch),
+  oninitialState: bindActionCreators(initialState, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeworkProblemDetail);

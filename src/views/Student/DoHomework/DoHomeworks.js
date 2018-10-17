@@ -4,7 +4,6 @@ import {
   Text, View, ScrollView, TouchableOpacity,
 } from 'react-native';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
-// import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import R from 'ramda';
@@ -23,8 +22,7 @@ import CommitHomeworkModal from './Components/Modals/CommitHomeworkModal';
 import CommitSuccessAndnoRemark from './Components/Modals/CommitSuccessAndnoRemark';
 import CommitSuccessAndhasRemark from './Components/Modals/CommitSuccessAndhasRemark';
 import DifficultLevelModal from './Components/Modals/DifficultLevelModal';
-import Modal from '../../../components/Modal';
-// import Modal, { ModalApi } from '../../../components/Modal';
+import { ModalApi } from '../../../components/Modal';
 
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
@@ -53,6 +51,11 @@ class DoHomeworks extends Component {
       animationType: 'slideInLeft',
       bottomTips: '左右滑动，切换上下题',
       maskClosable: true,
+    };
+    this.loadingData = {
+      animationType: 'loading',
+      bottomTips: '正在加载...',
+      maskClosable: false,
     };
   }
 
@@ -89,7 +92,11 @@ class DoHomeworks extends Component {
       if (needMark) {
         this.setRemarkModalVisibleFun(true);
       } else {
+        // 没有互批作业2秒后跳到首页
         this.setTipModalVisibleFun(true);
+        setTimeout(() => {
+          Actions.HomeworkTask();
+        }, 2000);
       }
 
       this.commitHomework = false;
@@ -117,8 +124,20 @@ class DoHomeworks extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { data } = nextProps;
+    // 根据unAnswerQuesList数据中的id去找到data.finalQuestionList中的对应id的题目来相应更新答案数据
+    const unAnswerList = prevState.unAnswerQuesList;
     if (!R.equals(data, prevState.data)) {
+      if (unAnswerList && unAnswerList.length) {
+        for (let i = 0; i < unAnswerList.length; i++) {
+          for (let j = 0; j < data.finalQuestionList.length; j++) {
+            if (unAnswerList[i].id === data.finalQuestionList[j].id) {
+              unAnswerList[i] = data.finalQuestionList[j];
+            }
+          }
+        }
+      }
       return {
+        unAnswerQuesList: unAnswerList,
         homeworkData: data,
       };
     }
@@ -174,7 +193,8 @@ class DoHomeworks extends Component {
   // 点击提交的函数
   submitFun = () => {
     this.setVisibleFun(false);
-    this.setCommitModalVisbleFun(true);
+    const { commitHomeworkModalStatus } = this.state;
+    this.setCommitModalVisbleFun(!commitHomeworkModalStatus);
   }
 
   // 点击二次确认的模态框内的提交按钮
@@ -183,6 +203,7 @@ class DoHomeworks extends Component {
     const { actions: { submitHomeworkAction }, homeworkId } = this.props;
     submitHomeworkAction({ homeworkId }, 'REQUEST');
     this.commitHomework = true;
+    this.setCommitModalVisbleFun(false);
   }
 
   // 点击查看已答题目/检查---进入作业检查页面
@@ -240,6 +261,20 @@ class DoHomeworks extends Component {
 
   // 查看未作答的题目---点击题号切换到对应题目
   orderChange = (num) => {
+    // 保存答案数据
+    const { currentIndex, unAnswerQuesList } = this.state;
+    const clickParams = {
+      questionId: unAnswerQuesList[num - 1].id,
+      number: unAnswerQuesList[num - 1].number,
+    };
+    this.fetchSaveQuestion(unAnswerQuesList[currentIndex].id, 'orderClick', clickParams);
+    // 如果当前题目未选择难易程度，则切换其他题目时要弹出难易程度的选择框让其选择
+    if (!unAnswerQuesList[currentIndex].difficultyLevel) {
+      this.setState({
+        preveId: unAnswerQuesList[currentIndex].id,
+        difficultModalStatus: true,
+      });
+    }
     this.setState({
       currentIndex: num - 1,
     });
@@ -252,8 +287,7 @@ class DoHomeworks extends Component {
     this.toCheckHomeworkFun(1);
     this.setCheckModalVisibleFun(false);
     // 此时表示是第一次进入该份作业，在关闭 检查意愿模态框后展示 切换上下题的手势指引
-
-    // ModalApi.onOppen('AnimationsModal', this.switchQuesGuidData);
+    ModalApi.onOppen('AnimationsModal', this.switchQuesGuidData);
   }
 
   // 不想检查--展示提交按钮
@@ -262,8 +296,7 @@ class DoHomeworks extends Component {
     this.toCheckHomeworkFun(2);
     this.setCheckModalVisibleFun(false);
     // 此时表示是第一次进入该份作业，在关闭 检查意愿模态框后展示 切换上下题的手势指引
-
-    // ModalApi.onOppen('AnimationsModal', this.switchQuesGuidData);
+    ModalApi.onOppen('AnimationsModal', this.switchQuesGuidData);
   }
 
   // 请求 保存检查意愿 的接口
@@ -294,7 +327,7 @@ class DoHomeworks extends Component {
   }
 
   // 保存答题数据---根据传过来的id去拿对应数据提交答案
-  fetchSaveQuestion = (id, optType) => {
+  fetchSaveQuestion = (id, optType, clickParams) => {
     const { currentIndex, homeworkData: { finalQuestionList } } = this.state;
     // 拿到当前要保存题目答案的索引
     let currentIndexs = currentIndex;
@@ -322,11 +355,16 @@ class DoHomeworks extends Component {
     answerParam.fileId = answerFileId === '0' ? '0' : answerFileId;
     answerParam.answerFileUrl = (answerFileUrl && answerFileUrl.length) ? answerFileUrl : null;
     if (optType === 'nextBtnClick') {
-      // 如果是点击下一题，则将下一题的number和questionId传给接口，否则这两个字段不用传
+      // 如果是左滑下一题，则将下一题的number和questionId传给接口，否则这两个字段不用传
       const questionId = finalQuestionList[currentIndexs + 1].id;
       const { number } = finalQuestionList[currentIndexs + 1];
       answerParam.number = number;
       answerParam.questionId = questionId;
+    }
+    if (optType === 'orderClick') {
+      // 如果是查看未作答题目时点击题号进入下一道题，则要将点击的那道题的number和questionId传给接口
+      answerParam.number = clickParams.number;
+      answerParam.questionId = clickParams.questionId;
     }
     const { actions: { submitDoHomeworkAnswerAction }, homeworkId } = this.props;
     submitDoHomeworkAnswerAction({ homeworkId, id, answerParam }, 'REQUEST');
@@ -356,43 +394,47 @@ class DoHomeworks extends Component {
 
   // 上传图片后展示正在加载的loading状态
   showLoadingFun = () => {
-    // const data = {
-    //   svgName: 'finger',
-    //   animationType: 'loading',
-    //   bottomTips: '正在加载...',
-    //   maskClosable: false,
-    // };
-    // ModalApi.onOppen('AnimationsModal', data);
-    // setTimeout(() => {
-    //   ModalApi.onClose();
-    // }, 2000);
+    // ModalApi.onOppen('AnimationsModal', this.loadingData);
   }
 
 
   // 渲染需要展示在扩展列表视图中的组件
-  renderQuestionOrder = (finalQuestionList, currentIndex) => (
-    <View style={styles.orderContent}>
-      <RadioGroup
-        onChange={this.orderChange}
-        style={styles.order_wrapper}
-        checkedIconWrapStyle={styles.checkedIconWrapStyle}
-        checkedTextStyle={styles.checkedRadioTextStyle}
-      >
-        {
-          finalQuestionList.map((item, index) => (
-            <RadioButton
-              value={item.number}
-              key={index}
-              iconWrapStyle={[styles.orderStyle, (item.number - 1) === currentIndex && styles.currentOrderStyle]}
-              textStyle={[styles.radioTextStyle, (item.number - 1) === currentIndex && styles.currentRadioTextStyle]}
-            >
-              {item.number}
-            </RadioButton>
-          ))
-        }
-      </RadioGroup>
-    </View>
-  )
+  renderQuestionOrder = (showQuesArray, currentIndex) => {
+    // 拿到当前题目的number
+    const currentNum = showQuesArray[currentIndex].number;
+
+    return (
+      <View style={styles.orderContent}>
+        <RadioGroup
+          onChange={this.orderChange}
+          style={styles.order_wrapper}
+          checkedIconWrapStyle={styles.checkedIconWrapStyle}
+          checkedTextStyle={styles.checkedRadioTextStyle}
+        >
+          {
+            showQuesArray.map((item, index) => (
+              <RadioButton
+                value={index + 1}
+                key={index}
+                iconWrapStyle={[
+                  styles.orderStyle,
+                  (item.number === currentNum) && styles.currentOrderStyle,
+                  (item.answered && item.number !== currentNum) && styles.answeredOrderStyle,
+                ]}
+                textStyle={[
+                  styles.radioTextStyle,
+                  (item.number === currentNum) && styles.currentRadioTextStyle,
+                  (item.answered && item.number !== currentNum) && styles.answeredOrderTextStyle,
+                ]}
+              >
+                {item.number}
+              </RadioButton>
+            ))
+          }
+        </RadioGroup>
+      </View>
+    );
+  }
 
   // 渲染作业头部组件
   renderDohomeworkTop = (homeworkData, currentIndex, finalQuestionList) => {
@@ -563,8 +605,6 @@ class DoHomeworks extends Component {
               questionId={preveId}
             />)
         }
-        {/* 图片正在加载中的模态 */}
-        <Modal key={Math.random()} />
       </View>
     );
   }

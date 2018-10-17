@@ -26,9 +26,8 @@ class UploadImgBefore extends Component {
   render() {
     const {
       type,
+      answered,
     } = this.props;
-    let { answered } = this.props;
-    answered = 1;
     let subjective;
     if (type >= 10) {
       subjective = true;
@@ -127,7 +126,7 @@ UploadImgBefore.propTypes = {
 
 UploadImgBefore.defaultProps = {
   updateImage: () => {},
-  answered: false,
+  answered: 0,
 };
 
 

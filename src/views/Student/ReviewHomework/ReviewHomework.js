@@ -5,6 +5,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -32,11 +33,11 @@ class ReviewHomework extends Component {
     };
     this.timeSetInterval = null;
   }
-  
+
   // 进入此页面时开始计时，离开此页面时将时间传给后台大佬用于保存检查时间
   componentDidMount() {
     const { data } = this.props;
-    // 拿到数据后将已作答的题目筛选出来
+    // 拿到数据后将已作答的题目筛选出来，后面都以此时筛选出的题目去展示，但是图片答案要与redux中一致才行
     const answerQuestionList = [];
     let { answeredNum, unAnsweredNum } = this.state;
     if (data && data.finalQuestionList && data.finalQuestionList.length) {
@@ -80,9 +81,21 @@ class ReviewHomework extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { data } = nextProps;
+    const answerList = prevState.reviewQues;
+    // 根据reviewQues数据中的id去找到data.finalQuestionList中的对应id的题目来相应更新答案数据
     if (!R.equals(data, prevState.data)) {
+      if (answerList && answerList.length) {
+        for (let i = 0; i < answerList.length; i++) {
+          for (let j = 0; j < data.finalQuestionList.length; j++) {
+            if (answerList[i].id === data.finalQuestionList[j].id) {
+              answerList[i] = data.finalQuestionList[j];
+            }
+          }
+        }
+      }
       return {
         data,
+        reviewQues: answerList,
       };
     }
     return null;
@@ -167,8 +180,8 @@ class ReviewHomework extends Component {
     const { reviewQues } = this.state;
     let types;
     for (let i = 0; i < reviewQues.length; i++) {
-      if (reviewQues.id === qid) {
-        types = reviewQues.type;
+      if (reviewQues[i].id === qid) {
+        types = reviewQues[i].type;
       }
     }
     deleteImageUrlAnswwerAction({ questionId: qid, type: types });
@@ -209,6 +222,16 @@ class ReviewHomework extends Component {
     submitDoHomeworkAnswerAction({ homeworkId, id, answerParam }, 'REQUEST');
   }
 
+  // 已作答题目数为0时展示
+  renderEmptyView = () => {
+    const viewHeight = parseInt(Dimensions.get('screen').height);
+    return (
+      <View style={[styles.noAnswer_box, { height: viewHeight }]}>
+        <Text style={styles.answer_info}>暂时没有已作答的题目</Text>
+      </View>
+    );
+  }
+
   render() {
     const {
       reviewQues,
@@ -238,20 +261,20 @@ class ReviewHomework extends Component {
         </View>
         <ScrollView>
           {
-            reviewQues && reviewQues.map((item, index) => (
-              <View key={index} style={styles.ques_card}>
-                <QuestionCard questions={item} reviewHomework />
-                <AnswerCard
-                  questions={item}
-                  handleDifficultLevel={this.handleDifficultLevel}
-                  handleToClickRadio={this.handleToClickRadio}
-                  handlePreviewImage={this.handlePreviewImage}
-                  handleCheckboxChange={this.handleCheckboxChange}
-                  deleteImg={this.deleteImg}
-                  // showLoadingFun={this.showLoadingFun}
-                />
-              </View>
-            ))
+            !R.isEmpty(reviewQues) && reviewQues
+              ? reviewQues.map((item, index) => (
+                <View key={index} style={styles.ques_card}>
+                  <QuestionCard questions={item} reviewHomework />
+                  <AnswerCard
+                    questions={item}
+                    handleDifficultLevel={this.handleDifficultLevel}
+                    handleToClickRadio={this.handleToClickRadio}
+                    handlePreviewImage={this.handlePreviewImage}
+                    handleCheckboxChange={this.handleCheckboxChange}
+                    deleteImg={this.deleteImg}
+                  />
+                </View>))
+              : this.renderEmptyView()
           }
         </ScrollView>
         <View style={styles.reviewHomework_footer}>

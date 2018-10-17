@@ -25,6 +25,7 @@ class TaskDetail extends Component {
       waitReadOver,
       homeworkId,
       actions,
+      previewed,
     } = this.props;
     return (
       <View style={styles.wrap}>
@@ -37,6 +38,7 @@ class TaskDetail extends Component {
             useTime={useTime}
             homeworkId={homeworkId}
             actions={actions}
+            previewed={previewed}
           />
         </View>
       </View>
@@ -57,6 +59,7 @@ TaskDetail.propTypes = {
   waitReadOver: PropTypes.bool,
   homeworkId: PropTypes.string,
   actions: PropTypes.object.isRequired,
+  previewed: PropTypes.number,
 };
 TaskDetail.defaultProps = {
   title: '6-22物理作业',
@@ -65,6 +68,7 @@ TaskDetail.defaultProps = {
   beginTime: formatTimeToshow(new Date()), // 默认今天
   waitReadOver: false,
   homeworkId: '499598186277502976',
+  previewed: 0,
 };
 
 const mapStateToProps = (state) => {

@@ -281,17 +281,62 @@ class ProblemRecords extends Component {
     );
   }
 
-
-  render() {
+  renderContent=() => {
     const { subjectData, recordData } = this.props;
-    if (_.isEmpty(subjectData)) {
-      return null;
-    }
+    // if (_.isEmpty(subjectData)) {
+    //   return null;
+    // }
     // if (_.isEmpty(recordData)) {
     //   return <Text>YOU HAVE NOT DATA</Text>;
     // }
     const {
       currentRecordType, showExtendView, currentSubjectId,
+    } = this.state;
+    return (
+      <React.Fragment>
+        <FilterBox
+          currentSubjectId={currentSubjectId}
+          subjectData={subjectData}
+          filterSubjectFun={this.filterSubjectFun}
+          filterMoreFun={this.filterMoreFun}
+        />
+        <RecordList
+          dataList={recordData}
+          gotoDetailFun={this.gotoDetailFun}
+          getRefreshListView={this.getRefreshListView}
+          recordType={currentRecordType}
+          dropDownRefresh={this.dropDownRefresh}
+          upPullGetMore={this.upPullGetMore}
+        />
+        {
+          // 这个170并不是所有屏幕都对的
+          showExtendView && (
+          <ExtendListView setVisibleFun={this.filterMoreFun} setTop={170}>
+            {
+              this.renderFilterView(currentRecordType)
+            }
+          </ExtendListView>
+          )
+         }
+      </React.Fragment>
+    );
+  }
+
+  renderNodataOrLoading=() => {
+    // 预留出来，Loading缓冲处理
+  }
+
+
+  render() {
+    const { subjectData } = this.props;
+    // if (_.isEmpty(subjectData)) {
+    //   return null;
+    // }
+    // if (_.isEmpty(recordData)) {
+    //   return <Text>YOU HAVE NOT DATA</Text>;
+    // }
+    const {
+      currentRecordType,
     } = this.state;
 
     return (
@@ -318,30 +363,9 @@ class ProblemRecords extends Component {
             </I18nText>
           </TouchableOpacity>
         </TouchableOpacity>
-        <FilterBox
-          currentSubjectId={currentSubjectId}
-          subjectData={subjectData}
-          filterSubjectFun={this.filterSubjectFun}
-          filterMoreFun={this.filterMoreFun}
-        />
-        <RecordList
-          dataList={recordData}
-          gotoDetailFun={this.gotoDetailFun}
-          getRefreshListView={this.getRefreshListView}
-          recordType={currentRecordType}
-          dropDownRefresh={this.dropDownRefresh}
-          upPullGetMore={this.upPullGetMore}
-        />
         {
-          // 这个170并不是所有屏幕都对的
-          showExtendView && (
-          <ExtendListView setVisibleFun={this.filterMoreFun} setTop={170}>
-            {
-              this.renderFilterView(currentRecordType)
-            }
-          </ExtendListView>
-          )
-         }
+          _.isEmpty(subjectData) ? <Text>HAVE no DATA</Text> : this.renderContent()
+        }
       </View>
     );
   }

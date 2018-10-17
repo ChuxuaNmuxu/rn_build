@@ -319,6 +319,19 @@ class TaskItem extends React.Component {
                     </Text>
                   </View>
                   )}
+                  {
+                    data.subjectName === 3
+                      ? (
+                        <View style={[styles.no_review_task, {
+                          transform: [{
+                            rotateZ: '-45deg',
+                          }],
+                        }]}
+                        ><Text style={styles.no_review_task_text}>未批</Text>
+                        </View>
+                      )
+                      : null
+                  }
                 </View>
               )
           }
