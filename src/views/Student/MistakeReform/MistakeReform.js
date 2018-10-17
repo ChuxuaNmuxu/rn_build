@@ -78,7 +78,7 @@ class MistakeReform extends Component {
     if (questions.length > 1) {
       return (
         <View style={styles.head_index_view}>
-          <Text style={styles.head_index_text}>{index + 1}/5</Text>
+          <Text style={styles.head_index_text}>{`${index + 1}/${questions.length}`}</Text>
         </View>
       );
     }
