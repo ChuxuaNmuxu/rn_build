@@ -6,6 +6,7 @@ import Task from '../component/Task';
 import styles from './planItem.scss';
 
 const PlanItem = (props) => {
+  console.log(props);
   const onPress = () => {
     const {
       title,
@@ -14,6 +15,7 @@ const PlanItem = (props) => {
       // beginTime: scheduledNode,
       taskType: waitReadOver,
       homeworkId,
+      previewed,
     } = props.data;
     if (waitReadOver === 4) {
       // console.log();
@@ -28,6 +30,7 @@ const PlanItem = (props) => {
         // beginTime: '占位',
         waitReadOver: !(waitReadOver < 4),
         homeworkId,
+        previewed,
       });
     }
   };

@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import Modal, { ModalApi } from '../../../../../components/Modal';
+import { ModalApi } from '../../../../../components/Modal';
 
 class CommitSuccessAndhasRemark extends Component {
   componentDidMount() {
@@ -70,9 +70,7 @@ class CommitSuccessAndhasRemark extends Component {
 
  render() {
    return (
-     <View>
-       <Modal />
-     </View>
+     <View />
    );
  }
 }

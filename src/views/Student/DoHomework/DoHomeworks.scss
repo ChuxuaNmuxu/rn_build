@@ -105,6 +105,11 @@
 .currentOrderStyle {
   background-color: #dbdbdb;
 }
+.currentRadioTextStyle {
+  color: #fff;
+  font-size: 30px;
+}
+
 .checkedIconWrapStyle {
   background-color: #dbdbdb;
   border-color: #dbdbdb;
@@ -113,11 +118,15 @@
   color: #999;
   font-size: 30px;
 }
-.currentRadioTextStyle {
+.checkedRadioTextStyle {
   color: #fff;
   font-size: 30px;
 }
-.checkedRadioTextStyle {
-  color: #fff;
+.answeredOrderStyle {
+  border-color: #a8e6bb;
+  background-color: #f0fff4;
+}
+.answeredOrderTextStyle {
+  color: #30bf6c;
   font-size: 30px;
 }

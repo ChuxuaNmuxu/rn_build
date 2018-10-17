@@ -122,7 +122,7 @@ class ButtonModal extends Component {
   }
 
   render() {
-    const { maskClosable, style } = this.props;
+    const { maskClosable, style, animationType } = this.props;
     return (
       <TouchableOpacity
         onPress={maskClosable ? this._onClose : this._preventDefault}
@@ -130,7 +130,9 @@ class ButtonModal extends Component {
         style={[
           Style.TouchableOpacity,
           Style.transparentTwo,
-          { backgroundColor: maskClosable ? 'rgba(0, 0, 0, 0)' : 'rgba(0, 0, 0, 0.2)' }]}
+          { backgroundColor: maskClosable ? 'rgba(0, 0, 0, 0)' : 'rgba(0, 0, 0, 0.2)' },
+          { alignItems: animationType === 'slideInLeft' ? 'flex-end' : 'center' },
+        ]}
       >
         <TouchableOpacity
           style={[Style.content, style]}

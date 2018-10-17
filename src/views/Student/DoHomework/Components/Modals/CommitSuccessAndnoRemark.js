@@ -5,7 +5,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import Modal, { ModalApi } from '../../../../../components/Modal';
+import { ModalApi } from '../../../../../components/Modal';
 
 class CommitSuccessAndnoRemark extends Component {
   componentDidMount() {
@@ -27,10 +27,7 @@ class CommitSuccessAndnoRemark extends Component {
 
  // 提示内容
  tipsContent = () => (
-   <View style={{
-     width: 684,
-   }}
-   >
+   <View>
      <View style={{ display: 'flex', justifyContent: 'center', flexDirection: 'row' }}>
        <Text style={{ color: '#333', fontSize: 24 }}>提交成功，快去</Text>
        <TouchableOpacity onPress={this.goIndex}>
@@ -43,9 +40,7 @@ class CommitSuccessAndnoRemark extends Component {
 
  render() {
    return (
-     <View>
-       <Modal />
-     </View>
+     <View />
    );
  }
 }
