@@ -1,7 +1,55 @@
-.navbar {
-  flex-direction: row;
-  justify-content: space-between;
+@mixin text {
+  font-size: 26px;
+  color: #333333;
+}
+
+.wrap {
+  flex: 1;
   align-items: center;
-  height: 40;
-  background-color: #30bf6c;
+  justify-content: center;
+}
+
+.box{
+  padding: 40px 100px;
+  border-radius: 8px;
+  background-color: #dddddd;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 40px;
+}
+
+.item {
+  flex-direction: row;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.label {
+  @include text();
+}
+
+.text_input {
+  @include text();
+  flex: 1;
+  width: 200px;
+  padding: 0;
+  color: #666666;
+}
+
+.login{
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 450px;
+  height: 80px;
+  border-radius: 8px;
+  background-color: #1ad982;
+}
+
+.login_text{
+  font-size: 30px;
+  color: #fff;
 }

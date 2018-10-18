@@ -14,6 +14,7 @@ import I18nText from '../../../components/I18nText';
 import Drag from './component/Drag';
 import { FetchStudentTaskList } from '../../../actions/homeworkTask';
 import Modal, { ModalApi } from '../../../components/Modal';
+import Debug from '../../../components/Debug';
 
 @connect((state) => {
   const {
@@ -53,7 +54,9 @@ class HomeworkTask extends Component {
     return (
       <View style={[styles.header]}>
         <View style={styles.headle_left}>
-          <I18nText style={styles.title} option={{ count: todoList.length }}>home.header.title</I18nText>
+          <Debug>
+            <I18nText style={styles.title} option={{ count: todoList.length }}>home.header.title</I18nText>
+          </Debug>
           {
             todoList.length
               ? <I18nText style={styles.small}>home.header.tip</I18nText>
