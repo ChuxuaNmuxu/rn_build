@@ -54,9 +54,9 @@ class HomeworkTask extends Component {
     return (
       <View style={[styles.header]}>
         <View style={styles.headle_left}>
-          {/* <Debug> */}
+          <Debug>
             <I18nText style={styles.title} option={{ count: todoList.length }}>home.header.title</I18nText>
-          {/* </Debug> */}
+          </Debug>
           {
             todoList.length
               ? <I18nText style={styles.small}>home.header.tip</I18nText>

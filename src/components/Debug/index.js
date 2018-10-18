@@ -6,7 +6,7 @@ import { Toast } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import Madal, { ModalApi } from '../Modal';
+import { ModalApi } from '../Modal';
 import Radio from '../Radio';
 import fetchApi from '../../config/apiBase/fetchApi';
 import ApiBase from '../../config/apiBase';
@@ -42,8 +42,8 @@ class Debug extends Component {
     }
   }
 
+  // 打开调试窗口
   onPress = () => {
-    console.log('debug');
     const { userInfo } = this.props;
     const data = {
       content: this.content(),
@@ -54,16 +54,23 @@ class Debug extends Component {
     ModalApi.onOppen('ButtomModal', data);
   }
 
+  // 切换环境：更改缓存、store数据，关闭模态。如果当前处于登陆状态则退出登陆并跳到登陆界面
   onChange = (data) => {
-    const { onSetApiFlag } = this.props;
+    const { onSetApiFlag, userInfo } = this.props;
     this.apiBase.setApiBase(data)
       .then(() => {
         ModalApi.onClose();
         onSetApiFlag(data);
+      })
+      .then(() => {
+        if (userInfo) {
+          this.logout('切换环境成功').then(Actions.Login);
+        }
       });
   }
 
-  logout = () => {
+  // 退出登陆：删除缓存
+  logout = (mes) => {
     ModalApi.onClose();
     const { apiFlag, onSetUserInfo } = this.props;
     Fetch.post(`${fetchApi(fetchApi.cjyun, apiFlag)}/unlogin/logout.cbp`)
@@ -71,14 +78,12 @@ class Debug extends Component {
         onSetUserInfo();
         return this.account.removeAccount();
       }).then(() => {
-        Toast.success('退出成功');
-        Actions.Login();
+        Toast.success(mes);
       });
   }
 
   content = () => {
     const { apiFlag, userInfo } = this.props;
-    console.log(81, userInfo);
     return (
       <View style={styles.debug_wrap}>
         <Text style={styles.debug_menu}>调试菜单</Text>
@@ -95,7 +100,7 @@ class Debug extends Component {
             ? (
               <TouchableOpacity
                 style={styles.logout}
-                onPress={this.logout}
+                onPress={() => { this.logout('退出成功').then(Actions.Login); }}
               >
                 <Text style={styles.logout_text}>退出登陆</Text>
               </TouchableOpacity>
@@ -108,11 +113,9 @@ class Debug extends Component {
 
   render() {
     const { children } = this.props;
-    console.log(111111, children);
     return (
       <TouchableWithoutFeedback onPress={this.onPress}>
         <View>
-          <Madal />
           {children}
         </View>
       </TouchableWithoutFeedback>

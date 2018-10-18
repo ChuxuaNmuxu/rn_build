@@ -17,21 +17,19 @@ const connectUrl = async (url) => {
     origin = await apiBase.getApiBase();
     origin = fetchApi(undefined, origin);
   }
-  console.log(22, url);
+
   if (typeof url !== 'string') {
     console.error('url只能为字符串类型');
   } else if (url.indexOf('http') === 0) {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
   } else if (url.charAt(0) === '/') {
-    console.log(origin + url);
     return origin + url;
   }
   return `${origin}/${url}`;
 };
 
 const errCode = (json) => {
-  console.log(24, json);
   switch (json.code) {
     case 703:
       return console.log('登陆过期', json);

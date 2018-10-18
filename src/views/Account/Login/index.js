@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Account from '../../../utils/account';
+import Madal from '../../../components/Modal';
 import { SetUserInfo } from '../../../actions/account';
 import fetchApi from '../../../config/apiBase/fetchApi';
 import Debug from '../../../components/Debug';
@@ -99,6 +100,7 @@ class Login extends Component {
   render() {
     return (
       <View style={styles.wrap}>
+        <Madal />
         <View style={styles.box}>
           <Debug>
             <Text style={styles.title}>用户登陆</Text>

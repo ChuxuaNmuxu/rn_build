@@ -26,7 +26,7 @@ class Welcome extends React.Component {
         const {
           userinfo,
         } = ret;
-        console.log(29, ret);
+
         const { onSetUserInfo } = this.props;
         onSetUserInfo(userinfo);
         if (tokenData) {
