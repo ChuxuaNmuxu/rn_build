@@ -74,7 +74,7 @@ class Login extends Component {
           } = data;
           const { onSetUserInfo } = this.props;
           onSetUserInfo(JSON.stringify(data.userInfo));
-          console.log(74, data);
+
           /**
            * 根据账号类型进行相应处理，课业只能使用学生或者教师账号登陆。
            * 保存成功之后才进行相应跳转，否则提示重新登陆

@@ -73,7 +73,7 @@ class Debug extends Component {
   logout = (mes) => {
     ModalApi.onClose();
     const { apiFlag, onSetUserInfo } = this.props;
-    Fetch.post(`${fetchApi(fetchApi.cjyun, apiFlag)}/unlogin/logout.cbp`)
+    return Fetch.post(`${fetchApi(fetchApi.cjyun, apiFlag)}/unlogin/logout.cbp`)
       .then(() => {
         onSetUserInfo();
         return this.account.removeAccount();
