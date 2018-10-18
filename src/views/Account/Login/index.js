@@ -1,17 +1,32 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import md5 from 'md5';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
-  Button,
+  Toast,
+} from 'antd-mobile-rn';
+import {
   Text,
   View,
-  List,
-  InputItem,
-} from 'antd-mobile-rn';
-import { token } from '../../../constants/stroage';
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+import Account from '../../../utils/account';
+import { SetUserInfo } from '../../../actions/account';
+import fetchApi from '../../../config/apiBase/fetchApi';
+import Debug from '../../../components/Debug';
+import styles from './styles.scss';
 
-export default class Login extends Component {
+@connect(({ config: { apiFlag } }) => ({
+  apiFlag,
+}), dispatch => ({
+  onSetUserInfo: bindActionCreators(SetUserInfo, dispatch),
+}))
+class Login extends Component {
   constructor(props) {
     super(props);
+    this.account = new Account();
     this.state = {
       password: '',
       username: '',
@@ -23,14 +38,10 @@ export default class Login extends Component {
     const {
       userInfo,
     } = res;
-    console.log(res);
-    return storage.save({
-      key: token,
-      data: {
-        token: tokenData,
-        userinfo: JSON.stringify(userInfo),
-      },
-      expires: null,
+
+    return this.account.setAccount({
+      token: tokenData,
+      userinfo: JSON.stringify(userInfo),
     });
   }
 
@@ -39,88 +50,110 @@ export default class Login extends Component {
       username,
       password,
     } = this.state;
-    Fetch.post('https://dev-cjyun-api.ecaicn.com/unlogin/login', {
-      // userName: '罗家健2017360449',
-      // password: md5(123456),
+    console.log(53, username,
+      password);
+    const { apiFlag } = this.props;
+
+    Fetch.post(`${fetchApi(fetchApi.cjyun, apiFlag)}/unlogin/login`, {
       userName: username,
       password: md5(password),
     })
       .then((res) => {
         const {
           data,
+          code,
+          message,
         } = res;
-        console.log('data', res);
-        const {
-          userInfo: {
-            currentSchoolRole,
-          },
-        } = data;
-        /**
-         * 根据账号类型进行相应处理，课业只能使用学生或者教师账号登陆。
-         * 保存成功之后才进行相应跳转，否则提示重新登陆
-         */
-        switch (currentSchoolRole) {
-          case 'STUDENT':
-            this.savaToken(data).then(() => {
-              Actions.Student();
-            });
-            break;
-          case 'TEACHER':
-            console.log('暂时只支持学生账号登陆');
-            break;
-          default:
-            console.log('请使用学生或老师账号登陆');
+
+        if (code === 0) {
+          const {
+            userInfo: {
+              currentSchoolRole,
+            },
+          } = data;
+          const { onSetUserInfo } = this.props;
+          onSetUserInfo(JSON.stringify(data.userInfo));
+          console.log(74, data);
+          /**
+           * 根据账号类型进行相应处理，课业只能使用学生或者教师账号登陆。
+           * 保存成功之后才进行相应跳转，否则提示重新登陆
+           */
+          switch (currentSchoolRole) {
+            case 'STUDENT':
+              this.savaToken(data).then(() => {
+                Toast.success('登陆成功', 2, Actions.Student);
+              });
+              break;
+            case 'TEACHER':
+              Toast.info('暂时只支持学生账号登陆');
+              break;
+            default:
+              Toast.info('请使用学生或老师账号登陆');
+          }
+        } else {
+          Toast.fail(message);
         }
       }).catch(err => console.log(77, err));
   }
 
-  clearToken = () => {
-    storage.remove({
-      key: token,
-    });
-  }
-
   render() {
     return (
-      <Fragment>
-        <View>
-          <List>
-            <List.Item>
-              <Text>
-                登陆
-              </Text>
-            </List.Item>
-            <InputItem
-              placeholder="请输入账号"
-              onChange={(value) => {
+      <View style={styles.wrap}>
+        <View style={styles.box}>
+          <Debug>
+            <Text style={styles.title}>用户登陆</Text>
+          </Debug>
+          <View style={styles.item}>
+            <Text style={styles.label}>账号：</Text>
+            <TextInput
+              style={styles.text_input}
+              onChangeText={(value) => {
                 this.setState({
                   username: value,
                 });
               }}
-            >
-            账号：
-            </InputItem>
-            <InputItem
-              placeholder="请输入密码"
-              onChange={(value) => {
+              autoFocus
+              placeholder="请输入账号"
+              placeholderTextColor="#999999"
+              underlineColorAndroid="transparent"
+            />
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.label}>密码：</Text>
+            <TextInput
+              style={styles.text_input}
+              onChangeText={(value) => {
                 this.setState({
                   password: value,
                 });
               }}
-            >
-            密码：
-            </InputItem>
-            <List.Item>
-              <Button
-                onClick={this.login}
-                type="primary"
-              >
-              登陆
-              </Button>
-            </List.Item>
-          </List>
+              placeholder="请输入密码"
+              placeholderTextColor="#999999"
+              underlineColorAndroid="transparent"
+              secureTextEntry
+            />
+          </View>
+
+          <TouchableOpacity
+            onPress={this.login}
+            style={styles.login}
+          >
+            <Text style={styles.login_text}>登陆</Text>
+          </TouchableOpacity>
         </View>
-      </Fragment>
+
+      </View>
     );
   }
 }
+Login.propTypes = {
+  onSetUserInfo: PropTypes.func,
+  apiFlag: PropTypes.string,
+};
+
+Login.defaultProps = {
+  onSetUserInfo: () => {},
+  apiFlag: '',
+};
+
+export default Login;

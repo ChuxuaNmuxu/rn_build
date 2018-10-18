@@ -9,6 +9,11 @@ export const INITIAL_CONFIG = 'INITIAL_CONFIG';
 // export const CHANGE_THEME = 'CHANGE_THEME';
 // 更改语言
 export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
+// 更改当前获取数据的环境
+export const SET_API_FLAG = 'SET_API_FLAG';
+
+// 设置登陆的账号信息
+export const SET_USER_INFO = 'SET_USER_INFO';
 
 /**
  * ---------------公共组件ACTIONS-----------------------

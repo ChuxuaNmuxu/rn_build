@@ -43,6 +43,7 @@ class MyModal extends Component {
       studentName: '',
       url: '',
       imageViewType: '',
+      footButton: false,
     };
     // 只提供两个API，TOST需要再搞
     Method.prototype.onOppen = this.onOppen;
@@ -76,8 +77,10 @@ class MyModal extends Component {
 
   _ButtomModal=() => {
     const {
-      activeBtn, rightBtnText, leftBtnText, content, rCallbakFn, lCallbakFn, closeBtn, style, svgOption,
+      activeBtn, rightBtnText, leftBtnText, content, rCallbakFn, lCallbakFn, closeBtn,
+      style, svgOption, footButton, maskClosable,
     } = this.state;
+
     return (
       <ButtomModal
         leftFn={lCallbakFn || this.onClose}
@@ -90,6 +93,8 @@ class MyModal extends Component {
         closeBtn={closeBtn}
         style={style}
         svgOption={svgOption}
+        footButton={footButton}
+        maskClosable={maskClosable}
       />
     );
   }

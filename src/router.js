@@ -116,17 +116,7 @@ const RouteMap = props => (
               component={ProblemOverview}
             />
           </Stack>
-          {/* hqh 注释掉 */}
           {/* <Stack
-            title="wrongNotes"
-            key="WrongNotesStack"
-            image="cuotiben1"
-            selectedImage="cuotiben1"
-            hideNavBar
-          >
-            <Scene key="WrongNotes" component={WrongNotes} />
-          </Stack> */}
-          <Stack
             title="my"
             key="MyStack"
             image="wodedangxuan"
@@ -134,7 +124,7 @@ const RouteMap = props => (
             hideNavBar
           >
             <Scene key="My" component={My} />
-          </Stack>
+          </Stack> */}
         </Tabs>
       </Stack>
       <Stack key="Teacher">

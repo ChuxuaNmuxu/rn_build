@@ -1,20 +1,37 @@
 import { isEmpty } from 'ramda';
 import qs from 'qs';
-import Config from '../config';
+import { DeviceEventEmitter } from 'react-native';
+import fetchApi from '../config/apiBase/fetchApi';
+import ApiBase from '../config/apiBase';
 
-function apiUrl(url) {
+// origin表示 https://cjyun.ecaicn.com
+let origin = null;
+// 监听修改环境操作
+DeviceEventEmitter.addListener('apiBase', (params) => {
+  origin = fetchApi(undefined, params);
+});
+const apiBase = new ApiBase();
+
+const connectUrl = async (url) => {
+  if (!origin) {
+    origin = await apiBase.getApiBase();
+    origin = fetchApi(undefined, origin);
+  }
+  console.log(22, url);
   if (typeof url !== 'string') {
     console.error('url只能为字符串类型');
   } else if (url.indexOf('http') === 0) {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
   } else if (url.charAt(0) === '/') {
-    console.log(Config.Api.baseApi + url);
-    return Config.Api.baseApi + url;
+    console.log(origin + url);
+    return origin + url;
   }
-  return `${Config.Api.baseApi}/${url}`;
-}
+  return `${origin}/${url}`;
+};
+
 const errCode = (json) => {
+  console.log(24, json);
   switch (json.code) {
     case 703:
       return console.log('登陆过期', json);
@@ -26,6 +43,7 @@ const errCode = (json) => {
   }
   return json;
 };
+
 const Fetch = {
   /**
  * param {Number} url 地址
@@ -71,21 +89,25 @@ const Fetch = {
         return error; // 返回错误App会自动在界面上呈现报错模态
       });
   },
+  async getUrl(url, ...args) {
+    const _url = await connectUrl(url);
+    return this.fetch(_url, ...args);
+  },
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;
     if (!isEmpty(params)) {
       _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
     }
-    return this.fetch(apiUrl(_url), {}, 'get', '', mock, headerParams);
+    return this.getUrl(_url, {}, 'get', '', mock, headerParams);
   },
-  post(url, params, type = 'json', mock = false) { return this.fetch(apiUrl(url), params, 'post', type, mock); },
-  put(url, params, type = 'json') { return this.fetch(apiUrl(url), params, 'put', type); },
+  post(url, params, type = 'json', mock = false) { return this.getUrl(url, params, 'post', type, mock); },
+  put(url, params, type = 'json') { return this.getUrl(url, params, 'put', type); },
   delete(url, params) {
     let _url = url;
     if (!isEmpty(params)) {
       _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
     }
-    return this.fetch(apiUrl(_url), params, 'delete');
+    return this.getUrl(_url, params, 'delete');
   },
 };
 export default Fetch;
