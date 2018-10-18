@@ -4,7 +4,9 @@ export default {
   problemRecords: '做题记录',
   wrongNotes: '错题本',
   my: '我的',
-
+  // 公用的
+  cancel: '取消',
+  confirm: '确认',
   // home
   home: {
     header: {
@@ -29,6 +31,7 @@ export default {
     partOfTheError: '部分正确',
     error: '错误',
     finishCorrectingAndNext: '完成批阅,下一题',
+    finishCorrectingNotNext: '完成批阅',
     homeworkCorrecting: '批阅:',
   },
 
@@ -74,6 +77,7 @@ export default {
     header: {
       count: '计时',
       commit: '提交',
+      viewAnsweredQues: '查看已答题目',
     },
     answerCard: {
       toAnswer: '作答：',
@@ -103,6 +107,7 @@ export default {
       form: '来自：',
       reviewQuestion: '复习错题',
     },
+    random_mistake_reform: '错题随机复习',
   },
 
   // 错题重做
@@ -110,5 +115,6 @@ export default {
     header: {
       title: '错题重做',
     },
+    submit: '提交答案并查看结果',
   },
 };

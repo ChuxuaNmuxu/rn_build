@@ -14,6 +14,7 @@ import { Actions } from 'react-native-router-flux';
 import styles from './ProblemOverview.scss';
 import * as actions from '../../../actions/problemOverviewAction';
 import CIcon from '../../../components/Icon';
+import NotResult from '../../../components/NotResult';
 
 class ProblemOverview extends PureComponent {
   componentDidMount() {
@@ -28,8 +29,10 @@ class ProblemOverview extends PureComponent {
   }
 
   // 点击进入错题列表页面
-  goProblemListFun = () => {
-    Actions.ProblemListOverview();
+  goProblemListFun = (subjectId) => {
+    Actions.ProblemListOverview({
+      subjectId,
+    });
   }
 
   render() {
@@ -41,16 +44,17 @@ class ProblemOverview extends PureComponent {
             错题本
           </Text>
         </View>
-        <FlatList
-          keyExtractor={() => `${Math.random()}`}
-          data={data}
-          renderItem={
+        {
+          data.length > 0 ? (
+            <FlatList
+              keyExtractor={() => `${Math.random()}`}
+              data={data}
+              renderItem={
             (dataItem) => {
               const { item, index } = dataItem;
-              console.log(dataItem);
               return (
                 <TouchableOpacity
-                  onPress={this.goProblemListFun}
+                  onPress={() => this.goProblemListFun(item.subjectId)}
                   key={index}
                 >
                   <View style={styles.item}>
@@ -62,7 +66,7 @@ class ProblemOverview extends PureComponent {
                     </View>
                     <View style={styles.item_right}>
                       <Text style={styles.item_right_number}>
-                        {item.count}
+                        {item.quantity}
                       </Text>
                       <Entypo name="chevron-thin-right" size={30} color="#30bf6c" />
                     </View>
@@ -71,32 +75,13 @@ class ProblemOverview extends PureComponent {
               );
             }
           }
-        />
-        {/* <View style={styles.title_wrap}>
-          <Text style={styles.title_content}>
-            错题本
-          </Text>
-        </View> */}
-        {/* {
-          data.map((item, index) => (
-            <TouchableOpacity onPress={this.goProblemListFun} key={index}>
-              <View style={styles.item}>
-                <View style={styles.item_left}>
-                  <View style={styles.item_left_icon}>
-                    <CIcon name={item.icon} size={40} color="white" />
-                  </View>
-                  <Text style={styles.item_left_subjectName}>{item.subjectName}</Text>
-                </View>
-                <View style={styles.item_right}>
-                  <Text style={styles.item_right_number}>
-                    {item.count}
-                  </Text>
-                  <Entypo name="chevron-thin-right" size={30} color="#30bf6c" />
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))
-        } */}
+            />
+          ) : (
+            <NotResult
+              tips="暂无错题"
+            />
+          )
+        }
       </View>
     );
   }
@@ -113,7 +98,6 @@ const mapStateToProps = (state) => {
     data,
   };
 };
-
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(actions, dispatch),
 });

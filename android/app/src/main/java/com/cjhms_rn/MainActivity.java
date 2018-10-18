@@ -4,6 +4,7 @@ import com.facebook.react.ReactActivity;
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen;
 import com.rnimmersive.RNImmersiveModule;
+import com.umeng.analytics.MobclickAgent;
 
 public class MainActivity extends ReactActivity {
 
@@ -29,5 +30,19 @@ public class MainActivity extends ReactActivity {
         if (hasFocus && RNImmersiveModule.getInstance() != null) {
             RNImmersiveModule.getInstance().emitImmersiveStateChangeEvent();
         }
+    }
+
+    // 友盟统计SDK
+    @Override
+    public void onResume() {
+    super.onResume();
+    MobclickAgent.onResume(this);
+    }
+
+    // 友盟统计SDK
+    @Override
+    public void onPause() {
+    super.onPause();
+    MobclickAgent.onPause(this);
     }
 }

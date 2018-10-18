@@ -1,0 +1,55 @@
+@mixin text {
+  text-align: center;
+  font-size: 20px;
+}
+
+.modal {
+  height: 424px;
+}
+
+.modal_logout{
+  height: 540px;
+}
+
+.debug_wrap {
+  margin: 20px 100px 20px;
+}
+
+.debug_menu {
+  @include text();
+  margin-bottom: 8px;
+  font-size: 30px;
+}
+
+.user {
+  @include text();
+  margin-bottom: 8px;
+}
+
+.title {
+  font-weight: bolder;
+}
+
+.select_server {
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.radio {
+  margin: 8px 0;
+}
+
+.logout {
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  background-color: #1ad982;
+  width: 450px;
+  height: 80px;
+  border-radius: 8px;
+}
+
+.logout_text {
+  font-size: 26px;
+  color: #fff;
+}

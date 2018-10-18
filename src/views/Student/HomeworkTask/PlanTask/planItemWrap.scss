@@ -1,0 +1,53 @@
+.time_wrap {
+  flex: 1;
+  flex-shrink: 0;
+  justify-content: flex-end ;
+  position: relative;
+};
+
+.time_box {
+  flex-direction: row;
+  justify-content: flex-end ;
+  height: 360px;
+  width: 142px;
+};
+
+.hover {
+  background-color: #f0fff4;
+}
+
+.time_box_checked {
+  width: 496px;
+}
+
+.border {
+  height: 360px;
+  width: 4px;
+  background-color: #e8e8e8 ;
+}
+
+.task_list {
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.time_scale {
+  flex-direction: row ;
+  margin-top: 11px;
+  height: 24px;
+};
+
+.scale_line {
+  flex: 1;
+  border-left-width: 1px;
+  border-left-color: #e8e8e8;
+}
+
+.scale {
+  border-left-color: transparent;
+};
+
+.time_text {
+  align-items: center ;
+};

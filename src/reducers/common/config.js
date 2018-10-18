@@ -3,11 +3,13 @@ import {
   InitialConfog,
   // ChangeTheme,
   ChangeLanguage,
+  SetApiFlag,
 } from '../../actions/config';
 
 const initialState = {
   // theme: {},
   language: '',
+  apiFlag: '',
 };
 export default handleActions({
   // [ChangeTheme](state, action) {
@@ -22,16 +24,24 @@ export default handleActions({
       language: action.payload,
     };
   },
+  [SetApiFlag](state, action) {
+    return {
+      ...state,
+      apiFlag: action.payload,
+    };
+  },
 
   [InitialConfog](state, action) {
     const {
       // theme,
       language,
+      apiFlag,
     } = action.payload;
     return {
       ...state,
       // theme,
       language,
+      apiFlag,
     };
   },
 }, initialState);

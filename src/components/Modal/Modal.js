@@ -43,6 +43,7 @@ class MyModal extends Component {
       studentName: '',
       url: '',
       imageViewType: '',
+      footButton: false,
     };
     // 只提供两个API，TOST需要再搞
     Method.prototype.onOppen = this.onOppen;
@@ -77,7 +78,9 @@ class MyModal extends Component {
   _ButtomModal=() => {
     const {
       activeBtn, rightBtnText, leftBtnText, content, rCallbakFn, lCallbakFn, closeBtn,
+      style, svgOption, footButton, maskClosable,
     } = this.state;
+
     return (
       <ButtomModal
         leftFn={lCallbakFn || this.onClose}
@@ -88,6 +91,10 @@ class MyModal extends Component {
         leftBtnText={leftBtnText}
         content={content}
         closeBtn={closeBtn}
+        style={style}
+        svgOption={svgOption}
+        footButton={footButton}
+        maskClosable={maskClosable}
       />
     );
   }
@@ -109,7 +116,7 @@ class MyModal extends Component {
 
   _AnimationsModal=() => {
     const {
-      bottomTips, maskClosable, svgName, animationType,
+      bottomTips, maskClosable, svgName, animationType, style, svgOption,
     } = this.state;
     return (
       <AnimationsModal
@@ -118,6 +125,8 @@ class MyModal extends Component {
         animationType={animationType}
         bottomTips={bottomTips}
         maskClosable={maskClosable}
+        style={style}
+        svgOption={svgOption}
       />
     );
   }
@@ -163,12 +172,12 @@ class MyModal extends Component {
         <Resolution>
           {
               {
-                ButtomModal: this._ButtomModal(),
-                TipsModal: this._TipsModal(),
-                AnimationsModal: this._AnimationsModal(),
-                CustomModal: this._CustomModal(),
-                ImageViewer: this._ImageViewer(),
-              }[type]
+                ButtomModal: this._ButtomModal,
+                TipsModal: this._TipsModal,
+                AnimationsModal: this._AnimationsModal,
+                CustomModal: this._CustomModal,
+                ImageViewer: this._ImageViewer,
+              }[type]()
           }
         </Resolution>
       </Modal>

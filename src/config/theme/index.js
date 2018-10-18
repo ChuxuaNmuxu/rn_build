@@ -18,6 +18,6 @@ export default class Theme {
       data: JSON.stringify(themeFlag),
     })
       .then(() => themeFlag)
-      .catch(() => console.log('保存主题失败'));
+      .catch(() => console.log('设置主题失败'));
   }
 }

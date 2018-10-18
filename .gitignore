@@ -61,3 +61,14 @@ android/gradle/wrapper/gradle-wrapper.properties
 
 # 配置.vscode
 .vscode/
+.settings.json
+
+# 过滤打包之后生成的文件
+android/app/src/main/assets/
+!android/app/src/main/assets/fonts
+android/app/src/main/res/drawable-hdpi/
+!android/app/src/main/res/drawable-hdpi/launch_screen.png
+android/app/src/main/res/drawable-mdpi/
+android/app/src/main/res/drawable-xhdpi/
+android/app/src/main/res/drawable-xxhdpi/
+android/app/src/main/res/drawable-xxxhdpi

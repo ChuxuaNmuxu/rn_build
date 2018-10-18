@@ -1,6 +1,6 @@
 // 工具方法
 
-import dayjs from 'dayjs';
+import moment from 'moment';
 import R from 'ramda';
 
 export const exampleOne = a => a + 1;
@@ -72,29 +72,43 @@ export const handleFormattingTime = (time) => { // 格式化计时
 // 对时间进行处理：两天以内用今天和昨天表示；超过两天且在当前周用星期X表示，再往前则按照日期显示。
 export const formatTimeToshow = (timeData) => {
   const today = new Date();
-  const yesterday = dayjs(new Date()).subtract(1, 'days');
-  const weekOfday = parseInt(dayjs().format('E')); // 计算今天是这周第几天
-  const lastSunday = dayjs().subtract(weekOfday, 'days').format('YYYY/MM/DD'); // 上周日日期
+  const yesterday = moment(new Date()).subtract(1, 'days');
+  const weekOfday = parseInt(moment().format('E')); // 计算今天是这周第几天
+  const lastSunday = moment().subtract(weekOfday, 'days').format('YYYY/MM/DD'); // 上周日日期
   let finalTime;
   // 还要判断下今天星期几，计算当前周要往前推几天
   const weekData = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const chineseWeekName = ['星期一', '星期二', '星期三', '星期四', '星期五'];
-  if (dayjs(today).isSame(timeData, 'day')) { // 判断 isSame方法
+  if (moment(today).isSame(timeData, 'day')) { // 判断 isSame方法
     finalTime = '今天';
-  } else if (dayjs(yesterday).isSame(timeData, 'day')) {
+  } else if (moment(yesterday).isSame(timeData, 'day')) {
     finalTime = '昨天';
-  } else if (dayjs(timeData).isAfter(lastSunday)) {
+  } else if (moment(timeData).isAfter(lastSunday)) {
     // 本周内--将英文的星期转中文
-    const index = weekData.indexOf(dayjs(timeData).format('dddd'));
+    const index = weekData.indexOf(moment(timeData).format('dddd'));
     finalTime = chineseWeekName[index];
   } else {
-    finalTime = dayjs(timeData).format('YYYY/MM/DD');
+    finalTime = moment(timeData).format('YYYY/MM/DD');
   }
   return finalTime;
 };
 
 // 各类题型
 export const subjectType = ['单选题', '多选题', '判断题', '对应题', '填空题', '主观题', '综合题'];
+
+/** *
+ * 错误原因
+ * 0:无, 1:知识记忆性错误, 2:理解性错误, 3:考虑不全面, 4:审题不仔细, 5:粗心大意, 65535:其他
+ *  */
+export const failReason = {
+  0: '无',
+  1: '知识记忆性错误',
+  2: '理解性错误',
+  3: '考虑不全面',
+  4: '审题不仔细',
+  5: '粗心大意',
+  65535: '其他',
+};
 
 /**
  * 根据小题类型转成对应的题型名称
@@ -249,9 +263,75 @@ export const createHalfHourPeriod = () => (
  * 将当前时间与时间段对应
  */
 export const currentTimeToPeriod = () => {
-  const hour = dayjs().hour();
-  const minute = dayjs().minute();
+  const hour = moment().hour();
+  const minute = moment().minute();
   // 整点算两个时间段，分钟大于30算一个时间段
   const periodIndex = hour * 2 + (minute > 30 ? 1 : 0);
   return periodIndex;
 };
+
+/**
+ * 后端不给回对应的科目icon名称 语文 => yuwen2
+ */
+export const strFormatterIconName = (str) => {
+  switch (str) {
+    case '物理':
+      return 'wuli1';
+    case '语文':
+      return 'yuwen2';
+    case '英语':
+      return 'yingyu1';
+    case '思品':
+      return 'sixiangpinde';
+    case '思想品德':
+      return 'sixiangpinde';
+    case '音乐':
+      return 'yinyue';
+    case '数学':
+      return 'shuxue1';
+    case '地理':
+      return 'dili1';
+    case '化学':
+      return 'huaxue1';
+    case '美术':
+      return 'meishu';
+    case '生物':
+      return 'shengwu1';
+    case '计算机':
+      return 'jisuanji';
+    case '历史':
+      return 'lishi1';
+    default:
+      return 'jinggao';
+  }
+};
+
+// 任务类型对应的颜色 taskType (string, optional): 任务类型[1:作业任务,2:补做任务3:订正任务,4:批阅任务]
+export const taskTypeMapColor = (num) => {
+  switch (num) {
+    case 1:
+      return '#1ad982';
+    case 2:
+      return '#fad961';
+    case 3:
+      return '#f86471';
+    default:
+      return '#1ad982';
+  }
+};
+
+// 从数组中随机取出5个不重复的item,没法写jest测试
+export function getRandomArrayItem(arr, count) {
+  const shuffled = arr.slice(0);
+  let i = arr.length;
+  const min = i - count;
+  let temp;
+  let index;
+  while (i-- > min) {
+    index = Math.floor((i + 1) * Math.random());
+    temp = shuffled[index];
+    shuffled[index] = shuffled[i];
+    shuffled[i] = temp;
+  }
+  return shuffled.slice(min);
+}

@@ -61,7 +61,7 @@ class FilterBox extends Component {
           </ScrollView>
           <TouchableOpacity style={styles.filterMoreBox} onPress={() => this.filterMoreFun()}>
             <Text style={styles.filterMoreText}>
-            更多筛选
+                更多筛选
               <CIcon style={styles.icon} name="shangyiye" />
             </Text>
           </TouchableOpacity>
@@ -72,7 +72,7 @@ class FilterBox extends Component {
 }
 
 FilterBox.propTypes = {
-  currentSubjectId: PropTypes.number.isRequired,
+  currentSubjectId: PropTypes.string.isRequired,
   subjectData: PropTypes.array.isRequired,
   filterSubjectFun: PropTypes.func.isRequired,
   filterMoreFun: PropTypes.func.isRequired,

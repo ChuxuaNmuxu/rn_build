@@ -1,0 +1,39 @@
+// 传给 TaskItem 的样式
+.wrap_style {
+  margin-left: 0;
+  height: 96px;
+}
+
+.icon_wrap_style {
+  height: 71px;
+  width: 71px;
+}
+
+.icon {
+  font-size: 88px;
+  line-height: 87px;
+}
+
+.wrap {
+  margin-top: 12px;
+}
+
+// 
+.showIconOnlyTask_wrap_style {
+  justify-content: center;
+  align-items: center;
+  margin-left: 0;
+  height: 96px;
+  width: 96px;
+  background-color: #54cc82;
+  border-radius:8px;
+}
+
+.showIconOnlyTask_icon_style {
+  justify-content: center;
+  align-items: center;
+  margin-right: 0;
+  height: 71px;
+  width: 71px;
+  border-radius: 71px;
+}

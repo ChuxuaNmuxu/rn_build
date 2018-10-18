@@ -1,0 +1,132 @@
+.homeworkDetail_container {
+  width: 100%;
+  height: 100%;
+  background:#fafafa;
+}
+.homeworkDetail_header {
+  background: #30bf6c;
+  width: 100%;
+  height: 72px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px 0 0;
+}
+
+.alt {
+  width: 20px;
+  height: 20px;
+}
+
+.buttonStyle {
+  font-size: 24px;
+  color: #fff;
+  text-align: center;
+  width: 60px;
+}
+
+.homeworkDetailTitle {
+  color: #fff;
+  font-size: 24px;
+  text-align: center;
+}
+
+.htmlViewComponent {
+  width: auto;
+  height: auto;
+  background-color: #fff;
+  padding: 13px 24px 31px;
+}
+
+.htmlContent {
+  font-size: 24px;
+}
+
+.splitLine {
+  width: 100%;
+  height: 12px;
+  background-color: transparent;
+}
+
+.studentAnserImage {
+  padding: 12px 24px 30px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #fff;
+}
+
+.correctAndOthersAnser {
+  padding: 0 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #fff;
+  width: 100%;
+  height: 250px;
+  flex-direction: column;
+}
+
+.correctAndOthersAnserTitle {
+  width: 100%;
+  height: 43px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  // background-color: bisque;
+}
+
+.AnserTitleText {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666666;
+  letter-spacing:0;
+  text-align:left;
+}
+
+.imageList {
+  height: 200px;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  // background-color: black;
+}
+
+.imageListItem {
+  margin-right: 24px;
+  width: 147px;
+  height: 147px;
+}
+
+.zoomImageIcon {
+  position: absolute;
+  bottom: 2;
+  right: 2;
+}
+
+.CauseOfError {
+  width: 100%;
+  height: 360px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-left: 12px;
+  padding-bottom: 80px;
+  background-color: #fff;
+}
+
+.loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  background-color: rgba(51,51,51,0.50);
+}
+
+.loadingText {
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#ffffff;
+  letter-spacing:0;
+  text-align: center;
+}

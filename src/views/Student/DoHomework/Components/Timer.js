@@ -9,7 +9,7 @@ class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentTime: 0,
+      currentTime: props.startTime || 0,
     };
     this.timeSetInterval = null;
   }
@@ -56,7 +56,11 @@ class Timer extends React.Component {
 }
 
 Timer.propTypes = {
-  startTime: PropTypes.number.isRequired,
+  startTime: PropTypes.number,
+};
+
+Timer.defaultProps = {
+  startTime: 0,
 };
 
 export default Timer;
