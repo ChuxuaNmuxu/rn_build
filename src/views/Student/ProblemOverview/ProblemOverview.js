@@ -14,6 +14,7 @@ import { Actions } from 'react-native-router-flux';
 import styles from './ProblemOverview.scss';
 import * as actions from '../../../actions/problemOverviewAction';
 import CIcon from '../../../components/Icon';
+import NotResult from '../../../components/NotResult';
 
 class ProblemOverview extends PureComponent {
   componentDidMount() {
@@ -43,13 +44,14 @@ class ProblemOverview extends PureComponent {
             错题本
           </Text>
         </View>
-        <FlatList
-          keyExtractor={() => `${Math.random()}`}
-          data={data}
-          renderItem={
+        {
+          data.length > 0 ? (
+            <FlatList
+              keyExtractor={() => `${Math.random()}`}
+              data={data}
+              renderItem={
             (dataItem) => {
               const { item, index } = dataItem;
-
               return (
                 <TouchableOpacity
                   onPress={() => this.goProblemListFun(item.subjectId)}
@@ -73,7 +75,13 @@ class ProblemOverview extends PureComponent {
               );
             }
           }
-        />
+            />
+          ) : (
+            <NotResult
+              tips="暂无错题"
+            />
+          )
+        }
       </View>
     );
   }
@@ -90,7 +98,6 @@ const mapStateToProps = (state) => {
     data,
   };
 };
-
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(actions, dispatch),
 });

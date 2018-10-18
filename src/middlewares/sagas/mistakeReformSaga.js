@@ -52,6 +52,7 @@ function* saveQeustionsSaga(action) {
             value: undefined,
           },
         };
+        // draft[i].controlComponent = controlComponent;
       }
     });
     yield put(actions.saveQuestionsAction(result, 'SUCCESS'));

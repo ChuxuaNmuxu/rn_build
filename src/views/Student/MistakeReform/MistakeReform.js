@@ -4,16 +4,16 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   ScrollView,
   StyleSheet,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import HTMLView from 'react-native-htmlview';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Swiper from 'react-native-swiper';
+import HTMLView from 'react-native-htmlview';
+import draftToHtml from '../../../utils/draftjsToHtml';
 import Modal, { ModalApi } from '../../../components/Modal';
 import ThumbnailImage from '../../../components/ThumbnailImage';
 import { getQuestionTypeName } from '../../../utils/common';
@@ -24,7 +24,7 @@ import CIcon from '../../../components/Icon';
 import AnswerCard from '../DoHomework/Components/AnswerCard';
 import WrongReason from '../../../components/WrongReason';
 import styles from './MistakeReform.scss';
-import draftToHtml from '../../../utils/draftjsToHtml';
+import NotResult from '../../../components/NotResult';
 // import problemImg from '../../../public/img/problem.png';
 
 class MistakeReform extends Component {
@@ -78,7 +78,7 @@ class MistakeReform extends Component {
     if (questions.length > 1) {
       return (
         <View style={styles.head_index_view}>
-          <Text style={styles.head_index_text}>{index + 1}/5</Text>
+          <Text style={styles.head_index_text}>{`${index + 1}/${questions.length}`}</Text>
         </View>
       );
     }
@@ -446,6 +446,7 @@ class MistakeReform extends Component {
   render() {
     const { questions } = this.props;
     const { index } = this.state;
+    const contentWrapStyle = questions.length > 0 ? styles.content_wrap : styles.content_wrap_not_result;
     return (
       <View style={styles.mistakeReform_container}>
         <Modal />
@@ -466,7 +467,7 @@ class MistakeReform extends Component {
           { this.haveIndex(index) }
         </View>
         <ScrollView>
-          <View style={styles.content_wrap}>
+          <View style={contentWrapStyle}>
             <Swiper
               ref={(node) => { this.swiperRef = node; }}
               loop={false}
@@ -511,15 +512,10 @@ class MistakeReform extends Component {
                     { this.showErrorRadio(item, i) }
                   </View>
                 )) : (
-                  <View style={styles.finish_picture}>
-                    <View style={styles.finish_picture_child_view}>
-                      <Image
-                        // style={{ width: '100%', height: '100%' }}
-                        source={require('../../../public/img/problem.png')}
-                      />
-                      <Text style={styles.finish_picture_child_view_text}>错题已复习完毕</Text>
-                    </View>
-                  </View>
+                  <NotResult
+                    tips="错题已复习完毕"
+                    imgStyle={{}}
+                  />
                 )
             }
             </Swiper>
