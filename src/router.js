@@ -71,8 +71,8 @@ const RouteMap = props => (
           tabBarStyle={styles.tabBarStyle} // 标签栏样式，可以修改tabBarPosition为bottom时默认下划线样式
           // animationEnabled={false} // 切换动画
           lazy
-          wrap
-          swipeEnabled
+          wrap // 自动使用自己的导航栏包装每个场景
+          swipeEnabled={false} // 是否可以滑动切换
           showLabel={false} // 显示文字
           headerMode="screen" // 页面切换方式
           icon={TabBarIcon}
