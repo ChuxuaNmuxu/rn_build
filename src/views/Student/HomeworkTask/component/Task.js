@@ -267,6 +267,18 @@ class TaskItem extends React.Component {
     });
   }
 
+  taskTypeMapTipText = () => {
+    const { data: { taskType, endTime } } = this.props;
+    switch (taskType) {
+      case 2:
+        return '截至提交时间未提交';
+      case 3:
+        return '待订正...';
+      default:
+        return `截止提交时间：${moment(endTime).format('MM-DD HH:mm') || '无时间'}`;
+    }
+  }
+
   render() {
     const {
       wrapStyle, iconWrapStyle, iconStyle, dragData, type,
@@ -314,9 +326,7 @@ class TaskItem extends React.Component {
                     {
                       type === 'detailsTask' && <Text style={styles.details}>预计耗时：{data.estimatedCost || '不限时'}</Text>
                     }
-                    <Text style={styles.details}>
-                      截止提交时间：{ moment(data.endTime).format('MM-DD HH:mm') || '无时间'}
-                    </Text>
+                    <Text style={styles.details}>{this.taskTypeMapTipText()}</Text>
                   </View>
                   )}
                   {
