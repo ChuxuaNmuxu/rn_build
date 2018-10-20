@@ -33,9 +33,17 @@ import Debug from '../../../components/Debug';
   onFetchStudentTaskList: bindActionCreators(FetchStudentTaskList, dispatch),
 }))
 class HomeworkTask extends Component {
+  timer = null
+
   componentDidMount() {
     const { onFetchStudentTaskList } = this.props;
     onFetchStudentTaskList();
+
+    this.timer = setInterval(() => {
+      onFetchStudentTaskList();
+      console.log('轮询中');
+    }, 1000 * 60);
+
     ModalApi.onOppen('AnimationsModal', {
       svgName: 'finger', // 选择提示信息的svg
       animationType: 'slideInDown', // 选择动画类型
@@ -47,6 +55,11 @@ class HomeworkTask extends Component {
       },
       style: { width: 540 },
     });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    console.log('卸载homeworkTask');
   }
 
   renderHeader = () => {

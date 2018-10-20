@@ -2,7 +2,7 @@ import React from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   Animated,
   PanResponder,
 } from 'react-native';
@@ -289,7 +289,7 @@ class TaskItem extends React.Component {
         {/**
           data.dragTask=true 表示模拟的拖拽元素
         */}
-        <TouchableOpacity>
+        <TouchableWithoutFeedback>
           {
             (dragData.homeworkId === data.homeworkId) && !data.dragTask
               ? (
@@ -307,6 +307,10 @@ class TaskItem extends React.Component {
                 <View
                   style={mergeStyles(styles.task, wrapStyle, { backgroundColor: taskTypeMapColor(data.taskType) })}
                   ref={(ref) => { this.taskRef = ref; }}
+                  iosshadowColor="red"
+                  iosshadowOffset={{ width: 5, height: 5 }}
+                  iosshadowRadius={2}
+                  iosshadowOpacity={1}
                 >
                   <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
                     <CIcon
@@ -342,7 +346,7 @@ class TaskItem extends React.Component {
                 </View>
               )
           }
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </Animated.View>
     );
   }

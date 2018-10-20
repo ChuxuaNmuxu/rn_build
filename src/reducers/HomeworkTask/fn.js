@@ -36,10 +36,10 @@ export const changePlanTask = (state, action) => {
     }
     if ('leavePeriodIndex' in action.payload) {
       // 取消排期
+      // todo 来重新排序
       const periodData = state.planList[action.payload.leavePeriodIndex];
       const periodChildDragingIndex = periodData.data.findIndex(v => v.data === action.payload.data);
       periodData.data.splice(periodChildDragingIndex, 1);
-      // todo 应该要通过事件来重新排序
       delete action.payload.leavePeriodIndex;
       return;
     }
@@ -52,7 +52,6 @@ export const changePlanTask = (state, action) => {
 
 export const changeTodoTask = (state, action) => {
   if (R.type(action.payload) === 'Array') {
-    // action.payload.forEach(v => state.todoList.unshift(v));
     state.todoList = action.payload;
   } else if (R.type(action.payload) === 'Object') {
     if (action.payload.cancelTask) {
@@ -93,6 +92,6 @@ export const isGetDropListenerRange = (state, action) => {
 };
 
 
-export const isFirstGetDropListenerRange = (state, action) => {
-  state.isFirstRegetDropListenerRange = action.payload;
-};
+// export const isFirstGetDropListenerRange = (state, action) => {
+//   state.isFirstRegetDropListenerRange = action.payload;
+// };

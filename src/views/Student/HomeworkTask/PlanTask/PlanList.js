@@ -17,7 +17,7 @@ import {
   ChangePlanTask,
   ChangeDragingTaskCorrespondPeriod,
   SaveTask,
-  IsFirstGetDropListenerRange,
+  // IsFirstGetDropListenerRange,
 } from '../../../../actions/homeworkTask';
 import { adaptiveRotation } from '../../../../utils/resolution';
 
@@ -29,7 +29,7 @@ import { adaptiveRotation } from '../../../../utils/resolution';
     lastHandlePeriodIndex,
     isRegetDropListenerRange,
     dragData,
-    isFirstRegetDropListenerRange,
+    // isFirstRegetDropListenerRange,
   },
 }) => ({
   listenerRangeList,
@@ -38,7 +38,7 @@ import { adaptiveRotation } from '../../../../utils/resolution';
   lastHandlePeriodIndex,
   isRegetDropListenerRange,
   dragData,
-  isFirstRegetDropListenerRange,
+  // isFirstRegetDropListenerRange,
 }), dispatch => ({
   onChangeDropPosition: bindActionCreators(ChangeDropPosition, dispatch),
   onChangeDropingData: bindActionCreators(ChangeDropingData, dispatch),
@@ -49,7 +49,7 @@ import { adaptiveRotation } from '../../../../utils/resolution';
   onIsgetDropListenerRange: bindActionCreators(IsgetDropListenerRange, dispatch),
   onGetDropListenerRange: bindActionCreators(GetDropListenerRange, dispatch),
   onSaveTask: bindActionCreators(SaveTask, dispatch),
-  onIsFirstGetDropListenerRange: bindActionCreators(IsFirstGetDropListenerRange, dispatch),
+  // onIsFirstGetDropListenerRange: bindActionCreators(IsFirstGetDropListenerRange, dispatch),
 }))
 class PlanList extends Component {
   constructor(props) {
@@ -62,29 +62,31 @@ class PlanList extends Component {
       dragingTaskCorrespondPeriodIndex: props.dragingTaskCorrespondPeriodIndex,
       listenerRangeList: props.listenerRangeList,
       lastHandlePeriodIndex: props.lastHandlePeriodIndex,
+      planList: props.planList,
     };
   }
 
   componentDidMount() {
     const { onChangeLastHandlePeriodIndex } = this.props;
     onChangeLastHandlePeriodIndex(this.currentPeriodIndex);
+    this.scrollToIndex();
   }
 
   componentDidUpdate() {
     const {
       isRegetDropListenerRange,
       onIsgetDropListenerRange,
-      isFirstRegetDropListenerRange,
+      // isFirstRegetDropListenerRange,
     } = this.props;
     if (isRegetDropListenerRange) {
       this.saveListenerRangeToStore()
         .then(() => onIsgetDropListenerRange(false));
     }
-    if (isFirstRegetDropListenerRange) {
-      const { onIsFirstGetDropListenerRange } = this.props;
-      onIsFirstGetDropListenerRange(false);
-      this.scrollToIndex();
-    }
+    // if (isFirstRegetDropListenerRange) {
+    //   const { onIsFirstGetDropListenerRange } = this.props;
+    //   onIsFirstGetDropListenerRange(false);
+    //   this.scrollToIndex();
+    // }
   }
 
   // 滑动时间段动画结束之后的回调
@@ -113,11 +115,13 @@ class PlanList extends Component {
       dragingTaskCorrespondPeriodIndex: stateDragingTaskCorrespondPeriodIndex,
       listenerRangeList: stateListenerRangeList,
       lastHandlePeriodIndex: stateLastHandlePeriodIndex,
+      planList: statePlanList,
     } = prevState;
     const {
       dragingTaskCorrespondPeriodIndex: propsDragingTaskCorrespondPeriodIndex,
       listenerRangeList: propsListenerRangeList,
       lastHandlePeriodIndex: propsLastHandlePeriodIndex,
+      planList: propsPlanList,
     } = nextProps;
     if (stateDragingTaskCorrespondPeriodIndex !== propsDragingTaskCorrespondPeriodIndex) {
       return {
@@ -134,6 +138,7 @@ class PlanList extends Component {
         lastHandlePeriodIndex: propsLastHandlePeriodIndex,
       };
     }
+    console.log(140, R.equals(statePlanList, propsPlanList), 'statePlanList:', statePlanList, 'propsPlanList:', propsPlanList);
 
     return null;
   }
@@ -288,14 +293,14 @@ PlanList.propTypes = {
   onChangeLastHandlePeriodIndex: PropTypes.func,
   onIsgetDropListenerRange: PropTypes.func,
   isRegetDropListenerRange: PropTypes.bool,
-  isFirstRegetDropListenerRange: PropTypes.bool,
+  // isFirstRegetDropListenerRange: PropTypes.bool,
   onChangeDropingData: PropTypes.func,
   onChangePlanTask: PropTypes.func,
   onChangeTodoTask: PropTypes.func,
   onChangeDragingTaskCorrespondPeriod: PropTypes.func,
   dragData: PropTypes.object,
   onSaveTask: PropTypes.func,
-  onIsFirstGetDropListenerRange: PropTypes.func,
+  // onIsFirstGetDropListenerRange: PropTypes.func,
 };
 
 PlanList.defaultProps = {
@@ -308,14 +313,14 @@ PlanList.defaultProps = {
   onChangeLastHandlePeriodIndex: () => {},
   onIsgetDropListenerRange: () => {},
   isRegetDropListenerRange: false,
-  isFirstRegetDropListenerRange: false,
+  // isFirstRegetDropListenerRange: false,
   onChangeDropingData: () => {},
   onChangePlanTask: () => {},
   onChangeTodoTask: () => {},
   onChangeDragingTaskCorrespondPeriod: () => {},
   dragData: {},
   onSaveTask: () => {},
-  onIsFirstGetDropListenerRange: () => {},
+  // onIsFirstGetDropListenerRange: () => {},
 };
 
 export default PlanList;
