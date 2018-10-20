@@ -1,8 +1,11 @@
 import { isEmpty } from 'ramda';
 import qs from 'qs';
+import { Toast } from 'antd-mobile-rn';
 import { DeviceEventEmitter } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import fetchApi from '../config/apiBase/fetchApi';
 import ApiBase from '../config/apiBase';
+import Account from './account';
 
 // origin表示 https://cjyun.ecaicn.com
 let origin = null;
@@ -32,13 +35,15 @@ const connectUrl = async (url) => {
 const errCode = (json) => {
   switch (json.code) {
     case 703:
-      return console.log('登陆过期', json);
+      Actions.Login();
+      new Account().removeAccount();
+      throw new Error(json.message);
     case -1:
-      // Toast.fail(`${json.code} ${json.message || json.data}`); // 打印出来给鬼看啊！还容易造成调试的问题
       return Promise.reject(new Error(`${json.code} ${json.message || json.data}`));
     default:
       // console.log('json.code:', json.code);
   }
+  if (json.code !== 0) Toast.info(json.message);
   return json;
 };
 
@@ -81,11 +86,7 @@ const Fetch = {
       .then(res => res.text())
       .then(text => (text ? JSON.parse(text) : {}))
       .then(errCode)
-      .catch((err) => {
-        const error = new Error(err);
-        console.log(error);
-        return error; // 返回错误App会自动在界面上呈现报错模态
-      });
+      .catch((err) => { throw new Error(err); });
   },
   async getUrl(url, ...args) {
     const _url = await connectUrl(url);

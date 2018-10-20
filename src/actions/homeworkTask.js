@@ -10,7 +10,7 @@ import {
   IS_GET_DROP_LISTENER_RANGE,
   FETCH_STUDENT_TASK_LIST,
   SAVE_TASK,
-  IS_FIRST_GET_DROP_LISTENER_RANGE,
+  // IS_FIRST_GET_DROP_LISTENER_RANGE,
 } from '../constants/actionType';
 
 export const ChangeDropPosition = actionCreator(CHANGE_DROP_POSITION, '长按或响应事件结束之后改变drop的位置');
@@ -23,4 +23,4 @@ export const ChangeLastHandlePeriodIndex = actionCreator(CHANGE_LAST_HANDLE_PERI
 export const IsgetDropListenerRange = actionCreator(IS_GET_DROP_LISTENER_RANGE, '是否获取时间段的监听范围');
 export const FetchStudentTaskList = actionCreator(FETCH_STUDENT_TASK_LIST, '获取学生作业列表');
 export const SaveTask = actionCreator(SAVE_TASK, '取消、保存或更改任务时间段');
-export const IsFirstGetDropListenerRange = actionCreator(IS_FIRST_GET_DROP_LISTENER_RANGE, '是否第一次获取时间段的监听范围');
+// export const IsFirstGetDropListenerRange = actionCreator(IS_FIRST_GET_DROP_LISTENER_RANGE, '是否第一次获取时间段的监听范围');

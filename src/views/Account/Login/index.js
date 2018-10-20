@@ -82,7 +82,8 @@ class Login extends Component {
           switch (currentSchoolRole) {
             case 'STUDENT':
               this.savaToken(data).then(() => {
-                Toast.success('登陆成功', 2, Actions.Student);
+                Toast.success('登陆成功');
+                Actions.Student();
               });
               break;
             case 'TEACHER':
