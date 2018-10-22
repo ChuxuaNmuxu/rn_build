@@ -14,13 +14,14 @@ class ScrollSelectedBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectTion: 0,
+      selectTion: props.selectTion,
     };
   }
 
   getBtnBGColor=(isItCorrect, index) => {
     const { status } = this.props;
     const { selectTion } = this.state;
+    console.log(selectTion, 'getBtnBGColorgetBtnBGColorgetBtnBGColor');
     // --------------红色---------绿色--------橙色-------灰色-------无色----
     const color = ['#fa5656', '#30bf6c', '#f5a623', '#bfbfbf', '#ffffff'];
     if (status === 0 && selectTion === index) {
@@ -150,6 +151,7 @@ ScrollSelectedBar.propTypes = {
   data: PropTypes.array.isRequired,
   moveIndex: PropTypes.func.isRequired,
   status: PropTypes.number.isRequired,
+  selectTion: PropTypes.number.isRequired,
 };
 
 export default ScrollSelectedBar;

@@ -46,3 +46,53 @@
   background-color: #30bf6c;
   color: #ffffff;
 }
+
+.wheelPicker {
+  width: 300px;
+  height: 600px;
+}
+
+.renderWheelPicker {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: auto;
+}
+
+.showPickerView {
+  flex: 1;
+  justify-content: flex-start;
+  align-items: center;
+  // background-color: pink;
+  width: 100%;
+}
+
+.headerBtnBar {
+  flex-direction: row;
+  justify-content: space-between;
+  background:#ffffff;
+  width:100%;
+  height:96px;
+  align-items: center;
+  padding: 0 24px;
+  // border-bottom: 2px solid #e8e8e8;
+}
+
+.headerBtnBarText {
+  font-family:PingFangSC-Regular;
+font-size:24px;
+color:#30bf6c;
+text-align:left;
+}
+
+.renderWheelPickerItemText {
+  width: 100%;
+  margin-bottom: 30px;
+  text-align: center;
+  font-family:PingFangSC-Regular;
+  font-size:24px;
+  color:#666666;
+}

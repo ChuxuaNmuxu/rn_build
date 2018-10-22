@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getMistakeList } from '../../../actions/mistakeListAction';
+import { getMistakeListAction } from '../../../actions/mistakeListAction';
 import { initialFetch } from '../../../actions/problemRecordsAction';
 import styles from './ProblemListOverview.scss';
 import I18nText from '../../../components/I18nText';
@@ -21,15 +21,6 @@ import SelectListButton from '../ProblemRecords/Components/SelectListButton';
 import { getRandomArrayItem } from '../../../utils/common';
 
 class ProblemListOverview extends Component {
-  static propTypes = {
-    onGetMistakeList: PropTypes.func.isRequired,
-    subjectId: PropTypes.string.isRequired,
-    problemOverviewData: PropTypes.array.isRequired,
-    mistakeList: PropTypes.array.isRequired,
-    allGradeData: PropTypes.array.isRequired,
-    getGrades: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
     const { problemOverviewData, subjectId } = props;
@@ -175,7 +166,7 @@ class ProblemListOverview extends Component {
     const {
       showExtendView, currentSubjectId, subjectData,
     } = this.state;
-    const { mistakeList } = this.props;
+    const { mistakeList, total } = this.props;
     return (
       <View style={styles.problemList_container}>
         <TouchableOpacity
@@ -196,7 +187,7 @@ class ProblemListOverview extends Component {
           filterMoreFun={this.filterMoreFun}
         />
         {/* <ScrollView> */}
-        <ProblemList refreshList={this.refreshList} mistakeList={mistakeList} />
+        <ProblemList refreshList={this.refreshList} mistakeList={mistakeList} total={total} />
         {/* </ScrollView> */}
         {
           // 更多筛选
@@ -220,10 +211,21 @@ class ProblemListOverview extends Component {
   }
 }
 
+ProblemListOverview.propTypes = {
+  total: PropTypes.number.isRequired, // 后台记录的总长度，用于判断能否刷新
+  onGetMistakeList: PropTypes.func.isRequired,
+  subjectId: PropTypes.string.isRequired,
+  problemOverviewData: PropTypes.array.isRequired,
+  mistakeList: PropTypes.array.isRequired,
+  allGradeData: PropTypes.array.isRequired,
+  getGrades: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) => {
   const {
     mistakeListReducer: {
       mistakeList,
+      total,
     },
     problemOverviewReducer: {
       data,
@@ -236,14 +238,14 @@ const mapStateToProps = (state) => {
 
   return {
     mistakeList,
+    total,
     problemOverviewData: data,
     allGradeData,
   };
 };
 const mapDispatchToProps = dispatch => ({
-  onGetMistakeList: bindActionCreators(getMistakeList, dispatch),
+  onGetMistakeList: bindActionCreators(getMistakeListAction, dispatch),
   getGrades: bindActionCreators(initialFetch, dispatch),
 });
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProblemListOverview);
