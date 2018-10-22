@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import SplashScreen from 'react-native-splash-screen';
 // import Theme from './config/theme';
 import Language from './config/language';
+import ApiBase from './config/apiBase';
 import { InitialConfog } from './actions/config';
 
 @connect(
@@ -25,6 +26,7 @@ export default class Setup extends Component {
     super(props);
     // this.theme = new Theme();
     this.language = new Language();
+    this.apiBase = new ApiBase();
 
     // 全屏组件，只支持Android
     if (Android) {
@@ -60,11 +62,12 @@ export default class Setup extends Component {
       Promise.all([
         // this.initialTheme(),
         this.initialLanguage(),
+        this.initialApiFlag(),
       ])
         .then((arr) => {
           // theme,
-          const [language] = arr;
-          doInitialConfog({ language });
+          const [language, apiFlag] = arr;
+          doInitialConfog({ language, apiFlag });
         })
         .catch(e => console.log('初始化配置失败：', e))
     );
@@ -73,6 +76,8 @@ export default class Setup extends Component {
   // initialTheme = () => this.theme.getTheme().then(res => res)
 
   initialLanguage = () => this.language.getLanguage().then(res => res)
+
+  initialApiFlag = () => this.apiBase.getApiBase().then(res => res)
 
   render() {
     const {

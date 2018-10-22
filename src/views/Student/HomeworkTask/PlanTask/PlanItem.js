@@ -6,7 +6,6 @@ import Task from '../component/Task';
 import styles from './planItem.scss';
 
 const PlanItem = (props) => {
-  console.log(9, props);
   const onPress = () => {
     const {
       title,

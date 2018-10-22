@@ -14,6 +14,7 @@ import I18nText from '../../../components/I18nText';
 import Drag from './component/Drag';
 import { FetchStudentTaskList } from '../../../actions/homeworkTask';
 import Modal, { ModalApi } from '../../../components/Modal';
+import Debug from '../../../components/Debug';
 
 @connect((state) => {
   const {
@@ -32,20 +33,33 @@ import Modal, { ModalApi } from '../../../components/Modal';
   onFetchStudentTaskList: bindActionCreators(FetchStudentTaskList, dispatch),
 }))
 class HomeworkTask extends Component {
+  timer = null
+
   componentDidMount() {
     const { onFetchStudentTaskList } = this.props;
     onFetchStudentTaskList();
-    // ModalApi.onOppen('AnimationsModal', {
-    //   svgName: 'finger', // 选择提示信息的svg
-    //   animationType: 'slideInDown', // 选择动画类型
-    //   bottomTips: '把作业向下拖动到具体时间段吧', // 提示文字信息
-    //   maskClosable: true, // 是否点击蒙层关闭
-    //   svgOption: {
-    //     width: 120,
-    //     height: 120,
-    //   },
-    //   style: { width: 540 },
-    // });
+
+    this.timer = setInterval(() => {
+      onFetchStudentTaskList();
+      console.log('轮询中');
+    }, 1000 * 60);
+
+    ModalApi.onOppen('AnimationsModal', {
+      svgName: 'finger', // 选择提示信息的svg
+      animationType: 'slideInDown', // 选择动画类型
+      bottomTips: '把作业向下拖动到具体时间段吧', // 提示文字信息
+      maskClosable: true, // 是否点击蒙层关闭
+      svgOption: {
+        width: 120,
+        height: 120,
+      },
+      style: { width: 540 },
+    });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    console.log('卸载homeworkTask');
   }
 
   renderHeader = () => {
@@ -53,7 +67,9 @@ class HomeworkTask extends Component {
     return (
       <View style={[styles.header]}>
         <View style={styles.headle_left}>
-          <I18nText style={styles.title} option={{ count: todoList.length }}>home.header.title</I18nText>
+          <Debug>
+            <I18nText style={styles.title} option={{ count: todoList.length }}>home.header.title</I18nText>
+          </Debug>
           {
             todoList.length
               ? <I18nText style={styles.small}>home.header.tip</I18nText>

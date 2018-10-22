@@ -1,31 +1,52 @@
 import { isEmpty } from 'ramda';
 import qs from 'qs';
-import Config from '../config';
+import { Toast } from 'antd-mobile-rn';
+import { DeviceEventEmitter } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import fetchApi from '../config/apiBase/fetchApi';
+import ApiBase from '../config/apiBase';
+import Account from './account';
 
-function apiUrl(url) {
+// origin表示 https://cjyun.ecaicn.com
+let origin = null;
+// 监听修改环境操作
+DeviceEventEmitter.addListener('apiBase', (params) => {
+  origin = fetchApi(undefined, params);
+});
+const apiBase = new ApiBase();
+
+const connectUrl = async (url) => {
+  if (!origin) {
+    origin = await apiBase.getApiBase();
+    origin = fetchApi(undefined, origin);
+  }
+
   if (typeof url !== 'string') {
     console.error('url只能为字符串类型');
   } else if (url.indexOf('http') === 0) {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
   } else if (url.charAt(0) === '/') {
-    console.log(Config.Api.baseApi + url);
-    return Config.Api.baseApi + url;
+    return origin + url;
   }
-  return `${Config.Api.baseApi}/${url}`;
-}
+  return `${origin}/${url}`;
+};
+
 const errCode = (json) => {
   switch (json.code) {
     case 703:
-      return console.log('登陆过期', json);
+      Actions.Login();
+      new Account().removeAccount();
+      throw new Error(json.message);
     case -1:
-      // Toast.fail(`${json.code} ${json.message || json.data}`); // 打印出来给鬼看啊！还容易造成调试的问题
       return Promise.reject(new Error(`${json.code} ${json.message || json.data}`));
     default:
       // console.log('json.code:', json.code);
   }
+  if (json.code !== 0) Toast.info(json.message);
   return json;
 };
+
 const Fetch = {
   /**
  * param {Number} url 地址
@@ -65,27 +86,27 @@ const Fetch = {
       .then(res => res.text())
       .then(text => (text ? JSON.parse(text) : {}))
       .then(errCode)
-      .catch((err) => {
-        const error = new Error(err);
-        console.log(error);
-        return error; // 返回错误App会自动在界面上呈现报错模态
-      });
+      .catch((err) => { throw new Error(err); });
+  },
+  async getUrl(url, ...args) {
+    const _url = await connectUrl(url);
+    return this.fetch(_url, ...args);
   },
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;
     if (!isEmpty(params)) {
       _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
     }
-    return this.fetch(apiUrl(_url), {}, 'get', '', mock, headerParams);
+    return this.getUrl(_url, {}, 'get', '', mock, headerParams);
   },
-  post(url, params, type = 'json', mock = false) { return this.fetch(apiUrl(url), params, 'post', type, mock); },
-  put(url, params, type = 'json') { return this.fetch(apiUrl(url), params, 'put', type); },
+  post(url, params, type = 'json', mock = false) { return this.getUrl(url, params, 'post', type, mock); },
+  put(url, params, type = 'json') { return this.getUrl(url, params, 'put', type); },
   delete(url, params) {
     let _url = url;
     if (!isEmpty(params)) {
       _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
     }
-    return this.fetch(apiUrl(_url), params, 'delete');
+    return this.getUrl(_url, params, 'delete');
   },
 };
 export default Fetch;

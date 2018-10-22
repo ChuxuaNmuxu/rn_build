@@ -2,7 +2,7 @@ import React from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   Animated,
   PanResponder,
 } from 'react-native';
@@ -138,14 +138,11 @@ class TaskItem extends React.Component {
       const { index } = findTask;
       console.log('排期成功：', findTask.index);
 
-      // 如果lastHandlePeriodIndex === index相等表示没有拖拽出当前时间段，直接中止
-      if (lastHandlePeriodIndex === index) {
+      // 如果lastHandlePeriodIndex === index相等，并且拖拽类型不是未排期任务，表示不用排期直接还原数据
+      if (lastHandlePeriodIndex === index && type !== 'detailsTask') {
         console.log('没有拖拽出当前时间段，返回原始位置');
-        return;
-      }
-
-      // 每个时间段只能排5个任务
-      if (planList[index].data.length > 4) {
+      } else if (planList[index].data.length > 4) {
+        // 每个时间段只能排5个任务
         ModalApi.onOppen('TipsModal', {
           tipsContent: <Text>该时段任务已满，请先完成后再安排</Text>,
           bottomTips: '自动关闭',
@@ -153,15 +150,15 @@ class TaskItem extends React.Component {
         });
       } else {
         /**
-         * 只有将未排期的任务进行排期或从排期任务中取消排期时才会对排期列表有影响
-         * 如果 type 为 detailsTask 并且排期成功时触发更改未排期任务列表action
-         */
+           * 只有将未排期的任务进行排期或从排期任务中取消排期时才会对排期列表有影响
+           * 如果 type 为 detailsTask 并且排期成功时触发更改未排期任务列表action
+           */
         if (type === 'detailsTask') onChangeTodoTask({ ...dragData, cancelTask: true });
 
         /**
-         * prevPeriodIndex 如果切换时间段，则有prevPeriodIndex属性，否则没有，通过该属性判断是排期还是切换排期
-         * currentPeriodIndex 当前时间段
-         */
+           * prevPeriodIndex 如果切换时间段，则有prevPeriodIndex属性，否则没有，通过该属性判断是排期还是切换排期
+           * currentPeriodIndex 当前时间段
+           */
         const taskData = type === 'detailsTask'
           ? { ...data, currentPeriodIndex: index }
           : { ...data, currentPeriodIndex: index, prevPeriodIndex: lastHandlePeriodIndex };
@@ -267,6 +264,18 @@ class TaskItem extends React.Component {
     });
   }
 
+  taskTypeMapTipText = () => {
+    const { data: { taskType, endTime } } = this.props;
+    switch (taskType) {
+      case 2:
+        return '截至提交时间未提交';
+      case 3:
+        return '待订正...';
+      default:
+        return `截止提交时间：${moment(endTime).format('MM-DD HH:mm') || '无时间'}`;
+    }
+  }
+
   render() {
     const {
       wrapStyle, iconWrapStyle, iconStyle, dragData, type,
@@ -280,7 +289,7 @@ class TaskItem extends React.Component {
         {/**
           data.dragTask=true 表示模拟的拖拽元素
         */}
-        <TouchableOpacity>
+        <TouchableWithoutFeedback>
           {
             (dragData.homeworkId === data.homeworkId) && !data.dragTask
               ? (
@@ -298,6 +307,10 @@ class TaskItem extends React.Component {
                 <View
                   style={mergeStyles(styles.task, wrapStyle, { backgroundColor: taskTypeMapColor(data.taskType) })}
                   ref={(ref) => { this.taskRef = ref; }}
+                  iosshadowColor="red"
+                  iosshadowOffset={{ width: 5, height: 5 }}
+                  iosshadowRadius={2}
+                  iosshadowOpacity={1}
                 >
                   <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
                     <CIcon
@@ -314,9 +327,7 @@ class TaskItem extends React.Component {
                     {
                       type === 'detailsTask' && <Text style={styles.details}>预计耗时：{data.estimatedCost || '不限时'}</Text>
                     }
-                    <Text style={styles.details}>
-                      截止提交时间：{ moment(data.endTime).format('MM-DD HH:mm') || '无时间'}
-                    </Text>
+                    <Text style={styles.details}>{this.taskTypeMapTipText()}</Text>
                   </View>
                   )}
                   {
@@ -335,7 +346,7 @@ class TaskItem extends React.Component {
                 </View>
               )
           }
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </Animated.View>
     );
   }
