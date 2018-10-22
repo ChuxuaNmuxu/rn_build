@@ -37,8 +37,10 @@ const errCode = (json) => {
     case 703:
       Actions.Login();
       new Account().removeAccount();
+      Toast.info(json.message);
       throw new Error(json.message);
     case -1:
+      Toast.info(json.message);
       return Promise.reject(new Error(`${json.code} ${json.message || json.data}`));
     default:
       // console.log('json.code:', json.code);

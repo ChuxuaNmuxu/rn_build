@@ -68,6 +68,15 @@ class TaskItem extends React.Component {
     this.touchStartX = gestureState.dx;
     this.touchStartY = gestureState.dy;
     this.touchStartTime = evt.nativeEvent.timestamp;
+
+    this.taskRef.setNativeProps({
+      shadowOffset: { width: 5, height: 0 },
+      shadowOpacity: 0.5,
+      shadowRadius: 8,
+      shadowColor: 'rgba(0,0,0,1)',
+      elevation: 6,
+    });
+
     const {
       type,
       onChangeLastHandlePeriodIndex,
@@ -103,6 +112,9 @@ class TaskItem extends React.Component {
       this.dragHandle(evt, dx, dy);
     } else if ((Math.abs(dx - this.touchStartX) < 10 || Math.abs(dy - this.touchStartY) < 10)) {
       if (nowTime - this.touchStartTime > this.longTouchTime) {
+        // 取消阴影
+        if (this.taskRef) this.taskRef.setNativeProps({ elevation: 0 });
+
         this.dragHandle(evt, dx, dy);
         this.isDraging = true;
         onChangeDropingData(data);
@@ -130,6 +142,10 @@ class TaskItem extends React.Component {
     const { scale } = adaptiveRotation();
     const { dx, dy } = gestureState;
     const { pageY, timestamp: nowTime } = evt.nativeEvent;
+
+    // 取消阴影
+    if (this.taskRef) this.taskRef.setNativeProps({ elevation: 0 });
+
     // 任务排期
     const findTask = this.findTaskCorrespondPeriod(evt);
 
@@ -305,12 +321,10 @@ class TaskItem extends React.Component {
               )
               : (
                 <View
-                  style={mergeStyles(styles.task, wrapStyle, { backgroundColor: taskTypeMapColor(data.taskType) })}
+                  style={mergeStyles(styles.task, wrapStyle, {
+                    backgroundColor: taskTypeMapColor(data.taskType),
+                  })}
                   ref={(ref) => { this.taskRef = ref; }}
-                  iosshadowColor="red"
-                  iosshadowOffset={{ width: 5, height: 5 }}
-                  iosshadowRadius={2}
-                  iosshadowOpacity={1}
                 >
                   <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
                     <CIcon
@@ -320,18 +334,18 @@ class TaskItem extends React.Component {
                     />
                   </View>
                   {type !== 'showIconOnlyTask' && (
-                  <View>
-                    <Text style={[styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
-                      {data.title || 'title'}
-                    </Text>
-                    {
+                    <View>
+                      <Text style={[styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
+                        {data.title || 'title'}
+                      </Text>
+                      {
                       type === 'detailsTask' && <Text style={styles.details}>预计耗时：{data.estimatedCost || '不限时'}</Text>
                     }
-                    <Text style={styles.details}>{this.taskTypeMapTipText()}</Text>
-                  </View>
+                      <Text style={styles.details}>{this.taskTypeMapTipText()}</Text>
+                    </View>
                   )}
                   {
-                    data.subjectName === 3
+                    data.subjectName === 4
                       ? (
                         <View style={[styles.no_review_task, {
                           transform: [{

@@ -50,7 +50,7 @@ export const adaptiveRotation = () => {
       width,
       height,
       scale,
-    } = zoomScreen(1080, 1820));
+    } = zoomScreen(1080, 1920));
   }
 
   return { width, height, scale };

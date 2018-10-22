@@ -35,7 +35,15 @@ export class Drop extends Component {
       }}
       >
         <Task
-          wrapStyle={wrapStyle}
+          wrapStyle={{
+            ...wrapStyle,
+            shadowOffset: { width: 5, height: 0 },
+            shadowOpacity: 0.5,
+            shadowRadius: 8,
+            shadowColor: 'rgba(0,0,0,1)',
+            elevation: 6,
+            marginBottom: 6,
+          }}
           data={{ ...data, dragTask: true }}
         />
       </View>
