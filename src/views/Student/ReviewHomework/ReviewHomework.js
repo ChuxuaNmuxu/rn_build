@@ -198,9 +198,13 @@ class ReviewHomework extends Component {
 
   // 点击未作答热区进入做作业页面--此时做作业页面展示可查看题目序号的图标并只出现未作答的题目
   goUnAnswered = () => {
-    this.saveCheckTime();
-    const { data } = this.state;
-    Actions.DoHomework({ homeworkId: data.homeworkId, showUnAnswerQues: true });
+    const { unAnsweredNum } = this.state;
+    // 未作答题目数为0应该不能跳转到未作答页面
+    if (unAnsweredNum) {
+      this.saveCheckTime();
+      const { data } = this.state;
+      Actions.DoHomework({ homeworkId: data.homeworkId, showUnAnswerQues: true });
+    }
   }
 
   // 保存检查耗时
