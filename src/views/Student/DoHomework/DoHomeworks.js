@@ -36,16 +36,17 @@ class DoHomeworks extends Component {
       hasRemarkStatus: false, // 提交作业成功且有互批任务的模态框显隐
       difficultModalStatus: false, // 滑动到下一题时是展示选择难易程度的模态层
       showExtendView: false, // 是否显示该份作业所有题目序号的扩展视图
-      preveId: null, // 滑动切换题目前的题目id
       currentIndex: 0, // 当前题目index
       checkStatus: 0, // 做作业右上角展示的按钮：0：作业还未选择是否想检查，1--查看已答题目，2--提交
       homeworkData: props.data || {}, // 本份作业的数据
       unAnswerQuesList: null, // 未作答的题目集合
       currentStartTime: new Date(), // 当前题目的开始时间
       uploadImgQuesId: null, // 上传图片要保存答案的题目id
+      showDifficultModalOpt: null, // 触发出现难易程度模态层的操作： commitBtnClick-点击提交按钮，clickQuesOrder-点击题号，clickNextBtn-左滑至下一题
+      clickQuesOrderIndex: null, // 点击题号时该题所在列表索引
     };
-    this.commitHomework = false; // 是否点击了提交作业按钮
-    this.tryToUploadImg = false; // 是否上传了图片
+    this.commitHomework = false; // 是否点击了二次确认的提交作业按钮
+    this.tryToUploadImg = false; // 是否上传了图片--防止componentDidUpdate一直执行出现死循环
     this.fetchHomeworkStatus = false; // 刚进入页面时是否请求到作业数据
     this.switchQuesGuidData = { // 切换上下题手势指引的内容
       svgName: 'hand-up',
@@ -193,11 +194,19 @@ class DoHomeworks extends Component {
     this.setVisibleFun(!showExtendView);
   }
 
-  // 点击提交的函数--先要判断当前题目是否有选难易程度，没有则需要让其选择难易程度后才弹框显示是否提交作业
+  // 点击提交的函数--先要判断当前题目是否有选难易程度，没有则弹窗让其选择难易程度
   submitFun = () => {
-    this.setVisibleFun(false);
-    const { commitHomeworkModalStatus } = this.state;
-    this.setCommitModalVisbleFun(!commitHomeworkModalStatus);
+    const { currentIndex, homeworkData: { finalQuestionList } } = this.state;
+    if (!finalQuestionList[currentIndex].difficultyLevel) {
+      this.setState({
+        difficultModalStatus: true,
+        showDifficultModalOpt: 'commitBtnClick',
+      });
+    } else {
+      this.setVisibleFun(false);
+      const { commitHomeworkModalStatus } = this.state;
+      this.setCommitModalVisbleFun(!commitHomeworkModalStatus);
+    }
   }
 
   // 点击二次确认的模态框内的提交按钮
@@ -237,8 +246,8 @@ class DoHomeworks extends Component {
       if (obj.i > 0 && !finalQuestionList[currentIndex].difficultyLevel) {
         // 此时先不跳转下一题
         this.setState({
-          preveId: finalQuestionList[currentIndex].id,
           difficultModalStatus: true,
+          showDifficultModalOpt: 'clickNextBtn',
         });
       }
       if (obj.i > 0 && finalQuestionList[currentIndex].difficultyLevel) {
@@ -248,29 +257,47 @@ class DoHomeworks extends Component {
           currentIndex: changeIndex,
         });
       }
+    } else {
+      this.setState({
+        currentIndex: changeIndex,
+      });
     }
   }
 
   // 难易程度发生改变的函数
   handleDifficultLevel = (currentId, level) => {
     const { actions: { changeDifficuiltLevelAction } } = this.props;
-    const { difficultModalStatus, currentIndex, homeworkData: { finalQuestionList } } = this.state;
+    const { difficultModalStatus, currentIndex, showDifficultModalOpt, clickQuesOrderIndex, homeworkData: { finalQuestionList } } = this.state;
     changeDifficuiltLevelAction({ currentId, level });
-    // 正常情况下选择难易程度
-    if (!difficultModalStatus) {
+    // 正常情况下选择难易程度或者点击提交时弹出的当前题目的难易程度选择标签
+    if (!difficultModalStatus || showDifficultModalOpt === 'commitBtnClick') {
       setTimeout(() => {
         this.fetchSaveQuestion(currentId);
       }, 0);
     }
-    // 如果是切换下一题时弹出的难易程度标签，此时需要更改当前题目索引为下一题--跳转下一题
-    if (difficultModalStatus && currentIndex + 1 < finalQuestionList.length) {
-      this.setState({
-        difficultModalStatus: false,
-        currentIndex: currentIndex + 1,
-      }, () => {
-        this.fetchSaveQuestion(currentId, 'nextBtnClick');
-      });
+    if (difficultModalStatus) {
+      // 如果是切换下一题时弹出的难易程度标签，此时需要更改当前题目索引为下一题--跳转下一题
+      if (showDifficultModalOpt === 'clickNextBtn' && currentIndex + 1 < finalQuestionList.length) {
+        this.setState({
+          difficultModalStatus: false,
+          currentIndex: currentIndex + 1,
+        }, () => {
+          this.fetchSaveQuestion(currentId, 'nextBtnClick');
+        });
+      }
+      // 如果是点击题号切换题目时弹出的难易程度标签，此时需要跳转到对应题目
+      if (showDifficultModalOpt === 'clickQuesOrder') {
+        this.setState({
+          difficultModalStatus: false,
+          currentIndex: clickQuesOrderIndex,
+        }, () => {
+          this.fetchSaveQuestion(currentId);
+        });
+      }
     }
+    this.setState({
+      showDifficultModalOpt: null,
+    });
   }
 
   // 查看未作答的题目---点击题号切换到对应题目
@@ -285,13 +312,15 @@ class DoHomeworks extends Component {
     // 如果当前题目未选择难易程度，则切换其他题目时要弹出难易程度的选择框让其选择
     if (!unAnswerQuesList[currentIndex].difficultyLevel) {
       this.setState({
-        preveId: unAnswerQuesList[currentIndex].id,
         difficultModalStatus: true,
+        showDifficultModalOpt: 'clickQuesOrder',
+        clickQuesOrderIndex: num - 1,
+      });
+    } else {
+      this.setState({
+        currentIndex: num - 1,
       });
     }
-    this.setState({
-      currentIndex: num - 1,
-    });
     this.setVisibleFun(false);
   }
 
@@ -518,7 +547,6 @@ class DoHomeworks extends Component {
       showExtendView,
       currentIndex,
       homeworkData,
-      preveId,
       unAnswerQuesList,
     } = this.state;
     const { showUnAnswerQues } = this.props;
@@ -620,7 +648,7 @@ class DoHomeworks extends Component {
           difficultModalStatus && (
             <DifficultLevelModal
               handleDifficultLevel={this.handleDifficultLevel}
-              questionId={preveId}
+              questionId={showQuesArray[currentIndex].id}
             />)
         }
       </View>
