@@ -199,15 +199,13 @@ class ProblemRecords extends Component {
     this.listVew.setheaderState(freshListViewSate.Refreshing);
     this.page = 1;
     this.changeParamsfetch({
-
       currentRecordType,
       currentSubjectId,
       ...this.moreParams,
       page: 1,
       callback: () => this.listVew.setheaderState(freshListViewSate.RefreshSuccess).setheaderState(freshListViewSate.Idle),
     });
-
-    console.log('曹尼玛的垃圾组件');
+    // console.log('曹尼玛的垃圾组件');
   }
 
   upPullGetMore=() => {
