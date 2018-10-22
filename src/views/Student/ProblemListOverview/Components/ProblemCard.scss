@@ -4,9 +4,13 @@
 
 .problemCard {
   background-color: #fff;
-  height: 362px,
+  height: 362px;
 }
 
+.hiden_box {
+  flex: 1;
+  height: 362px;
+}
 .hidenBtn {
   align-items: center;
   background-color: #30bf6c;
@@ -52,6 +56,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 .content_txt {
   font-size: 30px;
@@ -90,15 +95,22 @@
 .err_reason {
   color: #666;
   font-size: 24px;
+  margin-right: 12px;
 }
 
 .footer_right {
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-around;
+}
+
+.problem_info {
+  color: #666;
+  font-size: 24px;
+  text-align: right;
 }
 
 .question_time {
   font-size: 24px;
   color: #bfbfbf;
-  margin-right: 24px;
+  // margin-right: 24px;
 }
