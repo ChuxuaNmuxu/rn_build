@@ -41,7 +41,7 @@ class DoHomeworks extends Component {
       checkStatus: 0, // 做作业右上角展示的按钮：0：作业还未选择是否想检查，1--查看已答题目，2--提交
       homeworkData: props.data || {}, // 本份作业的数据
       unAnswerQuesList: null, // 未作答的题目集合
-      currentStartTime: moment(new Date()).format(), // 当前题目的开始时间
+      currentStartTime: new Date(), // 当前题目的开始时间
       uploadImgQuesId: null, // 上传图片要保存答案的题目id
     };
     this.commitHomework = false; // 是否点击了提交作业按钮
@@ -84,6 +84,7 @@ class DoHomeworks extends Component {
     const { uploadImgSuccess, needMark } = this.props;
     const { uploadImgQuesId, homeworkData } = this.state;
     // 上传图片成功后提交答案
+    console.log('didUpdate111111');
     if (uploadImgSuccess && uploadImgQuesId) {
       this.fetchSaveQuestion(uploadImgQuesId);
     }
@@ -346,11 +347,13 @@ class DoHomeworks extends Component {
     } = finalQuestionList[currentIndexs];
     const answerParam = {};
     const { currentStartTime } = this.state;
+    answerParam.questionId = id;
     answerParam.answer = type < 10 ? studentAnswer : null;
     answerParam.difficultyLevel = difficultyLevel;
     answerParam.needsExplain = needsExplain;
-    answerParam.startDate = currentStartTime;
-    answerParam.endDate = moment(new Date()).format();
+    // answerParam.startDate = currentStartTime;
+    // answerParam.endDate = moment(new Date()).format();
+    answerParam.timeSpent = Math.floor((new Date() - currentStartTime) / 1000);
     /* 需要注意的是返回的题目数据主观题图片答案保存的id为answerFileId字段，而上传答案给接口时是用fileId来保存 */
     answerParam.fileId = answerFileId === '0' ? '0' : answerFileId;
     answerParam.answerFileUrl = (answerFileUrl && answerFileUrl.length) ? answerFileUrl : null;
@@ -359,15 +362,17 @@ class DoHomeworks extends Component {
       const questionId = finalQuestionList[currentIndexs + 1].id;
       const { number } = finalQuestionList[currentIndexs + 1];
       answerParam.number = number;
-      answerParam.questionId = questionId;
+      answerParam.nextQuestionId = questionId;
     }
     if (optType === 'orderClick') {
       // 如果是查看未作答题目时点击题号进入下一道题，则要将点击的那道题的number和questionId传给接口
       answerParam.number = clickParams.number;
-      answerParam.questionId = clickParams.questionId;
+      answerParam.nextQuestionId = clickParams.questionId;
     }
     const { actions: { submitDoHomeworkAnswerAction }, homeworkId } = this.props;
+    console.log('homeworkId', homeworkId);
     submitDoHomeworkAnswerAction({ homeworkId, id, answerParam }, 'REQUEST');
+    this.setState({ currentStartTime: new Date() });
   }
 
   // 主观题上传答案或者客观题上传解答过程答案的函数
