@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import R from 'ramda';
-import moment from 'moment';
+// import moment from 'moment';
 import * as actions from '../../../actions/doHomeworkAction';
 import I18nText from '../../../components/I18nText';
 import { CustomButton } from '../../../components/Icon';
@@ -28,7 +28,7 @@ class ReviewHomework extends Component {
       answeredNum: 0, // 已作答题数
       unAnsweredNum: 0, // 未作答题数
       uploadImgQid: null, // 当前上传图片的题目id
-      currentStartTime: moment(new Date()).format(), // 当前题目的开始时间
+      currentStartTime: new Date(), // 当前题目的开始时间
       reviewTime: 0, // 检查时间
     };
     this.timeSetInterval = null;
@@ -204,22 +204,23 @@ class ReviewHomework extends Component {
       studentAnswer,
       difficultyLevel,
       answerFileId,
-      answerFileUrl,
+      // answerFileUrl,
       needsExplain,
     } = currentQues;
-    const answerParam = {};
     const { currentStartTime } = this.state;
+    const answerParam = {};
     const { homeworkId } = data;
+    answerParam.questionId = id;
     answerParam.answer = type < 10 ? studentAnswer : null;
     answerParam.difficultyLevel = difficultyLevel;
     answerParam.needsExplain = needsExplain;
-    answerParam.startDate = currentStartTime;
-    answerParam.endDate = moment(new Date()).format();
-    /* 需要注意的是返回的题目数据主观题图片答案保存的id为answerFileId字段，而上传答案给接口时是用fileId来保存 */
+    answerParam.timeSpent = Math.floor((new Date() - currentStartTime) / 1000);
+    /* 需要注意的是返回的题目数据主观题图片答案保存的id为answerFileId字段，而上传答案给接口时是用fileId来保存,图片地址不需要传了 */
     answerParam.fileId = answerFileId === '0' ? '0' : answerFileId;
-    answerParam.answerFileUrl = (answerFileUrl && answerFileUrl.length) ? answerFileUrl : null;
+    // answerParam.answerFileUrl = (answerFileUrl && answerFileUrl.length) ? answerFileUrl : null;
     const { actions: { submitDoHomeworkAnswerAction } } = this.props;
     submitDoHomeworkAnswerAction({ homeworkId, id, answerParam }, 'REQUEST');
+    this.setState({ currentStartTime: new Date() });
   }
 
   // 已作答题目数为0时展示
