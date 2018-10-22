@@ -7,7 +7,7 @@ import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import R from 'ramda';
-import moment from 'moment';
+// import moment from 'moment';
 import I18nText from '../../../components/I18nText';
 import Radio from '../../../components/Radio';
 import * as actions from '../../../actions/doHomeworkAction';
