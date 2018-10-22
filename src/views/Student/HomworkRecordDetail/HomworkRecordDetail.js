@@ -304,6 +304,32 @@ class HomworkRecordDetail extends Component {
     }
   }
 
+  contentIsLoading=(title, headerList, status, selectTion) => {
+    console.log('内容还没有，在loading');
+    return (
+      <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
+        <Modal />
+        <View style={styles.homeworkDetail_header}>
+          <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.myComponentWillUnmount} />
+          <Text style={styles.homeworkDetailTitle}>{title}</Text>
+          <Text style={styles.alt} />
+        </View>
+        {
+          // 如果看代码懵逼，请结合UI图，每一块分割线前的都是UI图上的一块。
+        }
+        {
+          // 头部的滚动选择器
+          <ScrollSelectedBar data={headerList} moveIndex={this.selectFun} status={status} selectTion={selectTion} />
+        }
+        {
+          // 你好我是分割线
+          this.splitLine()
+        }
+        <Text>正在搬运数据</Text>
+      </ScrollView>
+    );
+  }
+
 
   render() {
     const {
@@ -311,7 +337,7 @@ class HomworkRecordDetail extends Component {
     } = this.props;
     const { selectTion } = this.state;
     // 选中该项，是否存在数据
-    if (_.isNil(headerList[selectTion]) || _.isNil(detailsDataList[selectTion])) {
+    if (_.isNil(headerList[selectTion]) && _.isNil(detailsDataList[selectTion])) {
       console.log('尼玛这个能进来？');
       console.log(headerList[selectTion]);
       console.log(_.isNil(headerList[selectTion]));
@@ -319,6 +345,9 @@ class HomworkRecordDetail extends Component {
       console.log(detailsDataList[selectTion]);
       // 如果需要loading就ladoging
       return null;
+    }
+    if (!_.isNil(headerList[selectTion]) && _.isNil(detailsDataList[selectTion])) {
+      return this.contentIsLoading(title, headerList, status, selectTion);
     }
     console.log('caonimade haijinlaile ?');
     const {
@@ -352,7 +381,7 @@ class HomworkRecordDetail extends Component {
         }
         {
           // 头部的滚动选择器
-          <ScrollSelectedBar data={headerList} moveIndex={this.selectFun} status={status} />
+          <ScrollSelectedBar data={headerList} moveIndex={this.selectFun} status={status} selectTion={selectTion} />
         }
         {
           // 你好我是分割线

@@ -16,6 +16,8 @@ import ExtendListView from '../../../components/ExtendListView';
 import freshListViewSate from '../../../components/RefreshListView/RefreshState';
 import SelectListButton from './Components/SelectListButton';
 import * as actions from '../../../actions/problemRecordsAction';
+import noRecords from '../../../public/img/noRecords.png';
+import NoResult from '../../../components/NotResult';
 
 
 class ProblemRecords extends Component {
@@ -329,6 +331,7 @@ class ProblemRecords extends Component {
 
   render() {
     const { subjectData } = this.props;
+    // TODO:Laoding状态下是应该返回null的
     // if (_.isEmpty(subjectData)) {
     //   return null;
     // }
@@ -364,7 +367,7 @@ class ProblemRecords extends Component {
           </TouchableOpacity>
         </TouchableOpacity>
         {
-          _.isEmpty(subjectData) ? <Text>HAVE no DATA</Text> : this.renderContent()
+          _.isEmpty(subjectData) ? <NoResult tips="暂无记录" url={noRecords} /> : this.renderContent()
         }
       </View>
     );

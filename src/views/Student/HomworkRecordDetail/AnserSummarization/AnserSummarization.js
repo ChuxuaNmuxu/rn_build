@@ -46,8 +46,9 @@ class AnserSummarization extends Component {
 
   getText = (status, isItCorrect) => {
     const {
-      correctAnser, studentAnser, score, questionType, isQuestionSubmited,
+      correctAnser, studentAnser, score, questionType, isQuestionSubmited, type,
     } = this.props;
+    const isH = type === 'H';
     console.log(questionType, 'getTextgetTextgetText');
     // 主观题客观题的展示效果不一样，五种状态下的展示也不一样。文档敢写详细点？
     let text = '';
@@ -58,8 +59,8 @@ class AnserSummarization extends Component {
       partialCorrect,
       unCorrect,
     ] = [
-      questionType === 'obj' ? `回答错误，答案是${correctAnser}，你的答案是${studentAnser}，得分：${score}分` : `回答错误，得分：${score}分`,
-      questionType === 'obj' ? `回答正确，答案是${correctAnser}，得分：${score}分` : `回答正确，得分：${score}分`,
+      questionType === 'obj' ? `回答错误，答案是${correctAnser}，你的答案是${studentAnser}${isH ? '' : `，得分：${score}分`}` : `回答错误${isH ? '' : `，得分：${score}分`}`,
+      questionType === 'obj' ? `回答正确，答案是${correctAnser}${isH ? '' : `，得分：${score}分`}` : `回答正确${isH ? '' : `，得分：${score}分`}`,
       questionType === 'obj' ? `未作答，答案是${correctAnser}` : '未作答',
       `部分正确，答案是${correctAnser}，你的答案是${studentAnser}，得分：${score}分`,
       questionType === 'obj' ? `答案是${correctAnser}，你的答案是${studentAnser}` : '解答过程',
@@ -126,7 +127,7 @@ class AnserSummarization extends Component {
       isItCorrect, status, difficultyDegree, questionType, studentMarked,
     } = this.props;
     const iconArr = ['wrongIcon', 'corectIcon', 'partialCorrect'];
-    const colorArr = ['#fa5656', '#30bf6c', '#f5a623'];
+    const colorArr = ['#fa5656', '#30bf6c', '#f5a623', '#999999'];
     return (
       <View style={styles.AnserSummarization}>
         <View style={styles.leftTips}>
@@ -146,7 +147,7 @@ class AnserSummarization extends Component {
           <View style={styles.difficultyView}>
             {/* <Text style={styles.difficultyDegree}>难易程度：</Text> */}
             <Text style={[styles.difficultyDegree, { backgroundColor: colorArr[difficultyDegree], color: '#ffffff' }]}>
-              {['难', '易', '适中'][difficultyDegree]}
+              {['难', '易', '适中', '未标记'][difficultyDegree]}
             </Text>
           </View>
         </View>
