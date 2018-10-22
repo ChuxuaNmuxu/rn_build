@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TouchableOpacity, TouchableWithoutFeedback,
+  View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler,
 } from 'react-native';
 import { Toast } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
@@ -95,6 +95,7 @@ class Debug extends Component {
           value={apiFlag}
           onChange={this.onChange}
           childStyle={styles.radio}
+          style={styles.group_radio}
         />
         {
           userName
@@ -108,6 +109,12 @@ class Debug extends Component {
             )
             : null
           }
+        <TouchableOpacity
+          style={styles.close_soft}
+          onPress={BackHandler.exitApp}
+        >
+          <Text style={styles.logout_text}>关闭软件</Text>
+        </TouchableOpacity>
       </View>
     );
   }
