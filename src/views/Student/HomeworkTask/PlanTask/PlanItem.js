@@ -25,7 +25,7 @@ const PlanItem = (props) => {
       Actions.TaskDetail({
         title,
         useTime: `${useTime}分钟`,
-        endTime: moment(endTime).format('MM-DD HH:mm'),
+        endTime: moment(endTime).format('YYYY-MM-DD HH:mm'),
         // beginTime: '占位',
         waitReadOver: !(waitReadOver < 4),
         homeworkId,

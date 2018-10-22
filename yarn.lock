@@ -2190,6 +2190,12 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
+d@1:
+  version "1.0.0"
+  resolved "http://registry.npm.taobao.org/d/download/d-1.0.0.tgz#754bb5bfe55451da69a58b94d45f4c5b0462d58f"
+  dependencies:
+    es5-ext "^0.10.9"
+
 damerau-levenshtein@^1.0.4:
   version "1.0.4"
   resolved "http://registry.npm.taobao.org/damerau-levenshtein/download/damerau-levenshtein-1.0.4.tgz#03191c432cb6eea168bb77f3a55ffdccb8978514"
@@ -2442,6 +2448,29 @@ es-to-primitive@^1.1.1:
     is-callable "^1.1.1"
     is-date-object "^1.0.1"
     is-symbol "^1.0.1"
+
+es5-ext@^0.10.35, es5-ext@^0.10.9, es5-ext@~0.10.14:
+  version "0.10.46"
+  resolved "http://registry.npm.taobao.org/es5-ext/download/es5-ext-0.10.46.tgz#efd99f67c5a7ec789baa3daa7f79870388f7f572"
+  dependencies:
+    es6-iterator "~2.0.3"
+    es6-symbol "~3.1.1"
+    next-tick "1"
+
+es6-iterator@~2.0.3:
+  version "2.0.3"
+  resolved "http://registry.npm.taobao.org/es6-iterator/download/es6-iterator-2.0.3.tgz#a7de889141a05a94b0854403b2d0a0fbfa98f3b7"
+  dependencies:
+    d "1"
+    es5-ext "^0.10.35"
+    es6-symbol "^3.1.1"
+
+es6-symbol@^3.1.0, es6-symbol@^3.1.1, es6-symbol@~3.1.1:
+  version "3.1.1"
+  resolved "http://registry.npm.taobao.org/es6-symbol/download/es6-symbol-3.1.1.tgz#bf00ef4fdab6ba1b46ecb7b629b4c7ed5715cc77"
+  dependencies:
+    d "1"
+    es5-ext "~0.10.14"
 
 escape-html@~1.0.3:
   version "1.0.3"
@@ -4646,6 +4675,12 @@ mobx@^3.3.1:
   version "3.6.2"
   resolved "http://registry.npm.taobao.org/mobx/download/mobx-3.6.2.tgz#fb9f5ff5090539a1ad54e75dc4c098b602693320"
 
+moment-range@^4.0.1:
+  version "4.0.1"
+  resolved "http://registry.npm.taobao.org/moment-range/download/moment-range-4.0.1.tgz#1ae8cf209dded0a5ce5e16603146265b3906a86f"
+  dependencies:
+    es6-symbol "^3.1.0"
+
 moment@^2.22.2:
   version "2.22.2"
   resolved "http://registry.npm.taobao.org/moment/download/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
@@ -4703,6 +4738,10 @@ needle@^2.2.1:
 negotiator@0.6.1:
   version "0.6.1"
   resolved "http://registry.npm.taobao.org/negotiator/download/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
+
+next-tick@1:
+  version "1.0.0"
+  resolved "http://registry.npm.taobao.org/next-tick/download/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
 
 nice-try@^1.0.4:
   version "1.0.4"
@@ -5570,6 +5609,10 @@ react-native-vector-icons@^4.6.0:
 react-native-view-shot@^2.4.0:
   version "2.4.0"
   resolved "http://registry.npm.taobao.org/react-native-view-shot/download/react-native-view-shot-2.4.0.tgz#ba5dd7607a217a2fdd9e2e8165d0eb24614d2438"
+
+react-native-wheel-picker-android-iamsb@^2.1.5:
+  version "2.1.5"
+  resolved "http://registry.npm.taobao.org/react-native-wheel-picker-android-iamsb/download/react-native-wheel-picker-android-iamsb-2.1.5.tgz#c2d80e5adde767d2b5947460623b35bed1bb3f8c"
 
 react-native@0.55.4:
   version "0.55.4"

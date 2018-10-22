@@ -107,7 +107,7 @@ class RecordCard extends PureComponent {
 
   render() {
     const { datas, recordType } = this.props;
-    const accuracyData = `${Math.round(parseInt(datas.accuracy) * 100)}%`;
+    const accuracyData = `${(datas.accuracy * 100).toFixed(2)}%`;
     const randomNum = Math.random();
     return (
       <TouchableOpacity
