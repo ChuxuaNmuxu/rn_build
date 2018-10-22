@@ -492,9 +492,11 @@ class HomworkRecordDetail extends Component {
 
         {
           // 错误原因分析
-          <View style={styles.CauseOfError}>
-            <CauseOfError defaultValue={causeOfErrorNum} onChange={this.onChange} />
-          </View>
+          status === 1 ? (
+            <View style={styles.CauseOfError}>
+              <CauseOfError defaultValue={causeOfErrorNum} onChange={this.onChange} />
+            </View>
+          ) : null
         }
       </ScrollView>
     );
