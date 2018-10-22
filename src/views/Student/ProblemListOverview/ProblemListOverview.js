@@ -212,7 +212,7 @@ class ProblemListOverview extends Component {
 }
 
 ProblemListOverview.propTypes = {
-  total: PropTypes.number, // 后台记录的总长度，用于判断能否刷新
+  total: PropTypes.number.isRequired, // 后台记录的总长度，用于判断能否刷新
   onGetMistakeList: PropTypes.func.isRequired,
   subjectId: PropTypes.string.isRequired,
   problemOverviewData: PropTypes.array.isRequired,
