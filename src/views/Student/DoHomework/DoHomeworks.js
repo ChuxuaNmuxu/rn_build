@@ -45,6 +45,7 @@ class DoHomeworks extends Component {
       uploadImgQuesId: null, // 上传图片要保存答案的题目id
     };
     this.commitHomework = false; // 是否点击了提交作业按钮
+    this.tryToUploadImg = false; // 是否上传了图片
     this.fetchHomeworkStatus = false; // 刚进入页面时是否请求到作业数据
     this.switchQuesGuidData = { // 切换上下题手势指引的内容
       svgName: 'hand-up',
@@ -85,8 +86,9 @@ class DoHomeworks extends Component {
     const { uploadImgQuesId, homeworkData } = this.state;
     // 上传图片成功后提交答案
     console.log('didUpdate111111');
-    if (uploadImgSuccess && uploadImgQuesId) {
+    if (uploadImgSuccess && uploadImgQuesId && this.tryToUploadImg) {
       this.fetchSaveQuestion(uploadImgQuesId);
+      this.tryToUploadImg = false;
     }
     // 提交作业成功后是否有互批作业
     if (this.commitHomework) {
@@ -191,7 +193,7 @@ class DoHomeworks extends Component {
     this.setVisibleFun(!showExtendView);
   }
 
-  // 点击提交的函数
+  // 点击提交的函数--先要判断当前题目是否有选难易程度，没有则需要让其选择难易程度后才弹框显示是否提交作业
   submitFun = () => {
     this.setVisibleFun(false);
     const { commitHomeworkModalStatus } = this.state;
@@ -227,35 +229,46 @@ class DoHomeworks extends Component {
     Actions.HomeworkCorrecting({ homeworkId });
   }
 
-  // 左右滑动(切换tab)页面切换题目
+  // 左右滑动(切换tab)页面切换题目---如果当前题目未选择难易程度，则需要先弹出难易程度标签，选择后再跳到下一题
   changeQuestionFun = (obj) => {
     const changeIndex = obj.i;
     const { currentIndex, homeworkData: { finalQuestionList } } = this.state;
     if (currentIndex < changeIndex) {
       if (obj.i > 0 && !finalQuestionList[currentIndex].difficultyLevel) {
+        // 此时先不跳转下一题
         this.setState({
           preveId: finalQuestionList[currentIndex].id,
           difficultModalStatus: true,
         });
       }
-      this.fetchSaveQuestion(finalQuestionList[currentIndex].id, 'nextBtnClick');
+      if (obj.i > 0 && finalQuestionList[currentIndex].difficultyLevel) {
+        // 跳转下一题
+        this.fetchSaveQuestion(finalQuestionList[currentIndex].id, 'nextBtnClick');
+        this.setState({
+          currentIndex: changeIndex,
+        });
+      }
     }
-    this.setState({
-      currentIndex: changeIndex,
-    });
   }
 
   // 难易程度发生改变的函数
   handleDifficultLevel = (currentId, level) => {
     const { actions: { changeDifficuiltLevelAction } } = this.props;
-    const { difficultModalStatus } = this.state;
+    const { difficultModalStatus, currentIndex, homeworkData: { finalQuestionList } } = this.state;
     changeDifficuiltLevelAction({ currentId, level });
-    setTimeout(() => {
-      this.fetchSaveQuestion(currentId);
-    }, 0);
-    if (difficultModalStatus) {
+    // 正常情况下选择难易程度
+    if (!difficultModalStatus) {
+      setTimeout(() => {
+        this.fetchSaveQuestion(currentId);
+      }, 0);
+    }
+    // 如果是切换下一题时弹出的难易程度标签，此时需要更改当前题目索引为下一题--跳转下一题
+    if (difficultModalStatus && currentIndex + 1 < finalQuestionList.length) {
       this.setState({
         difficultModalStatus: false,
+        currentIndex: currentIndex + 1,
+      }, () => {
+        this.fetchSaveQuestion(currentId, 'nextBtnClick');
       });
     }
   }
@@ -376,6 +389,7 @@ class DoHomeworks extends Component {
   // 主观题上传答案或者客观题上传解答过程答案的函数
   handlePreviewImage = (questionId, e, imgName) => {
     // console.log(33333, questionId, e, imgName);
+    this.tryToUploadImg = true;
     const { actions: { uploadImageToOssAction } } = this.props;
     uploadImageToOssAction({ questionId, file: e, imgName });
     // 当从检查页面点击 未作答 热区 进来此页面时上传图片答案的题目id应该从此处给提交答案那，否则保存时题目id不对
@@ -524,6 +538,7 @@ class DoHomeworks extends Component {
     }
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
+    console.log(1111, '获取到的作业题目数据', showQuesArray);
     return (
       <View style={styles.containers}>
         {this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
