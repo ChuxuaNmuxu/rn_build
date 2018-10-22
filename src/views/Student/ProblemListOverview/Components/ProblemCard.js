@@ -14,6 +14,7 @@ import {
   formatTimeToshow, getQuestionTypeName, convertToDifficultyLevel, failReason,
 } from '../../../../utils/common/common';
 import I18nText from '../../../../components/I18nText';
+import { adaptiveRotation } from '../../../../utils/resolution';
 
 class ProblemCard extends PureComponent {
   constructor(props) {
@@ -71,65 +72,77 @@ class ProblemCard extends PureComponent {
 
     render() {
       const { datas, index } = this.props;
-      // console.log(35, datas);
+      const { width } = adaptiveRotation();
+      const textWidth = width - 360;
       return (
-        <SwipeRow
-          disableRightSwipe
-          rightOpenValue={-270}
-        >
-          <TouchableOpacity
-            style={styles.hidenBtn}
-            onPress={this.doErrWorkAgain}
+        <View style={styles.problemCard_box}>
+          <SwipeRow
+            disableRightSwipe
+            rightOpenValue={-270}
+            style={styles.hiden_box}
           >
-            <Text />
-            <I18nText style={styles.hideText}>
+            <TouchableOpacity
+              style={styles.hidenBtn}
+              onPress={this.doErrWorkAgain}
+            >
+              <Text />
+              <I18nText style={styles.hideText}>
               ProblemListOverview.ProblemCard.reviewQuestion
-            </I18nText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={styles.problemCard_box}
-            onPress={() => this.goProblemDetail(datas.category, index)}
-          >
-            <View style={styles.problemCard}>
-              <View style={styles.question_header}>
-                <Text style={styles.title_order}>
-                第{ index + 1 }题
-                </Text>
-                <View style={styles.title_border} />
-                <Text style={styles.title_txt}>{getQuestionTypeName(datas.type)}</Text>
-              </View>
-              <View style={styles.question_content}>
-                { this.htmlViewComponent(datas.content) }
-                {/* <Text style={styles.content_txt}>{datas.content}</Text> */}
-              </View>
-              <View style={styles.question_footer}>
-                <View style={styles.footer_left}>
-                  <View style={[styles.difficult_box, { backgroundColor: convertToDifficultyLevel(datas.difficultyLevel, true) }]}>
-                    <Text style={styles.difficult_txt}>{convertToDifficultyLevel(datas.difficultyLevel)}</Text>
+              </I18nText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => this.goProblemDetail(datas.category, index)}
+            >
+              <View style={styles.problemCard}>
+                <View style={styles.question_header}>
+                  <Text style={styles.title_order}>
+                  第{ index + 1 }题
+                  </Text>
+                  <View style={styles.title_border} />
+                  <Text style={styles.title_txt}>{getQuestionTypeName(datas.type)}</Text>
+                </View>
+                <View style={styles.question_content}>
+                  { this.htmlViewComponent(datas.content) }
+                  {/* <Text style={styles.content_txt}>{datas.content}</Text> */}
+                </View>
+                <View style={styles.question_footer}>
+                  <View style={styles.footer_left}>
+                    <View
+                      style={[
+                        styles.difficult_box,
+                        { backgroundColor: convertToDifficultyLevel(datas.difficultyLevel, true) },
+                      ]}
+                    >
+                      <Text style={styles.difficult_txt}>{convertToDifficultyLevel(datas.difficultyLevel)}</Text>
+                    </View>
+                    <View>
+                      <Text style={styles.err_reason}>
+                        <I18nText>
+                        ProblemListOverview.ProblemCard.wrongReason
+                        </I18nText>
+                        {failReason[datas.failReason]}
+                      </Text>
+                    </View>
                   </View>
-                  <View>
-                    <Text style={styles.err_reason}>
-                      <I18nText>
-                      ProblemListOverview.ProblemCard.wrongReason
-                      </I18nText>
-                      {failReason[datas.failReason]}
+                  <View style={styles.footer_right}>
+                    <Text style={[styles.problem_info, { width: textWidth }]} numberOfLines={1}>
+                      <Text style={styles.question_time}>
+                        {formatTimeToshow(datas.publishTime)}&nbsp;&nbsp;&nbsp;&nbsp;
+                      </Text>
+                      <Text>
+                        <I18nText>
+                        ProblemListOverview.ProblemCard.form
+                        </I18nText>
+                        {datas.name}
+                      </Text>
                     </Text>
                   </View>
                 </View>
-                <View style={styles.footer_right}>
-                  <Text style={styles.question_time}>{formatTimeToshow(datas.publishTime)}</Text>
-                  <Text style={styles.err_reason}>
-                    <I18nText>
-                    ProblemListOverview.ProblemCard.form
-                    </I18nText>
-                    {datas.name}
-                  </Text>
-                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        </SwipeRow>
+            </TouchableOpacity>
+          </SwipeRow>
+        </View>
       );
     }
 }

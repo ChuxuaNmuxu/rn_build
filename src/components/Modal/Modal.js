@@ -43,7 +43,7 @@ class MyModal extends Component {
       studentName: '',
       url: '',
       imageViewType: '',
-      footButton: false,
+      footButton: true,
     };
     // 只提供两个API，TOST需要再搞
     Method.prototype.onOppen = this.onOppen;
