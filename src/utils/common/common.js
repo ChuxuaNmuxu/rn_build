@@ -322,6 +322,7 @@ export const taskTypeMapColor = (num) => {
 
 // 从数组中随机取出5个不重复的item,没法写jest测试
 export function getRandomArrayItem(arr, count) {
+  if (arr.length <= count) return arr;
   const shuffled = arr.slice(0);
   let i = arr.length;
   const min = i - count;

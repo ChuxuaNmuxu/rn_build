@@ -36,7 +36,7 @@ class ProblemCard extends PureComponent {
   // 点击复习错题进入错题重做页面
   doErrWorkAgain = () => {
     const { datas } = this.props;
-    // console.log(datas);
+    console.log('点击复习错题进入错题重做页面', datas);
     Actions.MistakeReform({
       problemCardInfo: [datas],
     });
@@ -65,9 +65,13 @@ class ProblemCard extends PureComponent {
       );
     }
 
+    componentDidMount() {
+      console.log('调用 ProblemCard 组贱', this.props);
+    }
+
     render() {
       const { datas, index } = this.props;
-      console.log(35, datas);
+      // console.log(35, datas);
       return (
         <SwipeRow
           disableRightSwipe
