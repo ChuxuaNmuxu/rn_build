@@ -67,7 +67,7 @@ class ProblemCard extends PureComponent {
 
     render() {
       const { datas, index } = this.props;
-      console.log(35, datas);
+      // console.log(35, datas);
       return (
         <SwipeRow
           disableRightSwipe

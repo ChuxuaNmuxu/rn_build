@@ -1,6 +1,7 @@
-export const getMistakeList = (state, action) => {
-  const { data } = action.payload;
+export const getMistakeListSuccess = (state, action) => {
+  const { data, total } = action.payload;
   state.mistakeList = data;
+  state.total = total;
 };
 
 export const addMistakeList = (state, action) => {

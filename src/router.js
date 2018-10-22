@@ -16,7 +16,7 @@ import {
 import PropTypes from 'prop-types';
 import HomeworkTask from './views/Student/HomeworkTask';
 import ProblemRecords from './views/Student/ProblemRecords';
-import My from './views/Student/My';
+// import My from './views/Student/My'; // 项目人员 hqh 注释掉了
 // import WrongNotes from './views/Student/WrongNotes'; // 项目人员 hqh 注释掉了，因为错题本是hqh写的！
 import PreviewHomework from './views/Student/PreviewHomework';
 import ReviewHomework from './views/Student/ReviewHomework';
@@ -58,7 +58,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        // initial
+        initial
       >
         <Tabs
           key="StudentTabs"
@@ -103,6 +103,7 @@ const RouteMap = props => (
           </Stack>
           {/* 错题本 */}
           <Stack
+            initial
             title="wrongNotes" // 配好在zh.js、en.js那边了
             key="ProblemOverviewStack"
             image="cuotiben1"
