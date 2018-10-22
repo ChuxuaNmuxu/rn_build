@@ -492,7 +492,8 @@ class HomworkRecordDetail extends Component {
 
         {
           // 错误原因分析
-          status === 1 ? (
+          // 是否被批改且存在错误
+          status === 1 && isItCorrect !== 1 ? (
             <View style={styles.CauseOfError}>
               <CauseOfError defaultValue={causeOfErrorNum} onChange={this.onChange} />
             </View>
