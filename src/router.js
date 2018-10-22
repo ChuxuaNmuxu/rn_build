@@ -144,7 +144,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        // initial
+        initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
@@ -165,7 +165,7 @@ const RouteMap = props => (
         {/* 错题明细 */}
         <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar />
         {/* 任务详情 */}
-        <Scene key="TaskDetail" component={TaskDetail} hideNavBar />
+        <Scene key="TaskDetail" component={TaskDetail} hideNavBar initial />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />
