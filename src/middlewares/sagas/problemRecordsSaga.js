@@ -172,11 +172,11 @@ function* dropDownSaga(action) {
 function getSubjectData(data) {
   if (_.isEmpty(data)) {
     return [
-      {
-        // 筛选数据
-        subjectId: 'allSub',
-        subjectName: '全部学科',
-      },
+      // {
+      //   // 筛选数据
+      //   subjectId: 'allSub',
+      //   subjectName: '全部学科',
+      // },
     ];
   }
   const subjectData = [
@@ -223,7 +223,7 @@ function transfromRecordData(data, type) {
       arr.push({
         id: item.homeworkId,
         subjectName: item.subjectName,
-        title: `${item.subjectName}作业`,
+        title: `${item.title}`,
         accuracy: item.accuracy,
         resultRead: item.resultRead,
         publishTime: item.publishTime,

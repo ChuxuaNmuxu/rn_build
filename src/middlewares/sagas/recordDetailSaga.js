@@ -301,5 +301,8 @@ function getdifficultyDegree(difficultyLevel) {
   if (difficultyLevel === 5) {
     return 2;
   }
+  if (difficultyLevel === 0) {
+    return 3;
+  }
   return 0;
 }
