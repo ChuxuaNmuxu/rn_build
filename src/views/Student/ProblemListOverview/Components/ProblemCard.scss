@@ -1,15 +1,7 @@
-.problemCard_box {
+
+.swipeRow_box {
+  height: 362px;
   margin-top: 12px;
-}
-
-.problemCard {
-  background-color: #fff;
-  height: 362px;
-}
-
-.hiden_box {
-  flex: 1;
-  height: 362px;
 }
 .hidenBtn {
   align-items: center;
@@ -25,6 +17,10 @@
   font-size: 24px;
 }
 
+.problemCard {
+  background-color: #fff;
+  height: 362px;
+}
 .question_header {
   padding-left: 24px;
   height: 60px;
