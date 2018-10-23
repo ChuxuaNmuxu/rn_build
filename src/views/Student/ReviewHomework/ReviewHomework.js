@@ -31,8 +31,9 @@ class ReviewHomework extends Component {
     this.state = {
       data: props.data, // 做作业页面所有题目的数据
       reviewQues: null,
-      answeredNum: 0, // 已作答题数
-      unAnsweredNum: 0, // 未作答题数
+      countQuesNum: 0, // 总题目数
+      answeredQuesNum: 0, // 已作答题数
+      notAnswerQuesNum: 0, // 未作答题数
       uploadImgQid: null, // 当前上传图片的题目id
       currentStartTime: new Date(), // 当前题目的开始时间
       reviewTime: 0, // 检查时间
@@ -106,8 +107,8 @@ class ReviewHomework extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { data } = nextProps;
     const answerList = prevState.reviewQues;
-    // 根据reviewQues数据中的id去找到data.finalQuestionList中的对应id的题目来相应更新答案数据
     if (!R.equals(data, prevState.data)) {
+      // 根据reviewQues数据中的id去找到data.finalQuestionList中的对应id的题目来相应更新答案数据
       if (answerList && answerList.length) {
         for (let i = 0; i < answerList.length; i++) {
           for (let j = 0; j < data.finalQuestionList.length; j++) {
@@ -117,8 +118,20 @@ class ReviewHomework extends Component {
           }
         }
       }
+      // 实时更新已作答和未作答题目数
+      let answeredQuesNum = 0;
+      let notAnswerQuesNum = 0;
+      for (let k = 0; k < data.finalQuestionList.length; k++) {
+        if (data.finalQuestionList[k].answered) {
+          answeredQuesNum++;
+        } else {
+          notAnswerQuesNum++;
+        }
+      }
       return {
         data,
+        answeredQuesNum,
+        notAnswerQuesNum,
         reviewQues: answerList,
       };
     }
@@ -174,21 +187,24 @@ class ReviewHomework extends Component {
     const { data } = this.props;
     // 拿到数据后将已作答的题目筛选出来，后面都以此时筛选出的题目去展示，但是图片答案要与redux中一致才行
     const answerQuestionList = [];
-    let answeredNum = 0;
-    let unAnsweredNum = 0;
+    let countQuesNum = 0;
+    let answeredQuesNum = 0;
+    let notAnswerQuesNum = 0;
     if (data && data.finalQuestionList && data.finalQuestionList.length) {
+      countQuesNum = data.finalQuestionList.length;
       for (let i = 0; i < data.finalQuestionList.length; i++) {
         if (data.finalQuestionList[i].answered) {
           answerQuestionList.push(data.finalQuestionList[i]);
-          answeredNum++;
+          answeredQuesNum++;
         } else {
-          unAnsweredNum++;
+          notAnswerQuesNum++;
         }
       }
     }
     this.setState({
-      answeredNum,
-      unAnsweredNum,
+      countQuesNum,
+      answeredQuesNum,
+      notAnswerQuesNum,
       reviewQues: answerQuestionList,
     });
   }
@@ -201,9 +217,9 @@ class ReviewHomework extends Component {
 
   // 点击未作答热区进入做作业页面--此时做作业页面展示可查看题目序号的图标并只出现未作答的题目
   goUnAnswered = () => {
-    const { unAnsweredNum } = this.state;
+    const { notAnswerQuesNum } = this.state;
     // 未作答题目数为0应该不能跳转到未作答页面
-    if (unAnsweredNum) {
+    if (notAnswerQuesNum) {
       this.saveCheckTime();
       const { data } = this.state;
       Actions.DoHomework({ homeworkId: data.homeworkId, showUnAnswerQues: true });
@@ -320,27 +336,14 @@ class ReviewHomework extends Component {
   render() {
     const {
       reviewQues,
-      answeredNum,
-      unAnsweredNum,
+      countQuesNum,
+      answeredQuesNum,
+      notAnswerQuesNum,
       data,
       commitHomeworkModalStatus,
       tipStatus,
       hasRemarkStatus,
     } = this.state;
-    // 作答题目情况,拿到题目总数，已作答题数，未作答题数
-    const { data: { finalQuestionList } } = this.props;
-    const countQuesNum = finalQuestionList && finalQuestionList.length;
-    let answeredQuesNum = 0;
-    let notAnswerQuesNum = 0;
-    if (finalQuestionList && finalQuestionList.length) {
-      for (let i = 0; i < finalQuestionList.length; i++) {
-        if (finalQuestionList[i].answered) {
-          answeredQuesNum++;
-        } else {
-          notAnswerQuesNum++;
-        }
-      }
-    }
     return (
       <View style={styles.reviewHomework_container}>
         <View style={styles.reviewHomework_header}>
@@ -387,7 +390,7 @@ class ReviewHomework extends Component {
                 ReviewHomework.footer.isAnswered
               </I18nText>
               <TouchableOpacity>
-                <Text style={styles.questionNum}>{answeredNum}题</Text>
+                <Text style={styles.questionNum}>{answeredQuesNum}题</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity style={styles.footer_left} onPress={this.goUnAnswered}>
@@ -395,7 +398,7 @@ class ReviewHomework extends Component {
               <I18nText style={styles.answer_info}>
                 ReviewHomework.footer.notAnswered
               </I18nText>
-              <Text style={styles.questionNum}>{unAnsweredNum}题</Text>
+              <Text style={styles.questionNum}>{notAnswerQuesNum}题</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.footer_right}>
