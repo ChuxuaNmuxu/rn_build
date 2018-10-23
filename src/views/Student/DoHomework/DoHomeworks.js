@@ -110,7 +110,7 @@ class DoHomeworks extends Component {
       this.fetchHomeworkStatus = true;
       // checkStatus---0：作业还未选择是否想检查，1--查看已答题目，2--提交
       const { checkStatus } = homeworkData;
-      if (!checkStatus) {
+      if (checkStatus === 0) {
         // 未标记是否想检查作业--弹框提示
         this.setCheckModalVisibleFun(true);
       }
@@ -501,7 +501,7 @@ class DoHomeworks extends Component {
         <View style={styles.doHomeworkHeader}>
           <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.HomeworkTask} />
           <Text style={styles.doHomeworkTitle}>{homeworkData.title}</Text>
-          <Timer startTime={homeworkData.userTime} />
+          {homeworkData.userTime && <Timer startTime={homeworkData.userTime} />}
         </View>
         <View style={styles.questionOrder}>
           <View style={styles.order_left}>
