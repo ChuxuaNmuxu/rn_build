@@ -81,7 +81,7 @@ function* submitAnswerSaga(action) {
 function* submitRadioSaga(action) {
   try {
     const { index, value, item } = action.payload;
-    const url = `/app/api/student/failed-questions/questions/${item.id}/fail-reason`;
+    const url = `/app/api/student/failed-questions/questions/${item.id}/fail-reason?category=${item.category}`;
     const fetch = arg => Fetch.put(url, arg);
     const params = {
       reason: value,
