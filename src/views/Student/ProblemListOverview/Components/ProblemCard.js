@@ -74,6 +74,7 @@ class ProblemCard extends PureComponent {
       const { datas, index } = this.props;
       const { width } = adaptiveRotation();
       const textWidth = width - 360;
+      console.log(123, datas);
       return (
         <View style={styles.problemCard_box}>
           <SwipeRow
@@ -108,14 +109,20 @@ class ProblemCard extends PureComponent {
                 </View>
                 <View style={styles.question_footer}>
                   <View style={styles.footer_left}>
-                    <View
-                      style={[
-                        styles.difficult_box,
-                        { backgroundColor: convertToDifficultyLevel(datas.difficultyLevel, true) },
-                      ]}
-                    >
-                      <Text style={styles.difficult_txt}>{convertToDifficultyLevel(datas.difficultyLevel)}</Text>
-                    </View>
+                    {/* 考试错题不显示难易程度标签--错题类型(category---1:作业,2:考试) */}
+                    {
+                      datas.category === 1
+                      && (
+                      <View
+                        style={[
+                          styles.difficult_box,
+                          { backgroundColor: convertToDifficultyLevel(datas.difficultyLevel, true) },
+                        ]}
+                      >
+                        <Text style={styles.difficult_txt}>{convertToDifficultyLevel(datas.difficultyLevel)}</Text>
+                      </View>
+                      )
+                    }
                     <View>
                       <Text style={styles.err_reason}>
                         <I18nText>

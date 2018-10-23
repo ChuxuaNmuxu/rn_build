@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
+import {
+  Toast,
+} from 'antd-mobile-rn';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -204,6 +207,8 @@ class ReviewHomework extends Component {
       this.saveCheckTime();
       const { data } = this.state;
       Actions.DoHomework({ homeworkId: data.homeworkId, showUnAnswerQues: true });
+    } else {
+      Toast.info('您已全部作答完毕，请检查后提交作业！');
     }
   }
 
