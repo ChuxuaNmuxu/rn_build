@@ -78,13 +78,21 @@ class HomworkRecordDetail extends Component {
       commonActions: {
         returnFailReason,
       },
+      actions: {
+        fetchHomeworkData,
+      },
     } = this.props;
     const { selectTion } = this.state;
     const {
       id,
     } = headerList[selectTion];
     const type = this.type === 'H' ? 1 : 2;
-    returnFailReason({ type, id, reason: a });
+    returnFailReason({
+      type,
+      id,
+      reason: a,
+      callback: () => fetchHomeworkData({ homeworkId: this.id, questionId: id, index: selectTion }, 'REQUEST'),
+    });
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -366,7 +374,7 @@ class HomworkRecordDetail extends Component {
     const { studentAnser } = AnserSummarizationData;
     console.log(studentAnserImage, 'studentAnserImagestudentAnserImage');
     // 是否存在答案
-    const isQuestionSubmited = studentAnser !== null || studentAnserImage !== '';
+    const isQuestionSubmited = studentAnser === null || studentAnser === '' || studentAnserImage === [];
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
     return (
       <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
@@ -459,7 +467,7 @@ class HomworkRecordDetail extends Component {
            )
         }
 
-        {
+        {/* {
           _.isEmpty(rightAnser) ? null : (
             <React.Fragment>
               {
@@ -472,11 +480,33 @@ class HomworkRecordDetail extends Component {
             }
             </React.Fragment>
           )
+        } */}
+        {
+          !_.isEmpty(rightAnser) ? (
+            <React.Fragment>
+              {
+                console.log(rightAnser)
+              }
+              <View style={[styles.correctAndOthersAnserTitle, styles.rightAnserAdd]}>
+                <Text style={styles.AnserTitleText}>题目答案：</Text>
+              </View>
+              {
+              // 富文本显示块，，，如果出错可能是返回数据是block而不是html字符串。形式固定，不独立组件了。
+               this.htmlViewComponent(rightAnser)
+            }
+              {
+               // 你好我是分割线
+              this.splitLine()
+            }
+            </React.Fragment>
+          ) : null
+
         }
 
         {
           _.isEmpty(othersAnser) ? null : (
             <React.Fragment>
+
               {
                 // 题目答案
                 this.correctAndOthersAnser(othersAnser, '看看其他同学的解答过程：')
