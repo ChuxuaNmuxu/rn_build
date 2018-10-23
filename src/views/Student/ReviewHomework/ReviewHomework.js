@@ -14,7 +14,6 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import R from 'ramda';
-// import moment from 'moment';
 import * as actions from '../../../actions/doHomeworkAction';
 import I18nText from '../../../components/I18nText';
 import { CustomButton } from '../../../components/Icon';
@@ -35,28 +34,18 @@ class ReviewHomework extends Component {
       answeredQuesNum: 0, // 已作答题数
       notAnswerQuesNum: 0, // 未作答题数
       uploadImgQid: null, // 当前上传图片的题目id
-      currentStartTime: new Date(), // 当前题目的开始时间
-      reviewTime: 0, // 检查时间
+      currentStartTime: new Date(), // 开始检查作业的时间
       commitHomeworkModalStatus: false, // 二次确认模态框的显隐
       tipStatus: false, // 提交作业成功且无互批任务的模态框显隐
       hasRemarkStatus: false, // 提交作业成功且有互批任务的模态框显隐
     };
-    this.timeSetInterval = null;
     this.tryToUploadImg = false; // 是否上传了图片--防止componentDidUpdate一直执行出现死循环
     this.commitHomework = false; // 是否点击了二次确认的提交作业按钮
   }
 
-  // 进入此页面时开始计时，离开此页面时将时间传给后台大佬用于保存检查时间
   componentDidMount() {
     // 筛选出已作答的题目
     this.filterAnsweredData();
-    // 进入页面后开始计时
-    this.timeSetInterval = setInterval(() => {
-      const { reviewTime } = this.state;
-      this.setState({
-        reviewTime: reviewTime + 1,
-      });
-    }, 1000);
   }
 
   componentDidUpdate() {
@@ -84,10 +73,17 @@ class ReviewHomework extends Component {
     }
   }
 
-  // 离开页面时清除计时器
+  // 离开页面时保存检查时间
   componentWillUnmount() {
-    // 保存检查时间
     this.saveCheckTime();
+  }
+
+  // 控制点击提交按钮时询问是否提交的模态显隐
+  setCommitModalVisibleFun = (visible) => {
+    this.setState({
+      commitHomeworkModalStatus: visible,
+      currentStartTime: new Date(),
+    });
   }
 
   // 控制提交作业成功且无互批任务的模态框显隐
@@ -149,37 +145,23 @@ class ReviewHomework extends Component {
   submitHomeworkFun = () => {
     this.saveCheckTime();
     const { commitHomeworkModalStatus } = this.state;
-    this.setState({
-      commitHomeworkModalStatus: !commitHomeworkModalStatus,
-    });
+    this.setCommitModalVisibleFun(!commitHomeworkModalStatus);
   }
 
   // 二次确认提交作业
   commitHomeworkFun = () => {
     this.commitHomework = true;
-    this.setState({
-      commitHomeworkModalStatus: false,
-    });
+    this.setCommitModalVisibleFun(false);
     // 请求提交作业的接口
     const { actions: { submitHomeworkAction }, data } = this.props;
     submitHomeworkAction({ homeworkId: data.homeworkId }, 'REQUEST');
   }
 
-  // 二次确认选择检查--又开始重新计时
+  // 二次确认选择检查
   viewAnsweredQuesFun = () => {
-    this.setState({
-      commitHomeworkModalStatus: false,
-      reviewTime: 0,
-    });
+    this.setCommitModalVisibleFun(false);
     // 此时重新筛选下已作答的数据
     this.filterAnsweredData();
-    // 重新计时
-    this.timeSetInterval = setInterval(() => {
-      const { reviewTime } = this.state;
-      this.setState({
-        reviewTime: reviewTime + 1,
-      });
-    }, 1000);
   }
 
   // 进入检查页面时筛选已作答的数据
@@ -217,13 +199,15 @@ class ReviewHomework extends Component {
 
   // 点击未作答热区进入做作业页面--此时做作业页面展示可查看题目序号的图标并只出现未作答的题目
   goUnAnswered = () => {
+    this.saveCheckTime();
     const { notAnswerQuesNum } = this.state;
-    // 未作答题目数为0应该不能跳转到未作答页面
     if (notAnswerQuesNum) {
-      this.saveCheckTime();
+      // 未作答题目数大于0才能跳转到未作答页面
       const { data } = this.state;
       Actions.DoHomework({ homeworkId: data.homeworkId, showUnAnswerQues: true });
     } else {
+      // 未作答题目数为0时继续留在检查页面，更新作业检查开始时间
+      this.setState({ currentStartTime: new Date() });
       Toast.info('您已全部作答完毕，请检查后提交作业！');
     }
   }
@@ -231,9 +215,9 @@ class ReviewHomework extends Component {
   // 保存检查耗时
   saveCheckTime = () => {
     const { actions: { saveHomeworkCheckTimeAction }, data } = this.props;
-    const { reviewTime } = this.state;
+    const { currentStartTime } = this.state;
+    const reviewTime = Math.floor((new Date() - currentStartTime) / 1000);
     saveHomeworkCheckTimeAction({ homeworkId: data.homeworkId, checkTime: reviewTime }, 'REQUEST');
-    global.clearInterval(this.timeSetInterval);
   }
 
   // 难易程度发生改变的函数
@@ -307,20 +291,19 @@ class ReviewHomework extends Component {
       // answerFileUrl,
       needsExplain,
     } = currentQues;
-    const { currentStartTime } = this.state;
     const answerParam = {};
     const { homeworkId } = data;
     answerParam.questionId = id;
     answerParam.answer = type < 10 ? studentAnswer : null;
     answerParam.difficultyLevel = difficultyLevel;
     answerParam.needsExplain = needsExplain;
-    answerParam.timeSpent = Math.floor((new Date() - currentStartTime) / 1000);
+    // 检查作业页面修改提交答案不算入做题耗时，故timeSpent直接传0即可
+    answerParam.timeSpent = 0;
     /* 需要注意的是返回的题目数据主观题图片答案保存的id为answerFileId字段，而上传答案给接口时是用fileId来保存,图片地址不需要传了 */
     answerParam.fileId = answerFileId === '0' ? '0' : answerFileId;
     // answerParam.answerFileUrl = (answerFileUrl && answerFileUrl.length) ? answerFileUrl : null;
     const { actions: { submitDoHomeworkAnswerAction } } = this.props;
     submitDoHomeworkAnswerAction({ homeworkId, id, answerParam }, 'REQUEST');
-    this.setState({ currentStartTime: new Date() });
   }
 
   // 已作答题目数为0时展示
