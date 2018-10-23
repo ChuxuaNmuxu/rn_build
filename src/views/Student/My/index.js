@@ -8,6 +8,7 @@ import Drag from '../../../components/Drag/test-1';
 import Radio from '../../../components/Radio';
 import styles from '../DoHomework/Components/AnswerCard.scss';
 import styles2 from './style.sass';
+import Task from '../HomeworkTask/component/Task';
 
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
@@ -40,6 +41,8 @@ export default class Test3 extends Component {
           ><Text>已阅</Text>
           </View>
         </View>
+
+        <Task />
 
         {/* <RadioGroup
           value={1}
