@@ -501,7 +501,7 @@ class DoHomeworks extends Component {
         <View style={styles.doHomeworkHeader}>
           <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.HomeworkTask} />
           <Text style={styles.doHomeworkTitle}>{homeworkData.title}</Text>
-          {homeworkData.userTime && <Timer startTime={homeworkData.userTime} />}
+          <Timer startTime={homeworkData.userTime} />
         </View>
         <View style={styles.questionOrder}>
           <View style={styles.order_left}>
@@ -576,7 +576,7 @@ class DoHomeworks extends Component {
     console.log(222, '接口数据', homeworkData);
     return (
       <View style={styles.containers}>
-        {this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
+        {!R.isEmpty(homeworkData) && this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
         {
           showQuesArray && (
           <ScrollableTabView
