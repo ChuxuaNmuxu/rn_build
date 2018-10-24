@@ -110,7 +110,7 @@ class DoHomeworks extends Component {
       this.fetchHomeworkStatus = true;
       // checkStatus---0：作业还未选择是否想检查，1--查看已答题目，2--提交
       const { checkStatus } = homeworkData;
-      if (!checkStatus) {
+      if (checkStatus === 0) {
         // 未标记是否想检查作业--弹框提示
         this.setCheckModalVisibleFun(true);
       }
@@ -267,7 +267,13 @@ class DoHomeworks extends Component {
   // 难易程度发生改变的函数
   handleDifficultLevel = (currentId, level) => {
     const { actions: { changeDifficuiltLevelAction } } = this.props;
-    const { difficultModalStatus, currentIndex, showDifficultModalOpt, clickQuesOrderIndex, homeworkData: { finalQuestionList } } = this.state;
+    const {
+      difficultModalStatus,
+      currentIndex,
+      showDifficultModalOpt,
+      clickQuesOrderIndex,
+      homeworkData: { finalQuestionList },
+    } = this.state;
     changeDifficuiltLevelAction({ currentId, level });
     // 正常情况下选择难易程度或者点击提交时弹出的当前题目的难易程度选择标签
     if (!difficultModalStatus || showDifficultModalOpt === 'commitBtnClick') {
@@ -567,9 +573,10 @@ class DoHomeworks extends Component {
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
     console.log(1111, '获取到的作业题目数据', showQuesArray);
+    console.log(222, '接口数据', homeworkData);
     return (
       <View style={styles.containers}>
-        {this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
+        {!R.isEmpty(homeworkData) && this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
         {
           showQuesArray && (
           <ScrollableTabView
