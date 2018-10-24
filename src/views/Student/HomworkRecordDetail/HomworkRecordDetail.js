@@ -24,6 +24,7 @@ import AnserSummarization from './AnserSummarization';
 import Svg from '../../../components/Svg';
 import CauseOfError from '../../../components/WrongReason';
 import Modal, { ModalApi } from '../../../components/Modal';
+import NoResult from '../../../components/NotResult';
 
 class HomworkRecordDetail extends Component {
   constructor(props) {
@@ -344,6 +345,19 @@ class HomworkRecordDetail extends Component {
       headerList, detailsDataList, status, title,
     } = this.props;
     const { selectTion } = this.state;
+    if (_.isEmpty(headerList)) {
+      return (
+        <React.Fragment>
+          <View style={styles.homeworkDetail_header}>
+            <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.myComponentWillUnmount} />
+            <Text style={styles.homeworkDetailTitle}>{title}</Text>
+            <Text style={styles.alt} />
+          </View>
+          <NoResult tips="该作业无记录" />
+
+        </React.Fragment>
+      );
+    }
     // 选中该项，是否存在数据
     if (_.isNil(headerList[selectTion]) && _.isNil(detailsDataList[selectTion])) {
       console.log('尼玛这个能进来？');
