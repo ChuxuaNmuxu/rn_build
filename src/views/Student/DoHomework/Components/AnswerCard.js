@@ -146,6 +146,7 @@ class AnswerCard extends Component {
             hasImgUrl
             && (
             <UploadImgSuccess
+              mistakeReform={mistakeReform}
               answerFileUrl={answerFileUrl}
               width={parseInt(width)}
               height={parseInt(height)}

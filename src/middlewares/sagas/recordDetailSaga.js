@@ -179,7 +179,7 @@ function transFromExamdetailsDataList(data) {
       // 主观题专用（学生答案）
       studentAnserImage: item.answerImageUrls === null ? [] : item.answerImageUrls.map(i => ({ url: `${i}` })),
       // 主观题专用（正确）
-      rightAnser: item.answerExplain !== null ? [{ url: item.answerExplain }] : [],
+      rightAnser: item.answerExplain !== null ? item.answerExplain : '',
       // 其他同学的答案
       othersAnser: item.excellentAnswers instanceof Array ? item.excellentAnswers.map(o => ({
         url: o.answerFiles,
@@ -259,7 +259,7 @@ function transFromHomeworkDataList(data) {
     // 学生zhu观题答案
     studentAnserImage: data.answerFileUrl === null ? [] : [{ url: `${data.answerFileUrl}` }],
     // 主观题专用正确答案
-    rightAnser: data.answerContent !== null ? [{ url: data.answerContent }] : [],
+    rightAnser: data.answerContent !== null ? data.answerContent : '',
     // 其他同学的答案
     othersAnser: data.otherStudentAnswer instanceof Array ? data.otherStudentAnswer.map(o => ({
       url: o.explainImageUrl,

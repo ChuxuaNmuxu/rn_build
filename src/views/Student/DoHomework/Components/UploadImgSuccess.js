@@ -23,9 +23,14 @@ class UploadImgSuccess extends Component {
   }
 
   render() {
-    const { answerFileUrl, width, height } = this.props;
+    const {
+      answerFileUrl, width, height, mistakeReform,
+    } = this.props;
+    // 错题重做页面不需要关闭按钮去删除图片答案
     return (
       <View style={styles.img_box}>
+        {
+        !mistakeReform && (
         <View
           style={styles.icon_box}
         >
@@ -35,6 +40,8 @@ class UploadImgSuccess extends Component {
             style={styles.icon_close}
           />
         </View>
+        )
+      }
         <Image
           source={{ uri: answerFileUrl }}
           style={{ width: width || '80%', height: height || 300, maxWidth: '100%' }}
@@ -45,10 +52,16 @@ class UploadImgSuccess extends Component {
 }
 
 UploadImgSuccess.propTypes = {
+  mistakeReform: PropTypes.bool, // 错题重做页面调用时用来标识调用方的
   answerFileUrl: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  deleteImg: PropTypes.func.isRequired,
+  deleteImg: PropTypes.func,
+};
+
+UploadImgSuccess.defaultProps = {
+  mistakeReform: false,
+  deleteImg: () => {},
 };
 
 export default UploadImgSuccess;

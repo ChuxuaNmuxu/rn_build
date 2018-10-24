@@ -65,7 +65,7 @@ class AnserSummarization extends Component {
       `部分正确，答案是${correctAnser}，你的答案是${studentAnser}，得分：${score}分`,
       questionType === 'obj' ? `答案是${correctAnser}，你的答案是${studentAnser}` : '解答过程',
     ];
-    if (!isQuestionSubmited) {
+    if (isQuestionSubmited) {
       text = unanser;
       return text;
     }
