@@ -15,6 +15,7 @@ import UploadImgBefore from './UploadImgBefore';
 import UploadImgSuccess from './UploadImgSuccess';
 import I18nText from '../../../../components/I18nText';
 import { parseCorrespondingValue } from '../../../../components/LineTo/utils';
+import { ModalApi } from '../../../../components/Modal';
 
 
 const RadioGroup = Radio.Group;
@@ -31,6 +32,26 @@ class AnswerCard extends Component {
       height: null,
       fileName: null, // 图片名
     };
+    this.croppedImageStatus = false; // 是否点击了确定裁剪图片
+    this.loadingData = {
+      animationType: 'loading',
+      bottomTips: '图片加载中...',
+      maskClosable: false,
+    };
+  }
+
+  // 图片上传时显示loading状态
+  componentDidUpdate = () => {
+    const { imgLoading } = this.props;
+    if (this.croppedImageStatus && imgLoading) {
+      // console.log(80000000000, 'componentDidUpdate---onOppen');
+      ModalApi.onOppen('AnimationsModal', this.loadingData);
+    }
+    if (this.croppedImageStatus && !imgLoading) {
+      // console.log(9000000000000, 'componentDidUpdate---onClose');
+      this.croppedImageStatus = false;
+      ModalApi.onClose();
+    }
   }
 
   // 单选题、多选、判断、对应答案发生改变的函数
@@ -73,16 +94,15 @@ class AnswerCard extends Component {
 
   // 确定裁剪图片
   croppedImage = (uri, width, height) => {
-    const { showLoadingFun, questions } = this.props;
+    const { questions } = this.props;
     const { fileName } = this.state;
-    showLoadingFun();
+    const { handlePreviewImage } = this.props;
+    handlePreviewImage(questions.id, uri, fileName);
+    this.croppedImageStatus = true;
     this.setState({
       showCropper: false,
       width,
       height,
-    }, () => {
-      const { handlePreviewImage } = this.props;
-      handlePreviewImage(questions.id, uri, fileName);
     });
   }
 
@@ -264,22 +284,22 @@ class AnswerCard extends Component {
 AnswerCard.propTypes = {
   questions: PropTypes.object.isRequired,
   mistakeReform: PropTypes.bool, // 错题重做页面调用时用来标识调用方的
+  imgLoading: PropTypes.bool, // 图片上传loading状态
   handleDifficultLevel: PropTypes.func, // 难易程度发生改变的函数
   handleToClickRadio: PropTypes.func, // 单选题的回调函数
   handlePreviewImage: PropTypes.func, // 上传图片后的回调函数
   deleteImg: PropTypes.func, // 删除图片答案的函数
   handleCheckboxChange: PropTypes.func, // 改变不是很懂，请老师解答的复选框
-  showLoadingFun: PropTypes.func, // 显示正在loading状态的函数
 };
 
 AnswerCard.defaultProps = {
   mistakeReform: false,
+  imgLoading: false,
   handleToClickRadio: () => {},
   handleDifficultLevel: () => {},
   handlePreviewImage: () => {},
   handleCheckboxChange: () => {},
   deleteImg: () => {},
-  showLoadingFun: () => {},
 };
 
 
