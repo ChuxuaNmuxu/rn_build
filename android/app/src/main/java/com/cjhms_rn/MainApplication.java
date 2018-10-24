@@ -66,4 +66,20 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
     WebView.setWebContentsDebuggingEnabled(true);
   }
+
+
+  /** ELink 爱立顺定制机修改*/
+  public static final String MODEL_LENOVO_TB3_850F = "Lenovo TB3-850F";
+  public static final String MODEL_ELINK_H8631H8_8 = "H8631H8_8";
+  public static boolean isLenovoTab3() {
+      // 手机型号
+      String model = android.os.Build.MODEL;
+      return model.equals(MODEL_LENOVO_TB3_850F);
+  }
+  public static boolean isELinkH8() {
+      // 手机型号
+      String model = android.os.Build.MODEL;
+      return model.equals(MODEL_ELINK_H8631H8_8);
+  }
+
 }
