@@ -6,6 +6,7 @@ import {
 import PropTypes from 'prop-types';
 import { ModalApi } from '../../../../../components/Modal';
 import DifficultLevelView from '../../../../../components/DifficultLevelView';
+import { adaptiveRotation } from '../../../../../utils/resolution';
 
 class DifficultLevelModal extends Component {
   componentDidMount() {
@@ -13,9 +14,12 @@ class DifficultLevelModal extends Component {
   }
 
   press=() => {
+    // 让难易程度标签展示在页面正中间
+    const { height } = adaptiveRotation();
+    const topDistance = (height / 2) - 82;
     const data = {
       customContent: this.difficultLevelContent(),
-      top: 700,
+      top: topDistance,
       // 高度最好跟你自己自定义的内容高度一样
       height: 164,
     };

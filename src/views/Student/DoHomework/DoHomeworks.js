@@ -44,6 +44,7 @@ class DoHomeworks extends Component {
       uploadImgQuesId: null, // 上传图片要保存答案的题目id
       showDifficultModalOpt: null, // 触发出现难易程度模态层的操作： commitBtnClick-点击提交按钮，clickQuesOrder-点击题号，clickNextBtn-左滑至下一题
       clickQuesOrderIndex: null, // 点击题号时该题所在列表索引
+      imgLoading: false, // 图片上传loading状态
     };
     this.commitHomework = false; // 是否点击了二次确认的提交作业按钮
     this.tryToUploadImg = false; // 是否上传了图片--防止componentDidUpdate一直执行出现死循环
@@ -110,7 +111,7 @@ class DoHomeworks extends Component {
       this.fetchHomeworkStatus = true;
       // checkStatus---0：作业还未选择是否想检查，1--查看已答题目，2--提交
       const { checkStatus } = homeworkData;
-      if (!checkStatus) {
+      if (checkStatus === 0) {
         // 未标记是否想检查作业--弹框提示
         this.setCheckModalVisibleFun(true);
       }
@@ -267,7 +268,13 @@ class DoHomeworks extends Component {
   // 难易程度发生改变的函数
   handleDifficultLevel = (currentId, level) => {
     const { actions: { changeDifficuiltLevelAction } } = this.props;
-    const { difficultModalStatus, currentIndex, showDifficultModalOpt, clickQuesOrderIndex, homeworkData: { finalQuestionList } } = this.state;
+    const {
+      difficultModalStatus,
+      currentIndex,
+      showDifficultModalOpt,
+      clickQuesOrderIndex,
+      homeworkData: { finalQuestionList },
+    } = this.state;
     changeDifficuiltLevelAction({ currentId, level });
     // 正常情况下选择难易程度或者点击提交时弹出的当前题目的难易程度选择标签
     if (!difficultModalStatus || showDifficultModalOpt === 'commitBtnClick') {
@@ -412,18 +419,23 @@ class DoHomeworks extends Component {
     const { actions: { submitDoHomeworkAnswerAction }, homeworkId } = this.props;
     // console.log('homeworkId', homeworkId);
     submitDoHomeworkAnswerAction({ homeworkId, id, answerParam }, 'REQUEST');
-    this.setState({ currentStartTime: new Date() });
+    this.setState({
+      currentStartTime: new Date(),
+      imgLoading: false,
+    });
   }
 
   // 主观题上传答案或者客观题上传解答过程答案的函数
   handlePreviewImage = (questionId, e, imgName) => {
     // console.log(33333, questionId, e, imgName);
     this.tryToUploadImg = true;
-    const { actions: { uploadImageToOssAction } } = this.props;
-    uploadImageToOssAction({ questionId, file: e, imgName });
-    // 当从检查页面点击 未作答 热区 进来此页面时上传图片答案的题目id应该从此处给提交答案那，否则保存时题目id不对
+    // 当从检查页面点击 未作答 热区 进来此页面时上传图片答案的题目id应该从此处给提交答案那，否则保存时题目id无法准确拿取
     this.setState({
       uploadImgQuesId: questionId,
+      imgLoading: true,
+    }, () => {
+      const { actions: { uploadImageToOssAction } } = this.props;
+      uploadImageToOssAction({ questionId, file: e, imgName });
     });
   }
 
@@ -437,12 +449,6 @@ class DoHomeworks extends Component {
       this.fetchSaveQuestion(qid);
     }, 0);
   }
-
-  // 上传图片后展示正在加载的loading状态
-  showLoadingFun = () => {
-    // ModalApi.onOppen('AnimationsModal', this.loadingData);
-  }
-
 
   // 渲染需要展示在扩展列表视图中的组件
   renderQuestionOrder = (showQuesArray, currentIndex) => {
@@ -548,6 +554,7 @@ class DoHomeworks extends Component {
       currentIndex,
       homeworkData,
       unAnswerQuesList,
+      imgLoading,
     } = this.state;
     const { showUnAnswerQues } = this.props;
     const { finalQuestionList } = homeworkData;
@@ -567,9 +574,10 @@ class DoHomeworks extends Component {
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
     console.log(1111, '获取到的作业题目数据', showQuesArray);
+    console.log(222, '接口数据', homeworkData);
     return (
       <View style={styles.containers}>
-        {this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
+        {!R.isEmpty(homeworkData) && this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
         {
           showQuesArray && (
           <ScrollableTabView
@@ -592,7 +600,7 @@ class DoHomeworks extends Component {
                     handlePreviewImage={this.handlePreviewImage}
                     handleCheckboxChange={this.handleCheckboxChange}
                     deleteImg={this.deleteImg}
-                    showLoadingFun={this.showLoadingFun}
+                    imgLoading={imgLoading}
                   />
                 </ScrollView>
               ))

@@ -12,15 +12,15 @@ class DifficultLevelView extends Component {
     defaultValue: null,
   } // 默认选中值
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentLevel: 1,
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     currentLevel: 1,
+  //   };
+  // }
 
   render() {
-    const { currentLevel } = this.state;
+    // const { currentLevel } = this.state;
     const {
       onChange, defaultValue,
     } = this.props;
