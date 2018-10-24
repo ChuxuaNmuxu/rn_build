@@ -27,7 +27,6 @@ class AnswerCard extends Component {
     this.state = {
       source: null,
       showCropper: false,
-      testUri: null,
       width: null,
       height: null,
       fileName: null, // 图片名
@@ -79,7 +78,6 @@ class AnswerCard extends Component {
     showLoadingFun();
     this.setState({
       showCropper: false,
-      testUri: uri,
       width,
       height,
     }, () => {
@@ -100,7 +98,6 @@ class AnswerCard extends Component {
     const { deleteImg, questions } = this.props;
     deleteImg(questions.id);
     this.setState({
-      testUri: null,
       width: null,
       height: null,
     });
@@ -117,10 +114,10 @@ class AnswerCard extends Component {
       mistakeReform,
     } = this.props;
     const {
-      testUri, width, height,
+      width, height,
     } = this.state;
     // 客观题的上传解答过程，错题重做页面调用时不显示
-    const hasImgUrl = (answerFileUrl && answerFileUrl.length) || testUri; // 是否有图片答案
+    const hasImgUrl = answerFileUrl && answerFileUrl.length; // 是否有图片答案
     if ((mistakeReform && type > 4) || !mistakeReform) {
       // UploadImgBefore必须在一开始就渲染出来，否则会出现删除图片答案后再点击上传图片区域时不弹出选择图片的文件选择，此时只能让页面发生setState后才能正常弹出
       UpdateImgDiv = (
@@ -129,7 +126,7 @@ class AnswerCard extends Component {
             hasImgUrl
             && (
             <UploadImgSuccess
-              answerFileUrl={answerFileUrl || testUri}
+              answerFileUrl={answerFileUrl}
               width={parseInt(width)}
               height={parseInt(height)}
               deleteImg={this.deleteImg}

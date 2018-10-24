@@ -1,12 +1,8 @@
-.problemCard_box {
+
+.swipeRow_box {
+  height: 362px;
   margin-top: 12px;
 }
-
-.problemCard {
-  background-color: #fff;
-  height: 362px,
-}
-
 .hidenBtn {
   align-items: center;
   background-color: #30bf6c;
@@ -21,6 +17,10 @@
   font-size: 24px;
 }
 
+.problemCard {
+  background-color: #fff;
+  height: 362px;
+}
 .question_header {
   padding-left: 24px;
   height: 60px;
@@ -49,9 +49,10 @@
 .question_content {
   width: 100%;
   height: 220px;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  padding-left: 24px;
+  padding-right: 24px;
+  overflow: hidden;
+  background-color: transparent; // 不知为何加了背景颜色属性后 overflow:hidden才生效
 }
 .content_txt {
   font-size: 30px;
@@ -73,13 +74,16 @@
 .footer_left {
   flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .difficult_box {
-  height: 32px;
+  height: 36px;
   padding: 0 12px;
   border-radius:50px;
   margin-right: 24px;
+  align-items: center;
+  justify-content: center;
 }
 
 .difficult_txt {
@@ -90,15 +94,22 @@
 .err_reason {
   color: #666;
   font-size: 24px;
+  margin-right: 12px;
 }
 
 .footer_right {
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-around;
+}
+
+.problem_info {
+  color: #666;
+  font-size: 24px;
+  text-align: right;
 }
 
 .question_time {
   font-size: 24px;
   color: #bfbfbf;
-  margin-right: 24px;
+  // margin-right: 24px;
 }

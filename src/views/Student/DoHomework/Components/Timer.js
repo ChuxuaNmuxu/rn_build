@@ -9,7 +9,7 @@ class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentTime: props.startTime || 0,
+      currentTime: props.startTime,
     };
     this.timeSetInterval = null;
   }
@@ -27,21 +27,6 @@ class Timer extends React.Component {
     global.clearInterval(this.timeSetInterval);
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.startTime !== prevState.startTime) {
-      return {
-        currentTime: nextProps.startTime,
-      };
-    }
-    return null;
-  }
-
-
-  getTimer = () => { // 供父组件调用 返回当前计时
-    const { currentTime } = this.state;
-    return currentTime;
-  }
-
   render() {
     const { currentTime } = this.state;
     return (
@@ -56,11 +41,7 @@ class Timer extends React.Component {
 }
 
 Timer.propTypes = {
-  startTime: PropTypes.number,
-};
-
-Timer.defaultProps = {
-  startTime: 0,
+  startTime: PropTypes.number.isRequired,
 };
 
 export default Timer;

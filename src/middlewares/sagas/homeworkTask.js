@@ -17,17 +17,19 @@ function* fetchStudentTaskListSaga() {
   try {
     const res = yield Fetch.get('/app/api/student/homeworks/todo');
     const { code, data } = res;
+    console.log(20, res);
     if (code === 0) {
       const { planList } = yield select(state => state.homeworkTaskReducer);
       const { plan, todo } = data;
+      const newPlanList = R.clone(planList);
 
-      planList.forEach((v, i) => {
+      // todo 性能优化，判断是否有更改，若有则发送action没有则不发送
+      newPlanList.forEach((v, i) => {
         const periodData = plan.filter(value => value.scheduledNode === i);
-        if (!R.isEmpty(periodData)) {
-          v.data = periodData;
-        }
+        v.data = periodData;
       });
-      yield put(actions.ChangePlanTask(planList));
+
+      yield put(actions.ChangePlanTask(newPlanList));
       yield put(actions.ChangeTodoTask(todo));
       yield put(actions.FetchStudentTaskList(null, 'SUCCESS'));
     } else {
