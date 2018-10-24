@@ -14,12 +14,14 @@ import android.content.pm.ActivityInfo;
 import android.view.View;
 /** */
 
+import elinktek.common.*;
+
 public class MainActivity extends ReactActivity {
 
     /**联想TAB3定制机修改*/
     MiaMdmPolicyManager miaMdmPolicyManager;
     /** ELink 爱立顺定制机修改*/
-    //private elinktek.common.Utils alsUtils;
+    private elinktek.common.Utils alsUtils;
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -47,7 +49,7 @@ public class MainActivity extends ReactActivity {
     }
 
     // 友盟统计SDK
-    @Override
+    // @Override
     // public void onResume() {
     // super.onResume();
     // MobclickAgent.onResume(this);
@@ -64,8 +66,8 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         MobclickAgent.onResume(this);
+
         enableSystemBar(this,false);
         // 屏蔽电源键
         if (MainApplication.isLenovoTab3()) {
@@ -75,11 +77,11 @@ public class MainActivity extends ReactActivity {
             miaMdmPolicyManager.setControlPowerLong(false);
         }
         // ELink 爱立顺定制机修改
-        // if (MainApplication.isELinkH8()) {
-        //     // 使电源键无效
-        //     alsUtils.disableShortPressPower();
-        //     alsUtils.disableLongPressPower();
-        // }
+        if (MainApplication.isELinkH8()) {
+            // 使电源键无效
+            alsUtils.disableShortPressPower();
+            alsUtils.disableLongPressPower();
+        }
     }
 
 
@@ -108,19 +110,19 @@ public class MainActivity extends ReactActivity {
             miaMdmPolicyManager.setNavigaBar(!enable);
             miaMdmPolicyManager.setStatusBar(!enable);
         }
-        // // ELink 爱立顺定制机修改
-        // if (MainApplication.isELinkH8()) {
-        //     // ELink 爱立顺定制机修改
-        //     if (alsUtils == null) {
-        //         alsUtils = new elinktek.common.Utils(MainActivity.this);
-        //     }
-        //     if (enable) {
-        //         alsUtils.enableNavigation();
-        //     } else {
-        //         alsUtils.disableNavigation();
-        //     }
-        //     alsUtils.disableStatusbar();
-        // }
+        // ELink 爱立顺定制机修改
+        if (MainApplication.isELinkH8()) {
+            // ELink 爱立顺定制机修改
+            if (alsUtils == null) {
+                alsUtils = new elinktek.common.Utils(MainActivity.this);
+            }
+            if (enable) {
+                alsUtils.enableNavigation();
+            } else {
+                alsUtils.disableNavigation();
+            }
+            alsUtils.disableStatusbar();
+        }
     }
 
     @Override
@@ -134,11 +136,11 @@ public class MainActivity extends ReactActivity {
             miaMdmPolicyManager.setControlPowerLong(true);
         }
         // // ELink 爱立顺定制机修改
-        // if (MainApplication.isELinkH8()) {
-        //     alsUtils.enableShortPressPower();  //允许短按
-        //     alsUtils.enableLongPressPower(); //允许长按
+        if (MainApplication.isELinkH8()) {
+            alsUtils.enableShortPressPower();  //允许短按
+            alsUtils.enableLongPressPower(); //允许长按
 
-        // }
+        }
         enableSystemBar(this,true);
     }
 
