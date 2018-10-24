@@ -1,3 +1,13 @@
+@mixin border {
+  height: 360px;
+  width: 4px;
+}
+
+@mixin scaleLine {
+  flex: 1;
+  border-left-width: 1px;
+}
+
 .time_wrap {
   flex: 1;
   flex-shrink: 0;
@@ -21,9 +31,18 @@
 }
 
 .border {
-  height: 360px;
-  width: 4px;
+  @include border();
   background-color: #e8e8e8 ;
+}
+
+.border_hover {
+  @include border();
+  background-color: #54cc82 ;
+}
+
+.has_task_border {
+  @include border();
+  background-color:#a8e6bb;
 }
 
 .task_list {
@@ -38,16 +57,33 @@
   height: 24px;
 };
 
+.transparent_scale_line {
+  @include scaleLine();
+  border-left-color: transparent;
+}
+
 .scale_line {
-  flex: 1;
-  border-left-width: 1px;
+  @include scaleLine();
   border-left-color: #e8e8e8;
+}
+
+.has_tast_scale_line {
+  @include scaleLine();
+  border-left-color: #a8e6bb;
 }
 
 .scale {
   border-left-color: transparent;
 };
 
-.time_text {
+.time_view {
   align-items: center ;
 };
+
+.time_text {
+  color: #bfbfbf;
+}
+
+.has_task_time_text {
+  color:#54cc82;
+}

@@ -17,7 +17,7 @@ function* fetchStudentTaskListSaga() {
   try {
     const res = yield Fetch.get('/app/api/student/homeworks/todo');
     const { code, data } = res;
-    console.log(20, res);
+
     if (code === 0) {
       const { planList } = yield select(state => state.homeworkTaskReducer);
       const { plan, todo } = data;
@@ -34,7 +34,6 @@ function* fetchStudentTaskListSaga() {
       yield put(actions.FetchStudentTaskList(null, 'SUCCESS'));
     } else {
       yield put(actions.FetchStudentTaskList(null, 'ERROR'));
-      console.log(33);
     }
   } catch (err) {
     yield put(actions.FetchStudentTaskList(null, 'ERROR'));

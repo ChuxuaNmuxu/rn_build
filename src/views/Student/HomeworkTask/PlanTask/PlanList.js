@@ -138,7 +138,6 @@ class PlanList extends Component {
         lastHandlePeriodIndex: propsLastHandlePeriodIndex,
       };
     }
-    console.log(140, R.equals(statePlanList, propsPlanList), 'statePlanList:', statePlanList, 'propsPlanList:', propsPlanList);
 
     return null;
   }

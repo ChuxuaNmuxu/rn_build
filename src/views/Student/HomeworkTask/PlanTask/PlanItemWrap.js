@@ -44,6 +44,15 @@ class TodoItem extends Component {
     } = data;
     const checked = index === lastHandlePeriodIndex;
 
+    let checkBorderColor = styles.border;
+    if (checked || index + 1 === lastHandlePeriodIndex) {
+      checkBorderColor = styles.border_hover;
+    } else if (item.data.length) {
+      checkBorderColor = styles.has_task_border;
+    }
+    const timeText = item.data.length ? styles.has_task_time_text : styles.time_text;
+    const scaleLine = item.data.length ? styles.has_tast_scale_line : styles.scale_line;
+
     /*
      * breviaryTask 任务只显示简要
      * showIconOnlyTask 任务只显示图标
@@ -56,7 +65,6 @@ class TodoItem extends Component {
         >
 
           <View style={[styles.time_box, checked ? styles.time_box_checked : {}]}>
-            <View style={styles.border} />
             <View style={styles.task_list}>
               {/*
                 * 1.有任务状态
@@ -77,13 +85,14 @@ class TodoItem extends Component {
               <View style={styles.time_scale}>
                 {
                   Array(6).fill().map((v, i) => (
-                    <View key={i} style={[i === 1 ? {} : styles.scale_line]} />
+                    <View key={i} style={[i === 0 ? styles.transparent_scale_line : scaleLine]} />
                   ))
                 }
               </View>
             </View>
+            <View style={checkBorderColor} />
           </View>
-          <View style={styles.time_text}><Text>{item.period}</Text></View>
+          <View style={styles.time_view}><Text style={timeText}>{item.period}</Text></View>
         </View>
       </TouchableNativeFeedback>
     );
