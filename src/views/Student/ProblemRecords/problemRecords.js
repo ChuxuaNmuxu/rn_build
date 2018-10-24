@@ -129,8 +129,10 @@ class ProblemRecords extends Component {
     }));
 
     // 清空下拉刷新组件的状态，恢复默认
-    this.listVew.setheaderState(freshListViewSate.Idle);
-    this.listVew.setfooterState(freshListViewSate.Idle);
+    if (this.listVew) {
+      this.listVew.setheaderState(freshListViewSate.Idle);
+      this.listVew.setfooterState(freshListViewSate.Idle);
+    }
   }
 
     // 点击学科筛选
