@@ -1,20 +1,33 @@
 import { isEmpty } from 'ramda';
 import qs from 'qs';
 import { Toast } from 'antd-mobile-rn';
-import { DeviceEventEmitter } from 'react-native';
+import { DeviceEventEmitter, NetInfo } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import fetchApi from '../config/apiBase/fetchApi';
 import ApiBase from '../config/apiBase';
 import Account from './account';
+import * as listener from '../constants/listener';
 
 // origin表示 https://cjyun.ecaicn.com
 let origin = null;
+const apiBase = new ApiBase();
 // 监听修改环境操作
-DeviceEventEmitter.addListener('apiBase', (params) => {
+DeviceEventEmitter.addListener(listener.apiBase, (params) => {
   origin = fetchApi(undefined, params);
 });
-const apiBase = new ApiBase();
 
+
+let isConnected = true;
+// 获取初始网络
+NetInfo.isConnected.fetch().then((isConnect) => {
+  isConnected = isConnect;
+});
+// 监听网络状态
+DeviceEventEmitter.addListener(listener.netConnected, (param) => {
+  isConnected = param;
+});
+
+// 拼接url
 const connectUrl = async (url) => {
   if (!origin) {
     origin = await apiBase.getApiBase();
@@ -41,7 +54,7 @@ const errCode = (json) => {
       throw new Error(json.message);
     case -1:
       Toast.info(json.message);
-      return Promise.reject(new Error(`${json.code} ${json.message || json.data}`));
+      throw new Error(`${json.code} ${json.message || json.data}`);
     default:
       // console.log('json.code:', json.code);
   }
@@ -59,6 +72,9 @@ const Fetch = {
  * param {Object} headerParams 请求头设置
  */
   fetch(url, params = {}, method = 'get', type = '', mock = false, headerParams = {}) {
+    if (!isConnected) {
+      return Toast.info('当前设备处于离线状态，请检查网络');
+    }
     const headers = {};
     if (method === 'post') {
       headers.Accept = 'application/json';
@@ -88,7 +104,12 @@ const Fetch = {
       .then(res => res.text())
       .then(text => (text ? JSON.parse(text) : {}))
       .then(errCode)
-      .catch((err) => { throw new Error(err); });
+      .catch((err) => {
+        if (err.stack.indexOf('Network request failed') !== -1) {
+          Toast.fail('当前设备处于离线状态，请检查网络');
+        }
+        throw new Error(err);
+      });
   },
   async getUrl(url, ...args) {
     const _url = await connectUrl(url);

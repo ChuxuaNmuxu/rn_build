@@ -61,7 +61,14 @@ export const changeTodoTask = (state, action) => {
       delete action.payload.cancelTask;
     } else {
       // 取消排期
-      state.todoList.unshift(action.payload);
+      const findIndex = state.todoList.findIndex(v => v.taskType === action.payload.taskType);
+      if (findIndex) {
+        state.todoList.splice(findIndex, 1, action.payload);
+      } else if (findIndex === 0) {
+        state.todoList.unshift(action.payload);
+      } else {
+        state.todoList.push(action.payload);
+      }
     }
   }
 };

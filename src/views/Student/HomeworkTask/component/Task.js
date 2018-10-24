@@ -345,7 +345,7 @@ class TaskItem extends React.Component {
                     </View>
                   )}
                   {
-                    data.subjectName === 4
+                    data.taskType === 4
                       ? (
                         <View style={[styles.no_review_task, {
                           transform: [{
