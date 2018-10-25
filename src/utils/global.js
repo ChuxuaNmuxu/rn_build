@@ -7,8 +7,9 @@ import {
   PixelRatio,
   Platform,
 } from 'react-native';
-
 import { Actions } from 'react-native-router-flux';
+import store from '../store';
+
 // 项目中的图片可以通过Images.xxx 获取
 // import { Images } from '../Resources/index';
 // 本地存储
@@ -48,3 +49,6 @@ global.Actions = Actions;
 // global.Alert = Alert;
 // 存储
 global.storage = Storage;
+
+// store
+global.Store = store;

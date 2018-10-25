@@ -98,7 +98,10 @@ export const isGetDropListenerRange = (state, action) => {
   state.isRegetDropListenerRange = action.payload;
 };
 
+export const isFirstGetDropListenerRange = (state, action) => {
+  state.isFirstRegetDropListenerRange = action.payload;
+};
 
-// export const isFirstGetDropListenerRange = (state, action) => {
-//   state.isFirstRegetDropListenerRange = action.payload;
-// };
+export const isFirstOpenHomepage = (state, action) => {
+  state.isFirstOpenHomepage = action.payload;
+};

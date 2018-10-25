@@ -7,6 +7,7 @@ import fetchApi from '../config/apiBase/fetchApi';
 import ApiBase from '../config/apiBase';
 import Account from './account';
 import * as listener from '../constants/listener';
+import { SetUserInfo } from '../actions/account';
 
 // origin表示 https://cjyun.ecaicn.com
 let origin = null;
@@ -48,7 +49,15 @@ const connectUrl = async (url) => {
 const errCode = (json) => {
   switch (json.code) {
     case 703:
+      /**
+       * 登陆过期
+       * 1. 跳转至登陆页面
+       * 2. 清除store
+       * 3. 清除storage缓存
+       * 4. 提示登陆超时
+       */
       Actions.Login();
+      Store.dispatch(SetUserInfo());
       new Account().removeAccount();
       Toast.info(json.message);
       throw new Error(json.message);
@@ -73,7 +82,7 @@ const Fetch = {
  */
   fetch(url, params = {}, method = 'get', type = '', mock = false, headerParams = {}) {
     if (!isConnected) {
-      return Toast.info('当前设备处于离线状态，请检查网络');
+      return Toast.info('当前设备网络异常，请检查网络');
     }
     const headers = {};
     if (method === 'post') {
@@ -106,7 +115,7 @@ const Fetch = {
       .then(errCode)
       .catch((err) => {
         if (err.stack.indexOf('Network request failed') !== -1) {
-          Toast.fail('当前设备处于离线状态，请检查网络');
+          Toast.fail('当前设备网络异常，请检查网络');
         }
         throw new Error(err);
       });
