@@ -6,8 +6,6 @@ import org.devio.rn.splashscreen.SplashScreen;
 import com.rnimmersive.RNImmersiveModule;
 import com.umeng.analytics.MobclickAgent;
 
-public class MainActivity extends ReactActivity {
-
 import android.app.mia.MiaMdmPolicyManager;
 
 /** */
@@ -38,6 +36,7 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.show(this, true);
+        initSet();
         super.onCreate(savedInstanceState);
     }
 
@@ -60,8 +59,8 @@ public class MainActivity extends ReactActivity {
     // 友盟统计SDK
     @Override
     public void onPause() {
-    super.onPause();
-    MobclickAgent.onPause(this);
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
       
@@ -144,19 +143,5 @@ public class MainActivity extends ReactActivity {
 
         }
         enableSystemBar(this,true);
-    }
-
-    // 友盟统计SDK
-    @Override
-    public void onResume() {
-    super.onResume();
-    MobclickAgent.onResume(this);
-    }
-
-    // 友盟统计SDK
-    @Override
-    public void onPause() {
-    super.onPause();
-    MobclickAgent.onPause(this);
     }
 }
