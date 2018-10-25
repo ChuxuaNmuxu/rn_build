@@ -264,6 +264,8 @@ function transFromHomeworkDataList(data) {
       difficultyDegree: getdifficultyDegree(data.difficultyLevel),
       // 学生是否批改
       studentMarked: data.studentMarked,
+      // 学生是否反馈
+      hasMarkFeedback: data.hasMarkFeedback,
     },
     // 学生zhu观题答案
     studentAnserImage: data.answerFileUrl === null ? [] : [{ url: `${data.answerFileUrl}` }],

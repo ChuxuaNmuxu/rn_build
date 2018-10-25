@@ -390,7 +390,7 @@ class HomworkRecordDetail extends Component {
     const { studentAnser } = AnserSummarizationData;
     console.log(studentAnserImage, 'studentAnserImagestudentAnserImage');
     // 是否存在答案
-    const isQuestionSubmited = studentAnser === null || studentAnser === '' || studentAnserImage === [];
+    const isQuestionSubmited = studentAnser !== null || studentAnser !== '' || studentAnserImage !== [];
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
     return (
       <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
@@ -457,6 +457,12 @@ class HomworkRecordDetail extends Component {
                 isQuestionSubmited={isQuestionSubmited}
                 // 学生是否批改了
                 studentMarked={AnserSummarizationData.studentMarked}
+                // 学生是否反馈了
+                hasMarkFeedback={AnserSummarizationData.hasMarkFeedback}
+                // 作业ID
+                homeWorkId={this.id}
+                // 题目ID
+                qsId={headerList[selectTion].id}
               />
             }
             {
