@@ -13,7 +13,7 @@ export default function* mistakeListSaga() {
 
 const defaultParams = {
   page: 1,
-  pageSize: 10,
+  pageSize: 20,
 };
 
 // 更改最后一次操作的时间段saga

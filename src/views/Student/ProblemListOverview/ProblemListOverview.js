@@ -47,7 +47,7 @@ class ProblemListOverview extends Component {
 
   componentDidMount() {
     const { onGetMistakeList, subjectId, getGrades } = this.props;
-    console.log(53, 'componentDidMount', subjectId);
+    // console.log(53, 'componentDidMount', subjectId);
     onGetMistakeList({
       params: { subjectId },
     });

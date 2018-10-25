@@ -24,7 +24,7 @@ class ProblemCard extends PureComponent {
   }
 
   componentDidMount() {
-    console.log('调用 ProblemCard 组贱', this.props);
+    // console.log('调用 ProblemCard 组贱', this.props);
   }
 
   // 富文本数据展示框
