@@ -86,11 +86,13 @@ export const CHANGE_LAST_HANDLE_PERIOD_INDEX = 'CHANGE_LAST_HANDLE_PERIOD_INDEX'
 // 是否获取时间段的监听范围
 export const IS_GET_DROP_LISTENER_RANGE = 'IS_GET_DROP_LISTENER_RANGE';
 // 是否第一次获取时间段的监听范围
-// export const IS_FIRST_GET_DROP_LISTENER_RANGE = 'IS_FIRST_GET_DROP_LISTENER_RANGE';
+export const IS_FIRST_GET_DROP_LISTENER_RANGE = 'IS_FIRST_GET_DROP_LISTENER_RANGE';
 // 获取学生作业列表
 export const FETCH_STUDENT_TASK_LIST = 'FETCH_STUDENT_TASK_LIST';
 // 保存任务
 export const SAVE_TASK = 'SAVE_TASK';
+// 第一次进入首页
+export const IS_FIRST_OPEN_HOMEPAGE = 'IS_FIRST_OPEN_HOMEPAGE';
 
 /**
  *------------------------作业与考试详情页面-----------------------------------------

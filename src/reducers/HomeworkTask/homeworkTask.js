@@ -8,7 +8,8 @@ import {
   CHANGE_DRAGING_TASK_CORRESPOND_PERIOD,
   CHANGE_LAST_HANDLE_PERIOD_INDEX,
   IS_GET_DROP_LISTENER_RANGE,
-  // IS_FIRST_GET_DROP_LISTENER_RANGE,
+  IS_FIRST_GET_DROP_LISTENER_RANGE,
+  IS_FIRST_OPEN_HOMEPAGE,
 } from '../../constants/actionType';
 import { createHalfHourPeriod, currentTimeToPeriod } from '../../utils/common';
 import * as fn from './fn';
@@ -33,7 +34,8 @@ const initial = {
   dragingTaskCorrespondPeriodIndex: null, // 拖拽中的元素与时间对应的索引
   lastHandlePeriodIndex: null, // 最后操作时间段的索引
   isRegetDropListenerRange: false, // 是否重新获取时间段监听范围
-  // isFirstRegetDropListenerRange: false, // 是否重新获取时间段监听范围
+  isFirstRegetDropListenerRange: false, // 是否重新获取时间段监听范围
+  isFirstOpenHomepage: true, // 第一次进入首页
 };
 
 const handle = {
@@ -45,7 +47,8 @@ const handle = {
   [CHANGE_DRAGING_TASK_CORRESPOND_PERIOD]: fn.changeDragingTaskCorrespondPeriod,
   [CHANGE_LAST_HANDLE_PERIOD_INDEX]: fn.changeLastHandlePeriodIndex,
   [IS_GET_DROP_LISTENER_RANGE]: fn.isGetDropListenerRange,
-  // [IS_FIRST_GET_DROP_LISTENER_RANGE]: fn.isFirstGetDropListenerRange,
+  [IS_FIRST_GET_DROP_LISTENER_RANGE]: fn.isFirstGetDropListenerRange,
+  [IS_FIRST_OPEN_HOMEPAGE]: fn.isFirstOpenHomepage,
 };
 
 const homeworkTask = createReducer(initial, handle);

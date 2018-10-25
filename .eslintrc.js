@@ -16,6 +16,7 @@ module.exports = {
       "PX_WIDTH": true,
       "PX_HEIGHT": true,
       "Android": true,
+      "Store": true,
     },
     "parser": "babel-eslint",
     "rules": {
