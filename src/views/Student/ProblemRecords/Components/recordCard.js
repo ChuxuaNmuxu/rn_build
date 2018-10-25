@@ -101,7 +101,7 @@ class RecordCard extends PureComponent {
   // 点击卡片进入详情页
   gotoDetailFun = () => {
     const { gotoDetailFun, datas } = this.props;
-    gotoDetailFun(datas.id, datas.publishTime, datas.subjectName);
+    gotoDetailFun(datas.id, datas.publishTime, datas.subjectName, datas.resultRead);
   }
 
 
