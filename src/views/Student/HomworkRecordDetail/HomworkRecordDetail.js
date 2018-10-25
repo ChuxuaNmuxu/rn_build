@@ -15,6 +15,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'ramda';
 import draftToHtml from './lib/draftjs-to-html';
+
 import * as actions from '../../../actions/recordDetailActions';
 import * as commonActions from '../../../actions/commonActions';
 import { CustomButton } from '../../../components/Icon';
@@ -38,6 +39,7 @@ class HomworkRecordDetail extends Component {
     this.id = id;
     // 总类型为作业的还是考试的
     this.type = routeName === 'HomworkRecordDetail' ? 'H' : 'E';
+
     // 初始化请求数据
     this.init(this.type, id);
     // 学生答案图片的url
@@ -256,7 +258,7 @@ class HomworkRecordDetail extends Component {
                   <TouchableOpacity onPress={() => this.callImageModal(item.url, item.studentName && item.studentName)}>
                     <Image
                       style={[{ width: 146, height: 146 }]}
-                      source={{ uri: item.url }}
+                      source={{ uri: item.smallUrl }}
                     />
                   </TouchableOpacity>
                   <View style={styles.zoomImageIcon}>

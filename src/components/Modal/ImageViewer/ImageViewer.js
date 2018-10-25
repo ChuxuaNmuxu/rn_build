@@ -69,18 +69,26 @@ class ImageViewerModal extends Component {
 
   render() {
     const { url, type } = this.props;
-    const images = [{
-      // Simplest usage.
-      url,
-      // You can pass props to <Image />.
-      props: {
-        // headers: ...
-        // source: 'https://photo.tuchong.com/344025/f/375718249.jpg',
-        style: {
-          flex: 1,
-        },
-      },
-    }];
+    const images = [];
+    if (url instanceof Array) {
+      url.map((u) => {
+        images.push(
+          {
+            // Simplest usage.
+            url: u,
+            // You can pass props to <Image />.
+            props: {
+              // headers: ...
+              // source: 'https://photo.tuchong.com/344025/f/375718249.jpg',
+              style: {
+                flex: 1,
+              },
+            },
+          },
+        );
+      });
+    }
+
     return (
       <View
         style={{
@@ -133,13 +141,14 @@ class ImageViewerModal extends Component {
 ImageViewerModal.propTypes = {
   closeFn: PropTypes.func,
   name: PropTypes.string,
-  url: PropTypes.string,
+  url: PropTypes.any,
   type: PropTypes.string,
 };
 
 ImageViewerModal.defaultProps = {
   closeFn: () => null,
   name: '',
+  // URL可数组可字符串，产品的设计技巧真高超
   url: '',
   type: 'rotate', // ordinary
 };
