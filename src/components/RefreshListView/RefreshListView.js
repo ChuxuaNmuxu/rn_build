@@ -84,23 +84,23 @@ class RefreshListView extends Component {
       isHeaderRefreshing: true,
     }, () => {
       if (onHeaderRefresh) {
-        console.log('函数跑起来了吗', 'onHeaderRefresh');
+        // console.log('函数跑起来了吗', 'onHeaderRefresh');
         onHeaderRefresh();
       }
     });
-    console.log('startHeaderRefreshingstartHeaderRefreshing');
+    // console.log('startHeaderRefreshingstartHeaderRefreshing');
   }
 
   // 上拉加载更多，将底部刷新状态改为正在刷新，然后调用刷新方法，页面上可以显示出加载中的UI，注意这里setState写法
   startFooterRefreshing = () => {
-    console.log('startFooterRefreshing');
+    // console.log('startFooterRefreshing');
     const { onFooterRefresh } = this.props;
     this.setState({
       footerState: RefreshState.Refreshing,
       isFooterRefreshing: true,
     }, () => {
       if (onFooterRefresh) {
-        console.log('函数跑起来了吗', 'onFooterRefresh', onFooterRefresh);
+        // console.log('函数跑起来了吗', 'onFooterRefresh', onFooterRefresh);
         onFooterRefresh();
       }
     });

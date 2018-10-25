@@ -40,17 +40,15 @@ class ProblemListOverview extends Component {
     ];
     this.difficultyLevel = [
       { id: 1, text: '易' },
-      { id: 2, text: '适中' },
-      { id: 3, text: '难' },
+      { id: 5, text: '适中' },
+      { id: 9, text: '难' },
     ];
   }
 
   componentDidMount() {
-    const { onGetMistakeList, subjectId, getGrades } = this.props;
-    // console.log(53, 'componentDidMount', subjectId);
-    onGetMistakeList({
-      params: { subjectId },
-    });
+    console.log('调用 ProblemListOverview 组件', this.props);
+    const { getGrades } = this.props;
+    this.refreshList();
     getGrades({ currentRecordType: 0 }, 'REQUEST');
   }
 
@@ -64,7 +62,7 @@ class ProblemListOverview extends Component {
 
   getMoreParms = (Arr, objKey) => {
     this.moreParams[objKey] = Arr;
-    console.log(this.moreParams);
+    // console.log(67, this.moreParams);
     this.refreshList();
   }
 
@@ -83,15 +81,19 @@ class ProblemListOverview extends Component {
       subjectId: currentSubjectId,
       difficultyLevel,
       uniGradeId: uniGradeId[0],
+      page: 1,
+      pageSize: 20,
     };
     if (category.length === 1) {
       Object.assign(initParams, {
         category: category[0],
       });
     }
-
+    // 最终的请求参数
+    const fetchParams = Object.assign(initParams, params);
+    // console.log(94, fetchParams);
     onGetMistakeList({
-      params: Object.assign(initParams, params),
+      params: fetchParams,
       successFn,
       failureFn,
       action,

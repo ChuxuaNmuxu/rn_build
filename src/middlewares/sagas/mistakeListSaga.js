@@ -11,25 +11,19 @@ export default function* mistakeListSaga() {
   yield takeLatest(actionTypes.FETCH_MISTAKE_LIST, enhanceSaga(getDataSaga));
 }
 
-const defaultParams = {
-  page: 1,
-  pageSize: 20,
-};
-
 // 更改最后一次操作的时间段saga
 function* getDataSaga(action) {
-  // console.log(16, action);
   const {
     params, successFn = R.identity, failureFn = R.identity, action: costomAction = actions.getMistakeListAction,
   } = action.payload;
 
-  const fetchParam = qs.stringify(Object.assign(defaultParams, params));
-  console.log('fetchParam=', fetchParam);
+  const fetchParam = qs.stringify(params);
   const url = `/app/api/student/failed-questions/list?${fetchParam}`;
+  // console.log('url=', url);
   try {
     const res = yield Fetch.get(url);
     const { code, data, total } = res;
-    console.log('getDataSaga的res=', res);
+    // console.log('getDataSaga的res=', res);
     if (code !== 0) {
       failureFn(code);
       yield put(costomAction(code, 'ERROR'));
