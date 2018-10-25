@@ -71,14 +71,18 @@ $width: (48px * 48px) * 2;
 .no_review_task {
   align-items: center;
   position: absolute;
-  bottom: -35.355px;
-  right: -35.355px;
-  height: 70.71px;
-  width: 70.71px;
+  // bottom: -35.355px;
+  // right: -35.355px;
+  // height: 70.71px;
+  // width: 70.71px;
+  bottom: -33.94px;
+  right: -33.94px;
+  height: 67.88px;
+  width: 67.88px;
   background-color: red;
 }
 
 .no_review_task_text {
-  font-size: 14px;
+  font-size: 18px;
   color: #ffffff;
 }

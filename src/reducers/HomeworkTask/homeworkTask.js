@@ -8,7 +8,7 @@ import {
   CHANGE_DRAGING_TASK_CORRESPOND_PERIOD,
   CHANGE_LAST_HANDLE_PERIOD_INDEX,
   IS_GET_DROP_LISTENER_RANGE,
-  IS_FIRST_GET_DROP_LISTENER_RANGE,
+  // IS_FIRST_GET_DROP_LISTENER_RANGE,
 } from '../../constants/actionType';
 import { createHalfHourPeriod, currentTimeToPeriod } from '../../utils/common';
 import * as fn from './fn';

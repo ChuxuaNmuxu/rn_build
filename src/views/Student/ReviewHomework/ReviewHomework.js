@@ -38,6 +38,7 @@ class ReviewHomework extends Component {
       commitHomeworkModalStatus: false, // 二次确认模态框的显隐
       tipStatus: false, // 提交作业成功且无互批任务的模态框显隐
       hasRemarkStatus: false, // 提交作业成功且有互批任务的模态框显隐
+      imgLoading: false, // 图片上传loading状态
     };
     this.tryToUploadImg = false; // 是否上传了图片--防止componentDidUpdate一直执行出现死循环
     this.commitHomework = false; // 是否点击了二次确认的提交作业按钮
@@ -241,10 +242,12 @@ class ReviewHomework extends Component {
   // 主观题上传答案或者客观题上传解答过程答案的函数
   handlePreviewImage = (questionId, e, imgName) => {
     this.tryToUploadImg = true;
-    const { actions: { uploadImageToOssAction } } = this.props;
-    uploadImageToOssAction({ questionId, file: e, imgName });
     this.setState({
       uploadImgQid: questionId,
+      imgLoading: true,
+    }, () => {
+      const { actions: { uploadImageToOssAction } } = this.props;
+      uploadImageToOssAction({ questionId, file: e, imgName });
     });
   }
 
@@ -304,6 +307,9 @@ class ReviewHomework extends Component {
     // answerParam.answerFileUrl = (answerFileUrl && answerFileUrl.length) ? answerFileUrl : null;
     const { actions: { submitDoHomeworkAnswerAction } } = this.props;
     submitDoHomeworkAnswerAction({ homeworkId, id, answerParam }, 'REQUEST');
+    this.setState({
+      imgLoading: false,
+    });
   }
 
   // 已作答题目数为0时展示
@@ -326,6 +332,7 @@ class ReviewHomework extends Component {
       commitHomeworkModalStatus,
       tipStatus,
       hasRemarkStatus,
+      imgLoading,
     } = this.state;
     return (
       <View style={styles.reviewHomework_container}>
@@ -360,6 +367,7 @@ class ReviewHomework extends Component {
                     handlePreviewImage={this.handlePreviewImage}
                     handleCheckboxChange={this.handleCheckboxChange}
                     deleteImg={this.deleteImg}
+                    imgLoading={imgLoading}
                   />
                 </View>))
               : this.renderEmptyView()
