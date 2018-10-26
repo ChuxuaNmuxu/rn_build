@@ -217,6 +217,7 @@ class ProblemRecords extends Component {
     console.log(total, recordData.length);
     console.log(recordData);
     if (recordData.length === total) {
+      console.log('wopaoqilailemamama', this.listVew);
       this.listVew.setfooterState(freshListViewSate.NoMoreData);
       return;
     }

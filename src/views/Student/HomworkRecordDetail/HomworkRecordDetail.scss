@@ -102,6 +102,12 @@
   position: absolute;
   bottom: 2;
   right: 2;
+  background-color: rgba($color: #202c37, $alpha: 0.3);
+  width:36px;
+  height:36px;
+  border-radius:36px;
+  justify-content: center;
+  align-items: center;
 }
 
 .CauseOfError {

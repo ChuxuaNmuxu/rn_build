@@ -78,6 +78,7 @@ const RouteMap = props => (
           icon={TabBarIcon}
         >
           <Stack
+            initial
             title="homeworkTask"
             key="HomeworkTaskStack"
             image="zuoye2"
@@ -103,7 +104,6 @@ const RouteMap = props => (
           </Stack>
           {/* 错题本 */}
           <Stack
-            // initial
             title="wrongNotes" // 配好在zh.js、en.js那边了
             key="ProblemOverviewStack"
             image="cuotiben1"
