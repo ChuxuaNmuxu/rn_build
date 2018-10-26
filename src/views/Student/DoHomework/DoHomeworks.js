@@ -218,10 +218,23 @@ class DoHomeworks extends Component {
     this.setCommitModalVisbleFun(false);
   }
 
-  // 点击查看已答题目/检查---进入作业检查页面
-  viewAnsweredQuesFun = () => {
-    Actions.ReviewHomework();
-    this.setCommitModalVisbleFun(false);
+  // 点击查看已答题目/检查---进入作业检查页面,如果是点击 查看已答题目 按钮则先要判断当前题目是否有选难易程度，没有则弹窗让其选择难易程度
+  viewAnsweredQuesFun = (bool) => {
+    const { currentIndex, homeworkData: { finalQuestionList } } = this.state;
+    if (bool) {
+      this.setVisibleFun(false);
+      if (!finalQuestionList[currentIndex].difficultyLevel) {
+        this.setState({
+          difficultModalStatus: true,
+          showDifficultModalOpt: 'commitBtnClick',
+        });
+      } else {
+        Actions.ReviewHomework();
+      }
+    } else {
+      Actions.ReviewHomework();
+      this.setCommitModalVisbleFun(false);
+    }
   }
 
   // 稍后再批
@@ -275,7 +288,7 @@ class DoHomeworks extends Component {
       homeworkData: { finalQuestionList },
     } = this.state;
     changeDifficuiltLevelAction({ currentId, level });
-    // 正常情况下选择难易程度或者点击提交时弹出的当前题目的难易程度选择标签
+    // 正常情况下选择难易程度或者点击 提交/查看已答题目 时弹出的当前题目的难易程度选择标签
     if (!difficultModalStatus || showDifficultModalOpt === 'commitBtnClick') {
       setTimeout(() => {
         this.fetchSaveQuestion(currentId);
@@ -528,7 +541,7 @@ class DoHomeworks extends Component {
                 <CustomButton
                   warpStyle={styles.submitBtn}
                   style={styles.btnText}
-                  onPress={() => this.viewAnsweredQuesFun()}
+                  onPress={() => this.viewAnsweredQuesFun(true)}
                 >
                   <I18nText>
                     DoHomeworks.header.viewAnsweredQues
