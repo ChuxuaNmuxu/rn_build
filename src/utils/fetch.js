@@ -40,10 +40,10 @@ const connectUrl = async (url) => {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
   } else if (url.charAt(0) === '/') {
-    console.warn(`${origin}/${url}`, '完成的URL');
+    console.log(`${origin}/${url}`, '完成的URL');
     return origin + url;
   }
-  console.warn(`${origin}/${url}`, '完成的URL');
+  console.log(`${origin}/${url}`, '完成的URL');
   return `${origin}/${url}`;
 };
 
@@ -120,7 +120,7 @@ const Fetch = {
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;
     if (!isEmpty(params)) {
-      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
+      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params,{ indices: false });
     }
     return this.getUrl(_url, {}, 'get', '', mock, headerParams);
   },
@@ -129,7 +129,7 @@ const Fetch = {
   delete(url, params) {
     let _url = url;
     if (!isEmpty(params)) {
-      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
+      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params,{ indices: false });
     }
     return this.getUrl(_url, params, 'delete');
   },

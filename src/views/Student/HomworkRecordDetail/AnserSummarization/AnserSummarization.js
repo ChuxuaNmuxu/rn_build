@@ -61,13 +61,14 @@ class AnserSummarization extends Component {
       partialCorrect,
       unCorrect,
     ] = [
-      questionType === 'obj' ? `回答错误，答案是${this.getJudgeMentText(correctAnser)}，你的答案是${studentAnser}${isH ? '' : `，得分：${score}分`}` : `回答错误${isH ? '' : `，得分：${score}分`}`,
+      questionType === 'obj' ? `回答错误，答案是${this.getJudgeMentText(correctAnser)}，你的答案是${this.getJudgeMentText(studentAnser)}${isH ? '' : `，得分：${score}分`}` : `回答错误${isH ? '' : `，得分：${score}分`}`,
       questionType === 'obj' ? `回答正确，答案是${this.getJudgeMentText(correctAnser)}${isH ? '' : `，得分：${score}分`}` : `回答正确${isH ? '' : `，得分：${score}分`}`,
-      questionType === 'obj' ? `未作答，答案是${correctAnser}` : '未作答',
-      `部分正确，答案是${correctAnser}，你的答案是${studentAnser}，得分：${score}分`,
-      questionType === 'obj' ? `答案是${correctAnser}，你的答案是${studentAnser}` : '解答过程',
+      questionType === 'obj' ? `未作答，答案是${this.getJudgeMentText(correctAnser)}` : '未作答',
+      `部分正确，答案是${correctAnser}，你的答案是${this.getJudgeMentText(studentAnser)}，得分：${score}分`,
+      questionType === 'obj' ? `答案是${this.getJudgeMentText(correctAnser)}，你的答案是${this.getJudgeMentText(studentAnser)}` : '解答过程',
     ];
-    if (!isQuestionSubmited) {
+    console.log(!isQuestionSubmited,'!isQuestionSubmited!isQuestionSubmited!isQuestionSubmited')
+    if (isQuestionSubmited) {
       text = unanser;
       return text;
     }
@@ -159,9 +160,11 @@ class AnserSummarization extends Component {
 
           <View style={styles.difficultyView}>
             {/* <Text style={styles.difficultyDegree}>难易程度：</Text> */}
-            <Text style={[styles.difficultyDegree, { backgroundColor: colorArr[difficultyDegree], color: '#ffffff' }]}>
-              {['难', '易', '适中', '未标记'][difficultyDegree]}
-            </Text>
+            {difficultyDegree === 3 ? null : (
+              <Text style={[styles.difficultyDegree, { backgroundColor: colorArr[difficultyDegree], color: '#ffffff' }]}>
+                {['难', '易', '适中'][difficultyDegree]}
+              </Text>
+            )}
           </View>
         </View>
         {

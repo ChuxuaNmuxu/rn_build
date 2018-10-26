@@ -117,7 +117,7 @@ class HomworkRecordDetail extends Component {
             width,
             height,
             isgetImageSize: true,
-          },
+          }
         );
       },
       () => {
@@ -183,6 +183,18 @@ class HomworkRecordDetail extends Component {
     // console.log('我是layout');
   }
 
+  // _renderNode=(node, index, siblings, parent, defaultRenderer)=> {
+  //   const {screenWidth} = this.state
+  //   if (node.name === 'img') {
+  //     const attr = node.attribs;
+  //     const ratio = 513 / 49;
+  //     attr.width = screenWidth - 36;
+  //     attr.height =attr.width/ratio;
+  //     console.log(attr,'aaaaaa193')
+  //     return undefined;
+  //   }
+  // }
+
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
     console.log(draftToHtml(JSON.parse(htmlContent)), 'htmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponent');
@@ -190,7 +202,7 @@ class HomworkRecordDetail extends Component {
       p: {
         fontSize: 24,
         color: '#999999',
-      },
+      }
     });
     // const htmlContent = '<p>zhazhazha</p>'
     // + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
@@ -201,6 +213,7 @@ class HomworkRecordDetail extends Component {
         <HTMLView
           value={draftToHtml(JSON.parse(htmlContent))}
           stylesheet={htmlViewStyles}
+          // renderNode={this._renderNode}
         />
       </View>
     );
@@ -262,7 +275,7 @@ class HomworkRecordDetail extends Component {
                     />
                   </TouchableOpacity>
                   <View style={styles.zoomImageIcon}>
-                    <Svg height="40" width="40" source="wrongIcon" fill="#fff" />
+                    <Svg height="30" width="30" source="zoom" fill="#fff" />
                   </View>
                 </View>
               )
@@ -341,6 +354,19 @@ class HomworkRecordDetail extends Component {
     );
   }
 
+  isQuestionSubmited=(objAnser,subAnser)=>{
+    if(objAnser===null){
+      return true
+    }
+    if(objAnser===''){
+      return true
+    }
+    if(subAnser===[]){
+      return true
+    }
+    return false
+  }
+
 
   render() {
     const {
@@ -389,8 +415,8 @@ class HomworkRecordDetail extends Component {
     } = detailsDataList[selectTion];
     const { studentAnser } = AnserSummarizationData;
     console.log(studentAnserImage, 'studentAnserImagestudentAnserImage');
-    // 是否存在答案
-    const isQuestionSubmited = studentAnser !== null || studentAnser !== '' || studentAnserImage !== [];
+    // 是否存在答案studentAnser !== null || studentAnser !== '' || studentAnserImage !== [];
+    const isQuestionSubmited = this.isQuestionSubmited(studentAnser,studentAnserImage) 
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
     return (
       <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
