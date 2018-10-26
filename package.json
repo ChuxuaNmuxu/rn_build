@@ -18,7 +18,7 @@
     "build-js": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
     "build": "npm run build-js && cd android && gradlew.bat assembleRelease --console plain",
     "build-1": "cd android && gradlew assembleRelease",
-    "build&&install": "cd android && gradlew installRelease",
+    "test-build&&install": "cd android && gradlew installRelease",
     "install-dev": "adb install ./android/app/build/outputs/apk/app-debug.apk",
     "install-build": "adb install ./android/app/build/outputs/apk/app-release.apk",
     "clear-build-cache": "cd android && gradlew clean",
@@ -27,7 +27,10 @@
     "clear-all": "yarn cache clean -f && npm cache clean -f && cnpm cache clean -f && npm run clear",
     "gradle-debug": "cd android && gradlew compiledebug --debug",
     "gradle-info": "cd android && gradlew compiledebug --info",
-    "gradle-stacktrace": "cd android && gradlew compiledebug --stacktrace"
+    "gradle-stacktrace": "cd android && gradlew compiledebug --stacktrace",
+    "stop-app": "adb shell am force-stop com.cjhms_rn",
+    "start-app": "adb shell am start -n com.cjhms_rn/.MainActivity",
+    "delete-app": "adb uninstall com.cjhms_rn"
   },
   "dependencies": {
     "@cjfed/draftjs-to-html": "^0.7.7",

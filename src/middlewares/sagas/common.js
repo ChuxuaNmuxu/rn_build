@@ -1,9 +1,7 @@
 import {
   takeLatest, call,
 } from 'redux-saga/effects';
-// import api from '../../utils/fetch';
 // import _ from 'ramda';
-import api from '../../utils/fetch';
 // import * as actions from '../../actions/commonActions';
 import enhanceSaga from './enhanceSaga';
 

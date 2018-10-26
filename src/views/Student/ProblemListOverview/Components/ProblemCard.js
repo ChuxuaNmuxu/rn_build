@@ -24,12 +24,12 @@ class ProblemCard extends PureComponent {
   }
 
   componentDidMount() {
-    console.log('调用 ProblemCard 组贱', this.props);
+    // console.log('调用 ProblemCard 组贱', this.props);
   }
 
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
-    console.log(draftToHtml(JSON.parse(htmlContent)));
+    // console.log(draftToHtml(JSON.parse(htmlContent)));
     const htmlViewStyles = StyleSheet.create({
       p: {
         fontSize: 24,

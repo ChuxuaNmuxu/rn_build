@@ -7,17 +7,19 @@ import {
   Text,
   StyleSheet,
   ImageEditor,
-  Dimensions,
+  // Dimensions,
   Modal,
 } from 'react-native';
+import { Slider } from 'antd-mobile-rn';
+import IconSet from '../Icon';
 import ImageCropper from './imageCropper';
-// import Resolution from '../Resolution';
-// import { adaptiveRotation } from '../../../utils/resolution';
 
 export default class ImageCrop extends React.Component {
   constructor(props) {
     super(props);
+    this.oldValue = 0;
     this.state = {
+      value: 0,
       source: null,
       imageWidth: null,
       imageHeight: null,
@@ -33,12 +35,12 @@ export default class ImageCrop extends React.Component {
     let imageWidth = source.width;
     let imageHeight = source.height;
     // 处理判断下当前图片裁切灰色区的高度和宽度，进而控制判断图片展示的大小，以免图片超出裁切区时点击确定会报错
-    if (layout.width > layout.height - 144) {
-      if (source.height > layout.height - 144) {
-        imageHeight = layout.height - 144;
+    if (layout.width > layout.height - 100) {
+      if (source.height > layout.height - 100) {
+        imageHeight = layout.height - 100;
         imageWidth = (imageHeight / source.height) * source.width;
       }
-    } else if (layout.width < layout.height - 144) {
+    } else if (layout.width < layout.height - 100) {
       if (source.width > layout.width) {
         imageWidth = layout.width;
         imageHeight = (imageWidth / source.width) * source.height;
@@ -49,13 +51,12 @@ export default class ImageCrop extends React.Component {
       imageWidth,
       imageHeight,
       containerWidth: layout.width,
-      containerHeight: layout.height - 144,
+      containerHeight: layout.height - 100,
     });
   }
 
   // 确定裁剪
   pressConfirm = () => {
-    console.log('evt22', Dimensions.get('window'));
     const {
       width, height, left, top,
     } = this.imgCrop.getCropData();
@@ -90,6 +91,19 @@ export default class ImageCrop extends React.Component {
     this.imgCrop.rotate(digit);
   }
 
+  resetRotate = (digit) => {
+    this.setState({ value: 0 }, () => this.imgCrop.rotate(digit));
+  }
+
+  // 微调旋转
+  handleChange = (value) => {
+    if (value === this.oldValue) return;
+    const val = value - this.oldValue;
+    this.oldValue = value;
+
+    this.setState({ value }, () => this.imgCrop.rotate(val));
+  }
+
   pressCancel = () => {
     const { cancelCrop } = this.props;
     cancelCrop();
@@ -97,13 +111,13 @@ export default class ImageCrop extends React.Component {
 
   render() {
     const {
+      value,
       source,
       imageWidth,
       imageHeight,
       containerWidth,
       containerHeight,
     } = this.state;
-    // console.log('144', source, imageWidth, imageHeight);
     // const { source } = this.props;
     return (
       <Modal
@@ -115,7 +129,7 @@ export default class ImageCrop extends React.Component {
         }}
       >
         <View style={styles.container} onLayout={this.onLayout}>
-          <View style={[styles.toolBar]}>
+          <View style={[styles.toolBar, { backgroundColor: '#30bf6c' }]}>
             <TouchableOpacity style={styles.btn} onPress={this.pressCancel}>
               <Text style={styles.text}>X</Text>
             </TouchableOpacity>
@@ -136,12 +150,25 @@ export default class ImageCrop extends React.Component {
               ref={(crop) => { this.imgCrop = crop; }}
             />
           )}
-          <View style={[styles.toolBar]}>
-            <TouchableOpacity style={styles.btn} onPress={() => this.rotateImg(-90)}>
-              <Text style={styles.text}>左旋</Text>
-            </TouchableOpacity>
+          <View style={[styles.toolBar, { backgroundColor: '#fff' }]}>
             <TouchableOpacity style={styles.btn} onPress={() => this.rotateImg(90)}>
-              <Text style={styles.text}>右旋</Text>
+              <View><IconSet style={{ color: '#30bf6c', fontSize: 20 }} name="xuanzhuan" /></View>
+            </TouchableOpacity>
+            <View style={styles.slider}>
+              <Slider
+                step={4.5}
+                defaultValue={0}
+                value={value}
+                min={-45}
+                max={45}
+                maximumTrackTintColor="#30bf6c"
+                minimumTrackTintColor="#ffc14d"
+                onChange={val => this.handleChange(val)}
+              />
+              <Text style={styles.slideText}>{value}</Text>
+            </View>
+            <TouchableOpacity style={styles.btn} onPress={() => this.resetRotate(0)}>
+              <Text style={[styles.text, { color: '#30bf6c' }]}>还原</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -167,15 +194,25 @@ const styles = StyleSheet.create({
   },
   toolBar: {
     flexDirection: 'row',
-    height: 72,
-    justifyContent: 'space-evenly',
-    backgroundColor: '#30bf6c',
+    height: 50,
+    justifyContent: 'space-between',
   },
   btn: {
     width: 100,
-    height: 72,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  slider: {
+    flex: 1,
+    height: 50,
+    justifyContent: 'center',
+  },
+  slideText: {
+    flex: 1,
+    height: 25,
+    textAlign: 'center',
+    fontSize: 10,
   },
   text: {
     textAlign: 'center',

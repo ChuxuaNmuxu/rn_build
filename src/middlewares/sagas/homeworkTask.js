@@ -32,6 +32,7 @@ function* fetchStudentTaskListSaga() {
       yield put(actions.ChangePlanTask(newPlanList));
       yield put(actions.ChangeTodoTask(todo));
       yield put(actions.FetchStudentTaskList(null, 'SUCCESS'));
+      yield put(actions.IsFirstGetDropListenerRange(true));
     } else {
       yield put(actions.FetchStudentTaskList(null, 'ERROR'));
     }
