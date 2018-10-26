@@ -87,13 +87,12 @@ class DoHomeworks extends Component {
     const { uploadImgSuccess, needMark } = this.props;
     const { uploadImgQuesId, homeworkData } = this.state;
     // 上传图片成功后提交答案
-    console.log('didUpdate111111');
     if (uploadImgSuccess && uploadImgQuesId && this.tryToUploadImg) {
       this.fetchSaveQuestion(uploadImgQuesId);
       this.tryToUploadImg = false;
     }
-    // 提交作业成功后是否有互批作业
-    if (this.commitHomework) {
+    // 提交作业成功后是否有互批作业needMark为---0:没有互批作业, 1:有互批作业，其初始值为-1，表示还未接收到接口数据
+    if (this.commitHomework && needMark >= 0) {
       if (needMark) {
         this.setRemarkModalVisibleFun(true);
       } else {
@@ -573,8 +572,6 @@ class DoHomeworks extends Component {
     }
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
-    console.log(1111, '获取到的作业题目数据', showQuesArray);
-    console.log(222, '接口数据', homeworkData);
     return (
       <View style={styles.containers}>
         {!R.isEmpty(homeworkData) && this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
