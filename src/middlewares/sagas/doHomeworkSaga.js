@@ -142,6 +142,7 @@ function* submitHomeworkSaga(action) {
     if (code === 0) {
       // 提交作业成功后判断是否有互批作业
       const { needMark } = data;
+      // console.log(789, '提交作业成功', needMark);
       yield put(actions.submitHomeworkAction(needMark, 'SUCCESS'));
     } else {
       yield put(actions.submitHomeworkAction(code, 'ERROR'));
