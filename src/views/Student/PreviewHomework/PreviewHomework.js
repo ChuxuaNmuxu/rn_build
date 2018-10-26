@@ -15,18 +15,20 @@ import * as actions from '../../../actions/previewHomeworkAction';
 import draftToHtml from '../HomworkRecordDetail/lib/draftjs-to-html';
 
 class PreviewHomework extends Component {
+  timeSetInterval = null
+
   constructor(props) {
     super(props);
     this.state = {
       previewTime: 119, // 预览作业的时间
     };
-    this.timeSetInterval = null;
   }
+
 
   componentDidMount() {
     // 请求页面数据
     const { actions: { fetchPreviewHomeworkAction }, homeworkId } = this.props;
-    console.log('当前预览作业id', homeworkId);
+    // console.log('当前预览作业id', homeworkId);
     if (homeworkId) {
       fetchPreviewHomeworkAction({ homeworkId }, 'REQUEST');
     }
@@ -37,7 +39,7 @@ class PreviewHomework extends Component {
         previewTime: previewTime - 1,
       }, () => {
         if (this.state.previewTime <= 0) {
-          global.clearInterval(this.timeSetInterval);
+          clearInterval(this.timeSetInterval);
           this.doHomeWork();
         }
       });
@@ -46,7 +48,13 @@ class PreviewHomework extends Component {
 
   // 离开页面时清除计时器
   componentWillUnmount() {
-    global.clearInterval(this.timeSetInterval);
+    clearInterval(this.timeSetInterval);
+  }
+
+  // 点击左上角箭头回到首页
+  goIndex = () => {
+    clearInterval(this.timeSetInterval);
+    Actions.HomeworkTask();
   }
 
   // 完成预览，开始作业
@@ -66,10 +74,11 @@ class PreviewHomework extends Component {
     const { previewTime } = this.state;
     const { data } = this.props;
     const { questionList } = data;
+    // console.log(9960123, '预览作业数据', data);
     return (
       <View style={styles.previewHomework_container}>
         <View style={styles.previewHomework_header}>
-          <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.HomeworkTask} />
+          <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.goIndex} />
           <Text style={styles.previewHomework_title}>{data && data.title}</Text>
           <Text style={styles.previewHomework_time}>
             <I18nText>

@@ -43,6 +43,8 @@ export const updateImage = (state, action) => {
   const { index, urlSource } = action.payload;
   // 把那个可点击的隐藏掉
   state.questions[index].controlComponent.showSubjectiveInfo.urlSource = urlSource;
+  // 将图片地址直接放在questions下面的answerFileUrl字段下方便AnswerCard答案组件展示图片
+  state.questions[index].answerFileUrl = urlSource.file;
 };
 
 export const changeSubjectiveShowall = (state, action) => {

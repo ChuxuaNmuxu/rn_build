@@ -156,38 +156,47 @@ function transFromExamHeaderList(data) {
 }
 
 function transFromExamdetailsDataList(data) {
-  const { studentExamQuestionDetailDtos } = data;
-  console.log(studentExamQuestionDetailDtos);
+  const { studentExamQuestionDetailDtos, questionNums } = data;
+  console.log(studentExamQuestionDetailDtos, questionNums);
   if (_.isEmpty(studentExamQuestionDetailDtos)) {
     return [];
   }
-  const cusdata = studentExamQuestionDetailDtos.map(
-    item => ({
-      htmlContent: item.questionContent,
-      AnserSummarizationData: {
-        // 正确答案
-        correctAnser: item.answer,
-        // 学生答案（客观题专用）
-        studentAnser: item.studentAnswer,
-        // 得分
-        score: item.studentScore,
-        // 题目类型 题目类型(0:综合题 1:单选题 2:多选题 3:判断题 4:对应题, 10:填空题 11:主观题) ,
-        questionType: (item.questionType === 10 || item.questionType === 11) ? 'sub' : 'obj',
-        // 难易度(考试不展示难易度，写着先而已)
-        difficultyDegree: 0,
-      },
-      // 主观题专用（学生答案）
-      studentAnserImage: item.answerImageUrls === null ? [] : item.answerImageUrls.map(i => ({ url: `${i}` })),
-      // 主观题专用（正确）
-      rightAnser: item.answerExplain !== null ? [{ url: item.answerExplain }] : [],
-      // 其他同学的答案
-      othersAnser: item.excellentAnswers instanceof Array ? item.excellentAnswers.map(o => ({
-        url: o.answerFiles,
-        studentName: o.studentName,
-      })) : [],
-      causeOfErrorNum: item.faultReason,
-    }),
-  );
+  const cusdata = [];
+  questionNums.map((qitem) => {
+    studentExamQuestionDetailDtos.map((item) => {
+      if (qitem.questionNum === item.questionNum) {
+        cusdata.push({
+          htmlContent: item.questionContent,
+          AnserSummarizationData: {
+            // 正确答案
+            correctAnser: item.answer,
+            // 学生答案（客观题专用）
+            studentAnser: item.studentAnswer,
+            // 得分
+            score: item.studentScore,
+            // 题目类型 题目类型(0:综合题 1:单选题 2:多选题 3:判断题 4:对应题, 10:填空题 11:主观题) ,
+            questionType: (item.questionType === 10 || item.questionType === 11) ? 'sub' : 'obj',
+            // 难易度(考试不展示难易度，写着先而已)
+            difficultyDegree: 0,
+          },
+          // 主观题专用（学生答案）
+          studentAnserImage: item.answerImageUrls === null ? [] : item.answerImageUrls.map(i => ({ url: `${i}` })),
+          // 主观题专用（正确）
+          rightAnser: item.answerExplain !== null ? item.answerExplain : '',
+          // 其他同学的答案
+          othersAnser: item.excellentAnswers instanceof Array ? item.excellentAnswers.map(o => ({
+            url: o.answerFiles,
+            studentName: o.studentName,
+            smallUrl: o.answerFiles[0],
+          })) : [],
+          causeOfErrorNum: item.faultReason,
+          // 没什么用，给测试看的题号
+          questionNum: item.questionNum,
+        });
+      }
+    });
+  });
+
   return cusdata;
 }
 
@@ -255,15 +264,18 @@ function transFromHomeworkDataList(data) {
       difficultyDegree: getdifficultyDegree(data.difficultyLevel),
       // 学生是否批改
       studentMarked: data.studentMarked,
+      // 学生是否反馈
+      hasMarkFeedback: data.hasMarkFeedback,
     },
     // 学生zhu观题答案
     studentAnserImage: data.answerFileUrl === null ? [] : [{ url: `${data.answerFileUrl}` }],
     // 主观题专用正确答案
-    rightAnser: data.answerContent !== null ? [{ url: data.answerContent }] : [],
+    rightAnser: data.answerContent !== null ? data.answerContent : '',
     // 其他同学的答案
     othersAnser: data.otherStudentAnswer instanceof Array ? data.otherStudentAnswer.map(o => ({
-      url: o.explainImageUrl,
+      url: [o.explainImageUrl],
       studentName: o.studentName,
+      smallUrl: o.explainImageSmallUrl,
     })) : [],
     causeOfErrorNum: data.failReason,
   };

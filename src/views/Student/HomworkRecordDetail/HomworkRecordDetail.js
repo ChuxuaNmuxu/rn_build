@@ -15,6 +15,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'ramda';
 import draftToHtml from './lib/draftjs-to-html';
+
 import * as actions from '../../../actions/recordDetailActions';
 import * as commonActions from '../../../actions/commonActions';
 import { CustomButton } from '../../../components/Icon';
@@ -24,6 +25,7 @@ import AnserSummarization from './AnserSummarization';
 import Svg from '../../../components/Svg';
 import CauseOfError from '../../../components/WrongReason';
 import Modal, { ModalApi } from '../../../components/Modal';
+import NoResult from '../../../components/NotResult';
 
 class HomworkRecordDetail extends Component {
   constructor(props) {
@@ -37,6 +39,7 @@ class HomworkRecordDetail extends Component {
     this.id = id;
     // 总类型为作业的还是考试的
     this.type = routeName === 'HomworkRecordDetail' ? 'H' : 'E';
+
     // 初始化请求数据
     this.init(this.type, id);
     // 学生答案图片的url
@@ -78,13 +81,21 @@ class HomworkRecordDetail extends Component {
       commonActions: {
         returnFailReason,
       },
+      actions: {
+        fetchHomeworkData,
+      },
     } = this.props;
     const { selectTion } = this.state;
     const {
       id,
     } = headerList[selectTion];
     const type = this.type === 'H' ? 1 : 2;
-    returnFailReason({ type, id, reason: a });
+    returnFailReason({
+      type,
+      id,
+      reason: a,
+      callback: () => fetchHomeworkData({ homeworkId: this.id, questionId: id, index: selectTion }, 'REQUEST'),
+    });
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -247,7 +258,7 @@ class HomworkRecordDetail extends Component {
                   <TouchableOpacity onPress={() => this.callImageModal(item.url, item.studentName && item.studentName)}>
                     <Image
                       style={[{ width: 146, height: 146 }]}
-                      source={{ uri: item.url }}
+                      source={{ uri: item.smallUrl }}
                     />
                   </TouchableOpacity>
                   <View style={styles.zoomImageIcon}>
@@ -336,6 +347,19 @@ class HomworkRecordDetail extends Component {
       headerList, detailsDataList, status, title,
     } = this.props;
     const { selectTion } = this.state;
+    if (_.isEmpty(headerList)) {
+      return (
+        <React.Fragment>
+          <View style={styles.homeworkDetail_header}>
+            <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.myComponentWillUnmount} />
+            <Text style={styles.homeworkDetailTitle}>{title}</Text>
+            <Text style={styles.alt} />
+          </View>
+          <NoResult tips="该作业无记录" />
+
+        </React.Fragment>
+      );
+    }
     // 选中该项，是否存在数据
     if (_.isNil(headerList[selectTion]) && _.isNil(detailsDataList[selectTion])) {
       console.log('尼玛这个能进来？');
@@ -366,7 +390,7 @@ class HomworkRecordDetail extends Component {
     const { studentAnser } = AnserSummarizationData;
     console.log(studentAnserImage, 'studentAnserImagestudentAnserImage');
     // 是否存在答案
-    const isQuestionSubmited = studentAnser !== null || studentAnserImage !== '';
+    const isQuestionSubmited = studentAnser !== null || studentAnser !== '' || studentAnserImage !== [];
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
     return (
       <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
@@ -433,6 +457,12 @@ class HomworkRecordDetail extends Component {
                 isQuestionSubmited={isQuestionSubmited}
                 // 学生是否批改了
                 studentMarked={AnserSummarizationData.studentMarked}
+                // 学生是否反馈了
+                hasMarkFeedback={AnserSummarizationData.hasMarkFeedback}
+                // 作业ID
+                homeWorkId={this.id}
+                // 题目ID
+                qsId={headerList[selectTion].id}
               />
             }
             {
@@ -459,7 +489,7 @@ class HomworkRecordDetail extends Component {
            )
         }
 
-        {
+        {/* {
           _.isEmpty(rightAnser) ? null : (
             <React.Fragment>
               {
@@ -472,11 +502,33 @@ class HomworkRecordDetail extends Component {
             }
             </React.Fragment>
           )
+        } */}
+        {
+          !_.isEmpty(rightAnser) ? (
+            <React.Fragment>
+              {
+                console.log(rightAnser)
+              }
+              <View style={[styles.correctAndOthersAnserTitle, styles.rightAnserAdd]}>
+                <Text style={styles.AnserTitleText}>题目答案：</Text>
+              </View>
+              {
+              // 富文本显示块，，，如果出错可能是返回数据是block而不是html字符串。形式固定，不独立组件了。
+               this.htmlViewComponent(rightAnser)
+            }
+              {
+               // 你好我是分割线
+              this.splitLine()
+            }
+            </React.Fragment>
+          ) : null
+
         }
 
         {
           _.isEmpty(othersAnser) ? null : (
             <React.Fragment>
+
               {
                 // 题目答案
                 this.correctAndOthersAnser(othersAnser, '看看其他同学的解答过程：')

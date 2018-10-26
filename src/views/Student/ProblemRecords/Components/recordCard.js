@@ -101,14 +101,14 @@ class RecordCard extends PureComponent {
   // 点击卡片进入详情页
   gotoDetailFun = () => {
     const { gotoDetailFun, datas } = this.props;
-    gotoDetailFun(datas.id, datas.publishTime, datas.subjectName);
+    gotoDetailFun(datas.id, datas.publishTime, datas.subjectName, datas.resultRead);
   }
 
 
   render() {
     const { datas, recordType } = this.props;
     const accuracyData = `${(datas.accuracy * 100).toFixed(2)}%`;
-    const randomNum = Math.random();
+    // const randomNum = Math.random();
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -134,7 +134,7 @@ class RecordCard extends PureComponent {
             </View>
           </View>
         </View>
-        <View style={styles.cardRight}>
+        {/* <View style={styles.cardRight}>
           {
             recordType === 0 ? (
               <TouchableOpacity
@@ -150,7 +150,7 @@ class RecordCard extends PureComponent {
             ) : null
           }
 
-        </View>
+        </View> */}
         {
             datas.resultRead === 1 && (
             <Image

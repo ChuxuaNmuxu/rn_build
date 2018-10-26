@@ -11,6 +11,7 @@ import _ from 'ramda';
 import styles from './problemRecords.scss';
 import FilterBox from './Components/filterBox';
 import RecordList from './recordList';
+import api from '../../../utils/fetch';
 import I18nText from '../../../components/I18nText';
 import ExtendListView from '../../../components/ExtendListView';
 import freshListViewSate from '../../../components/RefreshListView/RefreshState';
@@ -129,8 +130,10 @@ class ProblemRecords extends Component {
     }));
 
     // 清空下拉刷新组件的状态，恢复默认
-    this.listVew.setheaderState(freshListViewSate.Idle);
-    this.listVew.setfooterState(freshListViewSate.Idle);
+    if (this.listVew) {
+      this.listVew.setheaderState(freshListViewSate.Idle);
+      this.listVew.setfooterState(freshListViewSate.Idle);
+    }
   }
 
     // 点击学科筛选
@@ -231,7 +234,7 @@ class ProblemRecords extends Component {
 
   // 点击卡片进入对应的作业/考试详情页
   // 去到那边需要格式化时间和考试名字，在这里带过去就好了。
-  gotoDetailFun = (id, time, title) => {
+  gotoDetailFun = (id, time, title, resultRead) => {
     const { currentRecordType } = this.state;
     if (currentRecordType) {
       // 进入考试详情页
@@ -239,6 +242,12 @@ class ProblemRecords extends Component {
     } else {
       // 进入作业详情页
       Actions.HomworkRecordDetail({ id, time, title });
+      // 假如未读则标记为已经读取
+      if (resultRead === 1) {
+        const url = `/app/api/student/homeworks/${id}/result-read`;
+        api.put(url).then(res => console.log(res, `/app/api/student/homeworks/${id}/result-read`));
+        // console.log(res, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+      }
     }
   }
 

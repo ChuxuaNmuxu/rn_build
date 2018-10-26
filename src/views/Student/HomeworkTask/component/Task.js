@@ -155,15 +155,17 @@ class TaskItem extends React.Component {
       console.log('排期成功：', findTask.index);
 
       // 如果lastHandlePeriodIndex === index相等，并且拖拽类型不是未排期任务，表示不用排期直接还原数据
+
       if (lastHandlePeriodIndex === index && type !== 'detailsTask') {
         console.log('没有拖拽出当前时间段，返回原始位置');
       } else if (planList[index].data.length > 4) {
         // 每个时间段只能排5个任务
-        ModalApi.onOppen('TipsModal', {
+        // 推动完成之后会执行很多事件，耗时可能超过模态出现的时间，所以模态没有弹出，将其改为异步之后所以同步代码执行完会回来执行异步
+        setTimeout(() => ModalApi.onOppen('TipsModal', {
           tipsContent: <Text>该时段任务已满，请先完成后再安排</Text>,
           bottomTips: '自动关闭',
           maskClosable: true,
-        });
+        }), 0);
       } else {
         /**
            * 只有将未排期的任务进行排期或从排期任务中取消排期时才会对排期列表有影响
@@ -345,7 +347,7 @@ class TaskItem extends React.Component {
                     </View>
                   )}
                   {
-                    data.subjectName === 4
+                    data.taskType === 4
                       ? (
                         <View style={[styles.no_review_task, {
                           transform: [{

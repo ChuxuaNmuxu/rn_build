@@ -35,6 +35,7 @@ class CommitHomeworkModal extends Component {
       leftBtnText: '检查',
       content: this.commitHomeworkContent(),
       closeBtn: true,
+      maskClosable: false,
     };
     ModalApi.onOppen('ButtomModal', data);
   }

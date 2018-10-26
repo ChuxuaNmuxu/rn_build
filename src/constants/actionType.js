@@ -91,6 +91,8 @@ export const IS_FIRST_GET_DROP_LISTENER_RANGE = 'IS_FIRST_GET_DROP_LISTENER_RANG
 export const FETCH_STUDENT_TASK_LIST = 'FETCH_STUDENT_TASK_LIST';
 // 保存任务
 export const SAVE_TASK = 'SAVE_TASK';
+// 第一次进入首页
+export const IS_FIRST_OPEN_HOMEPAGE = 'IS_FIRST_OPEN_HOMEPAGE';
 
 /**
  *------------------------作业与考试详情页面-----------------------------------------

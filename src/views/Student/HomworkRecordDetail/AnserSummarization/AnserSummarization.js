@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import Popover from 'react-native-modal-popover';
 import styles from './AnserSummarization.scss';
 import Svg from '../../../../components/Svg';
+import api from '../../../../utils/fetch';
 
 class AnserSummarization extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class AnserSummarization extends Component {
     this.state = {
       showPopover: false,
       popoverAnchor: {},
+      hasMarkFeedback: props.hasMarkFeedback === 1,
     };
   }
 
@@ -59,8 +61,8 @@ class AnserSummarization extends Component {
       partialCorrect,
       unCorrect,
     ] = [
-      questionType === 'obj' ? `回答错误，答案是${correctAnser}，你的答案是${studentAnser}${isH ? '' : `，得分：${score}分`}` : `回答错误${isH ? '' : `，得分：${score}分`}`,
-      questionType === 'obj' ? `回答正确，答案是${correctAnser}${isH ? '' : `，得分：${score}分`}` : `回答正确${isH ? '' : `，得分：${score}分`}`,
+      questionType === 'obj' ? `回答错误，答案是${this.getJudgeMentText(correctAnser)}，你的答案是${studentAnser}${isH ? '' : `，得分：${score}分`}` : `回答错误${isH ? '' : `，得分：${score}分`}`,
+      questionType === 'obj' ? `回答正确，答案是${this.getJudgeMentText(correctAnser)}${isH ? '' : `，得分：${score}分`}` : `回答正确${isH ? '' : `，得分：${score}分`}`,
       questionType === 'obj' ? `未作答，答案是${correctAnser}` : '未作答',
       `部分正确，答案是${correctAnser}，你的答案是${studentAnser}，得分：${score}分`,
       questionType === 'obj' ? `答案是${correctAnser}，你的答案是${studentAnser}` : '解答过程',
@@ -79,6 +81,17 @@ class AnserSummarization extends Component {
     }
 
     return text;
+  }
+
+  getJudgeMentText=(anser) => {
+    if (anser === '1') {
+      return '对';
+    }
+
+    if (anser === '0') {
+      return '错';
+    }
+    return anser;
   }
 
   setButton = () => {
@@ -160,8 +173,30 @@ class AnserSummarization extends Component {
     );
   }
 
+  _preventDefault=(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  //  hasMarkFeedback: PropTypes.number,
+  // homeWorkId: PropTypes.string,
+  // qsId: PropTypes.string,
+  putErrorMessage = () => {
+    const { homeWorkId, qsId } = this.props;
+    const url = `/app/api/student/homeworks/${homeWorkId}/${qsId}/feedback`;
+    api.put(url).then((res) => {
+      console.log(api.put(url), `/app/api/student/homeworks/${homeWorkId}/${qsId}/feedback`);
+      const { code } = res;
+      if (code === 0) {
+        this.setState({
+          hasMarkFeedback: true,
+        });
+      }
+    });
+  }
+
   popoverComponent=() => {
-    const { showPopover, popoverAnchor } = this.state;
+    const { showPopover, popoverAnchor, hasMarkFeedback } = this.state;
     return (
 
       <View style={styles.studentCorect} onLayout={this.setButton}>
@@ -170,11 +205,11 @@ class AnserSummarization extends Component {
         <TouchableHighlight
           ref={(r) => { this.button = r; }}
           style={styles.button}
-          onPress={this.openPopover}
+          onPress={hasMarkFeedback ? this._preventDefault : this.openPopover}
           underlayColor="transparent"
         >
-          <Text style={[styles.studentCorectText2]}>
-          批阅有误?
+          <Text style={[styles.studentCorectText2, hasMarkFeedback ? styles.submitText : '']}>
+            {hasMarkFeedback ? '已提交反馈' : '批阅有误?'}
           </Text>
         </TouchableHighlight>
 
@@ -207,7 +242,7 @@ class AnserSummarization extends Component {
                   取消
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.popoverBtn, { backgroundColor: '#30bf6c' }]} onPress={this.closePopover}>
+              <TouchableOpacity style={[styles.popoverBtn, { backgroundColor: '#30bf6c' }]} onPress={() => this.closePopover().putErrorMessage()}>
                 <Text style={[styles.popoverBtnText, { color: '#ffffff' }]}>
                   确认
                 </Text>
@@ -222,6 +257,7 @@ class AnserSummarization extends Component {
 
   closePopover=() => {
     this.setState({ showPopover: false });
+    return this;
   }
 
   openPopover = () => {
@@ -258,6 +294,9 @@ AnserSummarization.propTypes = {
   score: PropTypes.number,
   isQuestionSubmited: PropTypes.bool,
   studentMarked: PropTypes.number,
+  hasMarkFeedback: PropTypes.number,
+  homeWorkId: PropTypes.string,
+  qsId: PropTypes.string,
 };
 
 AnserSummarization.defaultProps = {
@@ -274,6 +313,10 @@ AnserSummarization.defaultProps = {
   score: 0,
   isQuestionSubmited: false,
   studentMarked: 0,
+  hasMarkFeedback: 1,
+  homeWorkId: '',
+  // 题目ID
+  qsId: '',
 };
 
 export default AnserSummarization;
