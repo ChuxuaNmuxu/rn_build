@@ -146,7 +146,7 @@ function transFromExamHeaderList(data) {
   // const { questionNum, status } = questionNums;
   const a = questionNums.map(
     (item, index) => ({
-      isItCorrect: item.status,
+      isItCorrect: item.status - 1,
       questionNum: item.questionNum,
       id: studentExamQuestionDetailDtos[index].questionId,
     }),

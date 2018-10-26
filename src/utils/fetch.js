@@ -129,7 +129,7 @@ const Fetch = {
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;
     if (!isEmpty(params)) {
-      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
+      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params,{ indices: false });
     }
     return this.getUrl(_url, {}, 'get', '', mock, headerParams);
   },
@@ -138,7 +138,7 @@ const Fetch = {
   delete(url, params) {
     let _url = url;
     if (!isEmpty(params)) {
-      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
+      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params,{ indices: false });
     }
     return this.getUrl(_url, params, 'delete');
   },
