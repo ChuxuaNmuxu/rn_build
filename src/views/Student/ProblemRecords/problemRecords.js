@@ -217,15 +217,15 @@ class ProblemRecords extends Component {
     const {
       recordData, total, isFoorterLoading, actions: { footerLoading },
     } = this.props;
-    console.log(total, recordData.length);
-    console.log(recordData);
+    // console.log(total, recordData.length);
+    // console.log(recordData);
     if (recordData.length === total) {
-      console.log('wopaoqilailemamama', this.listVew);
+      // console.log('wopaoqilailemamama', this.listVew);
       this.listVew.setfooterState(freshListViewSate.NoMoreData);
       return;
     }
     if (isFoorterLoading) {
-      console.log(isFoorterLoading, 'sasdasfdasfs');
+      // console.log(isFoorterLoading, 'sasdasfdasfs');
       return;
     }
 
