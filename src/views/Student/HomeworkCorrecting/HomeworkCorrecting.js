@@ -23,6 +23,7 @@ import Modal, { ModalApi } from '../../../components/Modal';
 import I18nText from '../../../components/I18nText';
 import styles from './HomeworkCorrecting.scss';
 import * as correctingActions from '../../../actions/homeworkCorrectingAction';
+import CorrentResultCard from './Components/CorrentResultCard';
 
 class HomeworkCorrecting extends Component {
   constructor(props) {
@@ -37,6 +38,19 @@ class HomeworkCorrecting extends Component {
     console.log('调用 HomeworkCorrecting 组件！', this.props);
     const { actions, homeworkId } = this.props;
     actions.fetchListAction(homeworkId, 'REQUEST');
+  }
+
+  // 选择批阅结果
+  onResultChange = (aa, index) => {
+    // aa: 选择的批阅结果--10正确，5部分正确，1错误；index：当前批阅题目的索引
+    // console.log(7777, aa, index);
+    if (aa === 10) {
+      this.setPopScore(10, index);
+    } else if (aa === 1) {
+      this.setPopScore(0, index);
+    } else {
+      this.popupDialog.show(); // 气泡弹出框
+    }
   }
 
   setPopScore = (score, index) => {
@@ -117,6 +131,7 @@ class HomeworkCorrecting extends Component {
     // 这个scrollBy会触发 onIndexChanged 所以不需要在这边设置 this.setState({})
     actions.saveCorrectResultAction(params, 'REQUEST');
   }
+
 
   render() {
     const { list } = this.props;
@@ -299,37 +314,7 @@ class HomeworkCorrecting extends Component {
                   </View>
                   <View style={styles.foot}>
                     <View style={styles.foot_child_left}>
-                      <View>
-                        <I18nText style={styles.foot_word}>
-                          homeworkCorrecting.homeworkCorrecting
-                        </I18nText>
-                      </View>
-                      {/* 错误 */}
-                      <TouchableOpacity onPress={() => this.setPopScore(10, index1)}>
-                        <I18nText style={[styles.foot_btn, styles.btn_color_green]}>
-                          homeworkCorrecting.correct
-                        </I18nText>
-                      </TouchableOpacity>
-                      <View style={styles.space_2} />
-                      {/* 部分正确 */}
-                      <View>
-                        {/* 气泡弹出框 */}
-                        <TouchableOpacity
-                          // onPress={() => this.openPop(index1)}
-                          onPress={() => this.popupDialog.show()}
-                        >
-                          <I18nText style={[styles.foot_btn, styles.btn_color_orange]}>
-                              homeworkCorrecting.partOfTheError
-                          </I18nText>
-                        </TouchableOpacity>
-                      </View>
-                      <View style={styles.space_2} />
-                      {/* 正确 */}
-                      <TouchableOpacity onPress={() => this.setPopScore(0, index1)}>
-                        <I18nText style={[styles.foot_btn, styles.btn_color_pink]}>
-                          homeworkCorrecting.error
-                        </I18nText>
-                      </TouchableOpacity>
+                      <CorrentResultCard key={index1} onChange={a => this.onResultChange(a, index1)} />
                     </View>
                     <View style={styles.foot_child_right}>
                       <TouchableOpacity
@@ -338,16 +323,15 @@ class HomeworkCorrecting extends Component {
                       >
                         {
                           index !== (list.length - 1) ? (
-                            <I18nText style={[styles.foot_btn, styles.btn_color_right]}>
+                            <I18nText style={[styles.foot_btn, item.score !== undefined && styles.btn_color_active]}>
                               homeworkCorrecting.finishCorrectingAndNext
                             </I18nText>
                           ) : (
-                            <I18nText style={[styles.foot_btn, styles.btn_color_right]}>
-                            homeworkCorrecting.finishCorrectingNotNext
+                            <I18nText style={[styles.foot_btn, item.score !== undefined && styles.btn_color_active]}>
+                              homeworkCorrecting.finishCorrectingNotNext
                             </I18nText>
                           )
                         }
-
                       </TouchableOpacity>
                     </View>
                   </View>
