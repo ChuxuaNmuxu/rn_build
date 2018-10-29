@@ -28,6 +28,7 @@ class ProblemListOverview extends Component {
       showExtendView: false,
       subjectData: problemOverviewData,
       currentSubjectId: subjectId,
+      difficultyLevelVisible: false, // 控制难易度的标签 选中作业是时候才显示
     };
     this.moreParams = {
       uniGradeId: [],
@@ -62,8 +63,13 @@ class ProblemListOverview extends Component {
 
   getMoreParms = (Arr, objKey) => {
     this.moreParams[objKey] = Arr;
-    // console.log(67, this.moreParams);
-    this.refreshList();
+    // console.log(67, Arr, objKey, this.moreParams);
+    // 控制难易度的标签 选中作业是时候才显示 objKey === category && category.includes(1)
+    this.setState({
+      difficultyLevelVisible: this.moreParams.category.includes(1),
+    }, () => {
+      this.refreshList();
+    });
   }
 
   // 控制更多筛选层的显隐
@@ -79,11 +85,15 @@ class ProblemListOverview extends Component {
     const { category, difficultyLevel, uniGradeId } = this.moreParams;
     const initParams = {
       subjectId: currentSubjectId,
-      difficultyLevel,
       uniGradeId: uniGradeId[0],
       page: 1,
       pageSize: 20,
     };
+
+    if (difficultyLevel.length > 0) {
+      initParams.difficultyLevel = difficultyLevel.join(); // 按后台格式来 Array[int]
+    }
+
     if (category.length === 1) {
       Object.assign(initParams, {
         category: category[0],
@@ -133,7 +143,8 @@ class ProblemListOverview extends Component {
   // 渲染需要展示在扩展列表视图中的组件
   renderFilterView = () => {
     const { allGradeData } = this.props;
-    console.log(1200, allGradeData);
+    const { difficultyLevelVisible } = this.state;
+    // console.log(1200, allGradeData);
     return (
       <View style={styles.renderFilterView}>
         <SelectListButton
@@ -152,14 +163,18 @@ class ProblemListOverview extends Component {
           selectType="multi"
           selected={this.moreParams.category}
         />
-        <SelectListButton
-          getItems={this.getMoreParms}
-          data={this.difficultyLevel}
-          title="全部标签"
-          objKey="difficultyLevel"
-          selectType="multi"
-          selected={this.moreParams.difficultyLevel}
-        />
+        {
+          difficultyLevelVisible ? (
+            <SelectListButton
+              getItems={this.getMoreParms}
+              data={this.difficultyLevel}
+              title="全部标签"
+              objKey="difficultyLevel"
+              selectType="multi"
+              selected={this.moreParams.difficultyLevel}
+            />
+          ) : null
+        }
       </View>
     );
   }
