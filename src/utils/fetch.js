@@ -41,10 +41,8 @@ const connectUrl = async (url) => {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
   } else if (url.charAt(0) === '/') {
-    console.warn(`${origin}/${url}`, '完成的URL');
     return origin + url;
   }
-  console.warn(`${origin}/${url}`, '完成的URL');
   return `${origin}/${url}`;
 };
 

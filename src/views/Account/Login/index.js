@@ -11,7 +11,6 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  NativeModules,
 } from 'react-native';
 import Account from '../../../utils/account';
 import Madal from '../../../components/Modal';
@@ -45,11 +44,6 @@ class Login extends Component {
       token: tokenData,
       userinfo: JSON.stringify(userInfo),
     });
-  }
-
-  componentDidMount() {
-    // 原生方法挂载在 NativeModules 上
-    NativeModules.MyNativeModule.show('toast', 2000);
   }
 
   login = () => {
@@ -110,7 +104,7 @@ class Login extends Component {
         <Madal />
         <View style={styles.box}>
           <Debug>
-            <Text style={styles.title}>用户登陆</Text>
+            <Text style={styles.title}>用户--11111登陆</Text>
           </Debug>
           <View style={styles.item}>
             <Text style={styles.label}>账号：</Text>
