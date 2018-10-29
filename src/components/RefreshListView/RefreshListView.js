@@ -198,7 +198,7 @@ class RefreshListView extends Component {
         ListHeaderComponent={() => this._renderHeader(headerState)}
         // 距离底部不足时调用,但是不一定存在这么多数据是吧，有待优化，先禁止
         onEndReached={this.beginFooterRefresh}
-        onEndReachedThreshold={0.1} // 这里取值0.1，可以根据实际情况调整，取值尽量小,取值范围时0-1
+        onEndReachedThreshold={0.2} // 这里取值0.1，可以根据实际情况调整，取值尽量小,取值范围时0-1
         ListFooterComponent={() => this._renderFooter(footerState)}
       />
     );

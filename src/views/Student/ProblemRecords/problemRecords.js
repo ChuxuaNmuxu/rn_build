@@ -200,7 +200,7 @@ class ProblemRecords extends Component {
   // RefreshSuccess: 'RefreshSuccess', // 刷新成功
   dropDownRefresh=() => {
     const { currentRecordType, currentSubjectId } = this.state;
-    this.listVew.setheaderState(freshListViewSate.Refreshing);
+
     this.page = 1;
     this.changeParamsfetch({
       currentRecordType,
@@ -228,7 +228,6 @@ class ProblemRecords extends Component {
       console.log(isFoorterLoading, 'sasdasfdasfs');
       return;
     }
-    this.listVew.setfooterState(freshListViewSate.Refreshing);
 
     footerLoading(true);
 
