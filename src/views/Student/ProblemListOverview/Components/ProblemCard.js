@@ -112,16 +112,16 @@ class ProblemCard extends PureComponent {
                 {/* 考试错题不显示难易程度标签--错题类型(category---1:作业,2:考试) */}
                 {
                       datas.category === 1
-                      && (
-                      <View
-                        style={[
-                          styles.difficult_box,
-                          { backgroundColor: convertToDifficultyLevel(datas.difficultyLevel, true) },
-                        ]}
-                      >
-                        <Text style={styles.difficult_txt}>{convertToDifficultyLevel(datas.difficultyLevel)}</Text>
-                      </View>
-                      )
+                      && (datas.difficultyLevel !== 0 ? (
+                        <View
+                          style={[
+                            styles.difficult_box,
+                            { backgroundColor: convertToDifficultyLevel(datas.difficultyLevel, true) },
+                          ]}
+                        >
+                          <Text style={styles.difficult_txt}>{convertToDifficultyLevel(datas.difficultyLevel)}</Text>
+                        </View>
+                      ) : null)
                     }
                 <View>
                   <Text style={styles.err_reason}>

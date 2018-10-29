@@ -65,11 +65,13 @@ class ProblemListOverview extends Component {
     this.moreParams[objKey] = Arr;
     // console.log(67, Arr, objKey, this.moreParams);
     // 控制难易度的标签 选中作业是时候才显示 objKey === category && category.includes(1)
-    this.setState({
-      difficultyLevelVisible: this.moreParams.category.includes(1),
-    }, () => {
-      this.refreshList();
-    });
+    if (this.moreParams.category.includes(1)) {
+      this.setState({ difficultyLevelVisible: true }, () => this.refreshList());
+    } else {
+      // 如果没有的话，要清空 difficultyLevel
+      this.moreParams.difficultyLevel = [];
+      this.setState({ difficultyLevelVisible: false }, () => this.refreshList());
+    }
   }
 
   // 控制更多筛选层的显隐
