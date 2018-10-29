@@ -64,10 +64,10 @@ class AnserSummarization extends Component {
       questionType === 'obj' ? `回答错误，答案是${this.getJudgeMentText(correctAnser)}，你的答案是${this.getJudgeMentText(studentAnser)}${isH ? '' : `，得分：${score}分`}` : `回答错误${isH ? '' : `，得分：${score}分`}`,
       questionType === 'obj' ? `回答正确，答案是${this.getJudgeMentText(correctAnser)}${isH ? '' : `，得分：${score}分`}` : `回答正确${isH ? '' : `，得分：${score}分`}`,
       questionType === 'obj' ? `未作答，答案是${this.getJudgeMentText(correctAnser)}` : '未作答',
-      `部分正确，答案是${correctAnser}，你的答案是${this.getJudgeMentText(studentAnser)}，得分：${score}分`,
+      questionType === 'obj' ? `部分正确，答案是${correctAnser}，你的答案是${this.getJudgeMentText(studentAnser)}，得分：${score}分` : `部分正确，得分：${score}分`,
       questionType === 'obj' ? `答案是${this.getJudgeMentText(correctAnser)}，你的答案是${this.getJudgeMentText(studentAnser)}` : '解答过程',
     ];
-    console.log(!isQuestionSubmited,'!isQuestionSubmited!isQuestionSubmited!isQuestionSubmited')
+    console.log(!isQuestionSubmited, '!isQuestionSubmited!isQuestionSubmited!isQuestionSubmited');
     if (isQuestionSubmited) {
       text = unanser;
       return text;

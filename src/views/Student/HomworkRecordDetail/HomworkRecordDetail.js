@@ -355,13 +355,10 @@ class HomworkRecordDetail extends Component {
   }
 
   isQuestionSubmited=(objAnser, subAnser) => {
-    if (objAnser === null) {
+    if (objAnser === null && subAnser === []) {
       return true;
     }
-    if (objAnser === '') {
-      return true;
-    }
-    if (subAnser === []) {
+    if (objAnser === '' && subAnser === []) {
       return true;
     }
     return false;

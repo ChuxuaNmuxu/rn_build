@@ -33,7 +33,7 @@ class RefreshListView extends Component {
 
   // 尾部组件的状态，供外部调用，一般不会用到
   setfooterState = (footerState) => {
-    // console.log('setfooterState', '皇上，臣妾2跑起来了啊', footerState);
+    console.log('setfooterState', '皇上，臣妾2跑起来了啊', footerState);
     // const {  } = this.props;
     this.setState({
       footerState,

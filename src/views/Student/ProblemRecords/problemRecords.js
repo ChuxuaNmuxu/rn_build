@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text,
+  // Text,
   TouchableOpacity,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
@@ -96,6 +96,7 @@ class ProblemRecords extends Component {
     const params = {
       ...args,
     };
+
     dropDownRefresh(params, 'REQUEST');
   }
 
@@ -213,7 +214,9 @@ class ProblemRecords extends Component {
 
   upPullGetMore=() => {
     const { currentRecordType, currentSubjectId } = this.state;
-    const { recordData, total } = this.props;
+    const {
+      recordData, total, isFoorterLoading, actions: { footerLoading },
+    } = this.props;
     console.log(total, recordData.length);
     console.log(recordData);
     if (recordData.length === total) {
@@ -221,7 +224,14 @@ class ProblemRecords extends Component {
       this.listVew.setfooterState(freshListViewSate.NoMoreData);
       return;
     }
+    if (isFoorterLoading) {
+      console.log(isFoorterLoading, 'sasdasfdasfs');
+      return;
+    }
     this.listVew.setfooterState(freshListViewSate.Refreshing);
+
+    footerLoading(true);
+
     this.dropDownFetch({
 
       currentRecordType,
@@ -391,6 +401,7 @@ ProblemRecords.propTypes = {
   recordStateData: PropTypes.array.isRequired,
   isRevisingData: PropTypes.array.isRequired,
   total: PropTypes.any.isRequired,
+  isFoorterLoading: PropTypes.any.isRequired,
 };
 
 ProblemRecords.defaultProps = {
@@ -410,6 +421,7 @@ const mapStateToProps = (state) => {
       // 修正状态
       isRevisingData,
       total,
+      isFoorterLoading,
     },
   } = state;
   return {
@@ -419,6 +431,7 @@ const mapStateToProps = (state) => {
     recordStateData,
     isRevisingData,
     total,
+    isFoorterLoading,
   };
 };
 
