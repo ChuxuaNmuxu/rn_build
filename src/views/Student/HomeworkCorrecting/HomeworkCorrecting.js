@@ -271,16 +271,22 @@ class HomeworkCorrecting extends Component {
                             <TouchableOpacity
                               // 返回首页
                               onPress={() => {
-                                console.log('查看老师布置的作业！');
-                                // const data = { url: item.answerFileUrl, studentName: '老师布置的作业' };
+                                console.log('查看学生的答案', item2);
+                                console.log(draftToHtml(JSON.parse(item2)));
+                                // const data = {
+                                //   // studentName: '李香兰',
+                                //   url: item.answerFileUrl, // 最好https，ios兼容问题
+                                //   imageViewType: 'rotate', // 默认 "ordinary"
+                                // };
+                                // // const data = { url: , studentName: '学生' };
                                 // ModalApi.onOppen('ImageViewer', data);
                               }}
                               key={index2}
                             >
                               {/* <Image
-                            style={{ width: '100%', height: '100%' }}
-                            source={{ uri: item.answerFileUrl }}
-                          /> */}
+                                  style={{ width: '100%', height: '100%' }}
+                                  source={{ uri: item.answerFileUrl }}
+                                /> */}
                               { this.htmlViewComponent(item2) }
                             </TouchableOpacity>
                           ))

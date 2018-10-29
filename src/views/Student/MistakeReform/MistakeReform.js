@@ -251,7 +251,7 @@ class MistakeReform extends Component {
                     <Text style={[styles.result_difficult]}>
                       你可以对该题进行
                       <Text
-                        style={[styles.result_difficult, styles.result_wrong]}
+                        style={[styles.result_difficult, styles.result_right]}
                         onPress={() => {
                           showWrongInfoRadioAction({ index, showWord: false });
                         }}
