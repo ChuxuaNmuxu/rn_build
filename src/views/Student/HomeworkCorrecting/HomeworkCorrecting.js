@@ -136,6 +136,8 @@ class HomeworkCorrecting extends Component {
   render() {
     const { list } = this.props;
     const { index } = this.state;
+    // 当前批阅的题目
+    const currentQues = list[index];
     const labelData = [ // 标签数据
       {
         label: '1',
@@ -174,23 +176,25 @@ class HomeworkCorrecting extends Component {
         value: 9,
       },
     ];
-    // if (list.length > 0) {
-    //   console.log(draft)
-    // }
-    console.log(index, list.length);
+    // console.log(7878, index, list.length, currentQues);
     return (
       <View style={styles.wrapper}>
         <PopupDialog
           ref={(popupDialog) => { this.popupDialog = popupDialog; }}
-          width={850}
+          width={400}
           height={340}
+          // overlayOpacity={0}
+          dialogStyle={{ position: 'absolute', left: 144, bottom: 150 }}
         >
           <View style={{
             // width: 1,
             height: 340,
             backgroundColor: 'white',
+            padding: 20,
+            borderRadius: 8,
           }}
           >
+            <Text style={styles.score_info}>满分10分：</Text>
             <Radio.Group
               // defaultValue={defaultValue}
               onChange={(score) => {
@@ -199,11 +203,12 @@ class HomeworkCorrecting extends Component {
                 actions.setCorrectResultAction({ score, index });
                 this.popupDialog.dismiss();
               }}
-              checkedIconWrapStyle={{
-                borderColor: '#fa5656',
-              }}
+              iconWrapStyle={styles.icon_btn_style}
+              textStyle={styles.text_btn_style}
+              checkedIconWrapStyle={styles.icon_checked_style}
               checkedTextStyle={{
-                color: '#fa5656',
+                color: '#fff',
+                fontSize: 36,
               }}
               style={styles.radio_wrapper}
               childStyle={styles.radio_childStyle}
@@ -312,29 +317,6 @@ class HomeworkCorrecting extends Component {
                       </View>
                     </TouchableOpacity>
                   </View>
-                  <View style={styles.foot}>
-                    <View style={styles.foot_child_left}>
-                      <CorrentResultCard key={index1} onChange={a => this.onResultChange(a, index1)} />
-                    </View>
-                    <View style={styles.foot_child_right}>
-                      <TouchableOpacity
-                        onPress={() => this.finishReadOver(item, index1)}
-                        disabled={item.score === undefined}
-                      >
-                        {
-                          index !== (list.length - 1) ? (
-                            <I18nText style={[styles.foot_btn, item.score !== undefined && styles.btn_color_active]}>
-                              homeworkCorrecting.finishCorrectingAndNext
-                            </I18nText>
-                          ) : (
-                            <I18nText style={[styles.foot_btn, item.score !== undefined && styles.btn_color_active]}>
-                              homeworkCorrecting.finishCorrectingNotNext
-                            </I18nText>
-                          )
-                        }
-                      </TouchableOpacity>
-                    </View>
-                  </View>
                 </View>
               ))
             }
@@ -343,6 +325,41 @@ class HomeworkCorrecting extends Component {
           }
           </View>
         </ScrollView>
+        <View>
+          {
+          list.length > 0
+            ? (
+              <View style={styles.foot}>
+                <View style={styles.foot_child_left}>
+                  <CorrentResultCard
+                    key={index}
+                    defaultValue={currentQues.score}
+                    onChange={a => this.onResultChange(a, index)}
+                  />
+                </View>
+                <View style={styles.foot_child_right}>
+                  <TouchableOpacity
+                    onPress={() => this.finishReadOver(currentQues, index)}
+                    disabled={currentQues.score === undefined}
+                  >
+                    {
+                  index !== (list.length - 1) ? (
+                    <I18nText style={[styles.foot_btn, currentQues.score !== undefined && styles.btn_color_active]}>
+                      homeworkCorrecting.finishCorrectingAndNext
+                    </I18nText>
+                  ) : (
+                    <I18nText style={[styles.foot_btn, currentQues.score !== undefined && styles.btn_color_active]}>
+                      homeworkCorrecting.finishCorrectingNotNext
+                    </I18nText>
+                  )
+                }
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )
+            : null
+        }
+        </View>
       </View>
     );
   }

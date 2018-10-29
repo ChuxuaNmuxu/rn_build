@@ -17,13 +17,22 @@ class CorrentResultCard extends Component {
     const {
       onChange, defaultValue,
     } = this.props;
+    // 处理下传过来的分数
+    let scoreValue = defaultValue;
+    if (scoreValue !== null) {
+      if (scoreValue > 0) {
+        scoreValue = defaultValue !== 10 ? 5 : 10;
+      } else {
+        scoreValue = 1;
+      }
+    }
     return (
       <View style={styles.corrent_wrapper}>
         <Text style={styles.corrent_title}>
           <I18nText>homeworkCorrecting.homeworkCorrecting</I18nText>
         </Text>
         <Radio.Group
-          defaultValue={defaultValue}
+          defaultValue={scoreValue}
           onChange={onChange}
           checkedTextStyle={{
             color: '#fff',
