@@ -284,7 +284,12 @@ class HomeworkCorrecting extends Component {
                       // 点击查看学生题目
                       onPress={() => {
                         // console.log('查看学生的答案');
-                        const data = { url: item.answerFileUrl, studentName: '学生' };
+                        const data = {
+                          // studentName: '李香兰',
+                          url: item.answerFileUrl, // 最好https，ios兼容问题
+                          imageViewType: 'rotate', // 默认 "ordinary"
+                        };
+                        // const data = { url: , studentName: '学生' };
                         ModalApi.onOppen('ImageViewer', data);
                       }}
                     >
@@ -371,7 +376,7 @@ HomeworkCorrecting.propTypes = {
 };
 
 HomeworkCorrecting.defaultProps = {
-  homeworkId: '500245896139636736', // 500245896139636736
+  homeworkId: '505700854901243904', // 卢晨的作业
 };
 
 const mapStateToProps = (state) => {
