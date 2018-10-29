@@ -28,6 +28,7 @@ function* fetchListSaga(action) {
       if (answerContent) newContent.push(answerContent); // 标准答案
       res.data[i].newContent = newContent;
       res.data[i].score = undefined; // 批阅分数
+      res.data[i].finishBtnDisable = false; // 完成按钮是否可以点击
     }
     const { code } = res;
     if (code === 0) {
@@ -44,12 +45,21 @@ function* fetchListSaga(action) {
 function* saveScoreSaga(action) {
   try {
     const {
-      studentId, homeworkId, questionId, score,
+      params: {
+        studentId, homeworkId, questionId, score, index,
+      },
+      callBack,
     } = action.payload;
     const url = `/app/api/student/homeworks/${studentId}/${homeworkId}/${questionId}/mark?score=${score}`;
     const fetch = arg => Fetch.post(url, arg);
     const res = yield call(fetch);
     console.log(res);
+    if (res.code === 0) {
+      callBack();
+      yield put(actions.controlFinsihBtnAction({ finishBtnDisable: true, index }));
+    } else {
+      yield put(actions.saveCorrectResultAction(res.code, 'ERROR'));
+    }
   } catch (e) {
     yield put(actions.saveCorrectResultAction(e, 'ERROR'));
   }

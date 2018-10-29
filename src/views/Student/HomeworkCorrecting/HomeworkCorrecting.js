@@ -109,13 +109,21 @@ class HomeworkCorrecting extends Component {
       studentId: item.studentId,
       questionId: item.questionId,
       score: item.score,
+      index,
     };
-    // const newIndex = index < list.length - 1 ? index + 1 : index;
-    const bol = index < list.length - 1;
-    console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol);
-    if (bol) this.swiperRef.scrollBy(1);
-    // 这个scrollBy会触发 onIndexChanged 所以不需要在这边设置 this.setState({})
-    actions.saveCorrectResultAction(params, 'REQUEST');
+    // 有分数才可以
+    if (item.score !== undefined) {
+      // 这个scrollBy会触发 onIndexChanged 所以不需要在这边设置 this.setState({})
+      actions.saveCorrectResultAction({
+        params,
+        callBack: () => {
+          // const newIndex = index < list.length - 1 ? index + 1 : index;
+          const bol = index < list.length - 1;
+          console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol);
+          if (bol) this.swiperRef.scrollBy(1);
+        },
+      }, 'REQUEST');
+    }
   }
 
   render() {
@@ -162,7 +170,7 @@ class HomeworkCorrecting extends Component {
     // if (list.length > 0) {
     //   console.log(draft)
     // }
-    console.log(index, list.length);
+    // console.log(index, list.length);
     return (
       <View style={styles.wrapper}>
         <PopupDialog
@@ -339,7 +347,7 @@ class HomeworkCorrecting extends Component {
                     <View style={styles.foot_child_right}>
                       <TouchableOpacity
                         onPress={() => this.finishReadOver(item, index1)}
-                        disabled={item.score === undefined}
+                        disabled={item.finishBtnDisable}
                       >
                         {
                           index !== (list.length - 1) ? (
@@ -352,7 +360,6 @@ class HomeworkCorrecting extends Component {
                             </I18nText>
                           )
                         }
-
                       </TouchableOpacity>
                     </View>
                   </View>
