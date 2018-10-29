@@ -444,7 +444,7 @@ class MistakeReform extends Component {
   }
 
   render() {
-    const { questions } = this.props;
+    const { questions, currentSubjectId } = this.props;
     const { index } = this.state;
     const contentWrapStyle = questions.length > 0 ? styles.content_wrap : styles.content_wrap_not_result;
     return (
@@ -454,7 +454,8 @@ class MistakeReform extends Component {
         <View style={styles.head}>
           <View style={styles.head_icon}>
             <TouchableOpacity
-              onPress={Actions.pop}
+              // 回去的时候要重新请求
+              onPress={() => Actions.ProblemListOverview({ subjectId: currentSubjectId })}
             >
               <Entypo name="chevron-thin-left" size={40} color="white" />
             </TouchableOpacity>
@@ -533,6 +534,8 @@ MistakeReform.propTypes = {
   questions: PropTypes.array.isRequired,
   // 上游传过来的数据
   problemCardInfo: PropTypes.array,
+  // 当前的subjectId
+  currentSubjectId: PropTypes.string.isRequired,
 };
 
 MistakeReform.defaultProps = {

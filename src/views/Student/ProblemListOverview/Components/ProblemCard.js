@@ -50,7 +50,6 @@ class ProblemCard extends PureComponent {
     );
   }
 
-
   // 点击错题卡片进入错题详情页
   goProblemDetail = (category, index) => {
     const { id } = this.props;
@@ -64,10 +63,11 @@ class ProblemCard extends PureComponent {
 
   // 点击复习错题进入错题重做页面
   doErrWorkAgain = () => {
-    const { datas } = this.props;
+    const { datas, currentSubjectId } = this.props;
     console.log('点击复习错题进入错题重做页面', datas);
     Actions.MistakeReform({
       problemCardInfo: [datas],
+      currentSubjectId,
     });
   }
 
@@ -157,6 +157,7 @@ ProblemCard.propTypes = {
   datas: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
+  currentSubjectId: PropTypes.string.isRequired,
 };
 
 export default ProblemCard;

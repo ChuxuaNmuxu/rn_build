@@ -135,10 +135,12 @@ class ProblemListOverview extends Component {
 
   // 前往随机错题重做(传5个随机的数据过去)
   randomMistakeReform = (list) => {
+    const { currentSubjectId } = this.state;
     const datas = getRandomArrayItem(list, 5);
     console.log('原数组list=', list, '随鸡5到题', datas);
     Actions.MistakeReform({
       problemCardInfo: datas,
+      subjectId: currentSubjectId,
     });
   }
 
@@ -206,7 +208,12 @@ class ProblemListOverview extends Component {
           filterMoreFun={this.filterMoreFun}
         />
         {/* <ScrollView> */}
-        <ProblemList refreshList={this.refreshList} mistakeList={mistakeList} total={total} />
+        <ProblemList
+          refreshList={this.refreshList}
+          mistakeList={mistakeList}
+          total={total}
+          currentSubjectId={currentSubjectId}
+        />
         {/* </ScrollView> */}
         {
           // 更多筛选
