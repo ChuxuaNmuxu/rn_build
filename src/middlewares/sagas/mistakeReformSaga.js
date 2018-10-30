@@ -206,30 +206,30 @@ function* subjectiveSaga(action) {
       const res2 = yield call(fetch2, formData, 'file');
       const code2 = res2.code;
       const data2 = res2.data;
-      // 第三部
+      // 第二部
       console.log('OSS第二部res2=', res2);
       if (code2 === 0) {
-        const startTime = moment(new Date()).format();
-        const endTime = moment(new Date()).format();
-        const thirdParams = {
-          startTime,
-          endTime,
-          answer: data2.url,
-          answerFileId: data2.fileId,
-        };
-        const thirdUrl = `/app/api/student/failed-questions/${item.id}/answer?category=${item.category}`;
+        // const startTime = moment(new Date()).format();
+        // const endTime = moment(new Date()).format();
+        // const thirdParams = {
+        // startTime,
+        // endTime,
+        //   answer: data2.url,
+        //   answerFileId: data2.fileId,
+        // };
+        const thirdUrl = `/app/api/student/homeworks/${item.homeworkExamId}/questions/${item.id}`;
         console.log(220, thirdUrl);
-        const thirdFetch = arg => Fetch.post(thirdUrl, arg);
+        const thirdFetch = arg => Fetch.get(thirdUrl, arg);
         // const res333 = yield thirdFetch(thirdParams);
         // console.log('res333=', res333);
-        const res3 = yield call(thirdFetch, thirdParams);
+        const res3 = yield call(thirdFetch);
         console.log('OSS 第三部 res3=', res3);
         const code3 = res3.code;
         const data3 = res3.data;
         if (code3 === 0) {
           const studentAnswer = data3.answerFileUrl; // 截图的时候就有了
-          const teacherAnswer = data3.explainImageUrl;
-          const otherStudentAnswer = data3.classMatesAnswers;
+          const teacherAnswer = data3.answerContent;
+          const { otherStudentAnswer } = data3;
           // if (otherStudentAnswer && otherStudentAnswer.length > 0) {
           //     for (let j = 0; j < otherStudentAnswer.length; j++) {
           //         let excellAnswer = {};
