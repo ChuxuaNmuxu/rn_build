@@ -57,7 +57,6 @@ class HomeworkTask extends Component {
           width: 120,
           height: 120,
         },
-        style: { width: 540 },
       });
     }
 

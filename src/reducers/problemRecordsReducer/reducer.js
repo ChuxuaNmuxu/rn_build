@@ -15,6 +15,7 @@ const initState = {
   // 总数
   total: 0,
   isLaoding: true,
+  isFoorterLoading: false,
 };
 
 const handle = {
@@ -25,6 +26,7 @@ const handle = {
   //  参数变化
   FETCH_PROBLEM_RECORDS_CHANGE_PARAMS_REFRESH_DATA_SUCCESS: fn.fetchChangeParamsRefreshDataSuccess,
   //
+  PROBLEM_RECORDS_UP_PULL_REFRESH_IS_LOADING: fn.footerIsLoading,
 };
 
 export default createReducer(initState, handle);

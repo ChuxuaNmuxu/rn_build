@@ -36,6 +36,7 @@ class CommitSuccessAndhasRemark extends Component {
       content: this.hasRemarkContent(),
       closeBtn: false,
       maskClosable: false,
+      style: { width: 620 },
     };
     ModalApi.onOppen('ButtomModal', data);
   }

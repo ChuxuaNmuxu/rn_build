@@ -7,6 +7,7 @@ import {
   Animated,
   Image,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
 // import styless from './imageCropper.scss';
@@ -76,9 +77,9 @@ export default class ImageCropper extends React.Component {
 
       onPanResponderGrant: (evt, gestureState) => {
         evt.persist();
-        console.log('target', evt.target);
+        // console.log('target', evt.target);
         // console.log('nativeEvent', evt.nativeEvent);
-        console.log('mouseDown', gestureState);
+        console.log('mouseDown', this._top + gestureState.dy);
         const { changedTouches } = evt.nativeEvent;
         if (changedTouches.length > 1) {
           this.dragClipRect = false;
@@ -89,40 +90,106 @@ export default class ImageCropper extends React.Component {
 
       onPanResponderMove: (evt, gestureState) => {
         // console.log('evt', evt);
-        // console.log('mouseMove', gestureState);
+        console.log('mouseMove', this.dragClipRect, this.scaleClipRectLT);
+
         const { changedTouches } = evt.nativeEvent;
         if (changedTouches.length <= 1) {
           if (this.dragClipRect) {
             // 拖动裁剪框
-            this._animatedLeft.setValue(this._left + gestureState.dx);
-            this._animatedTop.setValue(this._top + gestureState.dy);
+            let diffLeft = this._left + gestureState.dx;
+            let diffTop = this._top + gestureState.dy;
+            if (diffLeft < 0) {
+              diffLeft = 0;
+            } else if (diffLeft + this._width > containerWidth) {
+              diffLeft = containerWidth - this._width;
+            }
+            if (diffTop < 0) {
+              diffTop = 0;
+            } else if (diffTop + this._height > containerHeight) {
+              diffTop = containerHeight - this._height;
+            }
+            this._animatedLeft.setValue(diffLeft);
+            this._animatedTop.setValue(diffTop);
           } else if (this.scaleClipRectLT) {
             // 缩放裁剪框
-            const diffX = this._width - gestureState.dx;
-            const diffY = this._height - gestureState.dy;
-            if (diffX < 100 || diffY < 100) return;
-            this._animatedLeft.setValue(this._left + gestureState.dx);
-            this._animatedTop.setValue(this._top + gestureState.dy);
+            let diffX = this._width - gestureState.dx;
+            let diffY = this._height - gestureState.dy;
+            let diffLeft = this._left + gestureState.dx;
+            let diffTop = this._top + gestureState.dy;
+            if (diffX < 100) {
+              diffX = 100;
+              diffLeft = this._left + this._width - 100;
+            } else if (diffLeft < 0) {
+              diffX = this._width + this._left;
+              diffLeft = 0;
+            }
+            if (diffY < 100) {
+              diffY = 100;
+              diffTop = this._top + this._height - 100;
+            } else if (diffTop < 0) {
+              diffY = this._height + this._top;
+              diffTop = 0;
+            }
+            this._animatedLeft.setValue(diffLeft);
+            this._animatedTop.setValue(diffTop);
             this._animatedWidth.setValue(diffX);
             this._animatedHeight.setValue(diffY);
           } else if (this.scaleClipRectLB) {
-            const diffX = this._width - gestureState.dx;
-            const diffY = this._height + gestureState.dy;
-            if (diffX < 100 || diffY < 100) return;
-            this._animatedLeft.setValue(this._left + gestureState.dx);
+            let diffX = this._width - gestureState.dx;
+            let diffY = this._height + gestureState.dy;
+            let diffLeft = this._left + gestureState.dx;
+            if (diffX < 100) {
+              diffX = 100;
+            } else if (diffLeft < 0) {
+              diffX = this._width + this._left;
+              diffLeft = 0;
+            }
+
+            if (diffY < 100) {
+              diffY = 100;
+            } else if (diffY + this._top > containerHeight) {
+              diffY = containerHeight - this._top;
+            }
+            this._animatedLeft.setValue(diffLeft);
             this._animatedWidth.setValue(diffX);
             this._animatedHeight.setValue(diffY);
           } else if (this.scaleClipRectRT) {
-            const diffX = this._width + gestureState.dx;
-            const diffY = this._height - gestureState.dy;
-            if (diffX < 100 || diffY < 100) return;
-            this._animatedTop.setValue(this._top + gestureState.dy);
+            let diffX = this._width + gestureState.dx;
+            let diffY = this._height - gestureState.dy;
+            let diffTop = this._top + gestureState.dy;
+
+            if (diffX < 100) {
+              diffX = 100;
+            } else if (diffX + this._left > containerWidth) {
+              diffX = containerWidth - this._left;
+            }
+
+            if (diffY < 100) {
+              diffY = 100;
+              diffTop = this._top + this._height - 100;
+            } else if (diffTop < 0) {
+              diffY = this._height + this._top;
+              diffTop = 0;
+            }
+
+            this._animatedTop.setValue(diffTop);
             this._animatedWidth.setValue(diffX);
             this._animatedHeight.setValue(diffY);
           } else if (this.scaleClipRectRB) {
-            const diffX = this._width + gestureState.dx;
-            const diffY = this._height + gestureState.dy;
-            if (diffX < 100 || diffY < 100) return;
+            let diffX = this._width + gestureState.dx;
+            let diffY = this._height + gestureState.dy;
+
+            if (diffX < 100) {
+              diffX = 100;
+            } else if (diffX + this._left > containerWidth) {
+              diffX = containerWidth - this._left;
+            }
+
+            if (diffY < 100) {
+              diffY = 100;
+            } else if (diffY + this._top > containerHeight) {
+              diffY = containerHeight - this._top;
+            }
             this._animatedWidth.setValue(diffX);
             this._animatedHeight.setValue(diffY);
           }
@@ -151,30 +218,119 @@ export default class ImageCropper extends React.Component {
       },
 
       onPanResponderRelease: (evt, gestureState) => {
-        // console.log('evt', evt);
-        console.log('mouseUp', gestureState.dx, gestureState.dy);
+        // console.log('evt', evt); 详情计算
+        console.log('mouseUp', this.dragClipRect, this.scaleClipRectLT);
         if (this.dragClipRect) {
-          this._left += gestureState.dx;
-          this._top += gestureState.dy;
+          const diffLeft = this._left + gestureState.dx;
+          const diffTop = this._top + gestureState.dy;
+          if (diffLeft < 0) {
+            this._left = 0;
+          } else if (diffLeft + this._width > containerWidth) {
+            this._left = containerWidth - this._width;
+          } else {
+            this._left = diffLeft;
+          }
+          if (diffTop < 0) {
+            this._top = 0;
+          } else if (diffTop + this._height > containerHeight) {
+            this._top = containerHeight - this._height;
+          } else {
+            this._top = diffTop;
+          }
         } else if (this.scaleClipRectLT) {
-          this._left += gestureState.dx;
-          this._top += gestureState.dy;
-          this._width -= gestureState.dx;
-          this._height -= gestureState.dy;
+          const diffX = this._width - gestureState.dx;
+          const diffY = this._height - gestureState.dy;
+
+          const diffLeft = this._left + gestureState.dx;
+          const diffTop = this._top + gestureState.dy;
+          if (diffLeft < 0) {
+            this._width += this._left;
+            this._left = 0;
+          } else if (diffX < 100) {
+            this._left += this._width - 100;
+            this._width = 100;
+          } else {
+            this._width = diffX;
+            this._left = diffLeft;
+          }
+          if (diffTop < 0) {
+            this._height += this._top;
+            this._top = 0;
+          } else if (diffY < 100) {
+            this._top += this._height - 100;
+            this._height = 100;
+          } else {
+            this._height = diffY;
+            this._top = diffTop;
+          }
         } else if (this.scaleClipRectLB) {
-          this._left += gestureState.dx;
-          // this._top += gestureState.dy;
-          this._width -= gestureState.dx;
-          this._height += gestureState.dy;
+          const diffX = this._width - gestureState.dx;
+          const diffY = this._height + gestureState.dy;
+
+          const diffLeft = this._left + gestureState.dx;
+
+          if (diffLeft < 0) {
+            this._width += this._left;
+            this._left = 0;
+          } else if (diffX < 100) {
+            this._left += this._width - 100;
+            this._width = 100;
+          } else {
+            this._width = diffX;
+            this._left = diffLeft;
+          }
+
+          if (diffY < 100) {
+            this._height = 100;
+          } else if (diffY + this._top > containerHeight) {
+            this._height = containerHeight - this._top;
+          } else {
+            this._height = diffY;
+          }
         } else if (this.scaleClipRectRT) {
-          // this._left += gestureState.dx;
-          this._top += gestureState.dy;
-          this._width += gestureState.dx;
-          this._height -= gestureState.dy;
+          const diffX = this._width + gestureState.dx;
+          const diffY = this._height - gestureState.dy;
+          const diffTop = this._top + gestureState.dy;
+
+          if (diffX < 100) {
+            this._width = 100;
+          } else if (diffX + this._left > containerWidth) {
+            this._width = containerWidth - this._left;
+          } else {
+            this._width = diffX;
+          }
+
+          if (diffTop < 0) {
+            this._height += this._top;
+            this._top = 0;
+          } else if (diffY < 100) {
+            this._top += this._height - 100;
+            this._height = 100;
+          } else {
+            this._height = diffY;
+            this._top = diffTop;
+          }
         } else if (this.scaleClipRectRB) {
-          this._width += gestureState.dx;
-          this._height += gestureState.dy;
+          const diffX = this._width + gestureState.dx;
+          const diffY = this._height + gestureState.dy;
+
+          if (diffX < 100) {
+            this._width = 100;
+          } else if (diffX + this._left > containerWidth) {
+            this._width = containerWidth - this._left;
+          } else {
+            this._width = diffX;
+          }
+
+          if (diffY < 100) {
+            this._height = 100;
+          } else if (diffY + this._top > containerHeight) {
+            this._height = containerHeight - this._top;
+          } else {
+            this._height = diffY;
+          }
         }
+
         this.dragClipRect = false;
         this.scaleClipRectLT = false;
         this.scaleClipRectLB = false;
@@ -187,8 +343,6 @@ export default class ImageCropper extends React.Component {
   }
 
   onPressBtn = (e, type) => {
-    console.log('eeee', e);
-    console.log('type', type);
     switch (type) {
       case 'rect': this.dragClipRect = true; return false;
       case 'LT': this.scaleClipRectLT = true; return false;
@@ -200,19 +354,29 @@ export default class ImageCropper extends React.Component {
     }
   }
 
-  getCropData = () => ({
-    top: this._top * 1.125,
-    left: this._left * 1.125,
-    width: this._width * 1.125,
-    height: this._height * 1.125,
-  })
+  getCropData = () => {
+    const { scale } = Dimensions.get('screen');
+    console.log('scale', scale);
+    return {
+      top: this._top * scale,
+      left: this._left * scale,
+      width: this._width * scale,
+      height: this._height * scale,
+    };
+  }
 
   crop = () => captureRef(this.cropper, { format: 'png', quality: 1 })
 
   rotate = (digit) => {
     const { rotate } = this.state;
+    let rotateNum;
+    if (digit === 0) {
+      rotateNum = 0;
+    } else {
+      rotateNum = rotate + digit;
+    }
     this.setState({
-      rotate: rotate + digit,
+      rotate: rotateNum,
     });
   }
 
@@ -292,9 +456,9 @@ const styles = StyleSheet.create({
   },
   moveRect: {
     position: 'absolute',
-    borderWidth: 1,
+    borderWidth: 2,
     borderStyle: 'solid',
-    borderColor: '#3bfa6c',
+    borderColor: '#fa5656',
     padding: 40,
   },
   clipRect: {
@@ -317,23 +481,32 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 40,
     height: 40,
-    borderRadius: 50,
-    backgroundColor: 'black',
+    borderWidth: 4,
+    borderStyle: 'solid',
+    borderColor: '#fa5656',
   },
   LT: {
     left: 0,
     top: 0,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
   },
   LB: {
     left: 0,
     bottom: 0,
+    borderTopWidth: 0,
+    borderRightWidth: 0,
   },
   RT: {
     right: 0,
     top: 0,
+    borderLeftWidth: 0,
+    borderBottomWidth: 0,
   },
   RB: {
     right: 0,
     bottom: 0,
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
   },
 });

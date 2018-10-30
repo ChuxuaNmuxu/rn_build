@@ -30,12 +30,17 @@ class CommitHomeworkModal extends Component {
     const data = {
       lCallbakFn: this.leftFn,
       rCallbakFn: this.rightFn,
-      activeBtn: 'R',
+      activeBtn: 'L',
       rightBtnText: '提交',
       leftBtnText: '检查',
       content: this.commitHomeworkContent(),
       closeBtn: true,
       maskClosable: false,
+      svgOption: {
+        width: 60,
+        height: 60,
+      },
+      style: { width: 620 },
     };
     ModalApi.onOppen('ButtomModal', data);
   }

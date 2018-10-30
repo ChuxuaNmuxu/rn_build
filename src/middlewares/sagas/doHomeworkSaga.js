@@ -53,7 +53,8 @@ function* fetchDoHomeworkSaga(action) {
         for (let j = 0; j < homeworkData.questionList[i].childrenList.length; j++) {
           homeworkData.questionList[i].childrenList[j].materialContent = homeworkData.questionList[i].content;
           homeworkData.questionList[i].childrenList[j].bigNumber = homeworkData.questionList[i].number;
-          homeworkData.questionList[i].childrenList[j].bigTitle = homeworkData.questionList[i].title;
+          homeworkData.questionList[i].childrenList[j].bigTitle = homeworkData.questionList[i].title
+          || homeworkData.questionList[i].type;
           finalQuestionList.push(homeworkData.questionList[i].childrenList[j]);
           if (homeworkData.questionList[i].content) {
             homeworkData.questionList[i].childrenList[j].smallQuesNum = smallQuesNum;
@@ -142,6 +143,7 @@ function* submitHomeworkSaga(action) {
     if (code === 0) {
       // 提交作业成功后判断是否有互批作业
       const { needMark } = data;
+      // console.log(789, '提交作业成功', needMark);
       yield put(actions.submitHomeworkAction(needMark, 'SUCCESS'));
     } else {
       yield put(actions.submitHomeworkAction(code, 'ERROR'));
