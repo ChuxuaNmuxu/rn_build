@@ -40,6 +40,9 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  background-color: #fff;
+  border-top-color: rgba(0, 0, 0, 0.1);
+  border-top-width: 4px;
 }
 
 .random_btn_normal {
@@ -53,7 +56,7 @@
   // border: 1px solid #30bf6c;
   background-color: #54cc82;
   border-radius: 50px;
-  padding: 20px 100px;
+  padding: 20px 48px;
   margin: 10px;
   font-family: PingFangSC-Regular;
   font-size: 24px;
