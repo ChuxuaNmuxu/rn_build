@@ -104,7 +104,7 @@ class Login extends Component {
         <Madal />
         <View style={styles.box}>
           <Debug>
-            <Text style={styles.title}>用户--11111登陆</Text>
+            <Text style={styles.title}>用户登陆</Text>
           </Debug>
           <View style={styles.item}>
             <Text style={styles.label}>账号：</Text>

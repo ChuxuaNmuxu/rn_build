@@ -49,7 +49,7 @@ public class MainApplication extends Application implements ReactApplication {
           new VectorIconsPackage(),
           new SvgPackage(),
           new WheelPickerPackage(),
-          new MyNativeReactPackage()
+          new MyNativeReactPackage(),
           new ReactNativeExceptionHandlerPackage()
       );
     }
