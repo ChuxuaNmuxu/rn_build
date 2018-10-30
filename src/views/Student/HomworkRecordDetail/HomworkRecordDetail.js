@@ -301,7 +301,7 @@ class HomworkRecordDetail extends Component {
     initialState(null);
     Actions.ProblemRecords();
     console.log('caonika');
-    throw new Error('crash test is here');
+    // throw new Error('crash test is here');
   }
 
   selectFun=(index, questionId) => {

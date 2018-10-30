@@ -76,11 +76,14 @@ class AnserSummarization extends Component {
   examinationSummary=() => {
     const { type, questionType } = this.props;
     const iconArr = ['wrongIcon', 'corectIcon', 'partialCorrect'];
+    const colorArr = ['#fa5656', '#30bf6c', '#f5a623'];
     return (
       <View style={[styles.AnserSummarization, { justifyContent: 'flex-start' }]}>
         {
           // icon不一定会展示,没教师或者同学修改不展示
-          <Svg height="40" width="40" source={iconArr[0]} fill="#fff" />
+          <View style={[styles.svgView, { backgroundColor: colorArr[0] }]}>
+            <Svg height="16" width="16" source={iconArr[0]} fill={colorArr[0]} />
+          </View>
         }
 
         <Text
@@ -105,7 +108,9 @@ class AnserSummarization extends Component {
         <View style={styles.leftTips}>
           {
           // icon不一定会展示,没教师或者同学修改不展示
-            <Svg height="40" width="40" source={iconArr[0]} fill="#fff" />
+            <View style={[styles.svgView, { backgroundColor: colorArr[0] }]}>
+              <Svg height="16" width="16" source={iconArr[0]} fill={colorArr[0]} />
+            </View>
         }
 
           <Text
