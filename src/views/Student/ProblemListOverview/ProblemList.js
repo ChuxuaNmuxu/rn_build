@@ -19,6 +19,7 @@ class ProblemList extends Component {
   // 渲染子组件
   _renderItem = ({ item, index }) => (
     <ProblemCard
+      currentSubjectId={this.props.currentSubjectId}
       key={index}
       index={index}
       id={item.id}
@@ -76,6 +77,7 @@ ProblemList.propTypes = {
   total: PropTypes.number.isRequired,
   mistakeList: PropTypes.array.isRequired,
   refreshList: PropTypes.func.isRequired,
+  currentSubjectId: PropTypes.string.isRequired,
 };
 
 export default ProblemList;

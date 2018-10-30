@@ -18,6 +18,7 @@ function* getDataSaga(action) {
   } = action.payload;
 
   const fetchParam = qs.stringify(params);
+  console.log(21, fetchParam);
   const url = `/app/api/student/failed-questions/list?${fetchParam}`;
   // console.log('url=', url);
   try {

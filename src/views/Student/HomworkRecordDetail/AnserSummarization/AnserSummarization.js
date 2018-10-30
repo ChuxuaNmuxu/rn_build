@@ -64,10 +64,10 @@ class AnserSummarization extends Component {
       questionType === 'obj' ? `回答错误，答案是${this.getJudgeMentText(correctAnser)}，你的答案是${this.getJudgeMentText(studentAnser)}${isH ? '' : `，得分：${score}分`}` : `回答错误${isH ? '' : `，得分：${score}分`}`,
       questionType === 'obj' ? `回答正确，答案是${this.getJudgeMentText(correctAnser)}${isH ? '' : `，得分：${score}分`}` : `回答正确${isH ? '' : `，得分：${score}分`}`,
       questionType === 'obj' ? `未作答，答案是${this.getJudgeMentText(correctAnser)}` : '未作答',
-      `部分正确，答案是${correctAnser}，你的答案是${this.getJudgeMentText(studentAnser)}，得分：${score}分`,
+      questionType === 'obj' ? `部分正确，答案是${correctAnser}，你的答案是${this.getJudgeMentText(studentAnser)}，得分：${score}分` : `部分正确，得分：${score}分`,
       questionType === 'obj' ? `答案是${this.getJudgeMentText(correctAnser)}，你的答案是${this.getJudgeMentText(studentAnser)}` : '解答过程',
     ];
-    console.log(!isQuestionSubmited,'!isQuestionSubmited!isQuestionSubmited!isQuestionSubmited')
+    console.log(isQuestionSubmited, '!isQuestionSubmited!isQuestionSubmited!isQuestionSubmited');
     if (isQuestionSubmited) {
       text = unanser;
       return text;
@@ -149,7 +149,11 @@ class AnserSummarization extends Component {
           // icon不一定会展示,没教师或者同学修改不展示
           status === 0
             ? null
-            : <Svg height="40" width="40" source={iconArr[isItCorrect]} fill="#fff" />
+            : (
+              <View style={[styles.svgView, { backgroundColor: colorArr[isItCorrect] }]}>
+                <Svg height="16" width="16" source={iconArr[isItCorrect]} fill={colorArr[isItCorrect]} />
+              </View>
+            )
         }
 
           <Text

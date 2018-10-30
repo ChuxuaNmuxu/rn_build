@@ -91,7 +91,6 @@ class ProblemCard extends PureComponent {
     );
   }
 
-
   // 点击错题卡片进入错题详情页
   goProblemDetail = (category, index) => {
     const { id } = this.props;
@@ -105,10 +104,11 @@ class ProblemCard extends PureComponent {
 
   // 点击复习错题进入错题重做页面
   doErrWorkAgain = () => {
-    const { datas } = this.props;
+    const { datas, currentSubjectId } = this.props;
     console.log('点击复习错题进入错题重做页面', datas);
     Actions.MistakeReform({
       problemCardInfo: [datas],
+      currentSubjectId,
     });
   }
 
@@ -144,18 +144,18 @@ class ProblemCard extends PureComponent {
               <View style={styles.footer_left}>
                 {/* 考试错题不显示难易程度标签--错题类型(category---1:作业,2:考试) */}
                 {
-                    datas.category === 1
-                    && (
-                    <View
-                      style={[
-                        styles.difficult_box,
-                        { backgroundColor: convertToDifficultyLevel(datas.difficultyLevel, true) },
-                      ]}
-                    >
-                      <Text style={styles.difficult_txt}>{convertToDifficultyLevel(datas.difficultyLevel)}</Text>
-                    </View>
-                    )
-                  }
+                      datas.category === 1
+                      && (datas.difficultyLevel !== 0 ? (
+                        <View
+                          style={[
+                            styles.difficult_box,
+                            { backgroundColor: convertToDifficultyLevel(datas.difficultyLevel, true) },
+                          ]}
+                        >
+                          <Text style={styles.difficult_txt}>{convertToDifficultyLevel(datas.difficultyLevel)}</Text>
+                        </View>
+                      ) : null)
+                    }
                 <View>
                   <Text style={styles.err_reason}>
                     <I18nText>
@@ -190,6 +190,7 @@ ProblemCard.propTypes = {
   datas: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
+  currentSubjectId: PropTypes.string.isRequired,
 };
 
 export default ProblemCard;

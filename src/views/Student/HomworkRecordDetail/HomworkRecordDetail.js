@@ -117,7 +117,7 @@ class HomworkRecordDetail extends Component {
             width,
             height,
             isgetImageSize: true,
-          }
+          },
         );
       },
       () => {
@@ -197,12 +197,12 @@ class HomworkRecordDetail extends Component {
 
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
-    console.log(draftToHtml(JSON.parse(htmlContent)), 'htmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponent');
+    console.log(draftToHtml(JSON.parse(htmlContent)));
     const htmlViewStyles = StyleSheet.create({
       p: {
         fontSize: 24,
         color: '#999999',
-      }
+      },
     });
     // const htmlContent = '<p>zhazhazha</p>'
     // + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
@@ -301,6 +301,7 @@ class HomworkRecordDetail extends Component {
     initialState(null);
     Actions.ProblemRecords();
     console.log('caonika');
+    // throw new Error('crash test is here');
   }
 
   selectFun=(index, questionId) => {
@@ -354,17 +355,16 @@ class HomworkRecordDetail extends Component {
     );
   }
 
-  isQuestionSubmited=(objAnser,subAnser)=>{
-    if(objAnser===null){
-      return true
+  isQuestionSubmited=(objAnser, subAnser) => {
+    console.log(objAnser, subAnser);
+    console.log(objAnser === null && subAnser === []);
+    if (_.isNil(objAnser) && _.isEmpty(subAnser)) {
+      return true;
     }
-    if(objAnser===''){
-      return true
+    if (_.isEmpty(objAnser) && _.isEmpty(subAnser)) {
+      return true;
     }
-    if(subAnser===[]){
-      return true
-    }
-    return false
+    return false;
   }
 
 
@@ -416,8 +416,9 @@ class HomworkRecordDetail extends Component {
     const { studentAnser } = AnserSummarizationData;
     console.log(studentAnserImage, 'studentAnserImagestudentAnserImage');
     // 是否存在答案studentAnser !== null || studentAnser !== '' || studentAnserImage !== [];
-    const isQuestionSubmited = this.isQuestionSubmited(studentAnser,studentAnserImage) 
+    const isQuestionSubmited = this.isQuestionSubmited(studentAnser, studentAnserImage);
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
+    console.log(isQuestionSubmited, 'isQuestionSubmitedisQuestionSubmited');
     return (
       <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
         <Modal />

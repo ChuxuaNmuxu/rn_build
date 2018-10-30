@@ -243,6 +243,18 @@ class DetailView extends Component {
     ModalApi.onOppen('ImageViewer', data);
   }
 
+  isQuestionSubmited=(objAnser, subAnser) => {
+    console.log(objAnser, subAnser);
+    console.log(objAnser === null && subAnser === []);
+    if (_.isNil(objAnser) && _.isEmpty(subAnser)) {
+      return true;
+    }
+    if (_.isEmpty(objAnser) && _.isEmpty(subAnser)) {
+      return true;
+    }
+    return false;
+  }
+
 
   render() {
     const {
@@ -262,10 +274,12 @@ class DetailView extends Component {
       rightAnser,
       causeOfErrorNum,
     } = data;
-    // const { studentAnser } = AnserSummarizationData;
+    const { studentAnser } = AnserSummarizationData;
     console.log(studentAnserImage, 'studentAnserImagestudentAnserImage');
     // 是否存在答案
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
+    const isQuestionSubmited = this.isQuestionSubmited(studentAnser, studentAnserImage);
+    console.log(isQuestionSubmited, 'isQuestionSubmitedisQuestionSubmited');
     return (
       <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
         <Modal />
@@ -309,6 +323,8 @@ class DetailView extends Component {
                 studentAnser={AnserSummarizationData.studentAnser}
                 // 得分
                 score={AnserSummarizationData.score}
+                // 是否未作答
+                isQuestionSubmited={isQuestionSubmited}
               />
             }
             {

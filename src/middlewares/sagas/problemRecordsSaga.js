@@ -147,6 +147,7 @@ function* dropDownSaga(action) {
         total,
       }, 'SUCCESS'));
       callback();
+      yield put(actions.footerLoading(false));
     } else {
       yield put(actions.dropDownRefresh(code, 'ERROR'));
     }
