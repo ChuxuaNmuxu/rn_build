@@ -15,13 +15,6 @@ import { captureRef } from 'react-native-view-shot';
 export default class ImageCropper extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      rotate: 0,
-    };
-  }
-
-  componentWillMount() {
-    console.log('didMount');
     // 是否拖动裁剪框
     this.dragClipRect = false;
     // 是否缩放裁剪框
@@ -33,16 +26,16 @@ export default class ImageCropper extends React.Component {
     const {
       imageWidth = 0,
       imageHeight = 0,
-      containerWidth = 0,
-      containerHeight = 0,
+      containerWidth: CWidth = 0,
+      containerHeight: CHeight = 0,
     } = this.props;
 
     // 当前/动画 x 位移
-    this._left = containerWidth / 2 - imageWidth / 2;
+    this._left = CWidth / 2 - imageWidth / 2;
     this._animatedLeft = new Animated.Value(this._left);
 
     // 当前/动画 y 位移
-    this._top = containerHeight / 2 - imageHeight / 2;
+    this._top = CHeight / 2 - imageHeight / 2;
     this._animatedTop = new Animated.Value(this._top);
 
     this._width = imageWidth;
@@ -77,8 +70,6 @@ export default class ImageCropper extends React.Component {
 
       onPanResponderGrant: (evt, gestureState) => {
         evt.persist();
-        // console.log('target', evt.target);
-        // console.log('nativeEvent', evt.nativeEvent);
         console.log('mouseDown', this._top + gestureState.dy);
         const { changedTouches } = evt.nativeEvent;
         if (changedTouches.length > 1) {
@@ -89,10 +80,10 @@ export default class ImageCropper extends React.Component {
       },
 
       onPanResponderMove: (evt, gestureState) => {
-        // console.log('evt', evt);
-        console.log('mouseMove', this.dragClipRect, this.scaleClipRectLT);
+        // console.log('mouseMove', this.dragClipRect, this.scaleClipRectLT);
 
         const { changedTouches } = evt.nativeEvent;
+        const { containerWidth, containerHeight } = this.props;
         if (changedTouches.length <= 1) {
           if (this.dragClipRect) {
             // 拖动裁剪框
@@ -200,7 +191,6 @@ export default class ImageCropper extends React.Component {
           this.currentZoomDistance = Math.floor(
             Math.sqrt(widthDistance * widthDistance + heightDistance * heightDistance),
           );
-          // console.log('1233', this.currentZoomDistance);
           if (this.lastZoomDistance !== null) {
             let scale = this.scale + (
               this.currentZoomDistance - this.lastZoomDistance
@@ -218,8 +208,8 @@ export default class ImageCropper extends React.Component {
       },
 
       onPanResponderRelease: (evt, gestureState) => {
-        // console.log('evt', evt); 详情计算
-        console.log('mouseUp', this.dragClipRect, this.scaleClipRectLT);
+        // console.log('mouseUp', this.dragClipRect, this.scaleClipRectLT);
+        const { containerWidth, containerHeight } = this.props;
         if (this.dragClipRect) {
           const diffLeft = this._left + gestureState.dx;
           const diffTop = this._top + gestureState.dy;
@@ -340,6 +330,35 @@ export default class ImageCropper extends React.Component {
 
       onPanResponderTerminate: () => {},
     });
+    this.state = {
+      rotate: 0,
+      containerWidth: CWidth,
+    };
+  }
+
+  componentDidUpdate(preProps) {
+    // const { containerWidth: stateW } = this.state;
+    const { containerWidth } = this.props;
+    if (preProps.containerWidth !== containerWidth) {
+      if (preProps.containerWidth > containerWidth) {
+        const mid = this._top;
+        this._top = this._left;
+        this._left = containerWidth - mid - this._height;
+      } else {
+        const mid = this._left;
+        this._left = this._top;
+        this._top = preProps.containerWidth - mid - this._width;
+      }
+
+      const alt = this._width;
+      this._width = this._height;
+      this._height = alt;
+
+      this._animatedLeft.setValue(this._left);
+      this._animatedTop.setValue(this._top);
+      this._animatedWidth.setValue(this._width);
+      this._animatedHeight.setValue(this._height);
+    }
   }
 
   onPressBtn = (e, type) => {
@@ -354,9 +373,17 @@ export default class ImageCropper extends React.Component {
     }
   }
 
+  static getDerivedStateFromProps(nextProps, state) {
+    if (nextProps.containerWidth !== state.containerWidth) {
+      return {
+        containerWidth: nextProps.containerWidth,
+      };
+    }
+    return null;
+  }
+
   getCropData = () => {
     const { scale } = Dimensions.get('screen');
-    console.log('scale', scale);
     return {
       top: this._top * scale,
       left: this._left * scale,
@@ -381,8 +408,7 @@ export default class ImageCropper extends React.Component {
   }
 
   render() {
-    // console.log('this.animatedScale', this.animatedScale);
-    const { rotate = 0 } = this.state;
+    const { rotate = 0, containerWidth } = this.state;
     const animatedImgStyle = {
       transform: [{
         scale: this.animatedScale,
