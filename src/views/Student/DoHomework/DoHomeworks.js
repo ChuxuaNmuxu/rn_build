@@ -91,8 +91,8 @@ class DoHomeworks extends Component {
       this.fetchSaveQuestion(uploadImgQuesId);
       this.tryToUploadImg = false;
     }
-    // 提交作业成功后是否有互批作业
-    if (this.commitHomework) {
+    // 提交作业成功后是否有互批作业needMark为---0:没有互批作业, 1:有互批作业，其初始值为-1，表示还未接收到接口数据
+    if (this.commitHomework && needMark >= 0) {
       if (needMark) {
         this.setRemarkModalVisibleFun(true);
       } else {
@@ -218,10 +218,23 @@ class DoHomeworks extends Component {
     this.setCommitModalVisbleFun(false);
   }
 
-  // 点击查看已答题目/检查---进入作业检查页面
-  viewAnsweredQuesFun = () => {
-    Actions.ReviewHomework();
-    this.setCommitModalVisbleFun(false);
+  // 点击查看已答题目/检查---进入作业检查页面,如果是点击 查看已答题目 按钮则先要判断当前题目是否有选难易程度，没有则弹窗让其选择难易程度
+  viewAnsweredQuesFun = (bool) => {
+    const { currentIndex, homeworkData: { finalQuestionList } } = this.state;
+    if (bool) {
+      this.setVisibleFun(false);
+      if (!finalQuestionList[currentIndex].difficultyLevel) {
+        this.setState({
+          difficultModalStatus: true,
+          showDifficultModalOpt: 'commitBtnClick',
+        });
+      } else {
+        Actions.ReviewHomework();
+      }
+    } else {
+      Actions.ReviewHomework();
+      this.setCommitModalVisbleFun(false);
+    }
   }
 
   // 稍后再批
@@ -275,7 +288,7 @@ class DoHomeworks extends Component {
       homeworkData: { finalQuestionList },
     } = this.state;
     changeDifficuiltLevelAction({ currentId, level });
-    // 正常情况下选择难易程度或者点击提交时弹出的当前题目的难易程度选择标签
+    // 正常情况下选择难易程度或者点击 提交/查看已答题目 时弹出的当前题目的难易程度选择标签
     if (!difficultModalStatus || showDifficultModalOpt === 'commitBtnClick') {
       setTimeout(() => {
         this.fetchSaveQuestion(currentId);
@@ -528,7 +541,7 @@ class DoHomeworks extends Component {
                 <CustomButton
                   warpStyle={styles.submitBtn}
                   style={styles.btnText}
-                  onPress={() => this.viewAnsweredQuesFun()}
+                  onPress={() => this.viewAnsweredQuesFun(true)}
                 >
                   <I18nText>
                     DoHomeworks.header.viewAnsweredQues
@@ -572,8 +585,6 @@ class DoHomeworks extends Component {
     }
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
-    // console.log(1111, '获取到的作业题目数据', showQuesArray);
-    // console.log(222, '接口数据', homeworkData);
     return (
       <View style={styles.containers}>
         {!R.isEmpty(homeworkData) && this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}

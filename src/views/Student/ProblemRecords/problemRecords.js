@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text,
+  // Text,
   TouchableOpacity,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
@@ -96,6 +96,7 @@ class ProblemRecords extends Component {
     const params = {
       ...args,
     };
+
     dropDownRefresh(params, 'REQUEST');
   }
 
@@ -199,7 +200,7 @@ class ProblemRecords extends Component {
   // RefreshSuccess: 'RefreshSuccess', // 刷新成功
   dropDownRefresh=() => {
     const { currentRecordType, currentSubjectId } = this.state;
-    this.listVew.setheaderState(freshListViewSate.Refreshing);
+
     this.page = 1;
     this.changeParamsfetch({
       currentRecordType,
@@ -213,14 +214,23 @@ class ProblemRecords extends Component {
 
   upPullGetMore=() => {
     const { currentRecordType, currentSubjectId } = this.state;
-    const { recordData, total } = this.props;
-    console.log(total, recordData.length);
-    console.log(recordData);
+    const {
+      recordData, total, isFoorterLoading, actions: { footerLoading },
+    } = this.props;
+    // console.log(total, recordData.length);
+    // console.log(recordData);
     if (recordData.length === total) {
+      // console.log('wopaoqilailemamama', this.listVew);
       this.listVew.setfooterState(freshListViewSate.NoMoreData);
       return;
     }
-    this.listVew.setfooterState(freshListViewSate.Refreshing);
+    if (isFoorterLoading) {
+      // console.log(isFoorterLoading, 'sasdasfdasfs');
+      return;
+    }
+
+    footerLoading(true);
+
     this.dropDownFetch({
 
       currentRecordType,
@@ -390,6 +400,7 @@ ProblemRecords.propTypes = {
   recordStateData: PropTypes.array.isRequired,
   isRevisingData: PropTypes.array.isRequired,
   total: PropTypes.any.isRequired,
+  isFoorterLoading: PropTypes.any.isRequired,
 };
 
 ProblemRecords.defaultProps = {
@@ -409,6 +420,7 @@ const mapStateToProps = (state) => {
       // 修正状态
       isRevisingData,
       total,
+      isFoorterLoading,
     },
   } = state;
   return {
@@ -418,6 +430,7 @@ const mapStateToProps = (state) => {
     recordStateData,
     isRevisingData,
     total,
+    isFoorterLoading,
   };
 };
 

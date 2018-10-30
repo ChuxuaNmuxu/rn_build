@@ -57,9 +57,8 @@ class ReviewHomework extends Component {
       this.fetchSaveQuestion(uploadImgQid);
       this.tryToUploadImg = false;
     }
-
-    // 提交作业成功后是否有互批作业
-    if (this.commitHomework) {
+    // 提交作业成功后是否有互批作业needMark为---0:没有互批作业, 1:有互批作业，其初始值为-1，表示还未接收到接口数据
+    if (this.commitHomework && needMark >= 0) {
       if (needMark) {
         this.setRemarkModalVisibleFun(true);
       } else {
@@ -101,6 +100,7 @@ class ReviewHomework extends Component {
     });
   }
 
+
   static getDerivedStateFromProps(nextProps, prevState) {
     const { data } = nextProps;
     const answerList = prevState.reviewQues;
@@ -133,6 +133,20 @@ class ReviewHomework extends Component {
       };
     }
     return null;
+  }
+
+  // 去批改作业
+  presenttoCorrentFun = () => {
+    const { data: { homeworkId } } = this.state;
+    this.setRemarkModalVisibleFun(false);
+    // 到批阅作业界面
+    Actions.HomeworkCorrecting({ homeworkId });
+  }
+
+  // 稍后再批
+  laterToCorrentFun = () => {
+    this.setRemarkModalVisibleFun(false);
+    Actions.HomeworkTask();
   }
 
   // 返回继续做题

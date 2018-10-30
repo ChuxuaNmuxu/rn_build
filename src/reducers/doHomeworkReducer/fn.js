@@ -1,7 +1,7 @@
-// 请求接口做作业数据--此时将needMark默认为false
+// 请求接口做作业数据--此时将needMark还原为-1
 export function fetchDataSuccess(state, action) {
   state.data = action.payload;
-  state.needMark = 0;
+  state.needMark = -1;
 }
 
 // 改变redux中所存数据对应客观题的答案

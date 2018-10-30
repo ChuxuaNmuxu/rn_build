@@ -36,7 +36,7 @@ const connectUrl = async (url) => {
   }
 
   if (typeof url !== 'string') {
-    console.error('url只能为字符串类型');
+    // console.error('url只能为字符串类型');
   } else if (url.indexOf('http') === 0) {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
@@ -129,7 +129,7 @@ const Fetch = {
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;
     if (!isEmpty(params)) {
-      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
+      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params,{ indices: false });
     }
     return this.getUrl(_url, {}, 'get', '', mock, headerParams);
   },
@@ -138,7 +138,7 @@ const Fetch = {
   delete(url, params) {
     let _url = url;
     if (!isEmpty(params)) {
-      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
+      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params,{ indices: false });
     }
     return this.getUrl(_url, params, 'delete');
   },

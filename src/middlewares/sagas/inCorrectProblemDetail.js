@@ -60,11 +60,14 @@ function transFromHomeworkDataList(data) {
 
 
 function getdifficultyDegree(difficultyLevel) {
-  if ((difficultyLevel === '1')) {
+  if ((difficultyLevel === 1)) {
     return 1;
   }
-  if (difficultyLevel === '5') {
+  if (difficultyLevel === 5) {
     return 2;
+  }
+  if (difficultyLevel === 0) {
+    return 3;
   }
   return 0;
 }
