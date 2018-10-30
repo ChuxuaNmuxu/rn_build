@@ -197,7 +197,7 @@ class HomworkRecordDetail extends Component {
 
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
-    console.log(draftToHtml(JSON.parse(htmlContent)), 'htmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponenthtmlViewComponent');
+    console.log(draftToHtml(JSON.parse(htmlContent)));
     const htmlViewStyles = StyleSheet.create({
       p: {
         fontSize: 24,
@@ -417,6 +417,7 @@ class HomworkRecordDetail extends Component {
     console.log(studentAnserImage, 'studentAnserImagestudentAnserImage');
     // 是否存在答案studentAnser !== null || studentAnser !== '' || studentAnserImage !== [];
     const isQuestionSubmited = this.isQuestionSubmited(studentAnser, studentAnserImage);
+    console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
     console.log(isQuestionSubmited, 'isQuestionSubmitedisQuestionSubmited');
     return (
       <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
