@@ -53,7 +53,8 @@ function* fetchDoHomeworkSaga(action) {
         for (let j = 0; j < homeworkData.questionList[i].childrenList.length; j++) {
           homeworkData.questionList[i].childrenList[j].materialContent = homeworkData.questionList[i].content;
           homeworkData.questionList[i].childrenList[j].bigNumber = homeworkData.questionList[i].number;
-          homeworkData.questionList[i].childrenList[j].bigTitle = homeworkData.questionList[i].title;
+          homeworkData.questionList[i].childrenList[j].bigTitle = homeworkData.questionList[i].title
+          || homeworkData.questionList[i].type;
           finalQuestionList.push(homeworkData.questionList[i].childrenList[j]);
           if (homeworkData.questionList[i].content) {
             homeworkData.questionList[i].childrenList[j].smallQuesNum = smallQuesNum;

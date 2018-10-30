@@ -1,0 +1,42 @@
+.corrent_wrapper {
+  width: 100%;
+  height: 120px;
+  background-color: white;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.corrent_title {
+  font-family: PingFangSC-Regular;
+  font-size: 24px;
+  color: #999;
+  margin: 12px;
+}
+
+.radio_wrapper {
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+}
+.radio_childStyle {
+  margin: 6px;
+}
+.button_style {
+  width: 150px;
+  border-radius: 50px;
+  background-color: #fff;
+  border-color: #dbdbdb;
+}
+.checkedIconWrapStyle1{
+  border-color: #30bf6c;
+  background-color: #30bf6c;
+}
+.checkedIconWrapStyle2{
+  border-color: #f5a623;
+  background-color: #f5a623;
+}
+.checkedIconWrapStyle3{
+  border-color: #fa5656;
+  background-color: #fa5656;
+}

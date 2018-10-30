@@ -23,6 +23,7 @@ import Modal, { ModalApi } from '../../../components/Modal';
 import I18nText from '../../../components/I18nText';
 import styles from './HomeworkCorrecting.scss';
 import * as correctingActions from '../../../actions/homeworkCorrectingAction';
+import CorrentResultCard from './Components/CorrentResultCard';
 
 class HomeworkCorrecting extends Component {
   constructor(props) {
@@ -37,6 +38,19 @@ class HomeworkCorrecting extends Component {
     console.log('调用 HomeworkCorrecting 组件！', this.props);
     const { actions, homeworkId } = this.props;
     actions.fetchListAction(homeworkId, 'REQUEST');
+  }
+
+  // 选择批阅结果
+  onResultChange = (aa, index) => {
+    // aa: 选择的批阅结果--10正确，5部分正确，1错误；index：当前批阅题目的索引
+    // console.log(7777, aa, index);
+    if (aa === 10) {
+      this.setPopScore(10, index);
+    } else if (aa === 1) {
+      this.setPopScore(0, index);
+    } else {
+      this.popupDialog.show(); // 气泡弹出框
+    }
   }
 
   setPopScore = (score, index) => {
@@ -127,9 +141,12 @@ class HomeworkCorrecting extends Component {
     }
   }
 
+
   render() {
     const { list } = this.props;
     const { index } = this.state;
+    // 当前批阅的题目
+    const currentQues = list[index];
     const labelData = [ // 标签数据
       {
         label: '1',
@@ -172,19 +189,25 @@ class HomeworkCorrecting extends Component {
     //   console.log(draft)
     // }
     // console.log(index, list.length);
+    // console.log(7878, index, list.length, currentQues);
     return (
       <View style={styles.wrapper}>
         <PopupDialog
           ref={(popupDialog) => { this.popupDialog = popupDialog; }}
-          width={850}
+          width={400}
           height={340}
+          // overlayOpacity={0}
+          dialogStyle={{ position: 'absolute', left: 144, bottom: 150 }}
         >
           <View style={{
             // width: 1,
             height: 340,
             backgroundColor: 'white',
+            padding: 20,
+            borderRadius: 8,
           }}
           >
+            <Text style={styles.score_info}>满分10分：</Text>
             <Radio.Group
               // defaultValue={defaultValue}
               onChange={(score) => {
@@ -193,11 +216,12 @@ class HomeworkCorrecting extends Component {
                 actions.setCorrectResultAction({ score, index });
                 this.popupDialog.dismiss();
               }}
-              checkedIconWrapStyle={{
-                borderColor: '#fa5656',
-              }}
+              iconWrapStyle={styles.icon_btn_style}
+              textStyle={styles.text_btn_style}
+              checkedIconWrapStyle={styles.icon_checked_style}
               checkedTextStyle={{
-                color: '#fa5656',
+                color: '#fff',
+                fontSize: 36,
               }}
               style={styles.radio_wrapper}
               childStyle={styles.radio_childStyle}
@@ -317,60 +341,6 @@ class HomeworkCorrecting extends Component {
                       </View>
                     </TouchableOpacity>
                   </View>
-                  <View style={styles.foot}>
-                    <View style={styles.foot_child_left}>
-                      <View>
-                        <I18nText style={styles.foot_word}>
-                          homeworkCorrecting.homeworkCorrecting
-                        </I18nText>
-                      </View>
-                      {/* 错误 */}
-                      <TouchableOpacity onPress={() => this.setPopScore(10, index1)}>
-                        <I18nText style={[styles.foot_btn, styles.btn_color_green]}>
-                          homeworkCorrecting.correct
-                        </I18nText>
-                      </TouchableOpacity>
-                      <View style={styles.space_2} />
-                      {/* 部分正确 */}
-                      <View>
-                        {/* 气泡弹出框 */}
-                        <TouchableOpacity
-                          // onPress={() => this.openPop(index1)}
-                          onPress={() => this.popupDialog.show()}
-                        >
-                          <I18nText style={[styles.foot_btn, styles.btn_color_orange]}>
-                              homeworkCorrecting.partOfTheError
-                          </I18nText>
-                        </TouchableOpacity>
-                      </View>
-                      <View style={styles.space_2} />
-                      {/* 正确 */}
-                      <TouchableOpacity onPress={() => this.setPopScore(0, index1)}>
-                        <I18nText style={[styles.foot_btn, styles.btn_color_pink]}>
-                          homeworkCorrecting.error
-                        </I18nText>
-                      </TouchableOpacity>
-                    </View>
-                    {/* 完成批阅按钮,根据是不是最后一道题，显示不同的文字 */}
-                    <View style={styles.foot_child_right}>
-                      <TouchableOpacity
-                        onPress={() => this.finishReadOver(item, index1)}
-                        disabled={item.finishBtnDisable}
-                      >
-                        {
-                          index !== (list.length - 1) ? (
-                            <I18nText style={[styles.foot_btn, styles.btn_color_right]}>
-                              homeworkCorrecting.finishCorrectingAndNext
-                            </I18nText>
-                          ) : (
-                            <I18nText style={[styles.foot_btn, styles.btn_color_right]}>
-                            homeworkCorrecting.finishCorrectingNotNext
-                            </I18nText>
-                          )
-                        }
-                      </TouchableOpacity>
-                    </View>
-                  </View>
                 </View>
               ))
             }
@@ -379,6 +349,41 @@ class HomeworkCorrecting extends Component {
           }
           </View>
         </ScrollView>
+        <View>
+          {
+          list.length > 0
+            ? (
+              <View style={styles.foot}>
+                <View style={styles.foot_child_left}>
+                  <CorrentResultCard
+                    key={index}
+                    defaultValue={currentQues.score}
+                    onChange={a => this.onResultChange(a, index)}
+                  />
+                </View>
+                <View style={styles.foot_child_right}>
+                  <TouchableOpacity
+                    onPress={() => this.finishReadOver(currentQues, index)}
+                    disabled={currentQues.score === undefined}
+                  >
+                    {
+                  index !== (list.length - 1) ? (
+                    <I18nText style={[styles.foot_btn, currentQues.score !== undefined && styles.btn_color_active]}>
+                      homeworkCorrecting.finishCorrectingAndNext
+                    </I18nText>
+                  ) : (
+                    <I18nText style={[styles.foot_btn, currentQues.score !== undefined && styles.btn_color_active]}>
+                      homeworkCorrecting.finishCorrectingNotNext
+                    </I18nText>
+                  )
+                }
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )
+            : null
+        }
+        </View>
       </View>
     );
   }

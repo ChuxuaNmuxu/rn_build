@@ -24,6 +24,8 @@ import com.oblador.vectoricons.VectorIconsPackage;
 
 import com.iamsb.wheelpicker.WheelPickerPackage;
 
+import com.masteratul.exceptionhandler.ReactNativeExceptionHandlerPackage;
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -45,7 +47,8 @@ public class MainApplication extends Application implements ReactApplication {
             new SplashScreenReactPackage(),
           new VectorIconsPackage(),
           new SvgPackage(),
-          new WheelPickerPackage()
+          new WheelPickerPackage(),
+          new ReactNativeExceptionHandlerPackage()
       );
     }
 

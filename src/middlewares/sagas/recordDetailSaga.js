@@ -30,12 +30,13 @@ function* fetchExamData(action) {
     // 模拟数据
     // const code = 0;
     if (code === 0) {
-      const { isMarked, title } = data;
+      const { isMarked, title, submitStatus } = data;
       const customData = {
         headerList: transFromExamHeaderList(data),
         detailsDataList: transFromExamdetailsDataList(data),
-        status: isMarked ? 1 : 0,
+        status: getUncommitedStatus(submitStatus, isMarked), // submitStatus === 0 ? 1 : isMarked ? 1 : 0,
         title,
+        // 是否未参加考试，0是未参加
       };
       yield put(actions.fetchExaminationData(customData, 'SUCCESS'));
     } else {
@@ -46,6 +47,7 @@ function* fetchExamData(action) {
     // yield put(actions.fetchExaminationData(e, 'ERROR'));
   }
 }
+
 
 function* fetchHomeworkListData(action) {
   try {
@@ -146,13 +148,21 @@ function transFromExamHeaderList(data) {
   // const { questionNum, status } = questionNums;
   const a = questionNums.map(
     (item, index) => ({
-      isItCorrect: item.status - 1,
+      isItCorrect: item.isRight,
       questionNum: item.questionNum,
       id: studentExamQuestionDetailDtos[index].questionId,
     }),
   );
 
   return a;
+}
+
+function getUncommitedStatus(submitStatus, isMarked) {
+  // 如果未参加考试，当成未作答并且被批改了
+  if (submitStatus === 0) {
+    return 1;
+  }
+  return isMarked ? 1 : 0;
 }
 
 function transFromExamdetailsDataList(data) {
