@@ -39,24 +39,36 @@ class AnserSummarization extends Component {
     return color[0];
   }
 
-  getText = (type, questionType) => {
+  getText = (type, questionType, isQuestionSubmited) => {
     const {
       correctAnser, studentAnser, score,
     } = this.props;
     // console.log(questionType, 'getTextgetTextgetText');
+    //      questionType === 'obj' ? `未作答，答案是${this.getJudgeMentText(correctAnser)}` : '未作答',
     // 主观题客观题的展示效果不一样，五种状态下的展示也不一样。文档敢写详细点？
     const allText = {
       E: {
-        sub: `回答错误，得分：${score}分`,
-        obj: `回答错误，答案是${correctAnser}，你的答案时${studentAnser}，得分：${score}分`,
+        sub: isQuestionSubmited ? '未作答' : `回答错误，得分：${score}分`,
+        obj: isQuestionSubmited ? `未作答，答案是${this.getJudgeMentText(correctAnser)}` : `回答错误，答案是${this.getJudgeMentText(correctAnser)}，你的答案是${studentAnser}，得分：${score}分`,
       },
       H: {
-        sub: '回答错误',
-        obj: `回答错误，答案是${correctAnser}，你的答案时${studentAnser}，得分：${score}分`,
+        sub: isQuestionSubmited ? '未作答' : '回答错误',
+        obj: isQuestionSubmited ? `未作答，答案是${this.getJudgeMentText(correctAnser)}` : `回答错误，答案是${this.getJudgeMentText(correctAnser)}，你的答案是${studentAnser}，得分：${score}分`,
       },
     };
 
     return allText[type][questionType];
+  }
+
+  getJudgeMentText=(anser) => {
+    if (anser === '1') {
+      return '对';
+    }
+
+    if (anser === '0') {
+      return '错';
+    }
+    return anser;
   }
 
 
@@ -64,11 +76,14 @@ class AnserSummarization extends Component {
   examinationSummary=() => {
     const { type, questionType } = this.props;
     const iconArr = ['wrongIcon', 'corectIcon', 'partialCorrect'];
+    const colorArr = ['#fa5656', '#30bf6c', '#f5a623'];
     return (
       <View style={[styles.AnserSummarization, { justifyContent: 'flex-start' }]}>
         {
           // icon不一定会展示,没教师或者同学修改不展示
-          <Svg height="40" width="40" source={iconArr[0]} fill="#fff" />
+          <View style={[styles.svgView, { backgroundColor: colorArr[0] }]}>
+            <Svg height="16" width="16" source={iconArr[0]} fill={colorArr[0]} />
+          </View>
         }
 
         <Text
@@ -84,7 +99,7 @@ class AnserSummarization extends Component {
   //  humanCorrected: true, systemCorrected: true, result: 0, otherCorrected
   homeworkSummary=() => {
     const {
-      difficultyDegree, type, questionType,
+      difficultyDegree, type, questionType, isQuestionSubmited,
     } = this.props;
     const iconArr = ['wrongIcon', 'corectIcon', 'partialCorrect'];
     const colorArr = ['#fa5656', '#30bf6c', '#f5a623'];
@@ -93,20 +108,24 @@ class AnserSummarization extends Component {
         <View style={styles.leftTips}>
           {
           // icon不一定会展示,没教师或者同学修改不展示
-            <Svg height="40" width="40" source={iconArr[0]} fill="#fff" />
+            <View style={[styles.svgView, { backgroundColor: colorArr[0] }]}>
+              <Svg height="16" width="16" source={iconArr[0]} fill={colorArr[0]} />
+            </View>
         }
 
           <Text
             style={[styles.text, { color: this.getTextColor(type, questionType) }, styles.textMargin]}
           >
-            {this.getText(type, questionType)}
+            {this.getText(type, questionType, isQuestionSubmited)}
           </Text>
 
           <View style={styles.difficultyView}>
             {/* <Text style={styles.difficultyDegree}>难易程度：</Text> */}
-            <Text style={[styles.difficultyDegree, { backgroundColor: colorArr[difficultyDegree], color: '#ffffff' }]}>
-              {['难', '易', '适中'][difficultyDegree]}
-            </Text>
+            {difficultyDegree === 3 ? null : (
+              <Text style={[styles.difficultyDegree, { backgroundColor: colorArr[difficultyDegree], color: '#ffffff' }]}>
+                {['难', '易', '适中'][difficultyDegree]}
+              </Text>
+            )}
           </View>
         </View>
 
@@ -143,6 +162,7 @@ AnserSummarization.propTypes = {
   studentAnser: PropTypes.string,
   // 得分
   score: PropTypes.number,
+  isQuestionSubmited: PropTypes.bool.isRequired,
 
 };
 

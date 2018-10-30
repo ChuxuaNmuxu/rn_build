@@ -21,7 +21,7 @@ class RecordList extends Component {
     getRefreshListView(this.listView);
   }
 
-  _keyExtractor = item => item.id + Math.random();
+  _keyExtractor = item => `${item.id + Math.random()}`;
 
   // 渲染子组件
   _renderItem = ({ item, index }) => {

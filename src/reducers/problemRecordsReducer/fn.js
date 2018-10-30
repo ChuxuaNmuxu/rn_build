@@ -39,3 +39,7 @@ export function fetchChangeParamsRefreshDataSuccess(state, action) {
   state.recordData = recordData;
   state.total = total;
 }
+// footerIsLoading
+export function footerIsLoading(state, action) {
+  state.isFoorterLoading = action.payload;
+}
