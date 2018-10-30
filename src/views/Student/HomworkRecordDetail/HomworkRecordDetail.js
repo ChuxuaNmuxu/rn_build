@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import HTMLView from 'react-native-htmlview';
@@ -59,6 +60,7 @@ class HomworkRecordDetail extends Component {
     // 获取图片的大小
     // 真实情况应该在loading结束后才跑这个函数
     // 不可能每个图片都去获取大小的，既然同一个机型出来的图片，那么应该差不多的
+    console.log('肯定更新的');
     const { detailsDataList } = this.props;
     const { selectTion, isgetImageSize } = this.state;
 
@@ -117,7 +119,7 @@ class HomworkRecordDetail extends Component {
             width,
             height,
             isgetImageSize: true,
-          },
+          }, () => console.log(width, 'widthwidthwidthwidthwidth'),
         );
       },
       () => {
@@ -226,12 +228,14 @@ class HomworkRecordDetail extends Component {
 
   // 学生自己的答案（图片）
   studentAnserImage=(url, key) => {
-    console.log(url, '学生自己的答案（图片）');
     // 获得屏幕宽高
     const {
       screenHeight, screenWidth, width, height,
     } = this.state;
     let [_width, _height] = [width, height];
+    console.log(url, '学生自己的答案（图片）');
+    console.log(_width, _height);
+    console.log(url, '学生自己的答案（图片）');
     // 如果宽大于屏幕宽度,整体缩放到宽度是屏幕宽度
     if (_width > screenWidth) {
       console.log('!!');
@@ -240,6 +244,11 @@ class HomworkRecordDetail extends Component {
       _height *= widthPixel;
     }
 
+    // if (_width < screenWidth) {
+    //   _width *= Dimensions.get('window').scale;
+    //   console.log(Dimensions.get('window').scale, 'Diemnsions.get().scale');
+    // }
+
     // 如果此时高度还大于屏幕高度,整体缩放到高度是屏幕高度
     if (_height > screenHeight) {
       console.log('??');
@@ -247,6 +256,10 @@ class HomworkRecordDetail extends Component {
       _width *= HeightPixel;
       _height *= HeightPixel;
     }
+    // if (_height < screenHeight) {
+    //   // _height *= Dimensions.get('window').scale;
+    //   console.log(Dimensions.get('window').scale, 'Diemnsions.get().scale');
+    // }
     return (
       <View style={[styles.studentAnserImage]} key={key}>
         <Image
@@ -315,6 +328,7 @@ class HomworkRecordDetail extends Component {
     // 无脑刷新state，如果有就直接显示了，不用鸟
     this.setState({
       selectTion: index,
+      isgetImageSize: false,
     });
     // 如果没有数据的话就去拉取,不过考试的数据都存在，所以可以忽视请求了
     console.log({ homeworkId: this.id, questionId, index }, '我要去请求数据啦啦啦啦啦');

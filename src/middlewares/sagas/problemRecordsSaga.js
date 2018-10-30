@@ -232,6 +232,8 @@ function transfromRecordData(data, type) {
         resultRead: item.resultRead,
         publishTime: item.publishTime,
         type: getHomeWorkType(item),
+        // 是否可以去重做
+        unknownRedo: item.allowMakeUp,
       })
     ));
   } else {
