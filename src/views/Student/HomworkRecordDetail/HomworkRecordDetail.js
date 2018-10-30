@@ -356,22 +356,12 @@ class HomworkRecordDetail extends Component {
   }
 
   isQuestionSubmited=(objAnser, subAnser) => {
-<<<<<<< HEAD
-    if (objAnser === null) {
-      return true;
-    }
-    if (objAnser === '') {
-      return true;
-    }
-    if (subAnser === []) {
-=======
     console.log(objAnser, subAnser);
     console.log(objAnser === null && subAnser === []);
     if (_.isNil(objAnser) && _.isEmpty(subAnser)) {
       return true;
     }
     if (_.isEmpty(objAnser) && _.isEmpty(subAnser)) {
->>>>>>> origin/master
       return true;
     }
     return false;
@@ -427,11 +417,8 @@ class HomworkRecordDetail extends Component {
     console.log(studentAnserImage, 'studentAnserImagestudentAnserImage');
     // 是否存在答案studentAnser !== null || studentAnser !== '' || studentAnserImage !== [];
     const isQuestionSubmited = this.isQuestionSubmited(studentAnser, studentAnserImage);
-<<<<<<< HEAD
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
-=======
     console.log(isQuestionSubmited, 'isQuestionSubmitedisQuestionSubmited');
->>>>>>> origin/master
     return (
       <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
         <Modal />
