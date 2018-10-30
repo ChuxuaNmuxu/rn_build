@@ -29,7 +29,7 @@ const errorHandler = (e, isFatal) => {
   if (isFatal) {
     reporter(e);
     Alert.alert(
-      'Hei guys, I am catching a bug~~',
+      'Hei guys, I am catching a bug~~~',
       `
         Error: ${(isFatal) ? 'Fatal:' : ''} ${e.name} ${e.message}
         At present ,you can do something~~
