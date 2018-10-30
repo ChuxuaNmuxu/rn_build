@@ -41,6 +41,7 @@ class HomeworkCorrecting extends Component {
 
   setPopScore = (score, index) => {
     const { actions } = this.props;
+    // actions.controlFinsihBtnAction({ finishBtnDisable: false, index });
     actions.setCorrectResultAction({ score, index });
   }
 
@@ -350,6 +351,7 @@ class HomeworkCorrecting extends Component {
                         </I18nText>
                       </TouchableOpacity>
                     </View>
+                    {/* 完成批阅按钮,根据是不是最后一道题，显示不同的文字 */}
                     <View style={styles.foot_child_right}>
                       <TouchableOpacity
                         onPress={() => this.finishReadOver(item, index1)}
@@ -389,7 +391,7 @@ HomeworkCorrecting.propTypes = {
 };
 
 HomeworkCorrecting.defaultProps = {
-  homeworkId: '505700854901243904', // 卢晨的作业
+  homeworkId: '505700854901243904', // 杨海宏的作业
 };
 
 const mapStateToProps = (state) => {

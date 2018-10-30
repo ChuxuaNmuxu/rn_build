@@ -37,10 +37,10 @@ class MistakeReform extends Component {
       actions: {
         saveQuestionsAction,
       },
-      // isRandom,
+      isRandom,
       problemCardInfo,
     } = props;
-    console.log(39, problemCardInfo);
+    console.warn(39, problemCardInfo, isRandom);
     // 发送action保存到redux中，且在saga保存的时候加入一些页面需要的逻辑
     saveQuestionsAction(problemCardInfo);
   }
@@ -188,11 +188,16 @@ class MistakeReform extends Component {
 
   // 自动关闭tips
   pressT = () => {
+    const { isRandom, currentSubjectId } = this.props;
     const data = {
       tipsContent: this.modalContent('错题已移除错题本！'),
       bottomTips: '自动关闭',
     };
     ModalApi.onOppen('TipsModal', data);
+    if (!isRandom) {
+      // console.warn('进来了！');
+      Actions.ProblemListOverview({ subjectId: currentSubjectId });
+    }
   }
 
   // 确认按钮后触发的 tips (打酱油的)
@@ -409,29 +414,31 @@ class MistakeReform extends Component {
                       <Text style={styles.subjective_bottom_left_word}>看完答案，你觉得这次回答对了吗？</Text>
                     </View>
                     <View style={styles.subjective_bottom_right}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          // 隐藏掉这一行
-                          controlSubjectiveButtonAction({ index, showTrueOrFalseButton: false });
-                          // 显示错题radio
-                          showWrongInfoRadioAction({ index });
-                        }}
-                      >
-                        <View style={styles.subjective_bottom_right_btn}>
-                          <Text style={styles.subjective_bottom_right_word}>错了</Text>
-                        </View>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => {
-                          // 隐藏掉这一行
-                          controlSubjectiveButtonAction({ index, showTrueOrFalseButton: false });
-                          showCorrectInfoAction({ index, showAnswer: false });
-                        }}
-                      >
-                        <View style={styles.subjective_bottom_right_btn}>
-                          <Text style={styles.subjective_bottom_right_word}>对了</Text>
-                        </View>
-                      </TouchableOpacity>
+                      <View style={styles.subjective_bottom_right_child}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            // 隐藏掉这一行
+                            controlSubjectiveButtonAction({ index, showTrueOrFalseButton: false });
+                            // 显示错题radio
+                            showWrongInfoRadioAction({ index });
+                          }}
+                        >
+                          <View style={styles.subjective_bottom_right_btn}>
+                            <Text style={styles.subjective_bottom_right_word}>错了</Text>
+                          </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            // 隐藏掉这一行
+                            controlSubjectiveButtonAction({ index, showTrueOrFalseButton: false });
+                            showCorrectInfoAction({ index, showAnswer: false });
+                          }}
+                        >
+                          <View style={styles.subjective_bottom_right_btn}>
+                            <Text style={styles.subjective_bottom_right_word}>对了</Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
                 </View>
@@ -527,8 +534,8 @@ class MistakeReform extends Component {
   }
 }
 MistakeReform.propTypes = {
-  // 是否是随机题
-  // isRandom: PropTypes.bool,
+  // 是否是随机题 不是随机题的话，做完后跳到错题列表页
+  isRandom: PropTypes.bool,
   actions: PropTypes.object.isRequired,
   // 错题的数据
   questions: PropTypes.array.isRequired,
@@ -540,6 +547,7 @@ MistakeReform.propTypes = {
 
 MistakeReform.defaultProps = {
   problemCardInfo: [],
+  isRandom: false,
 };
 
 const mapStateToProps = (state) => {

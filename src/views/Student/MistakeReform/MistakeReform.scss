@@ -115,8 +115,9 @@
 }
 
 .result_word {
-  height: 72px;
+  height: 100px;
   // flex-direction: row;
+  justify-content: space-between;
 }
 
 .result_word_child {
@@ -126,7 +127,6 @@
 }
 
 .result_icon {
-  
   border-radius:8px;
   padding: 3px;
   margin-right: 10px;
@@ -214,7 +214,7 @@
 }
 
 .subjective_bottom_left {
-  flex: 2;
+  flex: 1;
 }
 
 .subjective_bottom_left_word {
@@ -224,14 +224,19 @@
 }
 
 .subjective_bottom_right {
-  flex-direction: row;
   flex: 1;
-  justify-content: space-around;
+  align-items: center;
+}
+
+.subjective_bottom_right_child {
+  flex-direction: row;
+  // justify-content: center;
 }
 
 .subjective_bottom_right_btn {
   border:1px solid #30bf6c;
   border-radius:50px;
+  margin: 0 10px;
 }
 
 .subjective_bottom_right_word {
