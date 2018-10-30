@@ -48,11 +48,11 @@ class AnserSummarization extends Component {
     const allText = {
       E: {
         sub: `回答错误，得分：${score}分`,
-        obj: `回答错误，答案是${correctAnser}，你的答案时${studentAnser}，得分：${score}分`,
+        obj: `回答错误，答案是${correctAnser}，你的答案是${studentAnser}，得分：${score}分`,
       },
       H: {
         sub: '回答错误',
-        obj: `回答错误，答案是${correctAnser}，你的答案时${studentAnser}，得分：${score}分`,
+        obj: `回答错误，答案是${correctAnser}，你的答案是${studentAnser}，得分：${score}分`,
       },
     };
 
