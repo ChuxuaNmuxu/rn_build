@@ -37,10 +37,10 @@ class MistakeReform extends Component {
       actions: {
         saveQuestionsAction,
       },
-      isRandom,
+      // isRandom,
       problemCardInfo,
     } = props;
-    console.warn(39, problemCardInfo, isRandom);
+    // console.warn(39, problemCardInfo, isRandom);
     // 发送action保存到redux中，且在saga保存的时候加入一些页面需要的逻辑
     saveQuestionsAction(problemCardInfo);
   }
@@ -90,7 +90,7 @@ class MistakeReform extends Component {
     console.log(value);
     const { actions: { selectAnswerAction, saveObjectiveAnswerAction } } = this.props;
     const { index } = this.state;
-    // 单选题
+    // 客观题要保存答案
     const { type } = item;
     if (type === 1 || type === 2 || type === 3 || type === 4) {
       saveObjectiveAnswerAction({
@@ -454,6 +454,7 @@ class MistakeReform extends Component {
     const { questions, currentSubjectId } = this.props;
     const { index } = this.state;
     const contentWrapStyle = questions.length > 0 ? styles.content_wrap : styles.content_wrap_not_result;
+    // const contentWrapStyle = styles.content_wrap_not_result;
     return (
       <View style={styles.mistakeReform_container}>
         <Modal />
@@ -492,14 +493,12 @@ class MistakeReform extends Component {
                   <View key={i}>
                     {/* 题目 */}
                     <View style={styles.questionCard_container}>
+                      {/* 根据web那边写好的，这边根据item.type展示什么题型 */}
                       <View style={styles.question_title}>
                         <Text style={styles.question_title_txt}>{getQuestionTypeName(item.type)}</Text>
                       </View>
+                      {/* block转换为html */}
                       <View style={styles.question_content_wrap}>
-                        {/* <Image
-                          style={{ width: '100%', height: '100%' }}
-                          source={{ uri: item.url }}
-                        /> */}
                         { this.htmlViewComponent(item.content) }
                       </View>
                     </View>
