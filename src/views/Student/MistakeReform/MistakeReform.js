@@ -361,49 +361,54 @@ class MistakeReform extends Component {
     if (showAll) {
       return (
         <View>
-          <View style={styles.space} />
+          {
+            (teacherAnswer || otherStudentAnswer.length > 0) && <View style={styles.space} />
+          }
           <View style={styles.subjective_container}>
             <View>
-              <View style={styles.answer_wrap}>
-                <Text style={styles.answer_title}>题目答案:</Text>
-                {
-              // 后台可能返回null给我
-              teacherAnswer && (
-              <ThumbnailImage
-                option={{
-                  url: teacherAnswer,
-                }}
-              />
-              )
+              {
+                  // 没有老师答案就不显示
+                  teacherAnswer && (
+                  // 后台可能返回null给我
+                  <View style={styles.answer_wrap}>
+                    <Text style={styles.answer_title}>题目答案:</Text>
+                    <ThumbnailImage
+                      option={{
+                        url: teacherAnswer,
+                      }}
+                    />
+                  </View>
+                  )
                 }
-              </View>
             </View>
-            <View style={styles.dotted_line} />
-            {/* {
-              // 后台可能返回空数组给我
-              otherStudentAnswer.length && ( */}
-            <View>
-              <View style={styles.answer_wrap}>
-                <Text style={styles.answer_title}>看看其他同学的解答过程:</Text>
-                <View style={styles.other_student_answer}>
-                  {
-                    // 缩略图:thumbUrl 大图: fileUrl 名称: studentName
-                  otherStudentAnswer.map((item2, i) => (
-                    <View style={{ marginRight: 25 }} key={i}>
-                      <ThumbnailImage
-                        option={{
-                          url: item2.fileUrl,
-                          studentName: item2.studentName,
-                        }}
-                      />
+            {
+              // 没有其他同学答案就不显示
+              otherStudentAnswer.length > 0 ? (
+                <React.Fragment>
+                  <View style={styles.dotted_line} />
+                  <View>
+                    <View style={styles.answer_wrap}>
+                      <Text style={styles.answer_title}>看看其他同学的解答过程:</Text>
+                      <View style={styles.other_student_answer}>
+                        {
+                        // 缩略图:thumbUrl 大图: fileUrl 名称: studentName
+                      otherStudentAnswer.map((item2, i) => (
+                        <View style={{ marginRight: 25 }} key={i}>
+                          <ThumbnailImage
+                            option={{
+                              url: item2.explainImageUrl,
+                              studentName: item2.studentName,
+                            }}
+                          />
+                        </View>
+                      ))
+                    }
+                      </View>
                     </View>
-                  ))
-                }
-                </View>
-              </View>
-            </View>
-            {/* )
-            } */}
+                  </View>
+                </React.Fragment>
+              ) : null
+            }
           </View>
           {
               showTrueOrFalseButton ? (
