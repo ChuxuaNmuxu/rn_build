@@ -58,7 +58,6 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        // initial
       >
         <Tabs
           key="StudentTabs"

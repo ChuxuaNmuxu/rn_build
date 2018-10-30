@@ -44,14 +44,22 @@ class TodoItem extends Component {
     } = data;
     const checked = index === lastHandlePeriodIndex;
 
+    // 展开任务样式
     let checkBorderColor = styles.border;
+    let timeText = styles.time_text;
+    let scaleLine = styles.scale_line;
+
     if (checked || index + 1 === lastHandlePeriodIndex) {
       checkBorderColor = styles.border_hover;
+      if (checked) {
+        timeText = styles.has_task_time_text;
+        scaleLine = styles.has_tast_scale_line;
+      }
     } else if (item.data.length) {
       checkBorderColor = styles.has_task_border;
+      timeText = styles.has_task_time_text;
+      scaleLine = styles.has_tast_scale_line;
     }
-    const timeText = item.data.length ? styles.has_task_time_text : styles.time_text;
-    const scaleLine = item.data.length ? styles.has_tast_scale_line : styles.scale_line;
 
     /*
      * breviaryTask 任务只显示简要
