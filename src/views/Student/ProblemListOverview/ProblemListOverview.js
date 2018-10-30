@@ -198,7 +198,7 @@ class ProblemListOverview extends Component {
         >
           <View style={styles.problemList_header}>
             <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.ProblemOverview} />
-            <Text style={styles.doHomeworkTitle}>我的错题</Text>
+            <I18nText style={styles.doHomeworkTitle}>ProblemListOverview.title</I18nText>
             <Text />
           </View>
         </TouchableOpacity>
