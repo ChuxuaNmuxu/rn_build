@@ -99,7 +99,7 @@ class AnserSummarization extends Component {
     const handle = findNodeHandle(this.button);
     if (handle) {
       NativeModules.UIManager.measure(handle, (x0, y0, width, height, x, y) => {
-        console.log(x, y);
+        // console.log(x, y);
         this.setState({
           popoverAnchor: {
             x, y, width, height,
