@@ -55,6 +55,7 @@ class HomeworkCorrecting extends Component {
 
   setPopScore = (score, index) => {
     const { actions } = this.props;
+    // actions.controlFinsihBtnAction({ finishBtnDisable: false, index });
     actions.setCorrectResultAction({ score, index });
   }
 
@@ -123,13 +124,21 @@ class HomeworkCorrecting extends Component {
       studentId: item.studentId,
       questionId: item.questionId,
       score: item.score,
+      index,
     };
-    // const newIndex = index < list.length - 1 ? index + 1 : index;
-    const bol = index < list.length - 1;
-    console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol);
-    if (bol) this.swiperRef.scrollBy(1);
-    // 这个scrollBy会触发 onIndexChanged 所以不需要在这边设置 this.setState({})
-    actions.saveCorrectResultAction(params, 'REQUEST');
+    // 有分数才可以
+    if (item.score !== undefined) {
+      // 这个scrollBy会触发 onIndexChanged 所以不需要在这边设置 this.setState({})
+      actions.saveCorrectResultAction({
+        params,
+        callBack: () => {
+          // const newIndex = index < list.length - 1 ? index + 1 : index;
+          const bol = index < list.length - 1;
+          console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol);
+          if (bol) this.swiperRef.scrollBy(1);
+        },
+      }, 'REQUEST');
+    }
   }
 
 
@@ -176,6 +185,10 @@ class HomeworkCorrecting extends Component {
         value: 9,
       },
     ];
+    // if (list.length > 0) {
+    //   console.log(draft)
+    // }
+    // console.log(index, list.length);
     // console.log(7878, index, list.length, currentQues);
     return (
       <View style={styles.wrapper}>
@@ -283,16 +296,22 @@ class HomeworkCorrecting extends Component {
                             <TouchableOpacity
                               // 返回首页
                               onPress={() => {
-                                console.log('查看老师布置的作业！');
-                                // const data = { url: item.answerFileUrl, studentName: '老师布置的作业' };
+                                console.log('查看学生的答案', item2);
+                                console.log(draftToHtml(JSON.parse(item2)));
+                                // const data = {
+                                //   // studentName: '李香兰',
+                                //   url: item.answerFileUrl, // 最好https，ios兼容问题
+                                //   imageViewType: 'rotate', // 默认 "ordinary"
+                                // };
+                                // // const data = { url: , studentName: '学生' };
                                 // ModalApi.onOppen('ImageViewer', data);
                               }}
                               key={index2}
                             >
                               {/* <Image
-                            style={{ width: '100%', height: '100%' }}
-                            source={{ uri: item.answerFileUrl }}
-                          /> */}
+                                  style={{ width: '100%', height: '100%' }}
+                                  source={{ uri: item.answerFileUrl }}
+                                /> */}
                               { this.htmlViewComponent(item2) }
                             </TouchableOpacity>
                           ))
@@ -304,7 +323,12 @@ class HomeworkCorrecting extends Component {
                       // 点击查看学生题目
                       onPress={() => {
                         // console.log('查看学生的答案');
-                        const data = { url: item.answerFileUrl, studentName: '学生' };
+                        const data = {
+                          // studentName: '李香兰',
+                          url: item.answerFileUrl, // 最好https，ios兼容问题
+                          imageViewType: 'rotate', // 默认 "ordinary"
+                        };
+                        // const data = { url: , studentName: '学生' };
                         ModalApi.onOppen('ImageViewer', data);
                       }}
                     >
@@ -372,7 +396,7 @@ HomeworkCorrecting.propTypes = {
 };
 
 HomeworkCorrecting.defaultProps = {
-  homeworkId: '500245896139636736', // 500245896139636736
+  homeworkId: '505700854901243904', // 杨海宏的作业
 };
 
 const mapStateToProps = (state) => {
