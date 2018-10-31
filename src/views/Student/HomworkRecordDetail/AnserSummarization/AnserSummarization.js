@@ -115,13 +115,18 @@ class AnserSummarization extends Component {
     console.log('垃圾ESlint标准');
     const { isItCorrect, status } = this.props;
     const iconArr = ['wrongIcon', 'corectIcon', 'partialCorrect'];
+    const colorArr = ['#fa5656', '#30bf6c', '#f5a623', '#999999'];
     return (
       <View style={[styles.AnserSummarization, { justifyContent: 'flex-start' }]}>
         {
           // icon不一定会展示,没教师或者同学修改不展示
           status === 0
             ? null
-            : <Svg height="40" width="40" source={iconArr[isItCorrect]} fill="#fff" />
+            : (
+              <View style={[styles.svgView, { backgroundColor: colorArr[isItCorrect] }]}>
+                <Svg height="16" width="16" source={iconArr[isItCorrect]} fill={colorArr[isItCorrect]} />
+              </View>
+            )
         }
 
         <Text
