@@ -372,11 +372,15 @@ class MistakeReform extends Component {
                   // 后台可能返回null给我
                   <View style={styles.answer_wrap}>
                     <Text style={styles.answer_title}>题目答案:</Text>
-                    <ThumbnailImage
+                    {/* 暂时支持不了图文压成图片 */}
+                    {/* <ThumbnailImage
                       option={{
                         url: teacherAnswer,
                       }}
-                    />
+                    /> */}
+                    <View style={styles.question_content_wrap}>
+                      { this.htmlViewComponent(item.content) }
+                    </View>
                   </View>
                   )
                 }
