@@ -47,7 +47,7 @@ class PreviewHomework extends Component {
 
   // 离开页面时清除计时器
   componentWillUnmount() {
-    console.log(9999, '执行了componentWillUnmount函数。。。。。。');
+    // console.log(9999, '执行了componentWillUnmount函数。。。。。。');
     clearInterval(this.timeSetInterval);
   }
 
