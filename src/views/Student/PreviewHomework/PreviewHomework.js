@@ -39,7 +39,6 @@ class PreviewHomework extends Component {
         previewTime: previewTime - 1,
       }, () => {
         if (this.state.previewTime <= 0) {
-          clearInterval(this.timeSetInterval);
           this.doHomeWork();
         }
       });
@@ -48,13 +47,15 @@ class PreviewHomework extends Component {
 
   // 离开页面时清除计时器
   componentWillUnmount() {
+    console.log(9999, '执行了componentWillUnmount函数。。。。。。');
     clearInterval(this.timeSetInterval);
   }
 
   // 点击左上角箭头回到首页
   goIndex = () => {
+    Actions.replace('HomeworkTask');
     clearInterval(this.timeSetInterval);
-    Actions.HomeworkTask();
+    // 用这种方式跳转页面就能执行componentWillUnmount函数
   }
 
   // 完成预览，开始作业
@@ -74,7 +75,6 @@ class PreviewHomework extends Component {
     const { previewTime } = this.state;
     const { data } = this.props;
     const { questionList } = data;
-    // console.log(9960123, '预览作业数据', data);
     return (
       <View style={styles.previewHomework_container}>
         <View style={styles.previewHomework_header}>

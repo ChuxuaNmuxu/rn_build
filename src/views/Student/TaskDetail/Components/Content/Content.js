@@ -153,6 +153,14 @@ class Content extends Component {
     }
   }
 
+  // 点击去批阅
+  goCorrentHomework = () => {
+    const { homeworkId } = this.props;
+    Actions.HomeworkCorrecting({
+      homeworkId,
+    });
+  }
+
   /**
  *假设开始日期比结束日期大，那么结束日期自动跳到开始时间。
  */
@@ -279,9 +287,9 @@ class Content extends Component {
             <I18nText style={styles.content_child_left}>TaskDetail.endTime</I18nText>
             <Text style={styles.content_child_right}>{endTime}</Text>
           </View>
-          <View style={[styles.content_child_btn]}>
+          <View style={[styles.content_child_btn, { marginTop: 200 }]}>
             {/* 去批阅 */}
-            <TouchableOpacity onPress={() => console.log('去批阅')}>
+            <TouchableOpacity onPress={this.goCorrentHomework}>
               <Text style={[styles.content_child_btn_normal, styles.content_child_btn_color]}>去批阅</Text>
             </TouchableOpacity>
           </View>
@@ -338,7 +346,7 @@ class Content extends Component {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={[styles.content_child_btn]}>
+        <View style={[styles.content_child_btn, { marginTop: 100 }]}>
           {/* 预览作业 */}
           <TouchableOpacity
             onPress={this.previewHomework}
