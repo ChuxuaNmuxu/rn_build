@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+import { Text } from 'react-native';
 import Account from '../../utils/account';
 import { SetUserInfo } from '../../actions/account';
 import tokenKey from '../../constants/stroage';
@@ -17,6 +18,11 @@ class Welcome extends React.Component {
 
   componentDidMount() {
     this.getToken();
+    console.log('welcome mount');
+  }
+
+  componentWillUnmount() {
+    console.log('welcome Unmount');
   }
 
   getToken = () => {
@@ -35,22 +41,23 @@ class Welcome extends React.Component {
           } = JSON.parse(userinfo);
           switch (currentSchoolRole) {
             case 'STUDENT':
-              Actions.Student();
+              Actions.reset('Student');
               break;
             case 'TEACHER':
-              Actions.Teacher();
+              Actions.reset('Teacher');
               break;
             default:
               console.log('当前帐号不属于学生或教师', currentSchoolRole);
           }
         }
       }).catch(() => {
-        Actions.Login();
+        console.log('哈哈哈');
+        Actions.reset('Account');
       });
   }
 
   render() {
-    return null;
+    return <Text>dfdfd</Text>;
   }
 }
 

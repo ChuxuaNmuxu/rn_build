@@ -37,6 +37,15 @@ import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
 // import ExamRecordDetail from './views/Student/ExamRecordDetail';
 import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
 
+/**
+ * 关于Actions.xxx跳转方法说明
+ * Actions.reset
+ * 清除路由堆栈并将场景推入第一个索引. 没有过渡动画。直接表现是按Android的返回键会直接退出应用，Actions.pop无反应
+ * Actions.replace
+ * Actions.refresh
+ * 刷新当前页面，没用过度动画
+ */
+
 const RouteMap = props => (
   <Router
     {...props}

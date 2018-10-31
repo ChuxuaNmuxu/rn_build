@@ -87,7 +87,7 @@ class HomeworkTask extends Component {
           }
         </View>
         <TouchableOpacity
-          onPress={BackHandler.exitApp}
+          onPress={Actions.pop}
         >
           <I18nText style={styles.headle}>home.header.headle</I18nText>
         </TouchableOpacity>
