@@ -108,7 +108,7 @@ class RecordCard extends PureComponent {
   render() {
     const { datas, recordType } = this.props;
     const accuracyData = `${(datas.accuracy * 100).toFixed(2)}%`;
-    // const randomNum = Math.random();
+    // const randomNum = 0.3;
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -134,23 +134,24 @@ class RecordCard extends PureComponent {
             </View>
           </View>
         </View>
-        {/* <View style={styles.cardRight}>
+        <View style={styles.cardRight}>
           {
-            recordType === 0 ? (
+            // 当前仅有补做，以后还有订正
+            recordType === 0 && datas.unknownRedo && datas.type === 'yuqi' ? (
               <TouchableOpacity
-                disabled={randomNum > 0.5}
+                // disabled={randomNum > 0.5} randomNum > 0.5 && styles.disabledBox, randomNum > 0.5 && styles.disabledText
                 onPress={() => this.toReviseFun()}
               >
-                <View style={[styles.toReviseBox, randomNum > 0.5 && styles.disabledBox]}>
-                  <Text style={[styles.toReviseText, randomNum > 0.5 && styles.disabledText]}>
-                去订正
+                <View style={[styles.toReviseBox]}>
+                  <Text style={[styles.toReviseText]}>
+                    去补做
                   </Text>
                 </View>
               </TouchableOpacity>
             ) : null
           }
 
-        </View> */}
+        </View>
         {
             datas.resultRead === 1 && (
             <Image

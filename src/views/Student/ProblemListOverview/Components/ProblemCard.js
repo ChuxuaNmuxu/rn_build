@@ -5,8 +5,9 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
-import { SwipeRow } from 'react-native-swipe-list-view';
+import Swipeout from 'react-native-swipeout';
 import HTMLView from 'react-native-htmlview';
 import draftToHtml from '../../../../utils/draftjsToHtml';
 import styles from './ProblemCard.scss';
@@ -20,11 +21,51 @@ class ProblemCard extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      textWidth: 0, // 错题来源部分需要固定的宽度，超出部分展示省略号
+      // 复习错题的按钮
+      reviewQuesBtns: [
+        {
+          backgroundColor: '#fff',
+          component: [
+            <TouchableOpacity
+              style={styles.hidenBtn}
+              key={props.index}
+              onPress={this.doErrWorkAgain}
+            >
+              <Text />
+              <I18nText style={styles.hideText}>
+                    ProblemListOverview.ProblemCard.reviewQuestion
+              </I18nText>
+            </TouchableOpacity>,
+          ],
+        },
+      ],
     };
   }
 
   componentDidMount() {
     // console.log('调用 ProblemCard 组贱', this.props);
+    this.getTextWidth();
+    // 监听屏幕旋转
+    Dimensions.addEventListener('change', () => {
+      this.getTextWidth();
+    });
+  }
+
+  // 移除监听
+  componentWillUnmount() {
+    Dimensions.removeEventListener('change', () => {
+      this.getTextWidth();
+    });
+  }
+
+  // 通过adaptiveRotation函数去取错题来源部分的固定宽度
+  getTextWidth = () => {
+    const { width } = adaptiveRotation();
+    const textWidth = width - 360;
+    this.setState({
+      textWidth,
+    });
   }
 
   // 富文本数据展示框
@@ -72,25 +113,17 @@ class ProblemCard extends PureComponent {
   }
 
   render() {
+    const { reviewQuesBtns, textWidth } = this.state;
     const { datas, index } = this.props;
-    const { width } = adaptiveRotation();
-    const textWidth = width - 360;
     // console.log(123, datas);
     return (
-      <SwipeRow
-        disableRightSwipe
-        rightOpenValue={-270}
-        style={styles.swipeRow_box}
+      <Swipeout
+        right={reviewQuesBtns}
+        sensitivity={4}
+        buttonWidth={270}
+        backgroundColor="#fff"
+        style={{ marginTop: 12 }}
       >
-        <TouchableOpacity
-          style={styles.hidenBtn}
-          onPress={this.doErrWorkAgain}
-        >
-          <Text />
-          <I18nText style={styles.hideText}>
-              ProblemListOverview.ProblemCard.reviewQuestion
-          </I18nText>
-        </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => this.goProblemDetail(datas.category, index)}
@@ -98,7 +131,7 @@ class ProblemCard extends PureComponent {
           <View style={styles.problemCard}>
             <View style={styles.question_header}>
               <Text style={styles.title_order}>
-                  第{ index + 1 }题
+                第{ index + 1 }题
               </Text>
               <View style={styles.title_border} />
               <Text style={styles.title_txt}>{getQuestionTypeName(datas.type)}</Text>
@@ -126,7 +159,7 @@ class ProblemCard extends PureComponent {
                 <View>
                   <Text style={styles.err_reason}>
                     <I18nText>
-                        ProblemListOverview.ProblemCard.wrongReason
+                      ProblemListOverview.ProblemCard.wrongReason
                     </I18nText>
                     {failReason[datas.failReason]}
                   </Text>
@@ -137,9 +170,9 @@ class ProblemCard extends PureComponent {
                   <Text style={styles.question_time}>
                     {formatTimeToshow(datas.publishTime)}&nbsp;&nbsp;&nbsp;&nbsp;
                   </Text>
-                  <Text>
-                    <I18nText>
-                        ProblemListOverview.ProblemCard.form
+                  <Text style={styles.question_name}>
+                    <I18nText style={styles.question_name}>
+                      ProblemListOverview.ProblemCard.form
                     </I18nText>
                     {datas.name}
                   </Text>
@@ -148,7 +181,7 @@ class ProblemCard extends PureComponent {
             </View>
           </View>
         </TouchableOpacity>
-      </SwipeRow>
+      </Swipeout>
     );
   }
 }
