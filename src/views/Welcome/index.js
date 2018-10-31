@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { Text } from 'react-native';
 import Account from '../../utils/account';
 import { SetUserInfo } from '../../actions/account';
 import tokenKey from '../../constants/stroage';
@@ -57,7 +56,7 @@ class Welcome extends React.Component {
   }
 
   render() {
-    return <Text>dfdfd</Text>;
+    return null;
   }
 }
 

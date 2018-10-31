@@ -2,7 +2,6 @@ import { isEmpty } from 'ramda';
 import qs from 'qs';
 import { Toast } from 'antd-mobile-rn';
 import { DeviceEventEmitter, NetInfo } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import fetchApi from '../config/apiBase/fetchApi';
 import ApiBase from '../config/apiBase';
 import Account from './account';
@@ -56,7 +55,7 @@ const errCode = (json) => {
        * 3. 清除storage缓存
        * 4. 提示登陆超时
        */
-      Actions.Login();
+      Actions.reset('Account');
       Store.dispatch(SetUserInfo());
       new Account().removeAccount();
       Toast.info(json.message);
@@ -127,7 +126,7 @@ const Fetch = {
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;
     if (!isEmpty(params)) {
-      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params,{ indices: false });
+      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params, { indices: false });
     }
     return this.getUrl(_url, {}, 'get', '', mock, headerParams);
   },
@@ -136,7 +135,7 @@ const Fetch = {
   delete(url, params) {
     let _url = url;
     if (!isEmpty(params)) {
-      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params,{ indices: false });
+      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params, { indices: false });
     }
     return this.getUrl(_url, params, 'delete');
   },
