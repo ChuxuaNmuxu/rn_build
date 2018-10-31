@@ -37,6 +37,22 @@ import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
 // import ExamRecordDetail from './views/Student/ExamRecordDetail';
 import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
 
+/**
+ * 关于Actions.xxx跳转方法说明
+ * Actions.reset
+ * 清除路由堆栈并将场景推入第一个索引. 没有过渡动画。直接表现是按Android的返回键会直接退出应用，Actions.pop无反应。
+ * 注意：只能使用Stack的key进行跳转，不能使用Scene的key进行跳转
+ *
+ * Actions.replace
+ * 替换当前场景，没有动画。会触发unmount
+ *
+ * Actions.refresh
+ * 刷新当前页面，没用过度动画
+ *
+ * Actions.[key]
+ * 使用路由的key跳转页面，不会执行unmount
+ */
+
 const RouteMap = props => (
   <Router
     {...props}
@@ -58,7 +74,6 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
-        // initial
       >
         <Tabs
           key="StudentTabs"
@@ -76,9 +91,9 @@ const RouteMap = props => (
           showLabel={false} // 显示文字
           headerMode="screen" // 页面切换方式
           icon={TabBarIcon}
+          // tabBarOnPress={(e) => { console.log('哈哈哈', e); }} // 自定义tabs点击事件
         >
           <Stack
-            initial
             title="homeworkTask"
             key="HomeworkTaskStack"
             image="zuoye2"
@@ -104,6 +119,7 @@ const RouteMap = props => (
           </Stack>
           {/* 错题本 */}
           <Stack
+            // initial
             title="wrongNotes" // 配好在zh.js、en.js那边了
             key="ProblemOverviewStack"
             image="cuotiben1"
@@ -135,6 +151,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
+        // initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />

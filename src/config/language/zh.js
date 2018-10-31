@@ -101,6 +101,7 @@ export default {
 
   // 错题本列表页
   ProblemListOverview: {
+    title: '我的错题',
     header: {
       moreFilter: '更多筛选',
     },

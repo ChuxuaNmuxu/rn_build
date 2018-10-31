@@ -24,6 +24,7 @@ import com.oblador.vectoricons.VectorIconsPackage;
 
 import com.iamsb.wheelpicker.WheelPickerPackage;
 
+import com.cjhms_rn.MyNativeReactPackage;
 import com.masteratul.exceptionhandler.ReactNativeExceptionHandlerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -48,6 +49,7 @@ public class MainApplication extends Application implements ReactApplication {
           new VectorIconsPackage(),
           new SvgPackage(),
           new WheelPickerPackage(),
+          new MyNativeReactPackage(),
           new ReactNativeExceptionHandlerPackage()
       );
     }
