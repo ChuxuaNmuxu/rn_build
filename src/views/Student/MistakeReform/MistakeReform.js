@@ -396,8 +396,9 @@ class MistakeReform extends Component {
                         <View style={{ marginRight: 25 }} key={i}>
                           <ThumbnailImage
                             option={{
-                              url: item2.explainImageUrl,
+                              url: [item2.explainImageUrl],
                               studentName: item2.studentName,
+                              imageViewType: 'ordinary',
                             }}
                           />
                         </View>

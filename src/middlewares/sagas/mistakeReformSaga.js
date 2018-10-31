@@ -132,7 +132,7 @@ function* objectiveSaga(action) {
     const state = yield select(getState);
     const startTime = moment(new Date()).format();
     const endTime = moment(new Date()).format();
-    console.log(startTime, endTime);
+    // console.log(startTime, endTime);
     console.log(state.mistakeReformReducer.questions[index].controlComponent.objectiveAnswer.value);
     const params = {
       startTime,
@@ -140,6 +140,7 @@ function* objectiveSaga(action) {
       answer: state.mistakeReformReducer.questions[index].controlComponent.objectiveAnswer.value,
       // answerFileId: item.answerFileId, // 没有图片就不需要传
     };
+    console.log(params);
     const url = `/app/api/student/failed-questions/${item.id}/answer?category=${item.category}`;
     const fetch = arg => Fetch.post(url, arg);
     const res = yield call(fetch, params);
@@ -217,6 +218,7 @@ function* subjectiveSaga(action) {
         //   answer: data2.url,
         //   answerFileId: data2.fileId,
         // };
+        // 这个接口貌似有问题
         const thirdUrl = `/app/api/student/homeworks/${item.homeworkExamId}/questions/${item.id}`;
         console.log(220, thirdUrl);
         const thirdFetch = arg => Fetch.get(thirdUrl, arg);
