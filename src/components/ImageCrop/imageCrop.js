@@ -57,14 +57,22 @@ export default class ImageCrop extends React.Component {
 
   // 确定裁剪
   pressConfirm = () => {
+    const { containerWidth, containerHeight } = this.state;
     const {
       width, height, left, top,
     } = this.imgCrop.getCropData();
+    let wid = width;
+    let heg = height;
+    if (width + left > containerWidth) {
+      wid = containerWidth - left;
+    }
+    if (height + top > containerHeight) {
+      heg = containerHeight - top;
+    }
     const cropData = {
       offset: { x: left, y: top },
-      size: { width, height },
+      size: { width: wid, height: heg },
     };
-    console.log('cropData', cropData);
     this.imgCrop.crop().then((uri) => {
       // Image.getSize(uri, (w, h) => {
       //   console.log('iamge123', w, h);
@@ -83,7 +91,7 @@ export default class ImageCrop extends React.Component {
   }
 
   error = (err) => {
-    console.log('success', err);
+    console.log('err', err);
   }
 
   // 图片旋转
