@@ -49,8 +49,8 @@ class TaskItem extends React.Component {
     // 创建PanResponder
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true, // 在开始触摸时是否成为响应者
-      onStartShouldSetPanResponderCapture: () => false, // 捕获触摸，阻止子组件成为响应者
-      onMoveShouldSetPanResponder: () => true, // 在触摸点开始移动时是否成为响应者
+      onStartShouldSetPanResponderCapture: this.onStartCapture, // 捕获触摸，阻止子组件成为响应者
+      onMoveShouldSetPanResponder: this.onMoveStartPanResponder, // 在触摸点开始移动时是否成为响应者
       onMoveShouldSetPanResponderCapture: () => false, // 捕获移动，阻止子组件响应移动
       onPanResponderGrant: this.onPanResponderGrant, /* 响应触摸事件 */
       onPanResponderMove: this.onPanResponderMove, /** 移动时 */
@@ -62,20 +62,27 @@ class TaskItem extends React.Component {
     });
   }
 
+  onStartCapture = (evt) => {
+    const nowTime = evt.nativeEvent.timestamp;
+    this.touchStartTime = nowTime;
+    return false;
+  }
+
+  onMoveStartPanResponder = (evt, gestureState) => {
+    const { dx, dy } = gestureState;
+    const nowTime = evt.nativeEvent.timestamp;
+    if (nowTime - this.touchStartTime > this.longTouchTime && Math.abs(dx) < 2 && Math.abs(dy) < 2) {
+      return true;
+    }
+    return false;
+  }
+
   onPanResponderGrant = (evt, gestureState) => {
     console.log('响应者');
     const { scale } = adaptiveRotation();
     this.touchStartX = gestureState.dx;
     this.touchStartY = gestureState.dy;
-    this.touchStartTime = evt.nativeEvent.timestamp;
-
-    this.taskRef.setNativeProps({
-      shadowOffset: { width: 5, height: 0 },
-      shadowOpacity: 0.5,
-      shadowRadius: 8,
-      shadowColor: 'rgba(0,0,0,1)',
-      elevation: 6,
-    });
+    this.interactiveStyle();
 
     const {
       type,
@@ -97,9 +104,9 @@ class TaskItem extends React.Component {
   }
 
   onPanResponderMove = (evt, gestureState) => {
+    console.log('moving');
     const { dx, dy } = gestureState;
 
-    const nowTime = evt.nativeEvent.timestamp;
     const {
       onChangeDropingData, data,
     } = this.props;
@@ -110,19 +117,18 @@ class TaskItem extends React.Component {
      */
     if (this.isDraging) {
       this.dragHandle(evt, dx, dy);
-    } else if ((Math.abs(dx - this.touchStartX) < 10 || Math.abs(dy - this.touchStartY) < 10)) {
-      if (nowTime - this.touchStartTime > this.longTouchTime) {
-        // 取消阴影
-        if (this.taskRef) this.taskRef.setNativeProps({ elevation: 0 });
+    } else {
+      // 取消阴影
+      this.clearInteractiveStyle();
 
-        this.dragHandle(evt, dx, dy);
-        this.isDraging = true;
-        onChangeDropingData(data);
-      }
+      this.dragHandle(evt, dx, dy);
+      this.isDraging = true;
+      onChangeDropingData(data);
     }
   }
 
-  onPanResponderRelease = (evt, gestureState) => {
+  onPanResponderRelease = (evt) => {
+    console.log('moveEnd');
     const {
       onChangeDropPosition,
       onChangeTodoTask,
@@ -131,7 +137,6 @@ class TaskItem extends React.Component {
       data,
       planList,
       onIsgetDropListenerRange,
-      onPress,
       onChangeDropingData,
       onChangeDragingTaskCorrespondPeriod,
       onChangeLastHandlePeriodIndex,
@@ -140,8 +145,8 @@ class TaskItem extends React.Component {
       onSaveTask,
     } = this.props;
     const { scale } = adaptiveRotation();
-    const { dx, dy } = gestureState;
-    const { pageY, timestamp: nowTime } = evt.nativeEvent;
+
+    const { pageY } = evt.nativeEvent;
 
     // 取消阴影
     if (this.taskRef) this.taskRef.setNativeProps({ elevation: 0 });
@@ -168,15 +173,15 @@ class TaskItem extends React.Component {
         }), 0);
       } else {
         /**
-           * 只有将未排期的任务进行排期或从排期任务中取消排期时才会对排期列表有影响
-           * 如果 type 为 detailsTask 并且排期成功时触发更改未排期任务列表action
-           */
+       * 只有将未排期的任务进行排期或从排期任务中取消排期时才会对排期列表有影响
+       * 如果 type 为 detailsTask 并且排期成功时触发更改未排期任务列表action
+       */
         if (type === 'detailsTask') onChangeTodoTask({ ...dragData, cancelTask: true });
 
         /**
-           * prevPeriodIndex 如果切换时间段，则有prevPeriodIndex属性，否则没有，通过该属性判断是排期还是切换排期
-           * currentPeriodIndex 当前时间段
-           */
+       * prevPeriodIndex 如果切换时间段，则有prevPeriodIndex属性，否则没有，通过该属性判断是排期还是切换排期
+       * currentPeriodIndex 当前时间段
+       */
         const taskData = type === 'detailsTask'
           ? { ...data, currentPeriodIndex: index }
           : { ...data, currentPeriodIndex: index, prevPeriodIndex: lastHandlePeriodIndex };
@@ -217,16 +222,6 @@ class TaskItem extends React.Component {
       });
     }
 
-    /**
-     * 模拟单击
-     * 单击事件小于 80ms 并且手指移动范围在 8px 以内
-     */
-    if (Math.abs(dx - this.touchStartX) < 8 || Math.abs(dy - this.touchStartY) < 8) {
-      if (nowTime - this.touchStartTime < this.touchTime) {
-        onPress();
-      }
-    }
-
     // 如果当前为拖拽状态，则还原拖拽时所改变的所有状态
     if (this.isDraging) {
       // 取消hover状态
@@ -242,6 +237,40 @@ class TaskItem extends React.Component {
       // 将正在拖拽状态改为停止拖拽
       this.isDraging = false;
     }
+  }
+
+  // 手指按下
+  onPressIn = () => {
+    // 为了解决onPress在点击时响应延迟问题，在PressIn阶段先更改样式响应点击
+    this.interactiveStyle();
+  }
+
+  // 点击结束或者离开
+  onPressOut = () => {
+    // rn很奇葩 PressOut在Press之前执行，所以通过delayPressOut添加延迟。让PressOut在后执行移除相应样式。
+    this.clearInteractiveStyle();
+  }
+
+  // 相应点击
+  onPress = () => {
+    const { onPress } = this.props;
+    onPress();
+  }
+
+  // 清楚相应样式
+  clearInteractiveStyle = () => {
+    if (this.taskRef) this.taskRef.setNativeProps({ elevation: 0 });
+  }
+
+  // 点击时的交互样式
+  interactiveStyle = () => {
+    this.taskRef.setNativeProps({
+      shadowOffset: { width: 5, height: 0 },
+      shadowOpacity: 0.5,
+      shadowRadius: 8,
+      shadowColor: 'rgba(0,0,0,1)',
+      elevation: 6,
+    });
   }
 
   // 查询任务对应的时间段
@@ -307,7 +336,12 @@ class TaskItem extends React.Component {
         {/**
           data.dragTask=true 表示模拟的拖拽元素
         */}
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          delayPressOut={200}
+          onPress={this.onPress}
+          onPressOut={this.onPressOut}
+          onPressIn={this.onPressIn}
+        >
           {
             (dragData.homeworkId === data.homeworkId) && !data.dragTask
               ? (

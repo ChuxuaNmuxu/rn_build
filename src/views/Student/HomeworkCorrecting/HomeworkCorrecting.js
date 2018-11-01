@@ -24,6 +24,7 @@ import I18nText from '../../../components/I18nText';
 import styles from './HomeworkCorrecting.scss';
 import * as correctingActions from '../../../actions/homeworkCorrectingAction';
 import CorrentResultCard from './Components/CorrentResultCard';
+import TriangleImg from '../../../public/img/Triangle.png';
 
 class HomeworkCorrecting extends Component {
   constructor(props) {
@@ -195,9 +196,11 @@ class HomeworkCorrecting extends Component {
         <PopupDialog
           ref={(popupDialog) => { this.popupDialog = popupDialog; }}
           width={400}
-          height={340}
+          height={360}
           // overlayOpacity={0}
-          dialogStyle={{ position: 'absolute', left: 144, bottom: 150 }}
+          dialogStyle={{
+            position: 'absolute', left: 144, bottom: 130, backgroundColor: 'transparent',
+          }}
         >
           <View style={{
             // width: 1,
@@ -236,6 +239,10 @@ class HomeworkCorrecting extends Component {
               onChange={() => this.popupDialog.dismiss()}
             /> */}
           </View>
+          <Image
+            source={TriangleImg}
+            style={{ width: 24, marginLeft: 186 }}
+          />
         </PopupDialog>
         <Modal />
         {/* 头部自定义导航条 */}

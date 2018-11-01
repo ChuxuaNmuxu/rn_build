@@ -311,17 +311,22 @@ class MistakeReform extends Component {
     const { index } = this.state;
     updateImageAction({ index, urlSource: { questionId, file: e, imgName } });
     selectAnswerAction({ index });
-    // uploadImageToOssAction({ questionId, file: e, imgName });
-    // 当从检查页面点击 未作答 热区 进来此页面时上传图片答案的题目id应该从此处给提交答案那，否则保存时题目id不对
-    // this.setState({
-    //   uploadImgQuesId: questionId,
-    // });
+  }
+
+  // 删除图片
+  deleteImg = (questionId) => {
+    // console.log('删除图片的id', questionId);
+    const { actions: { updateImageAction, selectAnswerAction } } = this.props;
+    const { index } = this.state;
+    updateImageAction({ index, urlSource: {} });
+    // 删除图片后不展示 提交答案并查看结果 的按钮
+    selectAnswerAction({ index, notShowSubmitBtn: true });
   }
 
   // 上传的图片
   showImageOrTitle = ({ item }) => {
     const {
-      studentAnswer,
+      studentAnswer, showAll,
     } = item.controlComponent.showSubjectiveInfo;
     if (studentAnswer) {
       console.log(319, studentAnswer);
@@ -349,9 +354,12 @@ class MistakeReform extends Component {
         <AnswerCard
           questions={item}
           mistakeReform
+          // 是否展示删除图片的按钮图标
+          showDeleteIcon={!showAll}
           handleToClickRadio={(id, value) => this.handleToClickRadio(id, value, item)}
           // updateImage={this.updateImage}
           handlePreviewImage={this.handlePreviewImage}
+          deleteImg={this.deleteImg}
         />
       </View>
     );

@@ -83,7 +83,7 @@ class Login extends Component {
             case 'STUDENT':
               this.savaToken(data).then(() => {
                 Toast.success('登陆成功');
-                Actions.Student();
+                Actions.reset('Student');
               });
               break;
             case 'TEACHER':

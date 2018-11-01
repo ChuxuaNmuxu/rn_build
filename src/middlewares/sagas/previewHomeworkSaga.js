@@ -33,7 +33,8 @@ function* fetchPreviewHomeworkSaga(action) {
         bottomTips: 's自动关闭',
       };
       ModalApi.onOppen('TipsModal', datas);
-      Actions.HomeworkTask();
+      Actions.replace('HomeworkTask');
+      // Actions.HomeworkTask();
       yield call(delay, 2000);
       yield put(actions.fetchPreviewHomeworkAction(code, 'ERROR'));
     }
@@ -44,7 +45,8 @@ function* fetchPreviewHomeworkSaga(action) {
       bottomTips: 's自动关闭',
     };
     ModalApi.onOppen('TipsModal', datas);
-    Actions.HomeworkTask();
+    Actions.replace('HomeworkTask');
+    // Actions.HomeworkTask();
     yield call(delay, 2000);
     yield put(actions.fetchPreviewHomeworkAction(e, 'ERROR'));
   }
@@ -61,7 +63,8 @@ function* checkHomeworkStatusSaga(action) {
     // console.log('检查作业是否可做返回数据', res);
     if (code === 0) {
       // 作业状态正常，则跳到做作业页面
-      Actions.DoHomework({ homeworkId });
+      Actions.replace('DoHomework', { homeworkId });
+      // Actions.DoHomework({ homeworkId });
       yield put(actions.checkHomeworkStatusAction(code, 'SUCCESS'));
     } else if (code === 42001) {
       const data = {
@@ -69,7 +72,8 @@ function* checkHomeworkStatusSaga(action) {
         bottomTips: 's自动关闭',
       };
       ModalApi.onOppen('TipsModal', data);
-      Actions.HomeworkTask();
+      Actions.replace('HomeworkTask');
+      // Actions.HomeworkTask();
       yield call(delay, 2000);
       yield put(actions.checkHomeworkStatusAction(code, 'ERROR'));
     } else if (code === 42005) {
@@ -78,7 +82,8 @@ function* checkHomeworkStatusSaga(action) {
         bottomTips: 's自动关闭',
       };
       ModalApi.onOppen('TipsModal', data);
-      Actions.HomeworkTask();
+      Actions.replace('HomeworkTask');
+      // Actions.HomeworkTask();
       yield call(delay, 2000);
       yield put(actions.checkHomeworkStatusAction(code, 'ERROR'));
     } else {
@@ -87,7 +92,8 @@ function* checkHomeworkStatusSaga(action) {
         bottomTips: 's自动关闭',
       };
       ModalApi.onOppen('TipsModal', data);
-      Actions.HomeworkTask();
+      Actions.replace('HomeworkTask');
+      // Actions.HomeworkTask();
       yield call(delay, 2000);
       yield put(actions.checkHomeworkStatusAction(code, 'ERROR'));
     }
