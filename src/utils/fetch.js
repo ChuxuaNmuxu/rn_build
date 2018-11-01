@@ -7,6 +7,7 @@ import ApiBase from '../config/apiBase';
 import Account from './account';
 import * as listener from '../constants/listener';
 import { SetUserInfo } from '../actions/account';
+import Logger from './logger';
 
 // origin表示 https://cjyun.ecaicn.com
 let origin = null;
@@ -110,7 +111,10 @@ const Fetch = {
 
     return fetch(url, options)
       .then(res => res.text())
-      .then(text => (text ? JSON.parse(text) : {}))
+      .then((text) => {
+        Logger.appendFile('networkLog.txt', Logger.formatNetWorkLog(text, url, options, method));
+        return (text ? JSON.parse(text) : {});
+      })
       .then(errCode)
       .catch((err) => {
         if (err.stack.indexOf('Network request failed') !== -1) {
