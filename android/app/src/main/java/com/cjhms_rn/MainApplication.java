@@ -48,17 +48,16 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            // 第一个参数是刚刚申请的key（可以根据环境配置）
-            // 第四个参数是服务器的URL
-            new CodePush("JGndXaPJcNJAotLcnzyeeafcLmYA4ksvOXqog", getApplicationContext(), BuildConfig.DEBUG, "http://10.0.3.117:3000"),
-            
-            new RNViewShotPackage(),
-            new PickerPackage(),
-            new ImagePickerPackage(),
-            new RNI18nPackage(),
-            new RNDeviceInfo(),
-            new RNImmersivePackage(),
-            new SplashScreenReactPackage(),
+          // 第一个参数是刚刚申请的key（可以根据环境配置）
+          // 第四个参数是服务器的URL
+          new CodePush("JGndXaPJcNJAotLcnzyeeafcLmYA4ksvOXqog", getApplicationContext(), BuildConfig.DEBUG, "http://10.0.3.117:3000"),
+          new RNViewShotPackage(),
+          new PickerPackage(),
+          new ImagePickerPackage(),
+          new RNI18nPackage(),
+          new RNDeviceInfo(),
+          new RNImmersivePackage(),
+          new SplashScreenReactPackage(),
           new RNViewShotPackage(),
           new PickerPackage(),
           new ImagePickerPackage(),
