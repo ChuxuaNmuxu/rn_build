@@ -64,7 +64,7 @@ class Debug extends Component {
       })
       .then(() => {
         if (userName) {
-          this.logout('切换环境成功').then(Actions.Login);
+          this.logout('切换环境成功').then(Actions.reset('Account'));
         }
       });
   }
@@ -102,7 +102,7 @@ class Debug extends Component {
             ? (
               <TouchableOpacity
                 style={styles.logout}
-                onPress={() => { this.logout('退出成功').then(Actions.Login); }}
+                onPress={() => { this.logout('退出成功').then(Actions.reset('Account')); }}
               >
                 <Text style={styles.logout_text}>退出登陆</Text>
               </TouchableOpacity>

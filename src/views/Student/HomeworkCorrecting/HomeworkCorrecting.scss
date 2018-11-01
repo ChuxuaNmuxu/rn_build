@@ -60,9 +60,11 @@
 
 .foot {
   height: 150; 
-  border: 1px solid #e8e8e8; 
+  // border: 1px solid #e8e8e8; 
   flex-direction: row;
   padding: 24px 20px;
+  border-top-color: rgba(0, 0, 0, 0.1);
+  border-top-width: 4px;
 }
 
 .foot_child_left {

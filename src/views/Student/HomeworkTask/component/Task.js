@@ -49,8 +49,8 @@ class TaskItem extends React.Component {
     // 创建PanResponder
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true, // 在开始触摸时是否成为响应者
-      onStartShouldSetPanResponderCapture: () => false, // 捕获触摸，阻止子组件成为响应者
-      onMoveShouldSetPanResponder: () => true, // 在触摸点开始移动时是否成为响应者
+      onStartShouldSetPanResponderCapture: this.onStartCapture, // 捕获触摸，阻止子组件成为响应者
+      onMoveShouldSetPanResponder: this.onMoveStartPanResponder, // 在触摸点开始移动时是否成为响应者
       onMoveShouldSetPanResponderCapture: () => false, // 捕获移动，阻止子组件响应移动
       onPanResponderGrant: this.onPanResponderGrant, /* 响应触摸事件 */
       onPanResponderMove: this.onPanResponderMove, /** 移动时 */
@@ -62,12 +62,28 @@ class TaskItem extends React.Component {
     });
   }
 
+  onStartCapture = (evt) => {
+    const nowTime = evt.nativeEvent.timestamp;
+    // console.log('onStartMoveCapture', nowTime);
+    this.touchStartTime = nowTime;
+    return false;
+  }
+
+  onMoveStartPanResponder = (evt, gestureState) => {
+    const { dx, dy } = gestureState;
+    const nowTime = evt.nativeEvent.timestamp;
+    // console.log('distanceTiem', dx, dy, nowTime - this.touchStartTime);
+    if (nowTime - this.touchStartTime > this.longTouchTime && Math.abs(dx) < 2 && Math.abs(dy) < 2) {
+      return true;
+    }
+    return false;
+  }
+
   onPanResponderGrant = (evt, gestureState) => {
     console.log('响应者');
     const { scale } = adaptiveRotation();
     this.touchStartX = gestureState.dx;
     this.touchStartY = gestureState.dy;
-    this.touchStartTime = evt.nativeEvent.timestamp;
 
     this.taskRef.setNativeProps({
       shadowOffset: { width: 5, height: 0 },
@@ -97,9 +113,10 @@ class TaskItem extends React.Component {
   }
 
   onPanResponderMove = (evt, gestureState) => {
+    console.log('moving');
     const { dx, dy } = gestureState;
 
-    const nowTime = evt.nativeEvent.timestamp;
+    // const nowTime = evt.nativeEvent.timestamp;
     const {
       onChangeDropingData, data,
     } = this.props;
@@ -110,19 +127,18 @@ class TaskItem extends React.Component {
      */
     if (this.isDraging) {
       this.dragHandle(evt, dx, dy);
-    } else if ((Math.abs(dx - this.touchStartX) < 10 || Math.abs(dy - this.touchStartY) < 10)) {
-      if (nowTime - this.touchStartTime > this.longTouchTime) {
-        // 取消阴影
-        if (this.taskRef) this.taskRef.setNativeProps({ elevation: 0 });
+    } else {
+      // 取消阴影
+      if (this.taskRef) this.taskRef.setNativeProps({ elevation: 0 });
 
-        this.dragHandle(evt, dx, dy);
-        this.isDraging = true;
-        onChangeDropingData(data);
-      }
+      this.dragHandle(evt, dx, dy);
+      this.isDraging = true;
+      onChangeDropingData(data);
     }
   }
 
   onPanResponderRelease = (evt, gestureState) => {
+    console.log('moveEnd');
     const {
       onChangeDropPosition,
       onChangeTodoTask,
