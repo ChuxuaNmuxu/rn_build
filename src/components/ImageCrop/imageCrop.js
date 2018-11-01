@@ -18,6 +18,7 @@ export default class ImageCrop extends React.Component {
   constructor(props) {
     super(props);
     this.oldValue = 0;
+    this.clip = false;
     this.state = {
       value: 0,
       source: null,
@@ -53,28 +54,31 @@ export default class ImageCrop extends React.Component {
 
   // 确定裁剪
   pressConfirm = () => {
-    const { containerWidth, containerHeight } = this.state;
-    const {
-      width, height, left, top,
-    } = this.imgCrop.getCropData();
-    let wid = width;
-    let heg = height;
-    if (width + left > containerWidth) {
-      wid = containerWidth - left;
+    if (!this.clip) {
+      this.clip = true;
+      const { containerWidth, containerHeight } = this.state;
+      const {
+        width, height, left, top,
+      } = this.imgCrop.getCropData();
+      let wid = width;
+      let heg = height;
+      if (width + left > containerWidth) {
+        wid = containerWidth - left;
+      }
+      if (height + top > containerHeight) {
+        heg = containerHeight - top;
+      }
+      const cropData = {
+        offset: { x: left, y: top },
+        size: { width: wid, height: heg },
+      };
+      this.imgCrop.crop().then((uri) => {
+        // Image.getSize(uri, (w, h) => {
+        //   console.log('iamge123', w, h);
+        // });
+        ImageEditor.cropImage(uri, cropData, this.success, this.error);
+      });
     }
-    if (height + top > containerHeight) {
-      heg = containerHeight - top;
-    }
-    const cropData = {
-      offset: { x: left, y: top },
-      size: { width: wid, height: heg },
-    };
-    this.imgCrop.crop().then((uri) => {
-      // Image.getSize(uri, (w, h) => {
-      //   console.log('iamge123', w, h);
-      // });
-      ImageEditor.cropImage(uri, cropData, this.success, this.error);
-    });
   }
 
   // 裁剪之后的回调

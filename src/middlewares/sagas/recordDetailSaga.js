@@ -36,6 +36,8 @@ function* fetchExamData(action) {
         detailsDataList: transFromExamdetailsDataList(data),
         status: getUncommitedStatus(submitStatus, isMarked), // submitStatus === 0 ? 1 : isMarked ? 1 : 0,
         title,
+        // 未提交不准显示错误原因，因此还是要拿到这个字段
+        submitStatus,
         // 是否未参加考试，0是未参加
       };
       yield put(actions.fetchExaminationData(customData, 'SUCCESS'));

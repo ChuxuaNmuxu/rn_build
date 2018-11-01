@@ -58,10 +58,6 @@ class MistakeReform extends Component {
         color: '#999999',
       },
     });
-    // const htmlContent = '<p>zhazhazha</p>'
-    // + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
-    // + 'alt="undefined" style="float:none;height: auto;width: auto"/>'
-    // + '<p>曹尼玛的富文本</p>';
     return (
       <View style={styles.htmlViewComponent}>
         <HTMLView
@@ -74,10 +70,9 @@ class MistakeReform extends Component {
 
   // 导航条右侧是否有 index
   haveIndex = (index) => {
-    const { questions, isRandom } = this.props;
+    const { questions } = this.props;
     console.log(questions, index);
     const newIndex = index + 1;
-    // if (isRandom) newIndex = index;
     if (questions.length > 1) {
       return (
         <View style={styles.head_index_view}>
@@ -95,7 +90,7 @@ class MistakeReform extends Component {
     const { index } = this.state;
     // 客观题要保存答案
     const { type } = item;
-    if (type === 1 || type === 2 || type === 3 || type === 4) {
+    if (type <= 4) {
       saveObjectiveAnswerAction({
         index,
         value,
@@ -154,21 +149,15 @@ class MistakeReform extends Component {
             <View style={styles.result_word_child}>
               <Text style={[styles.result_difficult]}>
                   你可以将回答正确的题目
-                {/* <TouchableOpacity
-                    onPress={() => {
-                      console.log('移除错题本!');
-                    }}
-                  > */}
                 <Text
                   style={[styles.result_difficult, styles.result_right]}
                   onPress={() => {
                     this.showConfirmModal(item);
                   }}
                 >
-                      移除错题本
+                  移除错题本
                 </Text>
-                {/* </TouchableOpacity> */}
-                  哦！
+                哦！
               </Text>
             </View>
           </View>
@@ -185,8 +174,7 @@ class MistakeReform extends Component {
   rightFn = (item) => {
     const { actions: { correctConfirmAction } } = this.props;
     const { index } = this.state;
-    // this.showLoading();
-    ModalApi.onClose();
+    this.showLoading();
     correctConfirmAction({ index, callback: this.pressT, item }, 'REQUEST');
   }
 
@@ -199,17 +187,19 @@ class MistakeReform extends Component {
       bottomTips: '正在加载...',
       maskClosable: false,
     };
+    ModalApi.onClose();
     ModalApi.onOppen('AnimationsModal', data);
   }
 
   // 自动关闭tips
   pressT = () => {
+    ModalApi.onClose();
     const { isRandom, currentSubjectId } = this.props;
     const data = {
       tipsContent: this.modalContent('错题已移除错题本！'),
       bottomTips: '自动关闭',
     };
-    // ModalApi.onOppen('TipsModal', data);
+    ModalApi.onOppen('TipsModal', data);
     if (isRandom) {
       // const newIndex = index < list.length - 1 ? index + 1 : index;
       const { index } = this.state;
@@ -271,9 +261,9 @@ class MistakeReform extends Component {
                           showWrongInfoRadioAction({ index, showWord: false });
                         }}
                       >
-                      错误原因分析
+                        错误原因分析
                       </Text>
-                    哦！
+                      哦！
                     </Text>
                   </View>
                 ) : null
@@ -323,52 +313,22 @@ class MistakeReform extends Component {
     selectAnswerAction({ index, notShowSubmitBtn: true });
   }
 
-  // 上传的图片
-  showImageOrTitle = ({ item }) => {
-    const {
-      studentAnswer, showAll,
-    } = item.controlComponent.showSubjectiveInfo;
-    if (studentAnswer) {
-      console.log(319, studentAnswer);
-    //   if (studentAnswer) {
-    //     return (
-    //       <View style={styles.updateImage_container}>
-    //         <View style={styles.question_title}>
-    //           <I18nText style={styles.question_title_txt}>
-    //         DoHomeworks.answerCard.toAnswer
-    //           </I18nText>
-    //         </View>
-    //         <View style={styles.image_container}>
-    //           <Image
-    //             source={{ uri: studentAnswer }}
-    //             style={{ width: '100%', height: '100%' }}
-    //           />
-    //         </View>
-    //       </View>
-    //     );
-    //   }
-    }
+  // 题目作答区域
+  showAnswerCard = ({ item }) => {
+    const { showAll } = item.controlComponent.showSubjectiveInfo;
+    // 0:综合题 1:单选题 2:多选题 3:判断题 4:对应题, 10:填空题 11:主观题
     return (
-      <View>
-        {/* 0:综合题 1:单选题 2:多选题 3:判断题 4:对应题, 10:填空题 11:主观题 */}
-        <AnswerCard
-          questions={item}
-          mistakeReform
-          // 是否展示删除图片的按钮图标
-          showDeleteIcon={!showAll}
-          handleToClickRadio={(id, value) => this.handleToClickRadio(id, value, item)}
-          // updateImage={this.updateImage}
-          handlePreviewImage={this.handlePreviewImage}
-          deleteImg={this.deleteImg}
-        />
-      </View>
+      <AnswerCard
+        questions={item}
+        mistakeReform
+        // 是否展示删除图片的按钮图标
+        showDeleteIcon={!showAll}
+        handleToClickRadio={(id, value) => this.handleToClickRadio(id, value, item)}
+        handlePreviewImage={this.handlePreviewImage}
+        deleteImg={this.deleteImg}
+      />
     );
   }
-
-  // 上传图片的回调函数
-  // updateImage = (source) => {
-
-  // }
 
   // 显示主观题的题目答案、别人家的答案等
   showSubjective = ({ item, index }) => {
@@ -382,27 +342,25 @@ class MistakeReform extends Component {
           {
             (teacherAnswer || otherStudentAnswer.length > 0) && <View style={styles.space} />
           }
-          <View style={styles.subjective_container}>
-            <View>
-              {
-                  // 没有老师答案就不显示
-                  teacherAnswer && (
-                  // 后台可能返回null给我
-                  <View style={styles.answer_wrap}>
-                    <Text style={styles.answer_title}>题目答案:</Text>
-                    {/* 暂时支持不了图文压成图片 */}
-                    {/* <ThumbnailImage
-                      option={{
-                        url: teacherAnswer,
-                      }}
-                    /> */}
-                    <View style={styles.question_content_wrap}>
-                      { this.htmlViewComponent(item.content) }
-                    </View>
+          <View>
+            {
+                // 没有老师答案就不显示
+                teacherAnswer && (
+                // 后台可能返回null给我
+                <View style={styles.subjective_container}>
+                  <Text style={styles.answer_title}>题目答案:</Text>
+                  {/* 暂时支持不了图文压成图片 */}
+                  {/* <ThumbnailImage
+                    option={{
+                      url: teacherAnswer,
+                    }}
+                  /> */}
+                  <View style={styles.question_content_wrap}>
+                    { this.htmlViewComponent(item.content) }
                   </View>
-                  )
-                }
-            </View>
+                </View>
+                )
+              }
             {
               // 没有其他同学答案就不显示
               otherStudentAnswer.length > 0 ? (
@@ -481,8 +439,6 @@ class MistakeReform extends Component {
   render() {
     const { questions, currentSubjectId } = this.props;
     const { index } = this.state;
-    const contentWrapStyle = questions.length > 0 ? styles.content_wrap : styles.content_wrap_not_result;
-    // const contentWrapStyle = styles.content_wrap_not_result;
     return (
       <View style={styles.mistakeReform_container}>
         <Modal />
@@ -503,59 +459,72 @@ class MistakeReform extends Component {
           </View>
           { this.haveIndex(index) }
         </View>
-        <ScrollView>
-          <View style={contentWrapStyle}>
-            <Swiper
-              ref={(node) => { this.swiperRef = node; }}
-              loop={false}
-              showsPagination={false}
-              onIndexChanged={(nextIndex) => {
-                console.log('onIndexChanged, nextIndex=', nextIndex);
-                this.setState({
-                  index: nextIndex,
-                });
-              }}
-            >
-              {
-                questions.length !== 0 ? questions.map((item, i) => (
-                  <View key={i}>
-                    {/* 题目 */}
-                    <View style={styles.questionCard_container}>
-                      {/* 根据web那边写好的，这边根据item.type展示什么题型 */}
-                      <View style={styles.question_title}>
-                        <Text style={styles.question_title_txt}>{getQuestionTypeName(item.type)}</Text>
+        <Swiper
+          ref={(node) => { this.swiperRef = node; }}
+          loop={false}
+          showsPagination={false}
+          onIndexChanged={(nextIndex) => {
+            console.log('onIndexChanged, nextIndex=', nextIndex);
+            this.setState({
+              index: nextIndex,
+            });
+          }}
+        >
+          {
+            questions.length !== 0
+              ? questions.map((item, i) => (
+                <ScrollView key={i}>
+                  {/* 有材料时要展示材料 */}
+                  {
+                    item.materialContent && (
+                      <View>
+                        <View style={styles.questionCard_container}>
+                          <View style={styles.question_title}>
+                            <Text style={styles.question_title_txt}>材料</Text>
+                          </View>
+                          {/* block转换为html */}
+                          <View style={styles.question_content_wrap}>
+                            { this.htmlViewComponent(item.materialContent) }
+                          </View>
+                        </View>
+                        <View style={styles.space} />
                       </View>
-                      {/* block转换为html */}
-                      <View style={styles.question_content_wrap}>
-                        { this.htmlViewComponent(item.content) }
-                      </View>
+                    )
+                  }
+                  {/* 题目内容 */}
+                  <View style={styles.questionCard_container}>
+                    {/* 根据web那边写好的，这边根据item.type展示什么题型 */}
+                    <View style={styles.question_title}>
+                      <Text style={styles.question_title_txt}>{getQuestionTypeName(item.type)}</Text>
                     </View>
-                    <View style={styles.space} />
-                    {/* 主观题上传图片后的图片显示,如果有图片,就显示图片，如果没有就显示题型 */}
-                    {this.showImageOrTitle({ item })}
-                    {/* 答案 */}
-                    <View />
-                    {/* 提交按钮 */}
-                    { this.showSubmitBtn({ item, index: i }) }
-                    {/* 错误答案信息 */}
-                    { this.showErrorInfo(item) }
-                    {/* 显示主观题的题目答案、别人家的答案等 */}
-                    { this.showSubjective({ item, index: i }) }
-                    {/* 正确答案信息 */}
-                    { this.showCorrectInfo(item) }
-                    {/* 错误信息的总结(radio) */}
-                    { this.showErrorRadio(item, i) }
+                    {/* block转换为html */}
+                    <View style={styles.question_content_wrap}>
+                      { this.htmlViewComponent(item.content) }
+                    </View>
                   </View>
-                )) : (
-                  <NotResult
-                    tips="错题已复习完毕"
-                    imgStyle={{}}
-                  />
-                )
-            }
-            </Swiper>
-          </View>
-        </ScrollView>
+                  <View style={styles.space} />
+                  {/* 错题重做作答区域 */}
+                  {this.showAnswerCard({ item })}
+                  {/* 提交按钮 */}
+                  { this.showSubmitBtn({ item, index: i }) }
+                  {/* 错误答案信息 */}
+                  { this.showErrorInfo(item) }
+                  {/* 显示主观题的题目答案、别人家的答案等 */}
+                  { this.showSubjective({ item, index: i }) }
+                  {/* 正确答案信息 */}
+                  { this.showCorrectInfo(item) }
+                  {/* 错误信息的总结(radio) */}
+                  { this.showErrorRadio(item, i) }
+                </ScrollView>
+              ))
+              : (
+                <NotResult
+                  tips="错题已复习完毕"
+                  imgStyle={{}}
+                />
+              )
+          }
+        </Swiper>
       </View>
     );
   }

@@ -27,6 +27,8 @@ import com.iamsb.wheelpicker.WheelPickerPackage;
 import com.cjhms_rn.MyNativeReactPackage;
 import com.masteratul.exceptionhandler.ReactNativeExceptionHandlerPackage;
 
+import com.rnfs.RNFSPackage;
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -39,18 +41,19 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNViewShotPackage(),
-            new PickerPackage(),
-            new ImagePickerPackage(),
-            new RNI18nPackage(),
-            new RNDeviceInfo(),
-            new RNImmersivePackage(),
-            new SplashScreenReactPackage(),
+          new RNViewShotPackage(),
+          new PickerPackage(),
+          new ImagePickerPackage(),
+          new RNI18nPackage(),
+          new RNDeviceInfo(),
+          new RNImmersivePackage(),
+          new SplashScreenReactPackage(),
           new VectorIconsPackage(),
           new SvgPackage(),
           new WheelPickerPackage(),
           new MyNativeReactPackage(),
-          new ReactNativeExceptionHandlerPackage()
+          new ReactNativeExceptionHandlerPackage(),
+          new RNFSPackage()
       );
     }
 
