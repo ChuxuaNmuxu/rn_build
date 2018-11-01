@@ -387,6 +387,16 @@ class HomworkRecordDetail extends Component {
     return false;
   }
 
+  examCanRenderCauseOfError=() => {
+    const {
+      submitStatus,
+    } = this.props;
+    if (this.type === 'E' && submitStatus === 0) {
+      return false;
+    }
+    return true;
+  }
+
 
   render() {
     const {
@@ -598,11 +608,13 @@ class HomworkRecordDetail extends Component {
         {
           // 错误原因分析
           // 是否被批改且存在错误
-          status === 1 && isItCorrect !== 1 ? (
-            <View style={styles.CauseOfError}>
-              <CauseOfError defaultValue={causeOfErrorNum} onChange={this.onChange} />
-            </View>
-          ) : null
+          // submitStatus=>是否参加考试，1是
+
+         this.examCanRenderCauseOfError() && status === 1 && isItCorrect !== 1 ? (
+           <View style={styles.CauseOfError}>
+             <CauseOfError defaultValue={causeOfErrorNum} onChange={this.onChange} />
+           </View>
+         ) : null
         }
       </ScrollView>
     );
@@ -618,6 +630,7 @@ HomworkRecordDetail.propTypes = {
   detailsDataList: PropTypes.array.isRequired,
   status: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
+  submitStatus: PropTypes.number.isRequired,
 };
 
 HomworkRecordDetail.defaultProps = {
@@ -627,7 +640,7 @@ HomworkRecordDetail.defaultProps = {
 const mapStateToProps = (state) => {
   const {
     routes, recordDetailReducer: {
-      detailsDataList, headerList, status, title,
+      detailsDataList, headerList, status, title, submitStatus,
     },
   } = state;
   const { params } = routes;
@@ -638,6 +651,7 @@ const mapStateToProps = (state) => {
     headerList,
     status,
     title,
+    submitStatus,
   };
 };
 
