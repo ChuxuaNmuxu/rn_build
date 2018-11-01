@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  TouchableHighlight,
+  // TouchableHighlight,
+  Dimensions,
   findNodeHandle,
   NativeModules,
   TouchableOpacity,
@@ -14,6 +15,7 @@ import Popover from 'react-native-modal-popover';
 import styles from './AnserSummarization.scss';
 import Svg from '../../../../components/Svg';
 import api from '../../../../utils/fetch';
+
 
 class AnserSummarization extends Component {
   constructor(props) {
@@ -27,6 +29,7 @@ class AnserSummarization extends Component {
     // this.correctAnser = props.correctAnser;
     // this.studentAnser = props.studentAnser;
     // this.score = props.score;
+    this.scale = Dimensions.get('window').scale;
     this.state = {
       showPopover: false,
       popoverAnchor: {},
@@ -214,16 +217,16 @@ class AnserSummarization extends Component {
       <View style={styles.studentCorect} onLayout={this.setButton}>
         <Text style={styles.studentCorectText1}>由同学批阅：</Text>
 
-        <TouchableHighlight
+        <TouchableOpacity
           ref={(r) => { this.button = r; }}
           style={styles.button}
           onPress={hasMarkFeedback ? this._preventDefault : this.openPopover}
-          underlayColor="transparent"
+          // underlayColor="transparent"
         >
           <Text style={[styles.studentCorectText2, hasMarkFeedback ? styles.submitText : '']}>
             {hasMarkFeedback ? '已提交反馈' : '批阅有误?'}
           </Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
         <Popover
           contentStyle={[styles.contentStyle, {
@@ -232,6 +235,9 @@ class AnserSummarization extends Component {
             shadowRadius: 5,
             shadowColor: 'rgba(87,163,222,0.13)',
             elevation: 4,
+          }, {
+            width: 421 / this.scale,
+            height: 249 / this.scale,
           }]}
           visible={showPopover}
           fromRect={popoverAnchor}
@@ -246,23 +252,36 @@ class AnserSummarization extends Component {
           //   elevation: 4,
           // }]}
         >
+          {/* <Resolution> */}
           <View style={styles.popoverView}>
             <View style={styles.popoverViewTips}><Text style={styles.popoverViewTipsText}>确认反馈批阅有误？</Text></View>
             <View style={styles.btnView}>
-              <TouchableOpacity style={[styles.popoverBtn]} onPress={this.closePopover}>
+              <TouchableOpacity
+                style={[styles.popoverBtn, {
+                  width: 170 / this.scale,
+                  height: 66 / this.scale,
+                }]}
+                onPress={this.closePopover}
+              >
                 <Text style={[styles.popoverBtnText, { color: '#30bf6c' }]}>
                   取消
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.popoverBtn, { backgroundColor: '#30bf6c' }]} onPress={() => this.closePopover().putErrorMessage()}>
+              <TouchableOpacity
+                style={[styles.popoverBtn, { backgroundColor: '#30bf6c' }, {
+                  width: 170 / this.scale,
+                  height: 66 / this.scale,
+                }]}
+                onPress={() => this.closePopover().putErrorMessage()}
+              >
                 <Text style={[styles.popoverBtnText, { color: '#ffffff' }]}>
                   确认
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
+          {/* </Resolution> */}
         </Popover>
-
       </View>
     );
   }
