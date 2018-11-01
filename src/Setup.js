@@ -17,6 +17,7 @@ import Language from './config/language';
 import ApiBase from './config/apiBase';
 import { InitialConfog } from './actions/config';
 import * as listener from './constants/listener';
+import Logger from './utils/logger';
 
 @connect(
   state => ({
@@ -53,8 +54,12 @@ export default class Setup extends Component {
       Immersive.addImmersiveListener(this.restoreImmersive);
     }
 
+
     // 初始化 主题、语言等配置
     await this.initialConfig();
+
+    // 删除日志networkLog.text，codeErrorLog.text
+    await Logger.callChaining('deleteFile', 'networkLog.txt').callChaining('deleteFile', 'codeErrorLog.txt');
 
     // 关闭启动页
     SplashScreen.hide();

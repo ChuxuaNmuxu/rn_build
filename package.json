@@ -53,6 +53,7 @@
     "react-native-code-push": "^5.4.2",
     "react-native-device-info": "^0.22.3",
     "react-native-exception-handler-iamsb": "^1.0.1",
+    "react-native-fs": "2.11.17",
     "react-native-htmlview": "^0.13.0",
     "react-native-i18n": "^2.0.15",
     "react-native-image-crop-picker": "^0.21.1",
