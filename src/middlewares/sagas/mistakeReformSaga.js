@@ -103,10 +103,10 @@ function* confirmDeleteSaga(action) {
     const { index, callback, item } = action.payload;
     const url = `/app/api/student/failed-questions/questions/${item.id}/understood?category=${item.category}`;
     const fetch = arg => Fetch.put(url, arg);
-    // const res = yield call(fetch);
+    const res = yield call(fetch);
     // console.log('移除错题本', res);
-    // const { code } = res;
-    const code = 0;
+    const { code } = res;
+    // const code = 0;
     if (code === 0) {
       const state = yield select(getState);
       const { questions } = state.mistakeReformReducer;
