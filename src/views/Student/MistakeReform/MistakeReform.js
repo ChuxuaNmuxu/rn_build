@@ -51,7 +51,7 @@ class MistakeReform extends Component {
 
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
-    console.log(draftToHtml(JSON.parse(htmlContent)));
+    // console.log(draftToHtml(JSON.parse(htmlContent)));
     const htmlViewStyles = StyleSheet.create({
       p: {
         fontSize: 24,
@@ -71,10 +71,12 @@ class MistakeReform extends Component {
   // 导航条右侧是否有 index
   haveIndex = (index) => {
     const { questions } = this.props;
+    console.log(questions, index);
+    const newIndex = index + 1;
     if (questions.length > 1) {
       return (
         <View style={styles.head_index_view}>
-          <Text style={styles.head_index_text}>{`${index + 1}/${questions.length}`}</Text>
+          <Text style={styles.head_index_text}>{`${newIndex}/${questions.length}`}</Text>
         </View>
       );
     }
@@ -176,20 +178,6 @@ class MistakeReform extends Component {
     correctConfirmAction({ index, callback: this.pressT, item }, 'REQUEST');
   }
 
-  // 自动关闭tips
-  pressT = () => {
-    const { isRandom, currentSubjectId } = this.props;
-    const data = {
-      tipsContent: this.modalContent('错题已移除错题本！'),
-      bottomTips: '自动关闭',
-    };
-    ModalApi.onOppen('TipsModal', data);
-    if (!isRandom) {
-      // console.warn('进来了！');
-      Actions.ProblemListOverview({ subjectId: currentSubjectId });
-    }
-  }
-
   // 确认按钮后触发的 tips (打酱油的)
   showLoading = () => {
     const data = {
@@ -199,7 +187,29 @@ class MistakeReform extends Component {
       bottomTips: '正在加载...',
       maskClosable: false,
     };
+    ModalApi.onClose();
     ModalApi.onOppen('AnimationsModal', data);
+  }
+
+  // 自动关闭tips
+  pressT = () => {
+    ModalApi.onClose();
+    const { isRandom, currentSubjectId } = this.props;
+    const data = {
+      tipsContent: this.modalContent('错题已移除错题本！'),
+      bottomTips: '自动关闭',
+    };
+    ModalApi.onOppen('TipsModal', data);
+    if (isRandom) {
+      // const newIndex = index < list.length - 1 ? index + 1 : index;
+      const { index } = this.state;
+      const { questions } = this.props;
+      const bol = index < questions.length - 1;
+      console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol, questions);
+      // if (bol) this.swiperRef.scrollBy(1);
+    } else {
+      Actions.ProblemListOverview({ subjectId: currentSubjectId });
+    }
   }
 
   modalContent = tip => (
@@ -332,23 +342,25 @@ class MistakeReform extends Component {
           {
             (teacherAnswer || otherStudentAnswer.length > 0) && <View style={styles.space} />
           }
-          <View style={styles.subjective_container}>
-            <View>
-              {
-                  // 没有老师答案就不显示
-                  teacherAnswer && (
-                  // 后台可能返回null给我
-                  <View style={styles.answer_wrap}>
-                    <Text style={styles.answer_title}>题目答案:</Text>
-                    <ThumbnailImage
-                      option={{
-                        url: teacherAnswer,
-                      }}
-                    />
+          <View>
+            {
+                // 没有老师答案就不显示
+                teacherAnswer && (
+                // 后台可能返回null给我
+                <View style={styles.subjective_container}>
+                  <Text style={styles.answer_title}>题目答案:</Text>
+                  {/* 暂时支持不了图文压成图片 */}
+                  {/* <ThumbnailImage
+                    option={{
+                      url: teacherAnswer,
+                    }}
+                  /> */}
+                  <View style={styles.question_content_wrap}>
+                    { this.htmlViewComponent(item.content) }
                   </View>
-                  )
-                }
-            </View>
+                </View>
+                )
+              }
             {
               // 没有其他同学答案就不显示
               otherStudentAnswer.length > 0 ? (
@@ -364,8 +376,9 @@ class MistakeReform extends Component {
                         <View style={{ marginRight: 25 }} key={i}>
                           <ThumbnailImage
                             option={{
-                              url: item2.explainImageUrl,
+                              url: [item2.thumbUrl],
                               studentName: item2.studentName,
+                              imageViewType: 'ordinary',
                             }}
                           />
                         </View>

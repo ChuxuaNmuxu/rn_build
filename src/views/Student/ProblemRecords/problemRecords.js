@@ -232,7 +232,6 @@ class ProblemRecords extends Component {
     footerLoading(true);
 
     this.dropDownFetch({
-
       currentRecordType,
       currentSubjectId,
       ...this.moreParams,

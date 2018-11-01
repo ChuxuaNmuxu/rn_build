@@ -9,3 +9,13 @@ export const addMistakeList = (state, action) => {
   // console.log(7, data);
   state.mistakeList = [...state.mistakeList, ...data];
 };
+
+export const control = (state, action) => {
+  // console.log(7, data);
+  state.controlFetch = action.payload;
+};
+
+export const initList = (state, action) => {
+  // console.log(7, data);
+  state.mistakeList = [];
+};

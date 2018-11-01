@@ -96,6 +96,7 @@ class RecordCard extends PureComponent {
   // 点击 去订正/去补做
   toReviseFun = () => {
     console.log(666, '去订正');
+    Actions.HomeworkTask();
   }
 
   // 点击卡片进入详情页
