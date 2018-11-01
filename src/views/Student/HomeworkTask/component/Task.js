@@ -145,8 +145,7 @@ class TaskItem extends React.Component {
       onSaveTask,
     } = this.props;
     const { scale } = adaptiveRotation();
-    // const { dx, dy } = gestureState;
-    // timestamp: nowTime
+
     const { pageY } = evt.nativeEvent;
 
     // 取消阴影
@@ -174,15 +173,15 @@ class TaskItem extends React.Component {
         }), 0);
       } else {
         /**
-           * 只有将未排期的任务进行排期或从排期任务中取消排期时才会对排期列表有影响
-           * 如果 type 为 detailsTask 并且排期成功时触发更改未排期任务列表action
-           */
+       * 只有将未排期的任务进行排期或从排期任务中取消排期时才会对排期列表有影响
+       * 如果 type 为 detailsTask 并且排期成功时触发更改未排期任务列表action
+       */
         if (type === 'detailsTask') onChangeTodoTask({ ...dragData, cancelTask: true });
 
         /**
-           * prevPeriodIndex 如果切换时间段，则有prevPeriodIndex属性，否则没有，通过该属性判断是排期还是切换排期
-           * currentPeriodIndex 当前时间段
-           */
+       * prevPeriodIndex 如果切换时间段，则有prevPeriodIndex属性，否则没有，通过该属性判断是排期还是切换排期
+       * currentPeriodIndex 当前时间段
+       */
         const taskData = type === 'detailsTask'
           ? { ...data, currentPeriodIndex: index }
           : { ...data, currentPeriodIndex: index, prevPeriodIndex: lastHandlePeriodIndex };
@@ -223,18 +222,6 @@ class TaskItem extends React.Component {
       });
     }
 
-    /**
-     * 模拟单击
-     * 单击事件小于 80ms 并且手指移动范围在 8px 以内
-     */
-
-    // if (Math.abs(dx - this.touchStartX) < 8 || Math.abs(dy - this.touchStartY) < 8) {
-    //   console.log(239, nowTime - this.touchStartTime,this.touchTime)
-    //   if (nowTime - this.touchStartTime < this.touchTime) {
-    //     onPress();
-    //   }
-    // }
-
     // 如果当前为拖拽状态，则还原拖拽时所改变的所有状态
     if (this.isDraging) {
       // 取消hover状态
@@ -252,14 +239,16 @@ class TaskItem extends React.Component {
     }
   }
 
+  // 手指按下
   onPressIn = () => {
+    // 为了解决onPress在点击时响应延迟问题，在PressIn阶段先更改样式响应点击
     this.interactiveStyle();
   }
 
   // 点击结束或者离开
   onPressOut = () => {
+    // rn很奇葩 PressOut在Press之前执行，所以通过delayPressOut添加延迟。让PressOut在后执行移除相应样式。
     this.clearInteractiveStyle();
-    console.log('提起');
   }
 
   // 相应点击
@@ -347,7 +336,12 @@ class TaskItem extends React.Component {
         {/**
           data.dragTask=true 表示模拟的拖拽元素
         */}
-        <TouchableWithoutFeedback delayPressOut={300} onPress={this.onPress} onPressOut={this.onPressOut} onPressIn={this.onPressIn}>
+        <TouchableWithoutFeedback
+          delayPressOut={200}
+          onPress={this.onPress}
+          onPressOut={this.onPressOut}
+          onPressIn={this.onPressIn}
+        >
           {
             (dragData.homeworkId === data.homeworkId) && !data.dragTask
               ? (
