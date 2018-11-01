@@ -22,6 +22,7 @@ function* getDataSaga(action) {
   const url = `/app/api/student/failed-questions/list?${fetchParam}`;
   // console.log('url=', url);
   try {
+    yield put({ type: 'control', payload: true });
     const res = yield Fetch.get(url);
     const { code, data, total } = res;
     // console.log('getDataSaga的res=', res);
@@ -38,5 +39,8 @@ function* getDataSaga(action) {
   } catch (e) {
     // failureFn(e);
     yield put(costomAction(e, 'ERROR'));
+  } finally {
+    yield put({ type: 'control', payload: false });
+    yield put(costomAction(null, 'FINISH'));
   }
 }
