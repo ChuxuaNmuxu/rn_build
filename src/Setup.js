@@ -12,6 +12,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import SplashScreen from 'react-native-splash-screen';
 // import Theme from './config/theme';
+import CodePush from 'react-native-code-push';
 import Language from './config/language';
 import ApiBase from './config/apiBase';
 import { InitialConfog } from './actions/config';
@@ -71,6 +72,13 @@ export default class Setup extends Component {
       this.setState({
         isConnected,
       });
+    });
+
+    CodePush.sync({
+      // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
+      installMode: CodePush.InstallMode.IMMEDIATE,
+      // 苹果公司和中国区安卓的热更新，是不允许弹窗提示的，所以不能设置为true
+      updateDialog: true,
     });
   }
 
