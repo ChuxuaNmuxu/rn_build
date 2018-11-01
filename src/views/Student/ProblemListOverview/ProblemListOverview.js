@@ -140,7 +140,7 @@ class ProblemListOverview extends Component {
     console.log('原数组list=', list, '随鸡5到题', datas);
     Actions.MistakeReform({
       problemCardInfo: datas,
-      subjectId: currentSubjectId, // 回来的时候重新请求数据用的
+      currentSubjectId, // 回来的时候重新请求数据用的
       isRandom: true, // 用来判断是否是随机，不是的时候删除错题本成功后调回此页面
     });
   }

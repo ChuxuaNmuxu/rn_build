@@ -51,7 +51,7 @@ class MistakeReform extends Component {
 
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
-    console.log(draftToHtml(JSON.parse(htmlContent)));
+    // console.log(draftToHtml(JSON.parse(htmlContent)));
     const htmlViewStyles = StyleSheet.create({
       p: {
         fontSize: 24,
@@ -74,11 +74,14 @@ class MistakeReform extends Component {
 
   // 导航条右侧是否有 index
   haveIndex = (index) => {
-    const { questions } = this.props;
+    const { questions, isRandom } = this.props;
+    console.log(questions, index);
+    const newIndex = index + 1;
+    // if (isRandom) newIndex = index;
     if (questions.length > 1) {
       return (
         <View style={styles.head_index_view}>
-          <Text style={styles.head_index_text}>{`${index + 1}/${questions.length}`}</Text>
+          <Text style={styles.head_index_text}>{`${newIndex}/${questions.length}`}</Text>
         </View>
       );
     }
@@ -182,22 +185,9 @@ class MistakeReform extends Component {
   rightFn = (item) => {
     const { actions: { correctConfirmAction } } = this.props;
     const { index } = this.state;
-    this.showLoading();
+    // this.showLoading();
+    ModalApi.onClose();
     correctConfirmAction({ index, callback: this.pressT, item }, 'REQUEST');
-  }
-
-  // 自动关闭tips
-  pressT = () => {
-    const { isRandom, currentSubjectId } = this.props;
-    const data = {
-      tipsContent: this.modalContent('错题已移除错题本！'),
-      bottomTips: '自动关闭',
-    };
-    ModalApi.onOppen('TipsModal', data);
-    if (!isRandom) {
-      // console.warn('进来了！');
-      Actions.ProblemListOverview({ subjectId: currentSubjectId });
-    }
   }
 
   // 确认按钮后触发的 tips (打酱油的)
@@ -210,6 +200,26 @@ class MistakeReform extends Component {
       maskClosable: false,
     };
     ModalApi.onOppen('AnimationsModal', data);
+  }
+
+  // 自动关闭tips
+  pressT = () => {
+    const { isRandom, currentSubjectId } = this.props;
+    const data = {
+      tipsContent: this.modalContent('错题已移除错题本！'),
+      bottomTips: '自动关闭',
+    };
+    // ModalApi.onOppen('TipsModal', data);
+    if (isRandom) {
+      // const newIndex = index < list.length - 1 ? index + 1 : index;
+      const { index } = this.state;
+      const { questions } = this.props;
+      const bol = index < questions.length - 1;
+      console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol, questions);
+      // if (bol) this.swiperRef.scrollBy(1);
+    } else {
+      Actions.ProblemListOverview({ subjectId: currentSubjectId });
+    }
   }
 
   modalContent = tip => (
@@ -400,7 +410,7 @@ class MistakeReform extends Component {
                         <View style={{ marginRight: 25 }} key={i}>
                           <ThumbnailImage
                             option={{
-                              url: [item2.explainImageUrl],
+                              url: [item2.thumbUrl],
                               studentName: item2.studentName,
                               imageViewType: 'ordinary',
                             }}
