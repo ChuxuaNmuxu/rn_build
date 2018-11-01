@@ -61,7 +61,7 @@ android/gradle/wrapper/gradle-wrapper.properties
 
 # 配置.vscode
 .vscode/
-.settings.json
+# .settings.json
 
 # 过滤打包之后生成的文件
 android/app/src/main/assets/
