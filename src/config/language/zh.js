@@ -23,6 +23,8 @@ export default {
     beginTime: '执行日期:',
     reviewHomework: '预览作业',
     beginHomework: '开始作业',
+    save: '保存',
+    selectTime: '选择执行时间',
   },
 
   // 批阅作业
@@ -99,6 +101,7 @@ export default {
 
   // 错题本列表页
   ProblemListOverview: {
+    title: '我的错题',
     header: {
       moreFilter: '更多筛选',
     },

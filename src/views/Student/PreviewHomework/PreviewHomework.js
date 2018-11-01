@@ -15,18 +15,20 @@ import * as actions from '../../../actions/previewHomeworkAction';
 import draftToHtml from '../HomworkRecordDetail/lib/draftjs-to-html';
 
 class PreviewHomework extends Component {
+  timeSetInterval = null
+
   constructor(props) {
     super(props);
     this.state = {
       previewTime: 119, // 预览作业的时间
     };
-    this.timeSetInterval = null;
   }
+
 
   componentDidMount() {
     // 请求页面数据
     const { actions: { fetchPreviewHomeworkAction }, homeworkId } = this.props;
-    console.log('当前预览作业id', homeworkId);
+    // console.log('当前预览作业id', homeworkId);
     if (homeworkId) {
       fetchPreviewHomeworkAction({ homeworkId }, 'REQUEST');
     }
@@ -37,7 +39,6 @@ class PreviewHomework extends Component {
         previewTime: previewTime - 1,
       }, () => {
         if (this.state.previewTime <= 0) {
-          global.clearInterval(this.timeSetInterval);
           this.doHomeWork();
         }
       });
@@ -46,7 +47,15 @@ class PreviewHomework extends Component {
 
   // 离开页面时清除计时器
   componentWillUnmount() {
-    global.clearInterval(this.timeSetInterval);
+    // console.log(9999, '执行了componentWillUnmount函数。。。。。。');
+    clearInterval(this.timeSetInterval);
+  }
+
+  // 点击左上角箭头回到首页
+  goIndex = () => {
+    Actions.replace('HomeworkTask');
+    clearInterval(this.timeSetInterval);
+    // 用这种方式跳转页面就能执行componentWillUnmount函数
   }
 
   // 完成预览，开始作业
@@ -69,7 +78,7 @@ class PreviewHomework extends Component {
     return (
       <View style={styles.previewHomework_container}>
         <View style={styles.previewHomework_header}>
-          <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.HomeworkTask} />
+          <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.goIndex} />
           <Text style={styles.previewHomework_title}>{data && data.title}</Text>
           <Text style={styles.previewHomework_time}>
             <I18nText>

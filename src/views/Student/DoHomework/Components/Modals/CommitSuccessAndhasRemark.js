@@ -35,6 +35,8 @@ class CommitSuccessAndhasRemark extends Component {
       leftBtnText: '稍后再批',
       content: this.hasRemarkContent(),
       closeBtn: false,
+      maskClosable: false,
+      style: { width: 620 },
     };
     ModalApi.onOppen('ButtomModal', data);
   }

@@ -35,6 +35,8 @@ class WillingToCheckModal extends Component {
       leftBtnText: '不想检查',
       content: this.willingToCheckContent(),
       closeBtn: false,
+      maskClosable: false,
+      style: { width: 620 },
     };
     ModalApi.onOppen('ButtomModal', data);
   }

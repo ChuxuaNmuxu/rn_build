@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getMistakeList } from '../../../actions/mistakeListAction';
+import { getMistakeListAction } from '../../../actions/mistakeListAction';
 import { initialFetch } from '../../../actions/problemRecordsAction';
 import styles from './ProblemListOverview.scss';
 import I18nText from '../../../components/I18nText';
@@ -21,15 +21,6 @@ import SelectListButton from '../ProblemRecords/Components/SelectListButton';
 import { getRandomArrayItem } from '../../../utils/common';
 
 class ProblemListOverview extends Component {
-  static propTypes = {
-    onGetMistakeList: PropTypes.func.isRequired,
-    subjectId: PropTypes.string.isRequired,
-    problemOverviewData: PropTypes.array.isRequired,
-    mistakeList: PropTypes.array.isRequired,
-    allGradeData: PropTypes.array.isRequired,
-    getGrades: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
     const { problemOverviewData, subjectId } = props;
@@ -37,6 +28,7 @@ class ProblemListOverview extends Component {
       showExtendView: false,
       subjectData: problemOverviewData,
       currentSubjectId: subjectId,
+      difficultyLevelVisible: false, // 控制难易度的标签 选中作业是时候才显示
     };
     this.moreParams = {
       uniGradeId: [],
@@ -49,17 +41,15 @@ class ProblemListOverview extends Component {
     ];
     this.difficultyLevel = [
       { id: 1, text: '易' },
-      { id: 2, text: '适中' },
-      { id: 3, text: '难' },
+      { id: 5, text: '适中' },
+      { id: 9, text: '难' },
     ];
   }
 
   componentDidMount() {
-    const { onGetMistakeList, subjectId, getGrades } = this.props;
-    console.log(53, 'componentDidMount', subjectId);
-    onGetMistakeList({
-      params: { subjectId },
-    });
+    console.log('调用 ProblemListOverview 组件', this.props);
+    const { getGrades } = this.props;
+    this.refreshList();
     getGrades({ currentRecordType: 0 }, 'REQUEST');
   }
 
@@ -73,8 +63,15 @@ class ProblemListOverview extends Component {
 
   getMoreParms = (Arr, objKey) => {
     this.moreParams[objKey] = Arr;
-    console.log(this.moreParams);
-    this.refreshList();
+    // console.log(67, Arr, objKey, this.moreParams);
+    // 控制难易度的标签 选中作业是时候才显示 objKey === category && category.includes(1)
+    if (this.moreParams.category.includes(1)) {
+      this.setState({ difficultyLevelVisible: true }, () => this.refreshList());
+    } else {
+      // 如果没有的话，要清空 difficultyLevel
+      this.moreParams.difficultyLevel = [];
+      this.setState({ difficultyLevelVisible: false }, () => this.refreshList());
+    }
   }
 
   // 控制更多筛选层的显隐
@@ -90,17 +87,25 @@ class ProblemListOverview extends Component {
     const { category, difficultyLevel, uniGradeId } = this.moreParams;
     const initParams = {
       subjectId: currentSubjectId,
-      difficultyLevel,
       uniGradeId: uniGradeId[0],
+      page: 1,
+      pageSize: 20,
     };
+
+    if (difficultyLevel.length > 0) {
+      initParams.difficultyLevel = difficultyLevel.join(); // 按后台格式来 Array[int]
+    }
+
     if (category.length === 1) {
       Object.assign(initParams, {
         category: category[0],
       });
     }
-
+    // 最终的请求参数
+    const fetchParams = Object.assign(initParams, params);
+    // console.log(94, fetchParams);
     onGetMistakeList({
-      params: Object.assign(initParams, params),
+      params: fetchParams,
       successFn,
       failureFn,
       action,
@@ -130,17 +135,21 @@ class ProblemListOverview extends Component {
 
   // 前往随机错题重做(传5个随机的数据过去)
   randomMistakeReform = (list) => {
+    const { currentSubjectId } = this.state;
     const datas = getRandomArrayItem(list, 5);
     console.log('原数组list=', list, '随鸡5到题', datas);
     Actions.MistakeReform({
       problemCardInfo: datas,
+      subjectId: currentSubjectId, // 回来的时候重新请求数据用的
+      isRandom: true, // 用来判断是否是随机，不是的时候删除错题本成功后调回此页面
     });
   }
 
   // 渲染需要展示在扩展列表视图中的组件
   renderFilterView = () => {
     const { allGradeData } = this.props;
-    console.log(1200, allGradeData);
+    const { difficultyLevelVisible } = this.state;
+    // console.log(1200, allGradeData);
     return (
       <View style={styles.renderFilterView}>
         <SelectListButton
@@ -159,14 +168,18 @@ class ProblemListOverview extends Component {
           selectType="multi"
           selected={this.moreParams.category}
         />
-        <SelectListButton
-          getItems={this.getMoreParms}
-          data={this.difficultyLevel}
-          title="全部标签"
-          objKey="difficultyLevel"
-          selectType="multi"
-          selected={this.moreParams.difficultyLevel}
-        />
+        {
+          difficultyLevelVisible ? (
+            <SelectListButton
+              getItems={this.getMoreParms}
+              data={this.difficultyLevel}
+              title="全部标签"
+              objKey="difficultyLevel"
+              selectType="multi"
+              selected={this.moreParams.difficultyLevel}
+            />
+          ) : null
+        }
       </View>
     );
   }
@@ -175,7 +188,7 @@ class ProblemListOverview extends Component {
     const {
       showExtendView, currentSubjectId, subjectData,
     } = this.state;
-    const { mistakeList } = this.props;
+    const { mistakeList, total } = this.props;
     return (
       <View style={styles.problemList_container}>
         <TouchableOpacity
@@ -185,7 +198,7 @@ class ProblemListOverview extends Component {
         >
           <View style={styles.problemList_header}>
             <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.ProblemOverview} />
-            <Text style={styles.doHomeworkTitle}>作业名称</Text>
+            <I18nText style={styles.doHomeworkTitle}>ProblemListOverview.title</I18nText>
             <Text />
           </View>
         </TouchableOpacity>
@@ -196,7 +209,12 @@ class ProblemListOverview extends Component {
           filterMoreFun={this.filterMoreFun}
         />
         {/* <ScrollView> */}
-        <ProblemList refreshList={this.refreshList} mistakeList={mistakeList} />
+        <ProblemList
+          refreshList={this.refreshList}
+          mistakeList={mistakeList}
+          total={total}
+          currentSubjectId={currentSubjectId}
+        />
         {/* </ScrollView> */}
         {
           // 更多筛选
@@ -220,10 +238,21 @@ class ProblemListOverview extends Component {
   }
 }
 
+ProblemListOverview.propTypes = {
+  total: PropTypes.number.isRequired, // 后台记录的总长度，用于判断能否刷新
+  onGetMistakeList: PropTypes.func.isRequired,
+  subjectId: PropTypes.string.isRequired,
+  problemOverviewData: PropTypes.array.isRequired,
+  mistakeList: PropTypes.array.isRequired,
+  allGradeData: PropTypes.array.isRequired,
+  getGrades: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) => {
   const {
     mistakeListReducer: {
       mistakeList,
+      total,
     },
     problemOverviewReducer: {
       data,
@@ -236,14 +265,14 @@ const mapStateToProps = (state) => {
 
   return {
     mistakeList,
+    total,
     problemOverviewData: data,
     allGradeData,
   };
 };
 const mapDispatchToProps = dispatch => ({
-  onGetMistakeList: bindActionCreators(getMistakeList, dispatch),
+  onGetMistakeList: bindActionCreators(getMistakeListAction, dispatch),
   getGrades: bindActionCreators(initialFetch, dispatch),
 });
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProblemListOverview);

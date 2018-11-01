@@ -15,6 +15,7 @@ import UploadImgBefore from './UploadImgBefore';
 import UploadImgSuccess from './UploadImgSuccess';
 import I18nText from '../../../../components/I18nText';
 import { parseCorrespondingValue } from '../../../../components/LineTo/utils';
+import { ModalApi } from '../../../../components/Modal';
 
 
 const RadioGroup = Radio.Group;
@@ -27,11 +28,30 @@ class AnswerCard extends Component {
     this.state = {
       source: null,
       showCropper: false,
-      testUri: null,
       width: null,
       height: null,
       fileName: null, // 图片名
     };
+    this.croppedImageStatus = false; // 是否点击了确定裁剪图片
+    this.loadingData = {
+      animationType: 'loading',
+      bottomTips: '图片加载中...',
+      maskClosable: false,
+    };
+  }
+
+  // 图片上传时显示loading状态
+  componentDidUpdate = () => {
+    const { imgLoading } = this.props;
+    if (this.croppedImageStatus && imgLoading) {
+      // console.log(80000000000, 'componentDidUpdate---onOppen');
+      ModalApi.onOppen('AnimationsModal', this.loadingData);
+    }
+    if (this.croppedImageStatus && !imgLoading) {
+      // console.log(9000000000000, 'componentDidUpdate---onClose');
+      this.croppedImageStatus = false;
+      ModalApi.onClose();
+    }
   }
 
   // 单选题、多选、判断、对应答案发生改变的函数
@@ -74,17 +94,15 @@ class AnswerCard extends Component {
 
   // 确定裁剪图片
   croppedImage = (uri, width, height) => {
-    const { showLoadingFun, questions } = this.props;
+    const { questions } = this.props;
     const { fileName } = this.state;
-    showLoadingFun();
+    const { handlePreviewImage } = this.props;
+    handlePreviewImage(questions.id, uri, fileName);
+    this.croppedImageStatus = true;
     this.setState({
       showCropper: false,
-      testUri: uri,
       width,
       height,
-    }, () => {
-      const { handlePreviewImage } = this.props;
-      handlePreviewImage(questions.id, uri, fileName);
     });
   }
 
@@ -100,7 +118,6 @@ class AnswerCard extends Component {
     const { deleteImg, questions } = this.props;
     deleteImg(questions.id);
     this.setState({
-      testUri: null,
       width: null,
       height: null,
     });
@@ -115,12 +132,13 @@ class AnswerCard extends Component {
         answerFileUrl,
       },
       mistakeReform,
+      showDeleteIcon,
     } = this.props;
     const {
-      testUri, width, height,
+      width, height,
     } = this.state;
     // 客观题的上传解答过程，错题重做页面调用时不显示
-    const hasImgUrl = (answerFileUrl && answerFileUrl.length) || testUri; // 是否有图片答案
+    const hasImgUrl = answerFileUrl && answerFileUrl.length; // 是否有图片答案
     if ((mistakeReform && type > 4) || !mistakeReform) {
       // UploadImgBefore必须在一开始就渲染出来，否则会出现删除图片答案后再点击上传图片区域时不弹出选择图片的文件选择，此时只能让页面发生setState后才能正常弹出
       UpdateImgDiv = (
@@ -129,10 +147,11 @@ class AnswerCard extends Component {
             hasImgUrl
             && (
             <UploadImgSuccess
-              answerFileUrl={answerFileUrl || testUri}
+              answerFileUrl={answerFileUrl}
               width={parseInt(width)}
               height={parseInt(height)}
               deleteImg={this.deleteImg}
+              showDeleteIcon={showDeleteIcon}
             />
             )
           }
@@ -267,22 +286,24 @@ class AnswerCard extends Component {
 AnswerCard.propTypes = {
   questions: PropTypes.object.isRequired,
   mistakeReform: PropTypes.bool, // 错题重做页面调用时用来标识调用方的
+  imgLoading: PropTypes.bool, // 图片上传loading状态
   handleDifficultLevel: PropTypes.func, // 难易程度发生改变的函数
   handleToClickRadio: PropTypes.func, // 单选题的回调函数
   handlePreviewImage: PropTypes.func, // 上传图片后的回调函数
   deleteImg: PropTypes.func, // 删除图片答案的函数
   handleCheckboxChange: PropTypes.func, // 改变不是很懂，请老师解答的复选框
-  showLoadingFun: PropTypes.func, // 显示正在loading状态的函数
+  showDeleteIcon: PropTypes.bool, // 错题重做页面用来标识是否需要展示删除图片的icon
 };
 
 AnswerCard.defaultProps = {
   mistakeReform: false,
+  imgLoading: false,
+  showDeleteIcon: true,
   handleToClickRadio: () => {},
   handleDifficultLevel: () => {},
   handlePreviewImage: () => {},
   handleCheckboxChange: () => {},
   deleteImg: () => {},
-  showLoadingFun: () => {},
 };
 
 

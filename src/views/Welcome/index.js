@@ -17,6 +17,11 @@ class Welcome extends React.Component {
 
   componentDidMount() {
     this.getToken();
+    console.log('welcome mount');
+  }
+
+  componentWillUnmount() {
+    console.log('welcome Unmount');
   }
 
   getToken = () => {
@@ -26,7 +31,7 @@ class Welcome extends React.Component {
         const {
           userinfo,
         } = ret;
-        console.log(29, ret);
+
         const { onSetUserInfo } = this.props;
         onSetUserInfo(userinfo);
         if (tokenData) {
@@ -35,17 +40,18 @@ class Welcome extends React.Component {
           } = JSON.parse(userinfo);
           switch (currentSchoolRole) {
             case 'STUDENT':
-              Actions.Student();
+              Actions.reset('Student');
               break;
             case 'TEACHER':
-              Actions.Teacher();
+              Actions.reset('Teacher');
               break;
             default:
               console.log('当前帐号不属于学生或教师', currentSchoolRole);
           }
         }
       }).catch(() => {
-        Actions.Login();
+        console.log('哈哈哈');
+        Actions.reset('Account');
       });
   }
 

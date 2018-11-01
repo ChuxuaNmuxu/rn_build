@@ -23,6 +23,7 @@ class UploadImgBefore extends Component {
     updateImage(source);
   }
 
+
   render() {
     const {
       type,
@@ -120,7 +121,7 @@ class UploadImgBefore extends Component {
 
 UploadImgBefore.propTypes = {
   type: PropTypes.number.isRequired,
-  answered: PropTypes.number, // 客观题是否作答了的标识
+  answered: PropTypes.number, // 客观题是否作答了的标识--客观题必须选择了答案后才可以点击上传解答过程
   updateImage: PropTypes.func, // 上传图片后的回调函数
 };
 

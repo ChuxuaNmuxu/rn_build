@@ -1,3 +1,5 @@
+import R from 'ramda';
+
 export const saveQuestions = (state, action) => {
   console.log(2, action);
   // 只需要按原生js写就好了，且不需要return出去！
@@ -5,16 +7,13 @@ export const saveQuestions = (state, action) => {
 };
 
 export const selectAnswer = (state, action) => {
-  const { index } = action.payload;
-  // const newState = immer(state, (draft) => {
+  const { index, notShowSubmitBtn } = action.payload;
   const { showCorrectInfo, showErrorInfo, showSubjectiveInfo } = state.questions[index].controlComponent;
-  if (!showCorrectInfo.showAll && !showErrorInfo.showAll && !showSubjectiveInfo.showAll) {
+  if (!showCorrectInfo.showAll && !showErrorInfo.showAll && !showSubjectiveInfo.showAll && !notShowSubmitBtn) {
     state.questions[index].controlComponent.showSubmitBtn = true;
   } else {
     state.questions[index].controlComponent.showSubmitBtn = false;
   }
-  // });
-  // return newState;
 };
 
 export const answerCorrect = (state, action) => {
@@ -41,8 +40,14 @@ export const showAnswerErrorRadio = (state, action) => {
 
 export const updateImage = (state, action) => {
   const { index, urlSource } = action.payload;
-  // 把那个可点击的隐藏掉
+  // 如果传过来的urlSource为空对象，则说明此为删除图片操作，不为空则为上传图片操作
   state.questions[index].controlComponent.showSubjectiveInfo.urlSource = urlSource;
+  if (R.isEmpty(urlSource)) {
+    state.questions[index].answerFileUrl = null;
+  } else {
+    // 将图片地址直接放在questions下面的answerFileUrl字段下方便AnswerCard答案组件展示图片
+    state.questions[index].answerFileUrl = urlSource.file;
+  }
 };
 
 export const changeSubjectiveShowall = (state, action) => {

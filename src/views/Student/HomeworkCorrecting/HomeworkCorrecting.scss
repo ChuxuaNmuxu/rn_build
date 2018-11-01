@@ -59,15 +59,18 @@
 }
 
 .foot {
-  height: 100%; 
-  border: 1px solid #ccc; 
+  height: 150; 
+  // border: 1px solid #e8e8e8; 
   flex-direction: row;
-  padding: 60px 20px;
+  padding: 24px 20px;
+  border-top-color: rgba(0, 0, 0, 0.1);
+  border-top-width: 4px;
 }
 
 .foot_child_left {
   flex-direction: row;
   flex: 3;
+  justify-content: flex-start;
 }
 
 .foot_child_right {
@@ -81,35 +84,13 @@
   padding: 20px 50px;
   font-family:PingFangSC-Regular;
   font-size:24px;
-  color: white;
+  color:#e8e8e8;
+  border: 1px solid #e8e8e8;
 }
 
-.foot_word {
-  padding: 20px 10px;
-  font-family:PingFangSC-Regular;
-  font-size:24px;
-  color:#30bf6c;
-}
-
-.btn_color_green {
-  background-color: #30bf6c;
-}
-
-.btn_color_orange {
-  background-color: #f5a623;
-}
-
-.btn_color_pink {
-  background-color: #fa5656;
-}
-
-.btn_color_right {
-  border:1px solid #30bf6c;
+.btn_color_active {
+  border: 1px solid #30bf6c;
   color: #30bf6c;
-}
-
-.space_2 {
-  width: 12px;
 }
 
 .contentStyle {
@@ -161,4 +142,26 @@
   margin: 6px;
   // width: 88px;
   // height: 71px;
+}
+
+.icon_btn_style {
+  border: 1px solid #f5a623;
+  border-radius: 50px;
+  width: 106px;
+  height: 70px;
+}
+
+.text_btn_style {
+  color: #f5a623;
+  font-size: 36px;
+}
+
+.icon_checked_style {
+  background-color: #f5a623;
+  border-color: #f5a623;
+}
+
+.score_info {
+  color: #999;
+  font-size: 24px;
 }

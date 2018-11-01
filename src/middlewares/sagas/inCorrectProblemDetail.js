@@ -53,18 +53,21 @@ function transFromHomeworkDataList(data) {
     // 学生zhu||ke观题答案
     studentAnserImage: data.studentAnswerFiles === null ? [] : data.studentAnswerFiles.map(item => ({ url: item })),
     // 主观题专用正确答案
-    rightAnser: data.answerContent !== null ? [{ url: data.answerContent }] : [],
+    rightAnser: data.answerContent !== null ? data.answerContent : [],
     causeOfErrorNum: data.failReason,
   };
 }
 
 
 function getdifficultyDegree(difficultyLevel) {
-  if ((difficultyLevel === '1')) {
+  if ((difficultyLevel === 1)) {
     return 1;
   }
-  if (difficultyLevel === '5') {
+  if (difficultyLevel === 5) {
     return 2;
+  }
+  if (difficultyLevel === 0) {
+    return 3;
   }
   return 0;
 }

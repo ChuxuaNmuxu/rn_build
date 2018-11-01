@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TouchableOpacity, TouchableWithoutFeedback,
+  View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler,
 } from 'react-native';
 import { Toast } from 'antd-mobile-rn';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import Madal, { ModalApi } from '../Modal';
+import { ModalApi } from '../Modal';
 import Radio from '../Radio';
 import fetchApi from '../../config/apiBase/fetchApi';
 import ApiBase from '../../config/apiBase';
@@ -18,10 +18,10 @@ import styles from './style.scss';
 const GroupRadio = Radio.Group;
 @connect(({
   config: { apiFlag },
-  account: { userInfo },
+  account: { userInfo: { userName } },
 }) => ({
   apiFlag,
-  userInfo,
+  userName,
 }), dispatch => ({
   onSetApiFlag: bindActionCreators(SetApiFlag, dispatch),
   onSetUserInfo: bindActionCreators(SetUserInfo, dispatch),
@@ -42,77 +42,88 @@ class Debug extends Component {
     }
   }
 
+  // 打开调试窗口
   onPress = () => {
-    console.log('debug');
-    const { userInfo } = this.props;
+    const { userName } = this.props;
     const data = {
       content: this.content(),
       footButton: false,
       maskClosable: true,
-      style: userInfo ? styles.modal_logout : styles.modal,
+      style: userName ? styles.modal_logout : styles.modal,
     };
     ModalApi.onOppen('ButtomModal', data);
   }
 
+  // 切换环境：更改缓存、store数据，关闭模态。如果当前处于登陆状态则退出登陆并跳到登陆界面
   onChange = (data) => {
-    const { onSetApiFlag } = this.props;
+    const { onSetApiFlag, userName } = this.props;
     this.apiBase.setApiBase(data)
       .then(() => {
         ModalApi.onClose();
         onSetApiFlag(data);
+      })
+      .then(() => {
+        if (userName) {
+          this.logout('切换环境成功').then(Actions.reset('Account'));
+        }
       });
   }
 
-  logout = () => {
+  // 退出登陆：删除缓存
+  logout = (mes) => {
     ModalApi.onClose();
     const { apiFlag, onSetUserInfo } = this.props;
-    Fetch.post(`${fetchApi(fetchApi.cjyun, apiFlag)}/unlogin/logout.cbp`)
+    return Fetch.post(`${fetchApi(fetchApi.cjyun, apiFlag)}/unlogin/logout.cbp`)
       .then(() => {
         onSetUserInfo();
         return this.account.removeAccount();
       }).then(() => {
-        Toast.success('退出成功');
-        Actions.Login();
+        Toast.success(mes);
       });
   }
 
   content = () => {
-    const { apiFlag, userInfo } = this.props;
-    console.log(81, userInfo);
+    const { apiFlag, userName } = this.props;
+    console.log(87, userName);
     return (
       <View style={styles.debug_wrap}>
         <Text style={styles.debug_menu}>调试菜单</Text>
-        <Text style={styles.user}>当前用户：{userInfo ? userInfo.userName : '未登录'}</Text>
+        <Text style={styles.user}>当前用户：{userName || '未登录'}</Text>
         <Text style={styles.select_server}>请选择环境:</Text>
         <GroupRadio
           options={this.options}
           value={apiFlag}
           onChange={this.onChange}
           childStyle={styles.radio}
+          style={styles.group_radio}
         />
         {
-          userInfo
+          userName
             ? (
               <TouchableOpacity
                 style={styles.logout}
-                onPress={this.logout}
+                onPress={() => { this.logout('退出成功').then(Actions.reset('Account')); }}
               >
                 <Text style={styles.logout_text}>退出登陆</Text>
               </TouchableOpacity>
             )
             : null
           }
+        <TouchableOpacity
+          style={styles.close_soft}
+          onPress={BackHandler.exitApp}
+        >
+          <Text style={styles.logout_text}>关闭软件</Text>
+        </TouchableOpacity>
       </View>
     );
   }
 
   render() {
     const { children } = this.props;
-    console.log(111111, children);
     return (
       <TouchableWithoutFeedback onPress={this.onPress}>
         <View>
-          <Madal />
           {children}
         </View>
       </TouchableWithoutFeedback>
@@ -124,7 +135,7 @@ Debug.propTypes = {
   apiFlag: PropTypes.string,
   onSetApiFlag: PropTypes.func,
   onSetUserInfo: PropTypes.func,
-  userInfo: PropTypes.string,
+  userName: PropTypes.string,
   children: PropTypes.element,
 };
 
@@ -132,7 +143,7 @@ Debug.defaultProps = {
   apiFlag: '',
   onSetApiFlag: () => {},
   onSetUserInfo: () => {},
-  userInfo: '',
+  userName: '',
   children: null,
 };
 

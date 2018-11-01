@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Account from '../../../utils/account';
+import Madal from '../../../components/Modal';
 import { SetUserInfo } from '../../../actions/account';
 import fetchApi from '../../../config/apiBase/fetchApi';
 import Debug from '../../../components/Debug';
@@ -73,7 +74,7 @@ class Login extends Component {
           } = data;
           const { onSetUserInfo } = this.props;
           onSetUserInfo(JSON.stringify(data.userInfo));
-          console.log(74, data);
+
           /**
            * 根据账号类型进行相应处理，课业只能使用学生或者教师账号登陆。
            * 保存成功之后才进行相应跳转，否则提示重新登陆
@@ -81,7 +82,8 @@ class Login extends Component {
           switch (currentSchoolRole) {
             case 'STUDENT':
               this.savaToken(data).then(() => {
-                Toast.success('登陆成功', 2, Actions.Student);
+                Toast.success('登陆成功');
+                Actions.reset('Student');
               });
               break;
             case 'TEACHER':
@@ -99,6 +101,7 @@ class Login extends Component {
   render() {
     return (
       <View style={styles.wrap}>
+        <Madal />
         <View style={styles.box}>
           <Debug>
             <Text style={styles.title}>用户登陆</Text>

@@ -239,8 +239,20 @@ class DetailView extends Component {
   )
 
   callImageModal=(url, name) => {
-    const data = { url, studentName: name };
+    const data = { url: [url], studentName: name };
     ModalApi.onOppen('ImageViewer', data);
+  }
+
+  isQuestionSubmited=(objAnser, subAnser) => {
+    console.log(objAnser, subAnser);
+    console.log(objAnser === null && subAnser === []);
+    if (_.isNil(objAnser) && _.isEmpty(subAnser)) {
+      return true;
+    }
+    if (_.isEmpty(objAnser) && _.isEmpty(subAnser)) {
+      return true;
+    }
+    return false;
   }
 
 
@@ -262,10 +274,12 @@ class DetailView extends Component {
       rightAnser,
       causeOfErrorNum,
     } = data;
-    // const { studentAnser } = AnserSummarizationData;
+    const { studentAnser } = AnserSummarizationData;
     console.log(studentAnserImage, 'studentAnserImagestudentAnserImage');
     // 是否存在答案
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
+    const isQuestionSubmited = this.isQuestionSubmited(studentAnser, studentAnserImage);
+    console.log(isQuestionSubmited, 'isQuestionSubmitedisQuestionSubmited');
     return (
       <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
         <Modal />
@@ -309,6 +323,8 @@ class DetailView extends Component {
                 studentAnser={AnserSummarizationData.studentAnser}
                 // 得分
                 score={AnserSummarizationData.score}
+                // 是否未作答
+                isQuestionSubmited={isQuestionSubmited}
               />
             }
             {
@@ -334,20 +350,26 @@ class DetailView extends Component {
              </React.Fragment>
            )
         }
-
         {
-          _.isEmpty(rightAnser) ? null : (
+          !_.isEmpty(rightAnser) ? (
             <React.Fragment>
               {
-              // 题目答案
-              this.correctAndOthersAnser(rightAnser, '题目答案：')
+                console.log(rightAnser)
+              }
+              <View style={[styles.correctAndOthersAnserTitle, styles.rightAnserAdd]}>
+                <Text style={styles.AnserTitleText}>题目答案：</Text>
+              </View>
+              {
+              // 富文本显示块，，，如果出错可能是返回数据是block而不是html字符串。形式固定，不独立组件了。
+               this.htmlViewComponent(rightAnser)
             }
               {
-              // 你好我是分割线
+               // 你好我是分割线
               this.splitLine()
             }
             </React.Fragment>
-          )
+          ) : null
+
         }
 
         {

@@ -11,36 +11,32 @@ export default function* mistakeListSaga() {
   yield takeLatest(actionTypes.FETCH_MISTAKE_LIST, enhanceSaga(getDataSaga));
 }
 
-const defaultParams = {
-  page: 1,
-  pageSize: 10,
-};
-
 // 更改最后一次操作的时间段saga
 function* getDataSaga(action) {
-  console.log(16, action);
   const {
-    params, successFn = R.identity, failureFn = R.identity, action: costomAction = actions.getMistakeList,
+    params, successFn = R.identity, failureFn = R.identity, action: costomAction = actions.getMistakeListAction,
   } = action.payload;
 
-  const fetchParam = qs.stringify(Object.assign(defaultParams, params));
-  console.log(32, fetchParam);
+  const fetchParam = qs.stringify(params);
+  console.log(21, fetchParam);
   const url = `/app/api/student/failed-questions/list?${fetchParam}`;
+  // console.log('url=', url);
   try {
     const res = yield Fetch.get(url);
-    const { code, data } = res;
-
+    const { code, data, total } = res;
+    // console.log('getDataSaga的res=', res);
     if (code !== 0) {
       failureFn(code);
       yield put(costomAction(code, 'ERROR'));
     } else {
       // const { page, pageSize } = fetchParam;
       successFn(data);
-      yield put(costomAction({ data }, 'SUCCESS'));
-      console.log(40, successFn);
+      // console.log(39, successFn(data));
+      yield put(costomAction({ data, total }, 'SUCCESS'));
+      // console.log(40, successFn);
     }
   } catch (e) {
-    failureFn(e);
+    // failureFn(e);
     yield put(costomAction(e, 'ERROR'));
   }
 }

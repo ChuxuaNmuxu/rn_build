@@ -147,6 +147,7 @@ function* dropDownSaga(action) {
         total,
       }, 'SUCCESS'));
       callback();
+      yield put(actions.footerLoading(false));
     } else {
       yield put(actions.dropDownRefresh(code, 'ERROR'));
     }
@@ -172,11 +173,11 @@ function* dropDownSaga(action) {
 function getSubjectData(data) {
   if (_.isEmpty(data)) {
     return [
-      {
-        // 筛选数据
-        subjectId: 'allSub',
-        subjectName: '全部学科',
-      },
+      // {
+      //   // 筛选数据
+      //   subjectId: 'allSub',
+      //   subjectName: '全部学科',
+      // },
     ];
   }
   const subjectData = [
@@ -192,8 +193,11 @@ function getSubjectData(data) {
 }
 // recordStateData = [{ id: 5, text: type === 0 ? '未提交' : '未参加' }, { id: 6, text: '批改中' }, { id: 7, text: '未批改' }];
 // 写死的数据
+// 考试状态[1：未参加, 2: 批改中, 3:已批改]
 function getRecordStateData(type) {
-  return [{ id: 5, text: type === 0 ? '未提交' : '未参加' }, { id: 4, text: '批改中' }, { id: 3, text: '未批改' }];
+  const examSattus = [{ id: 1, text: '未参加' }, { id: 2, text: '批改中' }, { id: 3, text: '已批改' }];
+  const homeworkSattus = [{ id: 5, text: '未提交' }, { id: 3, text: '批改中' }, { id: 4, text: '已批改' }];
+  return type === 0 ? homeworkSattus : examSattus;
 }
 // const allGrade = [{ id: 1, text: '一年级' }, { id: 2, text: '二年级' }, { id: 3, text: '九年级' }, { id: 4, text: '六年级' }];
 function getAllGrade(data) {
@@ -223,11 +227,13 @@ function transfromRecordData(data, type) {
       arr.push({
         id: item.homeworkId,
         subjectName: item.subjectName,
-        title: `${item.subjectName}作业`,
+        title: `${item.title}`,
         accuracy: item.accuracy,
         resultRead: item.resultRead,
         publishTime: item.publishTime,
         type: getHomeWorkType(item),
+        // 是否可以去重做
+        unknownRedo: item.allowMakeUp,
       })
     ));
   } else {

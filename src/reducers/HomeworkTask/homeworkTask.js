@@ -9,8 +9,13 @@ import {
   CHANGE_LAST_HANDLE_PERIOD_INDEX,
   IS_GET_DROP_LISTENER_RANGE,
   IS_FIRST_GET_DROP_LISTENER_RANGE,
+  IS_FIRST_OPEN_HOMEPAGE,
 } from '../../constants/actionType';
+import { createHalfHourPeriod, currentTimeToPeriod } from '../../utils/common';
 import * as fn from './fn';
+
+const halfHourPeriod = createHalfHourPeriod();
+const currentPeriod = currentTimeToPeriod();
 
 const initial = {
   position: { // 拖拽任务的坐标值
@@ -19,12 +24,18 @@ const initial = {
   },
   listenerRangeList: [], // 待计划任务拖拽排期的范围监听
   todoList: [], // 待计划任务
-  planList: [], // 已计划任务
+  planList: halfHourPeriod.map((v, i) => ({
+    data: [],
+    period: v,
+    currentPeriod: halfHourPeriod[currentPeriod],
+    index: i,
+  })), // 已计划任务
   dragData: {}, // 正在拖拽元素的索引
   dragingTaskCorrespondPeriodIndex: null, // 拖拽中的元素与时间对应的索引
   lastHandlePeriodIndex: null, // 最后操作时间段的索引
   isRegetDropListenerRange: false, // 是否重新获取时间段监听范围
   isFirstRegetDropListenerRange: false, // 是否重新获取时间段监听范围
+  isFirstOpenHomepage: true, // 第一次进入首页
 };
 
 const handle = {
@@ -37,6 +48,7 @@ const handle = {
   [CHANGE_LAST_HANDLE_PERIOD_INDEX]: fn.changeLastHandlePeriodIndex,
   [IS_GET_DROP_LISTENER_RANGE]: fn.isGetDropListenerRange,
   [IS_FIRST_GET_DROP_LISTENER_RANGE]: fn.isFirstGetDropListenerRange,
+  [IS_FIRST_OPEN_HOMEPAGE]: fn.isFirstOpenHomepage,
 };
 
 const homeworkTask = createReducer(initial, handle);

@@ -101,14 +101,14 @@ class RecordCard extends PureComponent {
   // 点击卡片进入详情页
   gotoDetailFun = () => {
     const { gotoDetailFun, datas } = this.props;
-    gotoDetailFun(datas.id, datas.publishTime, datas.subjectName);
+    gotoDetailFun(datas.id, datas.publishTime, datas.subjectName, datas.resultRead);
   }
 
 
   render() {
     const { datas, recordType } = this.props;
-    const accuracyData = `${Math.round(parseInt(datas.accuracy) * 100)}%`;
-    const randomNum = Math.random();
+    const accuracyData = `${(datas.accuracy * 100).toFixed(2)}%`;
+    // const randomNum = 0.3;
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -136,14 +136,15 @@ class RecordCard extends PureComponent {
         </View>
         <View style={styles.cardRight}>
           {
-            recordType === 0 ? (
+            // 当前仅有补做，以后还有订正
+            recordType === 0 && datas.unknownRedo && datas.type === 'yuqi' ? (
               <TouchableOpacity
-                disabled={randomNum > 0.5}
+                // disabled={randomNum > 0.5} randomNum > 0.5 && styles.disabledBox, randomNum > 0.5 && styles.disabledText
                 onPress={() => this.toReviseFun()}
               >
-                <View style={[styles.toReviseBox, randomNum > 0.5 && styles.disabledBox]}>
-                  <Text style={[styles.toReviseText, randomNum > 0.5 && styles.disabledText]}>
-                去订正
+                <View style={[styles.toReviseBox]}>
+                  <Text style={[styles.toReviseText]}>
+                    去补做
                   </Text>
                 </View>
               </TouchableOpacity>

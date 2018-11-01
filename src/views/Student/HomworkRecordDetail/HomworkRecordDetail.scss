@@ -102,6 +102,12 @@
   position: absolute;
   bottom: 2;
   right: 2;
+  background-color: rgba($color: #202c37, $alpha: 0.3);
+  width:36px;
+  height:36px;
+  border-radius:36px;
+  justify-content: center;
+  align-items: center;
 }
 
 .CauseOfError {
@@ -111,5 +117,10 @@
   align-items: flex-start;
   padding-left: 12px;
   padding-bottom: 80px;
+  background-color: #fff;
+}
+
+.rightAnserAdd {
+  padding: 0 24px;
   background-color: #fff;
 }

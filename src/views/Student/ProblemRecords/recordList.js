@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import _ from 'ramda';
 import RefreshListView from '../../../components/RefreshListView';
+import noRecords from '../../../public/img/noRecords.png';
+import NoResult from '../../../components/NotResult';
 
 // import RefreshState from '../../../components/RefreshListView/RefreshState';
 import RecordCard from './Components/recordCard';
@@ -19,7 +21,7 @@ class RecordList extends Component {
     getRefreshListView(this.listView);
   }
 
-  _keyExtractor = item => item.id + Math.random();
+  _keyExtractor = item => `${item.id + Math.random()}`;
 
   // 渲染子组件
   _renderItem = ({ item, index }) => {
@@ -65,7 +67,7 @@ class RecordList extends Component {
   render() {
     const { dataList } = this.props;
     if (_.isEmpty(dataList)) {
-      return <Text>YOU HAVE NOT DATA</Text>;
+      return <NoResult tips="暂无记录" url={noRecords} />;
     }
     return (
       <RefreshListView

@@ -2,15 +2,21 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Immersive } from 'react-native-immersive';
 import {
+  DeviceEventEmitter,
   StatusBar,
+  NetInfo,
+  View,
+  Text,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import SplashScreen from 'react-native-splash-screen';
 // import Theme from './config/theme';
+import CodePush from 'react-native-code-push';
 import Language from './config/language';
 import ApiBase from './config/apiBase';
 import { InitialConfog } from './actions/config';
+import * as listener from './constants/listener';
 
 @connect(
   state => ({
@@ -27,6 +33,10 @@ export default class Setup extends Component {
     // this.theme = new Theme();
     this.language = new Language();
     this.apiBase = new ApiBase();
+
+    this.state = {
+      isConnected: true,
+    };
 
     // 全屏组件，只支持Android
     if (Android) {
@@ -48,6 +58,23 @@ export default class Setup extends Component {
 
     // 关闭启动页
     SplashScreen.hide();
+
+    // 监听设备是否有网络
+    NetInfo.isConnected.addEventListener('connectionChange', this.listenerNetwork);
+
+    // 获取当前设备是否有网络
+    NetInfo.isConnected.fetch().then((isConnected) => {
+      this.setState({
+        isConnected,
+      });
+    });
+
+    CodePush.sync({
+      // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
+      installMode: CodePush.InstallMode.IMMEDIATE,
+      // 苹果公司和中国区安卓的热更新，是不允许弹窗提示的，所以不能设置为true
+      updateDialog: true,
+    });
   }
 
   componentWillUnmount() {
@@ -55,6 +82,14 @@ export default class Setup extends Component {
       Immersive.removeImmersiveListener(this.restoreImmersive);
     }
   }
+
+  listenerNetwork = (isConnected) => {
+    this.setState({
+      isConnected,
+    });
+    DeviceEventEmitter.emit(listener.netConnected, isConnected);
+  }
+
 
   initialConfig = () => {
     const { doInitialConfog } = this.props;
@@ -86,6 +121,7 @@ export default class Setup extends Component {
       //   brandPrimary,
       // },
     } = this.props;
+    const { isConnected } = this.state;
     return (
       <Fragment>
         <StatusBar
@@ -93,6 +129,15 @@ export default class Setup extends Component {
           // backgroundColor={brandPrimary}
           // animated
         />
+        {
+          !isConnected
+            ? (
+              <View style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+                <Text style={{ fontSize: 24, lineHeight: 30 }}>当前设备处于离线状态，请检查网络</Text>
+              </View>
+            )
+            : null
+        }
         {children}
       </Fragment>
     );

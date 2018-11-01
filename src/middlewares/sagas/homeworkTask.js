@@ -1,10 +1,10 @@
 import {
-  takeLatest, put, call,
+  takeLatest, put, call, select,
 } from 'redux-saga/effects';
 import R from 'ramda';
 import * as actions from '../../actions/homeworkTask';
 import * as actionTypes from '../../constants/actionType';
-import { createHalfHourPeriod, currentTimeToPeriod } from '../../utils/common';
+
 import enhanceSaga from './enhanceSaga';
 
 export default function* homeworkTask() {
@@ -14,39 +14,31 @@ export default function* homeworkTask() {
 
 // 获取任务
 function* fetchStudentTaskListSaga() {
-  const data = yield call(getStudentTaskList);
-  const { plan, todo } = data;
-  const halfHourPeriod = createHalfHourPeriod();
-  const planListData = halfHourPeriod.map(v => ({
-    data: [],
-    period: v,
-    currentPeriod: halfHourPeriod[currentTimeToPeriod()],
-  }));
-  R.forEach((v) => {
-    planListData[v.scheduledNode].data.push(v);
-  }, plan);
-  yield put(actions.ChangePlanTask(planListData));
-  yield put(actions.ChangeTodoTask(todo));
-}
-
-function* getStudentTaskList(pageSize) {
   try {
-    const params = pageSize ? { pageSize } : {};
-    const res = yield Fetch.get('/app/api/student/homeworks/todo', params);
+    const res = yield Fetch.get('/app/api/student/homeworks/todo');
     const { code, data } = res;
 
-    if (code !== 0) {
+    if (code === 0) {
+      const { planList } = yield select(state => state.homeworkTaskReducer);
+      const { plan, todo } = data;
+      const newPlanList = R.clone(planList);
+
+      // todo 性能优化，判断是否有更改，若有则发送action没有则不发送
+      newPlanList.forEach((v, i) => {
+        const periodData = plan.filter(value => value.scheduledNode === i);
+        v.data = periodData;
+      });
+
+      yield put(actions.ChangePlanTask(newPlanList));
+      yield put(actions.ChangeTodoTask(todo));
+      yield put(actions.FetchStudentTaskList(null, 'SUCCESS'));
+      yield put(actions.IsFirstGetDropListenerRange(true));
+    } else {
       yield put(actions.FetchStudentTaskList(null, 'ERROR'));
-      return false;
     }
-
-    yield put(actions.FetchStudentTaskList(null, 'SUCCESS'));
-    yield put(actions.IsFirstGetDropListenerRange(true));
-
-    return data;
-  } catch (e) {
+  } catch (err) {
     yield put(actions.FetchStudentTaskList(null, 'ERROR'));
-    return false;
+    console.log(36, err);
   }
 }
 
@@ -61,12 +53,12 @@ function* saveTaskSaga({ payload: { id, scheduledNode, taskType } }) {
     const res = yield call(fetch);
 
     const { code } = res;
-    if (code !== 0) {
-      yield put(actions.SaveTask(null, 'ERROR'));
-      console.log('更改任务失败：', res);
-    } else {
+    if (code === 0) {
       console.log('成功啦');
       yield put(actions.SaveTask(null, 'SUCCESS'));
+    } else {
+      yield put(actions.SaveTask(null, 'ERROR'));
+      console.log('更改任务失败：', res);
     }
   } catch (err) {
     yield put(actions.SaveTask(null, 'ERROR'));

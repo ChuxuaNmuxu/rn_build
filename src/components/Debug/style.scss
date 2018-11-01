@@ -3,12 +3,22 @@
   font-size: 20px;
 }
 
+@mixin button {
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px;
+  background-color: #1ad982;
+  width: 450px;
+  height: 60px;
+  border-radius: 8px;
+}
+
 .modal {
-  height: 424px;
+  height: 430px;
 }
 
 .modal_logout{
-  height: 540px;
+  height: 530px;
 }
 
 .debug_wrap {
@@ -35,18 +45,20 @@
   font-size: 20px;
 }
 
+.group_radio {
+  margin-bottom: 20px;
+}
+
 .radio {
   margin: 8px 0;
 }
 
 .logout {
-  justify-content: center;
-  align-items: center;
-  margin: 20px auto;
-  background-color: #1ad982;
-  width: 450px;
-  height: 80px;
-  border-radius: 8px;
+  @include button();
+}
+
+.close_soft{
+  @include button();
 }
 
 .logout_text {

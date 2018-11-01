@@ -23,7 +23,7 @@ class RefreshListView extends Component {
 
   // 头部组件的状态，供外部调用，一般不会用到
   setheaderState = (headerState) => {
-    console.log('setheaderState', '皇上，臣妾1跑起来了啊', headerState);
+    // console.log('setheaderState', '皇上，臣妾1跑起来了啊', headerState);
     // const {  } = this.props;
     this.setState({
       headerState,
@@ -84,23 +84,23 @@ class RefreshListView extends Component {
       isHeaderRefreshing: true,
     }, () => {
       if (onHeaderRefresh) {
-        console.log('函数跑起来了吗', 'onHeaderRefresh');
+        // console.log('函数跑起来了吗', 'onHeaderRefresh');
         onHeaderRefresh();
       }
     });
-    console.log('startHeaderRefreshingstartHeaderRefreshing');
+    // console.log('startHeaderRefreshingstartHeaderRefreshing');
   }
 
   // 上拉加载更多，将底部刷新状态改为正在刷新，然后调用刷新方法，页面上可以显示出加载中的UI，注意这里setState写法
   startFooterRefreshing = () => {
-    console.log('startFooterRefreshing');
+    // console.log('startFooterRefreshing');
     const { onFooterRefresh } = this.props;
     this.setState({
       footerState: RefreshState.Refreshing,
       isFooterRefreshing: true,
     }, () => {
       if (onFooterRefresh) {
-        console.log('函数跑起来了吗', 'onFooterRefresh', onFooterRefresh);
+        // console.log('函数跑起来了吗', 'onFooterRefresh', onFooterRefresh);
         onFooterRefresh();
       }
     });
@@ -198,7 +198,7 @@ class RefreshListView extends Component {
         ListHeaderComponent={() => this._renderHeader(headerState)}
         // 距离底部不足时调用,但是不一定存在这么多数据是吧，有待优化，先禁止
         onEndReached={this.beginFooterRefresh}
-        onEndReachedThreshold={0.1} // 这里取值0.1，可以根据实际情况调整，取值尽量小,取值范围时0-1
+        onEndReachedThreshold={0.2} // 这里取值0.1，可以根据实际情况调整，取值尽量小,取值范围时0-1
         ListFooterComponent={() => this._renderFooter(footerState)}
       />
     );

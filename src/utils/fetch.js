@@ -1,46 +1,72 @@
 import { isEmpty } from 'ramda';
 import qs from 'qs';
-import { DeviceEventEmitter } from 'react-native';
+import { Toast } from 'antd-mobile-rn';
+import { DeviceEventEmitter, NetInfo } from 'react-native';
 import fetchApi from '../config/apiBase/fetchApi';
 import ApiBase from '../config/apiBase';
+import Account from './account';
+import * as listener from '../constants/listener';
+import { SetUserInfo } from '../actions/account';
 
 // origin表示 https://cjyun.ecaicn.com
 let origin = null;
+const apiBase = new ApiBase();
 // 监听修改环境操作
-DeviceEventEmitter.addListener('apiBase', (params) => {
+DeviceEventEmitter.addListener(listener.apiBase, (params) => {
   origin = fetchApi(undefined, params);
 });
-const apiBase = new ApiBase();
 
+
+let isConnected = true;
+// 获取初始网络
+NetInfo.isConnected.fetch().then((isConnect) => {
+  isConnected = isConnect;
+});
+// 监听网络状态
+DeviceEventEmitter.addListener(listener.netConnected, (param) => {
+  isConnected = param;
+});
+
+// 拼接url
 const connectUrl = async (url) => {
   if (!origin) {
     origin = await apiBase.getApiBase();
     origin = fetchApi(undefined, origin);
   }
-  console.log(22, url);
+
   if (typeof url !== 'string') {
-    console.error('url只能为字符串类型');
+    // console.error('url只能为字符串类型');
   } else if (url.indexOf('http') === 0) {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
   } else if (url.charAt(0) === '/') {
-    console.log(origin + url);
     return origin + url;
   }
   return `${origin}/${url}`;
 };
 
 const errCode = (json) => {
-  console.log(24, json);
   switch (json.code) {
     case 703:
-      return console.log('登陆过期', json);
+      /**
+       * 登陆过期
+       * 1. 跳转至登陆页面
+       * 2. 清除store
+       * 3. 清除storage缓存
+       * 4. 提示登陆超时
+       */
+      Actions.reset('Account');
+      Store.dispatch(SetUserInfo());
+      new Account().removeAccount();
+      Toast.info(json.message);
+      throw new Error(json.message);
     case -1:
-      // Toast.fail(`${json.code} ${json.message || json.data}`); // 打印出来给鬼看啊！还容易造成调试的问题
-      return Promise.reject(new Error(`${json.code} ${json.message || json.data}`));
+      Toast.info(json.message);
+      throw new Error(`${json.code} ${json.message || json.data}`);
     default:
       // console.log('json.code:', json.code);
   }
+  if (json.code !== 0) Toast.info(json.message);
   return json;
 };
 
@@ -54,6 +80,9 @@ const Fetch = {
  * param {Object} headerParams 请求头设置
  */
   fetch(url, params = {}, method = 'get', type = '', mock = false, headerParams = {}) {
+    if (!isConnected) {
+      return Toast.info('当前设备网络异常，请检查网络');
+    }
     const headers = {};
     if (method === 'post') {
       headers.Accept = 'application/json';
@@ -84,9 +113,10 @@ const Fetch = {
       .then(text => (text ? JSON.parse(text) : {}))
       .then(errCode)
       .catch((err) => {
-        const error = new Error(err);
-        console.log(error);
-        return error; // 返回错误App会自动在界面上呈现报错模态
+        if (err.stack.indexOf('Network request failed') !== -1) {
+          Toast.fail('当前设备网络异常，请检查网络');
+        }
+        throw new Error(err);
       });
   },
   async getUrl(url, ...args) {
@@ -96,7 +126,7 @@ const Fetch = {
   get(url, params = {}, mock = false, headerParams = {}) {
     let _url = url;
     if (!isEmpty(params)) {
-      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
+      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params, { indices: false });
     }
     return this.getUrl(_url, {}, 'get', '', mock, headerParams);
   },
@@ -105,7 +135,7 @@ const Fetch = {
   delete(url, params) {
     let _url = url;
     if (!isEmpty(params)) {
-      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params);
+      _url = url + (/\?/.test(url) ? '&' : '?') + qs.stringify(params, { indices: false });
     }
     return this.getUrl(_url, params, 'delete');
   },

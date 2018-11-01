@@ -66,8 +66,7 @@ class PlanList extends Component {
   }
 
   componentDidMount() {
-    const { onChangeLastHandlePeriodIndex } = this.props;
-    onChangeLastHandlePeriodIndex(this.currentPeriodIndex);
+    this.scrollToIndex();
   }
 
   componentDidUpdate() {
@@ -80,6 +79,7 @@ class PlanList extends Component {
       this.saveListenerRangeToStore()
         .then(() => onIsgetDropListenerRange(false));
     }
+
     if (isFirstRegetDropListenerRange) {
       const { onIsFirstGetDropListenerRange } = this.props;
       onIsFirstGetDropListenerRange(false);
@@ -134,7 +134,6 @@ class PlanList extends Component {
         lastHandlePeriodIndex: propsLastHandlePeriodIndex,
       };
     }
-
     return null;
   }
 
@@ -150,6 +149,7 @@ class PlanList extends Component {
           startY: pageY,
           endY: pageY + height * scale,
           index: k,
+
           width,
         };
         resolve(obj);
@@ -175,13 +175,27 @@ class PlanList extends Component {
      * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
      * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中
      */
+    const {
+      planList,
+      onChangeLastHandlePeriodIndex,
+    } = this.props;
     const delay = new Promise(resolve => setTimeout(resolve, 500));
+
+    // 将最早有任务的时间段居中
+    const findIndex = planList.findIndex(v => v.data.length);
+    let centerIndex = this.currentPeriodIndex;
+    if (findIndex !== -1) {
+      centerIndex = findIndex;
+    }
+
+    onChangeLastHandlePeriodIndex(centerIndex);
+
     delay.then(() => {
       // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
       // 如果有展开并且展开的任务
       this.flatList.scrollToIndex({
         animated: false,
-        index: this.currentPeriodIndex,
+        index: centerIndex,
         viewOffset: (142 - 496) / 2,
         viewPosition: 0.5,
       });

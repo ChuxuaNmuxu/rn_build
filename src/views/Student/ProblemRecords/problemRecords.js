@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text,
+  // Text,
   TouchableOpacity,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
@@ -11,11 +11,14 @@ import _ from 'ramda';
 import styles from './problemRecords.scss';
 import FilterBox from './Components/filterBox';
 import RecordList from './recordList';
+import api from '../../../utils/fetch';
 import I18nText from '../../../components/I18nText';
 import ExtendListView from '../../../components/ExtendListView';
 import freshListViewSate from '../../../components/RefreshListView/RefreshState';
 import SelectListButton from './Components/SelectListButton';
 import * as actions from '../../../actions/problemRecordsAction';
+import noRecords from '../../../public/img/noRecords.png';
+import NoResult from '../../../components/NotResult';
 
 
 class ProblemRecords extends Component {
@@ -93,6 +96,7 @@ class ProblemRecords extends Component {
     const params = {
       ...args,
     };
+
     dropDownRefresh(params, 'REQUEST');
   }
 
@@ -127,8 +131,10 @@ class ProblemRecords extends Component {
     }));
 
     // 清空下拉刷新组件的状态，恢复默认
-    this.listVew.setheaderState(freshListViewSate.Idle);
-    this.listVew.setfooterState(freshListViewSate.Idle);
+    if (this.listVew) {
+      this.listVew.setheaderState(freshListViewSate.Idle);
+      this.listVew.setfooterState(freshListViewSate.Idle);
+    }
   }
 
     // 点击学科筛选
@@ -194,30 +200,37 @@ class ProblemRecords extends Component {
   // RefreshSuccess: 'RefreshSuccess', // 刷新成功
   dropDownRefresh=() => {
     const { currentRecordType, currentSubjectId } = this.state;
-    this.listVew.setheaderState(freshListViewSate.Refreshing);
+
     this.page = 1;
     this.changeParamsfetch({
-
       currentRecordType,
       currentSubjectId,
       ...this.moreParams,
       page: 1,
       callback: () => this.listVew.setheaderState(freshListViewSate.RefreshSuccess).setheaderState(freshListViewSate.Idle),
     });
-
-    console.log('曹尼玛的垃圾组件');
+    // console.log('曹尼玛的垃圾组件');
   }
 
   upPullGetMore=() => {
     const { currentRecordType, currentSubjectId } = this.state;
-    const { recordData, total } = this.props;
-    console.log(total, recordData.length);
-    console.log(recordData);
+    const {
+      recordData, total, isFoorterLoading, actions: { footerLoading },
+    } = this.props;
+    // console.log(total, recordData.length);
+    // console.log(recordData);
     if (recordData.length === total) {
+      // console.log('wopaoqilailemamama', this.listVew);
       this.listVew.setfooterState(freshListViewSate.NoMoreData);
       return;
     }
-    this.listVew.setfooterState(freshListViewSate.Refreshing);
+    if (isFoorterLoading) {
+      // console.log(isFoorterLoading, 'sasdasfdasfs');
+      return;
+    }
+
+    footerLoading(true);
+
     this.dropDownFetch({
 
       currentRecordType,
@@ -231,7 +244,7 @@ class ProblemRecords extends Component {
 
   // 点击卡片进入对应的作业/考试详情页
   // 去到那边需要格式化时间和考试名字，在这里带过去就好了。
-  gotoDetailFun = (id, time, title) => {
+  gotoDetailFun = (id, time, title, resultRead) => {
     const { currentRecordType } = this.state;
     if (currentRecordType) {
       // 进入考试详情页
@@ -239,6 +252,12 @@ class ProblemRecords extends Component {
     } else {
       // 进入作业详情页
       Actions.HomworkRecordDetail({ id, time, title });
+      // 假如未读则标记为已经读取
+      if (resultRead === 1) {
+        const url = `/app/api/student/homeworks/${id}/result-read`;
+        api.put(url).then(res => console.log(res, `/app/api/student/homeworks/${id}/result-read`));
+        // console.log(res, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+      }
     }
   }
 
@@ -329,6 +348,7 @@ class ProblemRecords extends Component {
 
   render() {
     const { subjectData } = this.props;
+    // TODO:Laoding状态下是应该返回null的
     // if (_.isEmpty(subjectData)) {
     //   return null;
     // }
@@ -364,7 +384,7 @@ class ProblemRecords extends Component {
           </TouchableOpacity>
         </TouchableOpacity>
         {
-          _.isEmpty(subjectData) ? <Text>HAVE no DATA</Text> : this.renderContent()
+          _.isEmpty(subjectData) ? <NoResult tips="暂无记录" url={noRecords} /> : this.renderContent()
         }
       </View>
     );
@@ -380,6 +400,7 @@ ProblemRecords.propTypes = {
   recordStateData: PropTypes.array.isRequired,
   isRevisingData: PropTypes.array.isRequired,
   total: PropTypes.any.isRequired,
+  isFoorterLoading: PropTypes.any.isRequired,
 };
 
 ProblemRecords.defaultProps = {
@@ -399,6 +420,7 @@ const mapStateToProps = (state) => {
       // 修正状态
       isRevisingData,
       total,
+      isFoorterLoading,
     },
   } = state;
   return {
@@ -408,6 +430,7 @@ const mapStateToProps = (state) => {
     recordStateData,
     isRevisingData,
     total,
+    isFoorterLoading,
   };
 };
 

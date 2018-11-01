@@ -64,7 +64,7 @@ TaskDetail.propTypes = {
 TaskDetail.defaultProps = {
   title: '6-22物理作业',
   useTime: '15分钟',
-  endTime: '9-20 24:00',
+  endTime: '2018-10-28 23:59:59',
   beginTime: formatTimeToshow(new Date()), // 默认今天
   waitReadOver: false,
   homeworkId: '499598186277502976',

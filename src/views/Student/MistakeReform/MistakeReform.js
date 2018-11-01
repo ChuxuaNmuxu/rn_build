@@ -40,7 +40,7 @@ class MistakeReform extends Component {
       // isRandom,
       problemCardInfo,
     } = props;
-    console.log(39, problemCardInfo);
+    // console.warn(39, problemCardInfo, isRandom);
     // 发送action保存到redux中，且在saga保存的时候加入一些页面需要的逻辑
     saveQuestionsAction(problemCardInfo);
   }
@@ -90,7 +90,7 @@ class MistakeReform extends Component {
     console.log(value);
     const { actions: { selectAnswerAction, saveObjectiveAnswerAction } } = this.props;
     const { index } = this.state;
-    // 单选题
+    // 客观题要保存答案
     const { type } = item;
     if (type === 1 || type === 2 || type === 3 || type === 4) {
       saveObjectiveAnswerAction({
@@ -188,11 +188,16 @@ class MistakeReform extends Component {
 
   // 自动关闭tips
   pressT = () => {
+    const { isRandom, currentSubjectId } = this.props;
     const data = {
       tipsContent: this.modalContent('错题已移除错题本！'),
       bottomTips: '自动关闭',
     };
     ModalApi.onOppen('TipsModal', data);
+    if (!isRandom) {
+      // console.warn('进来了！');
+      Actions.ProblemListOverview({ subjectId: currentSubjectId });
+    }
   }
 
   // 确认按钮后触发的 tips (打酱油的)
@@ -251,7 +256,7 @@ class MistakeReform extends Component {
                     <Text style={[styles.result_difficult]}>
                       你可以对该题进行
                       <Text
-                        style={[styles.result_difficult, styles.result_wrong]}
+                        style={[styles.result_difficult, styles.result_right]}
                         onPress={() => {
                           showWrongInfoRadioAction({ index, showWord: false });
                         }}
@@ -296,17 +301,22 @@ class MistakeReform extends Component {
     const { index } = this.state;
     updateImageAction({ index, urlSource: { questionId, file: e, imgName } });
     selectAnswerAction({ index });
-    // uploadImageToOssAction({ questionId, file: e, imgName });
-    // 当从检查页面点击 未作答 热区 进来此页面时上传图片答案的题目id应该从此处给提交答案那，否则保存时题目id不对
-    // this.setState({
-    //   uploadImgQuesId: questionId,
-    // });
+  }
+
+  // 删除图片
+  deleteImg = (questionId) => {
+    // console.log('删除图片的id', questionId);
+    const { actions: { updateImageAction, selectAnswerAction } } = this.props;
+    const { index } = this.state;
+    updateImageAction({ index, urlSource: {} });
+    // 删除图片后不展示 提交答案并查看结果 的按钮
+    selectAnswerAction({ index, notShowSubmitBtn: true });
   }
 
   // 上传的图片
   showImageOrTitle = ({ item }) => {
     const {
-      studentAnswer,
+      studentAnswer, showAll,
     } = item.controlComponent.showSubjectiveInfo;
     if (studentAnswer) {
       console.log(319, studentAnswer);
@@ -334,9 +344,12 @@ class MistakeReform extends Component {
         <AnswerCard
           questions={item}
           mistakeReform
+          // 是否展示删除图片的按钮图标
+          showDeleteIcon={!showAll}
           handleToClickRadio={(id, value) => this.handleToClickRadio(id, value, item)}
           // updateImage={this.updateImage}
           handlePreviewImage={this.handlePreviewImage}
+          deleteImg={this.deleteImg}
         />
       </View>
     );
@@ -356,49 +369,54 @@ class MistakeReform extends Component {
     if (showAll) {
       return (
         <View>
-          <View style={styles.space} />
+          {
+            (teacherAnswer || otherStudentAnswer.length > 0) && <View style={styles.space} />
+          }
           <View style={styles.subjective_container}>
             <View>
-              <View style={styles.answer_wrap}>
-                <Text style={styles.answer_title}>题目答案:</Text>
-                {
-              // 后台可能返回null给我
-              teacherAnswer && (
-              <ThumbnailImage
-                option={{
-                  url: teacherAnswer,
-                }}
-              />
-              )
+              {
+                  // 没有老师答案就不显示
+                  teacherAnswer && (
+                  // 后台可能返回null给我
+                  <View style={styles.answer_wrap}>
+                    <Text style={styles.answer_title}>题目答案:</Text>
+                    <ThumbnailImage
+                      option={{
+                        url: teacherAnswer,
+                      }}
+                    />
+                  </View>
+                  )
                 }
-              </View>
             </View>
-            <View style={styles.dotted_line} />
-            {/* {
-              // 后台可能返回空数组给我
-              otherStudentAnswer.length && ( */}
-            <View>
-              <View style={styles.answer_wrap}>
-                <Text style={styles.answer_title}>看看其他同学的解答过程:</Text>
-                <View style={styles.other_student_answer}>
-                  {
-                    // 缩略图:thumbUrl 大图: fileUrl 名称: studentName
-                  otherStudentAnswer.map((item2, i) => (
-                    <View style={{ marginRight: 25 }} key={i}>
-                      <ThumbnailImage
-                        option={{
-                          url: item2.fileUrl,
-                          studentName: item2.studentName,
-                        }}
-                      />
+            {
+              // 没有其他同学答案就不显示
+              otherStudentAnswer.length > 0 ? (
+                <React.Fragment>
+                  <View style={styles.dotted_line} />
+                  <View>
+                    <View style={styles.answer_wrap}>
+                      <Text style={styles.answer_title}>看看其他同学的解答过程:</Text>
+                      <View style={styles.other_student_answer}>
+                        {
+                        // 缩略图:thumbUrl 大图: fileUrl 名称: studentName
+                      otherStudentAnswer.map((item2, i) => (
+                        <View style={{ marginRight: 25 }} key={i}>
+                          <ThumbnailImage
+                            option={{
+                              url: item2.explainImageUrl,
+                              studentName: item2.studentName,
+                            }}
+                          />
+                        </View>
+                      ))
+                    }
+                      </View>
                     </View>
-                  ))
-                }
-                </View>
-              </View>
-            </View>
-            {/* )
-            } */}
+                  </View>
+                </React.Fragment>
+              ) : null
+            }
           </View>
           {
               showTrueOrFalseButton ? (
@@ -409,29 +427,31 @@ class MistakeReform extends Component {
                       <Text style={styles.subjective_bottom_left_word}>看完答案，你觉得这次回答对了吗？</Text>
                     </View>
                     <View style={styles.subjective_bottom_right}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          // 隐藏掉这一行
-                          controlSubjectiveButtonAction({ index, showTrueOrFalseButton: false });
-                          // 显示错题radio
-                          showWrongInfoRadioAction({ index });
-                        }}
-                      >
-                        <View style={styles.subjective_bottom_right_btn}>
-                          <Text style={styles.subjective_bottom_right_word}>错了</Text>
-                        </View>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => {
-                          // 隐藏掉这一行
-                          controlSubjectiveButtonAction({ index, showTrueOrFalseButton: false });
-                          showCorrectInfoAction({ index, showAnswer: false });
-                        }}
-                      >
-                        <View style={styles.subjective_bottom_right_btn}>
-                          <Text style={styles.subjective_bottom_right_word}>对了</Text>
-                        </View>
-                      </TouchableOpacity>
+                      <View style={styles.subjective_bottom_right_child}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            // 隐藏掉这一行
+                            controlSubjectiveButtonAction({ index, showTrueOrFalseButton: false });
+                            // 显示错题radio
+                            showWrongInfoRadioAction({ index });
+                          }}
+                        >
+                          <View style={styles.subjective_bottom_right_btn}>
+                            <Text style={styles.subjective_bottom_right_word}>错了</Text>
+                          </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            // 隐藏掉这一行
+                            controlSubjectiveButtonAction({ index, showTrueOrFalseButton: false });
+                            showCorrectInfoAction({ index, showAnswer: false });
+                          }}
+                        >
+                          <View style={styles.subjective_bottom_right_btn}>
+                            <Text style={styles.subjective_bottom_right_word}>对了</Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
                 </View>
@@ -444,9 +464,10 @@ class MistakeReform extends Component {
   }
 
   render() {
-    const { questions } = this.props;
+    const { questions, currentSubjectId } = this.props;
     const { index } = this.state;
     const contentWrapStyle = questions.length > 0 ? styles.content_wrap : styles.content_wrap_not_result;
+    // const contentWrapStyle = styles.content_wrap_not_result;
     return (
       <View style={styles.mistakeReform_container}>
         <Modal />
@@ -454,7 +475,8 @@ class MistakeReform extends Component {
         <View style={styles.head}>
           <View style={styles.head_icon}>
             <TouchableOpacity
-              onPress={Actions.pop}
+              // 回去的时候要重新请求
+              onPress={() => Actions.ProblemListOverview({ subjectId: currentSubjectId })}
             >
               <Entypo name="chevron-thin-left" size={40} color="white" />
             </TouchableOpacity>
@@ -484,14 +506,12 @@ class MistakeReform extends Component {
                   <View key={i}>
                     {/* 题目 */}
                     <View style={styles.questionCard_container}>
+                      {/* 根据web那边写好的，这边根据item.type展示什么题型 */}
                       <View style={styles.question_title}>
                         <Text style={styles.question_title_txt}>{getQuestionTypeName(item.type)}</Text>
                       </View>
+                      {/* block转换为html */}
                       <View style={styles.question_content_wrap}>
-                        {/* <Image
-                          style={{ width: '100%', height: '100%' }}
-                          source={{ uri: item.url }}
-                        /> */}
                         { this.htmlViewComponent(item.content) }
                       </View>
                     </View>
@@ -526,17 +546,20 @@ class MistakeReform extends Component {
   }
 }
 MistakeReform.propTypes = {
-  // 是否是随机题
-  // isRandom: PropTypes.bool,
+  // 是否是随机题 不是随机题的话，做完后跳到错题列表页
+  isRandom: PropTypes.bool,
   actions: PropTypes.object.isRequired,
   // 错题的数据
   questions: PropTypes.array.isRequired,
   // 上游传过来的数据
   problemCardInfo: PropTypes.array,
+  // 当前的subjectId
+  currentSubjectId: PropTypes.string.isRequired,
 };
 
 MistakeReform.defaultProps = {
   problemCardInfo: [],
+  isRandom: false,
 };
 
 const mapStateToProps = (state) => {

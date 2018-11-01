@@ -2,7 +2,7 @@ import React from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   Animated,
   PanResponder,
 } from 'react-native';
@@ -49,8 +49,8 @@ class TaskItem extends React.Component {
     // 创建PanResponder
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true, // 在开始触摸时是否成为响应者
-      onStartShouldSetPanResponderCapture: () => false, // 捕获触摸，阻止子组件成为响应者
-      onMoveShouldSetPanResponder: () => true, // 在触摸点开始移动时是否成为响应者
+      onStartShouldSetPanResponderCapture: this.onStartCapture, // 捕获触摸，阻止子组件成为响应者
+      onMoveShouldSetPanResponder: this.onMoveStartPanResponder, // 在触摸点开始移动时是否成为响应者
       onMoveShouldSetPanResponderCapture: () => false, // 捕获移动，阻止子组件响应移动
       onPanResponderGrant: this.onPanResponderGrant, /* 响应触摸事件 */
       onPanResponderMove: this.onPanResponderMove, /** 移动时 */
@@ -62,12 +62,28 @@ class TaskItem extends React.Component {
     });
   }
 
+  onStartCapture = (evt) => {
+    const nowTime = evt.nativeEvent.timestamp;
+    this.touchStartTime = nowTime;
+    return false;
+  }
+
+  onMoveStartPanResponder = (evt, gestureState) => {
+    const { dx, dy } = gestureState;
+    const nowTime = evt.nativeEvent.timestamp;
+    if (nowTime - this.touchStartTime > this.longTouchTime && Math.abs(dx) < 2 && Math.abs(dy) < 2) {
+      return true;
+    }
+    return false;
+  }
+
   onPanResponderGrant = (evt, gestureState) => {
     console.log('响应者');
     const { scale } = adaptiveRotation();
     this.touchStartX = gestureState.dx;
     this.touchStartY = gestureState.dy;
-    this.touchStartTime = evt.nativeEvent.timestamp;
+    this.interactiveStyle();
+
     const {
       type,
       onChangeLastHandlePeriodIndex,
@@ -88,9 +104,9 @@ class TaskItem extends React.Component {
   }
 
   onPanResponderMove = (evt, gestureState) => {
+    console.log('moving');
     const { dx, dy } = gestureState;
 
-    const nowTime = evt.nativeEvent.timestamp;
     const {
       onChangeDropingData, data,
     } = this.props;
@@ -101,16 +117,18 @@ class TaskItem extends React.Component {
      */
     if (this.isDraging) {
       this.dragHandle(evt, dx, dy);
-    } else if ((Math.abs(dx - this.touchStartX) < 10 || Math.abs(dy - this.touchStartY) < 10)) {
-      if (nowTime - this.touchStartTime > this.longTouchTime) {
-        this.dragHandle(evt, dx, dy);
-        this.isDraging = true;
-        onChangeDropingData(data);
-      }
+    } else {
+      // 取消阴影
+      this.clearInteractiveStyle();
+
+      this.dragHandle(evt, dx, dy);
+      this.isDraging = true;
+      onChangeDropingData(data);
     }
   }
 
-  onPanResponderRelease = (evt, gestureState) => {
+  onPanResponderRelease = (evt) => {
+    console.log('moveEnd');
     const {
       onChangeDropPosition,
       onChangeTodoTask,
@@ -119,7 +137,6 @@ class TaskItem extends React.Component {
       data,
       planList,
       onIsgetDropListenerRange,
-      onPress,
       onChangeDropingData,
       onChangeDragingTaskCorrespondPeriod,
       onChangeLastHandlePeriodIndex,
@@ -128,8 +145,12 @@ class TaskItem extends React.Component {
       onSaveTask,
     } = this.props;
     const { scale } = adaptiveRotation();
-    const { dx, dy } = gestureState;
-    const { pageY, timestamp: nowTime } = evt.nativeEvent;
+
+    const { pageY } = evt.nativeEvent;
+
+    // 取消阴影
+    if (this.taskRef) this.taskRef.setNativeProps({ elevation: 0 });
+
     // 任务排期
     const findTask = this.findTaskCorrespondPeriod(evt);
 
@@ -138,30 +159,29 @@ class TaskItem extends React.Component {
       const { index } = findTask;
       console.log('排期成功：', findTask.index);
 
-      // 如果lastHandlePeriodIndex === index相等表示没有拖拽出当前时间段，直接中止
-      if (lastHandlePeriodIndex === index) {
-        console.log('没有拖拽出当前时间段，返回原始位置');
-        return;
-      }
+      // 如果lastHandlePeriodIndex === index相等，并且拖拽类型不是未排期任务，表示不用排期直接还原数据
 
-      // 每个时间段只能排5个任务
-      if (planList[index].data.length > 4) {
-        ModalApi.onOppen('TipsModal', {
+      if (lastHandlePeriodIndex === index && type !== 'detailsTask') {
+        console.log('没有拖拽出当前时间段，返回原始位置');
+      } else if (planList[index].data.length > 4) {
+        // 每个时间段只能排5个任务
+        // 推动完成之后会执行很多事件，耗时可能超过模态出现的时间，所以模态没有弹出，将其改为异步之后所以同步代码执行完会回来执行异步
+        setTimeout(() => ModalApi.onOppen('TipsModal', {
           tipsContent: <Text>该时段任务已满，请先完成后再安排</Text>,
           bottomTips: '自动关闭',
           maskClosable: true,
-        });
+        }), 0);
       } else {
         /**
-         * 只有将未排期的任务进行排期或从排期任务中取消排期时才会对排期列表有影响
-         * 如果 type 为 detailsTask 并且排期成功时触发更改未排期任务列表action
-         */
+       * 只有将未排期的任务进行排期或从排期任务中取消排期时才会对排期列表有影响
+       * 如果 type 为 detailsTask 并且排期成功时触发更改未排期任务列表action
+       */
         if (type === 'detailsTask') onChangeTodoTask({ ...dragData, cancelTask: true });
 
         /**
-         * prevPeriodIndex 如果切换时间段，则有prevPeriodIndex属性，否则没有，通过该属性判断是排期还是切换排期
-         * currentPeriodIndex 当前时间段
-         */
+       * prevPeriodIndex 如果切换时间段，则有prevPeriodIndex属性，否则没有，通过该属性判断是排期还是切换排期
+       * currentPeriodIndex 当前时间段
+       */
         const taskData = type === 'detailsTask'
           ? { ...data, currentPeriodIndex: index }
           : { ...data, currentPeriodIndex: index, prevPeriodIndex: lastHandlePeriodIndex };
@@ -202,16 +222,6 @@ class TaskItem extends React.Component {
       });
     }
 
-    /**
-     * 模拟单击
-     * 单击事件小于 80ms 并且手指移动范围在 8px 以内
-     */
-    if (Math.abs(dx - this.touchStartX) < 8 || Math.abs(dy - this.touchStartY) < 8) {
-      if (nowTime - this.touchStartTime < this.touchTime) {
-        onPress();
-      }
-    }
-
     // 如果当前为拖拽状态，则还原拖拽时所改变的所有状态
     if (this.isDraging) {
       // 取消hover状态
@@ -227,6 +237,40 @@ class TaskItem extends React.Component {
       // 将正在拖拽状态改为停止拖拽
       this.isDraging = false;
     }
+  }
+
+  // 手指按下
+  onPressIn = () => {
+    // 为了解决onPress在点击时响应延迟问题，在PressIn阶段先更改样式响应点击
+    this.interactiveStyle();
+  }
+
+  // 点击结束或者离开
+  onPressOut = () => {
+    // rn很奇葩 PressOut在Press之前执行，所以通过delayPressOut添加延迟。让PressOut在后执行移除相应样式。
+    this.clearInteractiveStyle();
+  }
+
+  // 相应点击
+  onPress = () => {
+    const { onPress } = this.props;
+    onPress();
+  }
+
+  // 清楚相应样式
+  clearInteractiveStyle = () => {
+    if (this.taskRef) this.taskRef.setNativeProps({ elevation: 0 });
+  }
+
+  // 点击时的交互样式
+  interactiveStyle = () => {
+    this.taskRef.setNativeProps({
+      shadowOffset: { width: 5, height: 0 },
+      shadowOpacity: 0.5,
+      shadowRadius: 8,
+      shadowColor: 'rgba(0,0,0,1)',
+      elevation: 6,
+    });
   }
 
   // 查询任务对应的时间段
@@ -267,6 +311,18 @@ class TaskItem extends React.Component {
     });
   }
 
+  taskTypeMapTipText = () => {
+    const { data: { taskType, endTime } } = this.props;
+    switch (taskType) {
+      case 2:
+        return '截至提交时间未提交';
+      case 3:
+        return '待订正...';
+      default:
+        return `截止提交时间：${moment(endTime).format('MM-DD HH:mm') || '无时间'}`;
+    }
+  }
+
   render() {
     const {
       wrapStyle, iconWrapStyle, iconStyle, dragData, type,
@@ -280,7 +336,12 @@ class TaskItem extends React.Component {
         {/**
           data.dragTask=true 表示模拟的拖拽元素
         */}
-        <TouchableOpacity>
+        <TouchableWithoutFeedback
+          delayPressOut={200}
+          onPress={this.onPress}
+          onPressOut={this.onPressOut}
+          onPressIn={this.onPressIn}
+        >
           {
             (dragData.homeworkId === data.homeworkId) && !data.dragTask
               ? (
@@ -296,7 +357,9 @@ class TaskItem extends React.Component {
               )
               : (
                 <View
-                  style={mergeStyles(styles.task, wrapStyle, { backgroundColor: taskTypeMapColor(data.taskType) })}
+                  style={mergeStyles(styles.task, wrapStyle, {
+                    backgroundColor: taskTypeMapColor(data.taskType),
+                  })}
                   ref={(ref) => { this.taskRef = ref; }}
                 >
                   <View style={mergeStyles(styles.icon_box, iconWrapStyle)}>
@@ -307,20 +370,18 @@ class TaskItem extends React.Component {
                     />
                   </View>
                   {type !== 'showIconOnlyTask' && (
-                  <View>
-                    <Text style={[styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
-                      {data.title || 'title'}
-                    </Text>
-                    {
+                    <View>
+                      <Text style={[styles.subject]} ellipsizeMode="tail" numberOfLines={1}>
+                        {data.title || 'title'}
+                      </Text>
+                      {
                       type === 'detailsTask' && <Text style={styles.details}>预计耗时：{data.estimatedCost || '不限时'}</Text>
                     }
-                    <Text style={styles.details}>
-                      截止提交时间：{ moment(data.endTime).format('MM-DD HH:mm') || '无时间'}
-                    </Text>
-                  </View>
+                      <Text style={styles.details}>{this.taskTypeMapTipText()}</Text>
+                    </View>
                   )}
                   {
-                    data.subjectName === 3
+                    data.taskType === 4
                       ? (
                         <View style={[styles.no_review_task, {
                           transform: [{
@@ -335,7 +396,7 @@ class TaskItem extends React.Component {
                 </View>
               )
           }
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
       </Animated.View>
     );
   }
