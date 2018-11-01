@@ -74,6 +74,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
+        initial
       >
         <Tabs
           key="StudentTabs"
@@ -119,7 +120,7 @@ const RouteMap = props => (
           </Stack>
           {/* 错题本 */}
           <Stack
-            // initial
+            initial
             title="wrongNotes" // 配好在zh.js、en.js那边了
             key="ProblemOverviewStack"
             image="cuotiben1"

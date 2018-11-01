@@ -101,20 +101,20 @@ function* submitRadioSaga(action) {
 function* confirmDeleteSaga(action) {
   try {
     const { index, callback, item } = action.payload;
-    // console.log(action);
     const url = `/app/api/student/failed-questions/questions/${item.id}/understood?category=${item.category}`;
     const fetch = arg => Fetch.put(url, arg);
-    const res = yield call(fetch);
-    console.log('移除错题本', res);
-    const { code } = res;
+    // const res = yield call(fetch);
+    // console.log('移除错题本', res);
+    // const { code } = res;
+    const code = 0;
     if (code === 0) {
-      callback();
-      yield call(delay, 3000); // 试试等callback函数那边执行完后（那边的执行是2秒），再执行这边
       const state = yield select(getState);
       const { questions } = state.mistakeReformReducer;
       // 成功后删除
       const newQuestions = R.remove(index, 1, questions);
       yield put(actions.correctConfirmAction(newQuestions, 'SUCCESS')); // 目前没做什么操作
+      yield call(delay, 5000); // 试试等callback函数那边执行完后（那边的执行是2秒），再执行这边
+      callback();
       // 成功后的回调
     } else {
       yield put(actions.correctConfirmAction(code, 'ERROR'));
@@ -132,7 +132,7 @@ function* objectiveSaga(action) {
     const state = yield select(getState);
     const startTime = moment(new Date()).format();
     const endTime = moment(new Date()).format();
-    console.log(startTime, endTime);
+    // console.log(startTime, endTime);
     console.log(state.mistakeReformReducer.questions[index].controlComponent.objectiveAnswer.value);
     const params = {
       startTime,
@@ -140,6 +140,7 @@ function* objectiveSaga(action) {
       answer: state.mistakeReformReducer.questions[index].controlComponent.objectiveAnswer.value,
       // answerFileId: item.answerFileId, // 没有图片就不需要传
     };
+    console.log(params);
     const url = `/app/api/student/failed-questions/${item.id}/answer?category=${item.category}`;
     const fetch = arg => Fetch.post(url, arg);
     const res = yield call(fetch, params);
@@ -209,36 +210,29 @@ function* subjectiveSaga(action) {
       // 第二部
       console.log('OSS第二部res2=', res2);
       if (code2 === 0) {
-        // const startTime = moment(new Date()).format();
-        // const endTime = moment(new Date()).format();
-        // const thirdParams = {
-        // startTime,
-        // endTime,
-        //   answer: data2.url,
-        //   answerFileId: data2.fileId,
-        // };
-        const thirdUrl = `/app/api/student/homeworks/${item.homeworkExamId}/questions/${item.id}`;
+        const startTime = moment(new Date()).format();
+        const endTime = moment(new Date()).format();
+        const thirdParams = {
+          startTime,
+          endTime,
+          answer: data2.url,
+          answerFileId: data2.fileId,
+        };
+        const thirdUrl = `/app/api/student/failed-questions/${item.id}/answer?category=${item.category}`;
+        // 这个接口貌似有问题
+        // const thirdUrl = `/app/api/student/homeworks/${item.homeworkExamId}/questions/${item.id}`;
         console.log(220, thirdUrl);
-        const thirdFetch = arg => Fetch.get(thirdUrl, arg);
+        const thirdFetch = arg => Fetch.post(thirdUrl, arg);
         // const res333 = yield thirdFetch(thirdParams);
         // console.log('res333=', res333);
-        const res3 = yield call(thirdFetch);
+        const res3 = yield call(thirdFetch, thirdParams);
         console.log('OSS 第三部 res3=', res3);
         const code3 = res3.code;
         const data3 = res3.data;
         if (code3 === 0) {
-          const studentAnswer = data3.answerFileUrl; // 截图的时候就有了
-          const teacherAnswer = data3.answerContent;
-          const { otherStudentAnswer } = data3;
-          // if (otherStudentAnswer && otherStudentAnswer.length > 0) {
-          //     for (let j = 0; j < otherStudentAnswer.length; j++) {
-          //         let excellAnswer = {};
-          //         excellAnswer.smallSrc = otherStudentAnswer[j].thumbUrl;
-          //         excellAnswer.bigSrc = otherStudentAnswer[j].fileUrl;
-          //         excellAnswer.studentName = otherStudentAnswer[j].studentName;
-          //         excellAnswerImgArr.push(excellAnswer)
-          //     }
-          // }
+          const { studentAnswer } = data3; // 截图的时候就有了
+          const teacherAnswer = data3.explainContent;
+          const otherStudentAnswer = data3.classMatesAnswers;
           yield put(actions.fetchSubjectiveAnswerAction(
             {
               index, showAll: true, teacherAnswer, otherStudentAnswer, studentAnswer,
