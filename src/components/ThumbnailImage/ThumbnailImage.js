@@ -20,12 +20,13 @@ class ThumbnailImage extends Component {
       imageViewType: 'rotate', // 'ordinary' || 'rotate',
       ...props.option,
     };
-    console.log(initState);
+    // console.log(initState);
     this.state = initState;
   }
 
   onClick = () => {
     const option = this.state;
+    // console.log(29, option);
     ModalApi.onOppen('ImageViewer', option);
   }
 

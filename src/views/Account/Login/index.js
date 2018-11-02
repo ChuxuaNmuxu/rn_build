@@ -103,6 +103,13 @@ class Login extends Component {
       <View style={styles.wrap}>
         <Madal />
         <View style={styles.box}>
+          {
+            !__DEV__ && (
+              <View style={{ alignItems: 'center', marginBottom: 15 }}>
+                <Text style={{ fontSize: 22, color: 'red' }}>V1.0.3(build 11.02_2)</Text>
+              </View>
+            )
+          }
           <Debug>
             <Text style={styles.title}>用户登陆</Text>
           </Debug>

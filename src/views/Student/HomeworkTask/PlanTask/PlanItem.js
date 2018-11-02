@@ -16,18 +16,23 @@ const PlanItem = (props) => {
       homeworkId,
       previewed,
     } = props.data;
+    // console.log(666, waitReadOver);
     if (waitReadOver === 4) {
-      // console.log();
-      Actions.HomeworkCorrecting({
+      // 待批阅作业
+      Actions.TaskDetail({
+        title,
+        endTime: moment(endTime).format('YYYY-MM-DD HH:mm'),
+        waitReadOver: true,
         homeworkId,
       });
     } else {
+      // 要做的作业
       Actions.TaskDetail({
         title,
         useTime: `${useTime}分钟`,
         endTime: moment(endTime).format('YYYY-MM-DD HH:mm'),
         // beginTime: '占位',
-        waitReadOver: !(waitReadOver < 4),
+        waitReadOver: false,
         homeworkId,
         previewed,
       });

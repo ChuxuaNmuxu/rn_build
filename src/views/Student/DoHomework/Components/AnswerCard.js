@@ -132,6 +132,7 @@ class AnswerCard extends Component {
         answerFileUrl,
       },
       mistakeReform,
+      showDeleteIcon,
     } = this.props;
     const {
       width, height,
@@ -146,11 +147,11 @@ class AnswerCard extends Component {
             hasImgUrl
             && (
             <UploadImgSuccess
-              mistakeReform={mistakeReform}
               answerFileUrl={answerFileUrl}
               width={parseInt(width)}
               height={parseInt(height)}
               deleteImg={this.deleteImg}
+              showDeleteIcon={showDeleteIcon}
             />
             )
           }
@@ -291,11 +292,13 @@ AnswerCard.propTypes = {
   handlePreviewImage: PropTypes.func, // 上传图片后的回调函数
   deleteImg: PropTypes.func, // 删除图片答案的函数
   handleCheckboxChange: PropTypes.func, // 改变不是很懂，请老师解答的复选框
+  showDeleteIcon: PropTypes.bool, // 错题重做页面用来标识是否需要展示删除图片的icon
 };
 
 AnswerCard.defaultProps = {
   mistakeReform: false,
   imgLoading: false,
+  showDeleteIcon: true,
   handleToClickRadio: () => {},
   handleDifficultLevel: () => {},
   handlePreviewImage: () => {},

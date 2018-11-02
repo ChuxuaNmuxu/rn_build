@@ -36,26 +36,27 @@ class UploadImgSuccess extends Component {
 
   render() {
     const {
-      answerFileUrl, mistakeReform,
+      answerFileUrl,
+      showDeleteIcon,
     } = this.props;
     const { imgWidth, imgHeight } = this.state;
     // console.log(67890, imgWidth, imgHeight);
     return (
       <View style={styles.img_box}>
-        {/* 错题重做页面不需要关闭按钮去删除图片答案 */}
         {
-        !mistakeReform && (
-        <View
-          style={styles.icon_box}
-        >
-          <CustomButton
-            onPress={this.deleteImg}
-            name="guanbi"
-            style={styles.icon_close}
-          />
-        </View>
-        )
+          showDeleteIcon && (
+          <View
+            style={styles.icon_box}
+          >
+            <CustomButton
+              onPress={this.deleteImg}
+              name="guanbi"
+              style={styles.icon_close}
+            />
+          </View>
+          )
       }
+
         <Image
           source={{ uri: answerFileUrl }}
           style={{ width: imgWidth, height: imgHeight, maxWidth: '100%' }}
@@ -66,15 +67,15 @@ class UploadImgSuccess extends Component {
 }
 
 UploadImgSuccess.propTypes = {
-  mistakeReform: PropTypes.bool, // 错题重做页面调用时用来标识调用方的
   answerFileUrl: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   deleteImg: PropTypes.func,
+  showDeleteIcon: PropTypes.bool, // 错题重做页面用来标识是否需要展示删除图片的icon
 };
 
 UploadImgSuccess.defaultProps = {
-  mistakeReform: false,
+  showDeleteIcon: true, // 默认展示
   deleteImg: () => {},
 };
 

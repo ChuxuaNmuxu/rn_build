@@ -2,14 +2,6 @@
   flex: 1;
 }
 
-.content_wrap {
-  height: 2200px;
-}
-
-.content_wrap_not_result {
-  height: 1000px;
-}
-
 .head {
   background-color: #30bf6c;
   flex-direction: row;
@@ -187,14 +179,14 @@
 
 .subjective_container {
   background-color: white;
-  // padding: 19px;
+  padding: 20px;
 }
 
 .answer_title {
   font-family:PingFangSC-Regular;
   font-size:24px;
   color:#666666;
-  margin-bottom: 19px;
+  padding: 0 23px;
 }
 
 .other_student_answer {
