@@ -54,12 +54,8 @@ export default class Setup extends Component {
       Immersive.addImmersiveListener(this.restoreImmersive);
     }
 
-
     // 初始化 主题、语言等配置
     await this.initialConfig();
-
-    // 删除日志networkLog.text，codeErrorLog.text
-    await Logger.callChaining('deleteFile', 'networkLog.txt').callChaining('deleteFile', 'codeErrorLog.txt');
 
     // 关闭启动页
     SplashScreen.hide();
@@ -74,12 +70,30 @@ export default class Setup extends Component {
       });
     });
 
-    CodePush.sync({
-      // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
-      installMode: CodePush.InstallMode.IMMEDIATE,
-      // 苹果公司和中国区安卓的热更新，是不允许弹窗提示的，所以不能设置为true
-      updateDialog: true,
-    });
+    // 正式包才执行一下代码
+    if (!__DEV__) {
+      // 热更新
+      const updateContent = `
+        升级内容：
+        1.如出现由数据错误导致的bug，请重启平板并找到平板的android/data/com.cjhms_rn/file中的日志文件发到群里
+        注意：以后升级将不重新发包（需要修改原生Android代码除外），将采用热更新方式
+      `;
+      CodePush.sync({
+        // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
+        installMode: CodePush.InstallMode.IMMEDIATE,
+        // 苹果公司和中国区安卓的热更新，是不允许弹窗提示的，所以不能设置为true
+        updateDialog: {
+          appendReleaseDescription: true,
+          descriptionPrefix: updateContent,
+          title: '11.02版本升级',
+          mandatoryUpdateMessage: '',
+          mandatoryContinueButtonLabel: '更新',
+        },
+      });
+
+      // 删除日志networkLog.text，codeErrorLog.text
+      await Logger.callChaining('deleteFile', 'networkLog.txt').callChaining('deleteFile', 'codeErrorLog.txt');
+    }
   }
 
   componentWillUnmount() {
