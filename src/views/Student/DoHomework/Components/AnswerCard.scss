@@ -75,12 +75,6 @@
   border-color: #e8e8e8;
   position: relative;
 }
-.imgPic_container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-}
 .img_container {
   flex-direction: column;
   justify-content: center;
@@ -108,7 +102,7 @@
 }
 .objective_area {
   width: 100%;
-  margin-top: 12px;
+  padding-top: 12px;
   padding-left: 24px;
   padding-bottom: 12px;
   flex-direction: row;
@@ -116,6 +110,7 @@
   border-bottom-width: 1px;
   border-style: solid;
   border-color: #e8e8e8;
+  // background-color: red;
 }
 .photo_container {
   width: 48px;
@@ -170,14 +165,6 @@
 .notUnderstood_text {
   font-size: 24px;
   color: #999;
-}
-
-.container {
-  height: 100px;
-  width: 100%;
-  // flex: 1;
-  // background-color: 'yellow';
-  // position: 'relative';
 }
 .img_box {
   flex-direction: column;

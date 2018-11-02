@@ -439,6 +439,7 @@ class MistakeReform extends Component {
   render() {
     const { questions, currentSubjectId } = this.props;
     const { index } = this.state;
+    console.log(8888, questions);
     return (
       <View style={styles.mistakeReform_container}>
         <Modal />
