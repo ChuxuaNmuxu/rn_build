@@ -44,7 +44,6 @@ function* saveQeustionsSaga(action) {
             answerInfo: {}, // 主观题的返回信息
             showAll: false,
             otherStudentAnswer: [],
-            teacherAnswer: '',
             showTrueOrFalseButton: true,
           },
           // 单选题答案
@@ -231,11 +230,10 @@ function* subjectiveSaga(action) {
         const data3 = res3.data;
         if (code3 === 0) {
           const { studentAnswer } = data3; // 截图的时候就有了
-          const teacherAnswer = data3.explainContent;
           const otherStudentAnswer = data3.classMatesAnswers;
           yield put(actions.fetchSubjectiveAnswerAction(
             {
-              index, showAll: true, teacherAnswer, otherStudentAnswer, studentAnswer,
+              index, showAll: true, otherStudentAnswer, studentAnswer,
             },
             'SUCCESS',
           ));
