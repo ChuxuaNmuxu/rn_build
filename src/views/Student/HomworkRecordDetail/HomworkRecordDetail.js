@@ -53,6 +53,7 @@ class HomworkRecordDetail extends Component {
       screenHeight: 0,
       selectTion: 0,
       isgetImageSize: false,
+      imageSize: {},
     };
   }
 
@@ -76,7 +77,6 @@ class HomworkRecordDetail extends Component {
     }
   }
 
-
   onChange=(a) => {
     const {
       headerList,
@@ -99,6 +99,45 @@ class HomworkRecordDetail extends Component {
       callback: () => fetchHomeworkData({ homeworkId: this.id, questionId: id, index: selectTion }, 'REQUEST'),
     });
   }
+
+  setImageSizes = async (index) => {
+    const { detailsDataList } = this.props;
+    const { selectTion, imageSize } = this.state;
+
+    const {
+      htmlContent,
+    } = detailsDataList[index || selectTion];
+
+    const sizes = await this.getBlockImageSize(htmlContent);
+
+    this.setState({
+      imageSize: Object.assign({}, imageSize, sizes),
+    });
+  }
+
+  getBlockImageSize = async (htmlContent) => {
+    const htmlJson = JSON.parse(htmlContent);
+
+    const size = {};
+    const allSize = Object.values(htmlJson.entityMap).map(async (v) => {
+      if (v.data && v.data.src) {
+        const { src } = v.data;
+        size[src] = await this.getImageSizeAsync(src);
+      }
+      return Promise.resolve();
+    });
+
+    return Promise.all(allSize).then(() => size);
+  }
+
+  getImageSizeAsync = src => new Promise((resolve) => {
+    Image.getSize(src, (width, height) => {
+      resolve({
+        width,
+        height,
+      });
+    });
+  })
 
   static getDerivedStateFromProps(props, state) {
     const { detailsDataList } = props;
@@ -185,17 +224,44 @@ class HomworkRecordDetail extends Component {
     // console.log('我是layout');
   }
 
-  // _renderNode=(node, index, siblings, parent, defaultRenderer)=> {
-  //   const {screenWidth} = this.state
-  //   if (node.name === 'img') {
-  //     const attr = node.attribs;
-  //     const ratio = 513 / 49;
-  //     attr.width = screenWidth - 36;
-  //     attr.height =attr.width/ratio;
-  //     console.log(attr,'aaaaaa193')
-  //     return undefined;
-  //   }
-  // }
+  _renderNode=(node, index, siblings, parent, defaultRenderer) => {
+    const { screenWidth, imageSize } = this.state;
+    const attr = node.attribs;
+
+    console.log(246, attr)
+
+    if (node.name === 'img') {
+      const size = imageSize[attr.src];
+
+      if (size) {
+        const { width, height } = size;
+
+        // TODO: 图片尺寸过大的自适应
+        // const ratio = width / height;
+        // attr.width = screenWidth - 36;
+        // attr.height = attr.width / ratio;
+        // attr.style = {};
+
+        let style = {};
+        if (attr.style) {
+          // todo: 合并attr的style
+          style = Object.assign({}, {
+            height,
+            width,
+          });
+        }
+
+        // console.log(280, style)
+
+        return (
+          <Image
+            style={style}
+            source={{ uri: attr.src }}
+          />
+        );
+      }
+    }
+  }
 
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
@@ -215,7 +281,7 @@ class HomworkRecordDetail extends Component {
         <HTMLView
           value={draftToHtml(JSON.parse(htmlContent))}
           stylesheet={htmlViewStyles}
-          // renderNode={this._renderNode}
+          renderNode={this._renderNode}
         />
       </View>
     );
@@ -317,7 +383,7 @@ class HomworkRecordDetail extends Component {
     // throw new Error('crash test is here');
   }
 
-  selectFun=(index, questionId) => {
+  selectFun= async (index, questionId) => {
     // homeworkId,
     // questionId,
     // index,
@@ -330,6 +396,9 @@ class HomworkRecordDetail extends Component {
       selectTion: index,
       isgetImageSize: false,
     });
+
+    await this.setImageSizes(index);
+
     // 如果没有数据的话就去拉取,不过考试的数据都存在，所以可以忽视请求了
     console.log({ homeworkId: this.id, questionId, index }, '我要去请求数据啦啦啦啦啦');
     if (_.isNil(detailsDataList[index])) {
