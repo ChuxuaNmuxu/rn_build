@@ -60,7 +60,7 @@ class HomeworkTask extends Component {
       });
     }
 
-
+    console.log('挂载homeworkTask');
     this.timer = setInterval(() => {
       onFetchStudentTaskList();
       console.log('轮询中');
