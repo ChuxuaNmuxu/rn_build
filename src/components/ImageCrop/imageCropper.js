@@ -62,13 +62,14 @@ export default class ImageCropper extends React.Component {
     );
 
     this.imagePanResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onStartShouldSetPanResponderCapture: () => false,
-      onMoveShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponderCapture: () => true,
-      onPanResponderTerminationRequest: () => false,
+      onStartShouldSetPanResponder: () => true, // 在开始触摸时是否成为响应者
+      onStartShouldSetPanResponderCapture: () => false, // 捕获触摸，阻止子组件成为响应者
+      onMoveShouldSetPanResponder: () => true, // 在触摸点开始移动时是否成为响应者
+      onMoveShouldSetPanResponderCapture: () => false, // 捕获移动，阻止子组件响应移动
+      onPanResponderTerminationRequest: () => false, // 有其他组件请求接替响应者，true表示同意放权
 
       onPanResponderGrant: (evt, gestureState) => {
+        // 响应触摸事件
         evt.persist();
         console.log('mouseDown', this._top + gestureState.dy);
         const { changedTouches } = evt.nativeEvent;
@@ -80,8 +81,8 @@ export default class ImageCropper extends React.Component {
       },
 
       onPanResponderMove: (evt, gestureState) => {
-        // console.log('mouseMove', this.dragClipRect, this.scaleClipRectLT);
-
+        // 手势移动事件
+        console.log('moving');
         const { changedTouches } = evt.nativeEvent;
         const { containerWidth, containerHeight } = this.props;
         if (changedTouches.length <= 1) {
@@ -208,7 +209,7 @@ export default class ImageCropper extends React.Component {
       },
 
       onPanResponderRelease: (evt, gestureState) => {
-        // console.log('mouseUp', this.dragClipRect, this.scaleClipRectLT);
+        // 手势事件结束
         const { containerWidth, containerHeight } = this.props;
         if (this.dragClipRect) {
           const diffLeft = this._left + gestureState.dx;

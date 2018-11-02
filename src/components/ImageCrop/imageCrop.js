@@ -35,16 +35,12 @@ export default class ImageCrop extends React.Component {
     let imageWidth = source.width;
     let imageHeight = source.height;
     // 处理判断下当前图片裁切灰色区的高度和宽度，进而控制判断图片展示的大小，以免图片超出裁切区时点击确定会报错
-    if (layout.width > layout.height - 100) {
-      if (source.height > layout.height - 100) {
-        imageHeight = layout.height - 100;
-        imageWidth = (imageHeight / source.height) * source.width;
-      }
-    } else if (layout.width < layout.height - 100) {
-      if (source.width > layout.width) {
-        imageWidth = layout.width;
-        imageHeight = (imageWidth / source.width) * source.height;
-      }
+    if (source.height > layout.height - 100) {
+      imageHeight = layout.height - 100;
+      imageWidth = (imageHeight / source.height) * source.width;
+    } else if (source.width > layout.width) {
+      imageWidth = layout.width;
+      imageHeight = (imageWidth / source.width) * source.height;
     }
     this.setState({
       source,
