@@ -333,30 +333,22 @@ class MistakeReform extends Component {
   // 显示主观题的题目答案、别人家的答案等
   showSubjective = ({ item, index }) => {
     const {
-      showAll, teacherAnswer, otherStudentAnswer, showTrueOrFalseButton,
+      showAll, otherStudentAnswer, showTrueOrFalseButton,
     } = item.controlComponent.showSubjectiveInfo;
     const { actions: { controlSubjectiveButtonAction, showWrongInfoRadioAction, showCorrectInfoAction } } = this.props;
+    // 主观题老师的答案
+    const teacherAnswer = item.answerContent;
     if (showAll) {
       return (
         <View>
-          {
-            (teacherAnswer || otherStudentAnswer.length > 0) && <View style={styles.space} />
-          }
           <View>
             {
-                // 没有老师答案就不显示
+                // 没有老师答案就不显示，后台可能返回null给我
                 teacherAnswer && (
-                // 后台可能返回null给我
                 <View style={styles.subjective_container}>
                   <Text style={styles.answer_title}>题目答案:</Text>
-                  {/* 暂时支持不了图文压成图片 */}
-                  {/* <ThumbnailImage
-                    option={{
-                      url: teacherAnswer,
-                    }}
-                  /> */}
                   <View style={styles.question_content_wrap}>
-                    { this.htmlViewComponent(item.content) }
+                    { this.htmlViewComponent(teacherAnswer) }
                   </View>
                 </View>
                 )
@@ -439,6 +431,7 @@ class MistakeReform extends Component {
   render() {
     const { questions, currentSubjectId } = this.props;
     const { index } = this.state;
+    // console.log(8888000, questions);
     return (
       <View style={styles.mistakeReform_container}>
         <Modal />

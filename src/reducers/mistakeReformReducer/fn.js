@@ -52,12 +52,11 @@ export const updateImage = (state, action) => {
 
 export const changeSubjectiveShowall = (state, action) => {
   const {
-    index, showAll, studentAnswer, teacherAnswer, otherStudentAnswer,
+    index, showAll, studentAnswer, otherStudentAnswer,
   } = action.payload;
   // 把那个可点击的隐藏掉
   state.questions[index].controlComponent.showSubjectiveInfo.showAll = showAll;
   state.questions[index].controlComponent.showSubjectiveInfo.studentAnswer = studentAnswer;
-  state.questions[index].controlComponent.showSubjectiveInfo.teacherAnswer = teacherAnswer;
   state.questions[index].controlComponent.showSubjectiveInfo.otherStudentAnswer = otherStudentAnswer;
 };
 
