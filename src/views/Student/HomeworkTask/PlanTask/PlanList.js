@@ -66,7 +66,9 @@ class PlanList extends Component {
   }
 
   componentDidMount() {
-    this.scrollToIndex();
+    setTimeout(() => {
+      this.scrollToIndex('DidMount');
+    }, 3000);
   }
 
   componentDidUpdate() {
@@ -83,7 +85,7 @@ class PlanList extends Component {
     if (isFirstRegetDropListenerRange) {
       const { onIsFirstGetDropListenerRange } = this.props;
       onIsFirstGetDropListenerRange(false);
-      this.scrollToIndex();
+      this.scrollToIndex('DidUpdate');
     }
   }
 
@@ -170,7 +172,8 @@ class PlanList extends Component {
     this.timeItemRefList.push(ref);
   }
 
-  scrollToIndex = () => {
+  scrollToIndex = (mes) => {
+    console.log(`${mes}，居中`);
     /**
      * 必须为异步时才能起作用，FlatList默认从index为0时开始加载。
      * 当使用scrollToIndex时需要先将对应的元素加载出来,然后才能让指定元素居中

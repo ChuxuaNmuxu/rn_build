@@ -92,7 +92,9 @@ export default class Setup extends Component {
       });
 
       // 删除日志networkLog.text，codeErrorLog.text
-      await Logger.callChaining('deleteFile', 'networkLog.txt').callChaining('deleteFile', 'codeErrorLog.txt');
+      // await Logger
+      //   .callChaining('deleteFile', 'networkLog.txt') // 删除网络日志
+      //   .callChaining('deleteFile', 'codeErrorLog.txt'); // 删除bug日志
     }
   }
 
