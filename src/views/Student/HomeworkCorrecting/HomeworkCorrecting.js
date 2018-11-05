@@ -180,6 +180,10 @@ class HomeworkCorrecting extends Component {
         },
       }, 'REQUEST');
     }
+    // 批阅到最后一题点击 完成批阅 需要跳转至首页
+    if (index === (list.length - 1)) {
+      Actions.HomeworkTask();
+    }
   }
 
 
@@ -222,6 +226,7 @@ class HomeworkCorrecting extends Component {
             <Text style={styles.score_info}>满分10分：</Text>
             <Radio.Group
               // defaultValue={defaultValue}
+              key={index}
               onChange={(score) => {
                 // console.log(score);
                 const { actions } = this.props;
