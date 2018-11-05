@@ -1,3 +1,4 @@
+
 import {
   Platform,
 } from 'react-native';
@@ -139,6 +140,23 @@ message:${message}
 
     `
   )
+
+
+   // 代码错误捕获日志
+   formatCodeConsole=data => (
+     `
+
+
+/----------------------------------------------------------------/
+date:${moment().format('YYYY-MM-DD HH:mm:ss')}
+|
+data: ${data}
+/----------------------------------------------------------------/
+
+
+
+    `
+   )
 }
 
 const logger = new Logger();

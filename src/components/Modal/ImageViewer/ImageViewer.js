@@ -68,10 +68,11 @@ class ImageViewerModal extends Component {
   renderIndicator = () => null
 
   render() {
-    const { url, type } = this.props;
+    const { url, bigImgUrl, type } = this.props;
     const images = [];
-    if (url instanceof Array) {
-      url.map((u) => {
+    const imgurl = bigImgUrl || url;
+    if (imgurl instanceof Array) {
+      imgurl.map((u) => {
         images.push(
           {
             // Simplest usage.
@@ -82,13 +83,14 @@ class ImageViewerModal extends Component {
               // source: 'https://photo.tuchong.com/344025/f/375718249.jpg',
               style: {
                 flex: 1,
+                width: 500,
+                height: 500,
               },
             },
           },
         );
       });
     }
-
     return (
       <View
         style={{
@@ -121,7 +123,7 @@ class ImageViewerModal extends Component {
 
           //     />
           //   </View>
-            <ZommImage closeFn={this._onClose} url={url} loadingRender={this.loadingRender} />
+            <ZommImage closeFn={this._onClose} url={imgurl} loadingRender={this.loadingRender} />
           ) : (
             <ImageViewer
               imageUrls={images}
@@ -142,14 +144,16 @@ ImageViewerModal.propTypes = {
   closeFn: PropTypes.func,
   name: PropTypes.string,
   url: PropTypes.any,
+  bigImgUrl: PropTypes.any,
   type: PropTypes.string,
 };
 
 ImageViewerModal.defaultProps = {
   closeFn: () => null,
   name: '',
-  // URL可数组可字符串，产品的设计技巧真高超
+  // URL，bigImgUrl可数组可字符串，产品的设计技巧真高超
   url: '',
+  bigImgUrl: '',
   type: 'rotate', // ordinary
 };
 
