@@ -38,7 +38,13 @@ function* fetchStudentTaskListSaga() {
     }
   } catch (err) {
     yield put(actions.FetchStudentTaskList(null, 'ERROR'));
-    console.log(36, err);
+    // try {
+    //   // Toast(err.toString());
+    //   console.log(44, err);
+    // } catch (e) {
+    //   Toast(JSON.stringify(err));
+    //   console.log(47, err);
+    // }
   }
 }
 
