@@ -33,21 +33,59 @@ class HomeworkCorrecting extends Component {
       index: 0,
       // isVisible: false,
     };
+    this.labelData = [ // 标签数据
+      {
+        label: '1',
+        value: 1,
+      },
+      {
+        label: '2',
+        value: 2,
+      },
+      {
+        label: '3',
+        value: 3,
+      },
+      {
+        label: '4',
+        value: 4,
+      },
+      {
+        label: '5',
+        value: 5,
+      },
+      {
+        label: '6',
+        value: 6,
+      },
+      {
+        label: '7',
+        value: 7,
+      },
+      {
+        label: '8',
+        value: 8,
+      },
+      {
+        label: '9',
+        value: 9,
+      },
+    ];
   }
 
   componentDidMount() {
-    console.log('调用 HomeworkCorrecting 组件！', this.props);
+    // console.log('调用 HomeworkCorrecting 组件！', this.props);
     const { actions, homeworkId } = this.props;
     actions.fetchListAction(homeworkId, 'REQUEST');
   }
 
   // 选择批阅结果
   onResultChange = (aa, index) => {
-    // aa: 选择的批阅结果--10正确，5部分正确，1错误；index：当前批阅题目的索引
+    // aa: 选择的批阅结果--10正确，5部分正确，-1错误(错误时分数为0，该组件中用-1来代表错误)；index：当前批阅题目的索引
     // console.log(7777, aa, index);
     if (aa === 10) {
       this.setPopScore(10, index);
-    } else if (aa === 1) {
+    } else if (aa === -1) {
       this.setPopScore(0, index);
     } else {
       this.popupDialog.show(); // 气泡弹出框
@@ -56,7 +94,7 @@ class HomeworkCorrecting extends Component {
 
   setPopScore = (score, index) => {
     const { actions } = this.props;
-    // actions.controlFinsihBtnAction({ finishBtnDisable: false, index });
+    actions.controlFinsihBtnAction({ finishBtnDisable: false, index });
     actions.setCorrectResultAction({ score, index });
   }
 
@@ -109,10 +147,10 @@ class HomeworkCorrecting extends Component {
     <View style={styles.customContent}>
       <View style={styles.customContentItem}>
         {
-            [1, 2, 3].map(item => (
-              <Text key={item} style={styles.btn} onPress={() => ModalApi.onClose()}>{item}</Text>
-            ))
-          }
+          [1, 2, 3].map(item => (
+            <Text key={item} style={styles.btn} onPress={() => ModalApi.onClose()}>{item}</Text>
+          ))
+        }
       </View>
     </View>
   )
@@ -127,6 +165,8 @@ class HomeworkCorrecting extends Component {
       score: item.score,
       index,
     };
+    // 完成批阅要将当前批阅完成的题目的批阅按钮置灰，不可再更改批阅结果
+    actions.controlFinsihBtnAction({ finishBtnDisable: true, index });
     // 有分数才可以
     if (item.score !== undefined) {
       // 这个scrollBy会触发 onIndexChanged 所以不需要在这边设置 this.setState({})
@@ -135,10 +175,14 @@ class HomeworkCorrecting extends Component {
         callBack: () => {
           // const newIndex = index < list.length - 1 ? index + 1 : index;
           const bol = index < list.length - 1;
-          console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol);
+          // console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol);
           if (bol) this.swiperRef.scrollBy(1);
         },
       }, 'REQUEST');
+    }
+    // 批阅到最后一题点击 完成批阅 需要跳转至首页
+    if (index === (list.length - 1)) {
+      Actions.HomeworkTask();
     }
   }
 
@@ -148,49 +192,18 @@ class HomeworkCorrecting extends Component {
     const { index } = this.state;
     // 当前批阅的题目
     const currentQues = list[index];
-    const labelData = [ // 标签数据
-      {
-        label: '1',
-        value: 1,
-      },
-      {
-        label: '2',
-        value: 2,
-      },
-      {
-        label: '3',
-        value: 3,
-      },
-      {
-        label: '4',
-        value: 4,
-      },
-      {
-        label: '5',
-        value: 5,
-      },
-      {
-        label: '6',
-        value: 6,
-      },
-      {
-        label: '7',
-        value: 7,
-      },
-      {
-        label: '8',
-        value: 8,
-      },
-      {
-        label: '9',
-        value: 9,
-      },
-    ];
-    // if (list.length > 0) {
-    //   console.log(draft)
-    // }
-    // console.log(index, list.length);
-    // console.log(7878, index, list.length, currentQues);
+    // 判断当前题目是否有批改好了的分数
+    let correctScore = currentQues && currentQues.score;
+    // 学生批阅了则展示学生批阅的分数
+    if (currentQues && currentQues.studentMarked) {
+      correctScore = currentQues.studentMarkScore;
+    }
+    // 判断当前题目是否还可再修改批阅结果---当前题目已有分数结果(分数结果也可为0)且点击了完成批阅（finishBtnDisable为true）时不可修改批阅结果，不调用onChange函数
+    let canChangeScoreResult = true;
+    if (correctScore >= 0 && currentQues.finishBtnDisable) {
+      canChangeScoreResult = false;
+    }
+    // console.log(7878, index, list, currentQues);
     return (
       <View style={styles.wrapper}>
         <PopupDialog
@@ -213,9 +226,11 @@ class HomeworkCorrecting extends Component {
             <Text style={styles.score_info}>满分10分：</Text>
             <Radio.Group
               // defaultValue={defaultValue}
+              key={index}
               onChange={(score) => {
-                console.log(score);
+                // console.log(score);
                 const { actions } = this.props;
+                actions.controlFinsihBtnAction({ finishBtnDisable: false, index });
                 actions.setCorrectResultAction({ score, index });
                 this.popupDialog.dismiss();
               }}
@@ -230,7 +245,7 @@ class HomeworkCorrecting extends Component {
               childStyle={styles.radio_childStyle}
             >
               {
-                labelData.map((proItem, proIndex) => (
+                this.labelData.map((proItem, proIndex) => (
                   <Radio.Button key={proIndex} value={proItem.value}>{proItem.label}</Radio.Button>
                 ))
               }
@@ -269,7 +284,7 @@ class HomeworkCorrecting extends Component {
                 index={index}
                 // loadMinimal
                 onIndexChanged={(nextIndex) => {
-                  console.log('onIndexChanged, nextIndex=', nextIndex);
+                  // console.log('onIndexChanged, nextIndex=', nextIndex);
                   this.setState({
                     index: nextIndex,
                   });
@@ -364,22 +379,23 @@ class HomeworkCorrecting extends Component {
                 <View style={styles.foot_child_left}>
                   <CorrentResultCard
                     key={index}
-                    defaultValue={currentQues.score}
+                    defaultValue={correctScore}
+                    disabled={!canChangeScoreResult}
                     onChange={a => this.onResultChange(a, index)}
                   />
                 </View>
                 <View style={styles.foot_child_right}>
                   <TouchableOpacity
                     onPress={() => this.finishReadOver(currentQues, index)}
-                    disabled={currentQues.score === undefined}
+                    disabled={currentQues.finishBtnDisable}
                   >
                     {
                   index !== (list.length - 1) ? (
-                    <I18nText style={[styles.foot_btn, currentQues.score !== undefined && styles.btn_color_active]}>
+                    <I18nText style={[styles.foot_btn, !currentQues.finishBtnDisable && styles.btn_color_active]}>
                       homeworkCorrecting.finishCorrectingAndNext
                     </I18nText>
                   ) : (
-                    <I18nText style={[styles.foot_btn, currentQues.score !== undefined && styles.btn_color_active]}>
+                    <I18nText style={[styles.foot_btn, !currentQues.finishBtnDisable && styles.btn_color_active]}>
                       homeworkCorrecting.finishCorrectingNotNext
                     </I18nText>
                   )

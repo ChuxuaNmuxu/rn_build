@@ -46,7 +46,7 @@ class MistakeReform extends Component {
   }
 
   componentDidMount() {
-    console.log('调用 错题重做 MistakeReform 组件', this.props);
+    // console.log('调用 错题重做 MistakeReform 组件', this.props);
   }
 
   // 富文本数据展示框
@@ -338,6 +338,7 @@ class MistakeReform extends Component {
     const { actions: { controlSubjectiveButtonAction, showWrongInfoRadioAction, showCorrectInfoAction } } = this.props;
     // 主观题老师的答案
     const teacherAnswer = item.answerContent;
+    // console.log('其它同学的优秀解答', otherStudentAnswer);
     if (showAll) {
       return (
         <View>
@@ -357,18 +358,18 @@ class MistakeReform extends Component {
               // 没有其他同学答案就不显示
               otherStudentAnswer.length > 0 ? (
                 <React.Fragment>
-                  <View style={styles.dotted_line} />
                   <View>
-                    <View style={styles.answer_wrap}>
+                    <View style={[styles.subjective_container, styles.border_style]}>
                       <Text style={styles.answer_title}>看看其他同学的解答过程:</Text>
                       <View style={styles.other_student_answer}>
                         {
-                        // 缩略图:thumbUrl 大图: fileUrl 名称: studentName
+                        // 缩略图:thumbUrl 大图: fileUrl 名称: studentName,打开模态层查看需要展示大图，故应把大图传过去
                       otherStudentAnswer.map((item2, i) => (
                         <View style={{ marginRight: 25 }} key={i}>
                           <ThumbnailImage
                             option={{
                               url: [item2.thumbUrl],
+                              bigImgUrl: [item2.fileUrl],
                               studentName: item2.studentName,
                               imageViewType: 'ordinary',
                             }}

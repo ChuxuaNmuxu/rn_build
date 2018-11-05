@@ -10,21 +10,21 @@ class CorrentResultCard extends Component {
   static defaultProps = {
     onChange: (a) => { console.log(123, a); },
     defaultValue: null,
+    disabled: false, // 是否可以更改批阅结果(禁选所有子单选器)
   }
 
   render() {
-    // const { currentLevel } = this.state;
     const {
-      onChange, defaultValue,
+      onChange, defaultValue, disabled,
     } = this.props;
-    // 处理下传过来的分数
     let scoreValue = defaultValue;
-    if (scoreValue !== null) {
-      if (scoreValue > 0) {
-        scoreValue = defaultValue !== 10 ? 5 : 10;
-      } else {
-        scoreValue = 1;
-      }
+    if (defaultValue === 0) {
+      // 错误：因为Radio.Button的value为0时onChange改变拿到的为'group'，所以错误时value用-1代替
+      scoreValue = -1;
+    }
+    if (scoreValue > 0 && scoreValue < 10) {
+      // 部分正确时统一将value定为5
+      scoreValue = 5;
     }
     return (
       <View style={styles.corrent_wrapper}>
@@ -32,6 +32,7 @@ class CorrentResultCard extends Component {
           <I18nText>homeworkCorrecting.homeworkCorrecting</I18nText>
         </Text>
         <Radio.Group
+          disabled={disabled}
           defaultValue={scoreValue}
           onChange={onChange}
           checkedTextStyle={{
@@ -56,12 +57,16 @@ class CorrentResultCard extends Component {
             iconWrapStyle={styles.button_style}
             checkedIconWrapStyle={styles.checkedIconWrapStyle2}
           >
-            <I18nText>homeworkCorrecting.partOfTheError</I18nText>
+            {
+              scoreValue === 5
+                ? `${defaultValue}/10`
+                : <I18nText>homeworkCorrecting.partOfTheError</I18nText>
+            }
           </Radio.Button>
           {/* 错误 */}
           <Radio.Button
-            key={1}
-            value={1}
+            key={-1}
+            value={-1}
             iconWrapStyle={styles.button_style}
             checkedIconWrapStyle={styles.checkedIconWrapStyle3}
           >
@@ -76,6 +81,7 @@ class CorrentResultCard extends Component {
 CorrentResultCard.propTypes = {
   onChange: PropTypes.func,
   defaultValue: PropTypes.number,
+  disabled: PropTypes.bool, // 是否可以更改批阅结果(禁选所有子单选器)
 };
 
 export default CorrentResultCard;
