@@ -12,10 +12,12 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import SplashScreen from 'react-native-splash-screen';
 // import Theme from './config/theme';
+import CodePush from 'react-native-code-push';
 import Language from './config/language';
 import ApiBase from './config/apiBase';
 import { InitialConfog } from './actions/config';
 import * as listener from './constants/listener';
+import Logger from './utils/logger';
 
 @connect(
   state => ({
@@ -67,6 +69,33 @@ export default class Setup extends Component {
         isConnected,
       });
     });
+
+    // 正式包才执行一下代码
+    if (!__DEV__) {
+      // 热更新
+      const updateContent = `
+        升级内容：
+        1.如出现由数据错误导致的bug，请重启平板并找到平板的android/data/com.cjhms_rn/file中的日志文件发到群里
+        注意：以后升级将不重新发包（需要修改原生Android代码除外），将采用热更新方式
+      `;
+      CodePush.sync({
+        // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
+        installMode: CodePush.InstallMode.IMMEDIATE,
+        // 苹果公司和中国区安卓的热更新，是不允许弹窗提示的，所以不能设置为true
+        updateDialog: {
+          appendReleaseDescription: true,
+          descriptionPrefix: updateContent,
+          title: '11.02版本升级',
+          mandatoryUpdateMessage: '',
+          mandatoryContinueButtonLabel: '更新',
+        },
+      });
+
+      // 删除日志networkLog.text，codeErrorLog.text
+      // await Logger
+      //   .callChaining('deleteFile', 'networkLog.txt') // 删除网络日志
+      //   .callChaining('deleteFile', 'codeErrorLog.txt'); // 删除bug日志
+    }
   }
 
   componentWillUnmount() {

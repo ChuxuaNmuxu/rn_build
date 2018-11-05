@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getMistakeListAction } from '../../../actions/mistakeListAction';
+import { getMistakeListAction, addMistakeList, initStateAction } from '../../../actions/mistakeListAction';
 import { initialFetch } from '../../../actions/problemRecordsAction';
 import styles from './ProblemListOverview.scss';
 import I18nText from '../../../components/I18nText';
@@ -18,6 +18,7 @@ import FilterView from './Components/FilterView';
 import ProblemList from './ProblemList';
 import ExtendListView from '../../../components/ExtendListView';
 import SelectListButton from '../ProblemRecords/Components/SelectListButton';
+import RefreshState from '../../../components/RefreshListView/RefreshState';
 import { getRandomArrayItem } from '../../../utils/common';
 
 class ProblemListOverview extends Component {
@@ -30,6 +31,7 @@ class ProblemListOverview extends Component {
       currentSubjectId: subjectId,
       difficultyLevelVisible: false, // 控制难易度的标签 选中作业是时候才显示
     };
+    this.page = 1;
     this.moreParams = {
       uniGradeId: [],
       category: [],
@@ -59,6 +61,41 @@ class ProblemListOverview extends Component {
     if (showExtendView) {
       this.setVisibleFun(false);
     }
+  }
+
+  // 底部上上上拉刷新
+  onFooterRefresh = () => {
+    const {
+      total, mistakeList, controlFetch,
+    } = this.props;
+    console.log('底部上上上拉刷新', mistakeList.length === total);
+    if (controlFetch) return;
+    if (mistakeList.length === total) {
+      this.listView.setfooterState(RefreshState.NoMoreData);
+      return;
+    }
+    this.refreshList({ page: ++this.page }, () => {
+      console.log(53, this.page);
+      this.listView.setfooterState(RefreshState.NoMoreData);
+    }, () => {
+      this.listView.setfooterState(RefreshState.NoMoreData);
+    }, addMistakeList);
+  }
+
+  // 头部下下下下拉刷新
+  onHeaderRefresh = () => {
+    // const { refreshList } = this.props;
+    console.log('头部下下下下拉刷新');
+    this.refreshList({}, () => {
+      this.listView.endHeaderRefreshing(RefreshState.RefreshSuccess);
+      this.listView.endHeaderRefreshing(RefreshState.Idle);
+    }, () => {
+      this.listView.endHeaderRefreshing(RefreshState.Failure);
+    });
+  }
+
+  getRefreshListView=(ref) => {
+    this.listView = ref;
   }
 
   getMoreParms = (Arr, objKey) => {
@@ -140,9 +177,17 @@ class ProblemListOverview extends Component {
     console.log('原数组list=', list, '随鸡5到题', datas);
     Actions.MistakeReform({
       problemCardInfo: datas,
-      subjectId: currentSubjectId, // 回来的时候重新请求数据用的
+      currentSubjectId, // 回来的时候重新请求数据用的
       isRandom: true, // 用来判断是否是随机，不是的时候删除错题本成功后调回此页面
     });
+  }
+
+  back = () => {
+    this.page = 1;
+    console.log(this.props);
+    const { initState } = this.props;
+    initState();
+    Actions.ProblemOverview();
   }
 
   // 渲染需要展示在扩展列表视图中的组件
@@ -188,7 +233,7 @@ class ProblemListOverview extends Component {
     const {
       showExtendView, currentSubjectId, subjectData,
     } = this.state;
-    const { mistakeList, total } = this.props;
+    const { mistakeList } = this.props;
     return (
       <View style={styles.problemList_container}>
         <TouchableOpacity
@@ -197,7 +242,7 @@ class ProblemListOverview extends Component {
           onPress={this.onTopClickFun}
         >
           <View style={styles.problemList_header}>
-            <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={Actions.ProblemOverview} />
+            <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.back} />
             <I18nText style={styles.doHomeworkTitle}>ProblemListOverview.title</I18nText>
             <Text />
           </View>
@@ -210,10 +255,15 @@ class ProblemListOverview extends Component {
         />
         {/* <ScrollView> */}
         <ProblemList
-          refreshList={this.refreshList}
+          // refreshList={this.refreshList}
+          getRefreshListView={this.getRefreshListView}
           mistakeList={mistakeList}
-          total={total}
+          // total={total}
           currentSubjectId={currentSubjectId}
+          // controlFetch={controlFetch}
+          // params={this.page}
+          onFooterRefresh={this.onFooterRefresh}
+          onHeaderRefresh={this.onHeaderRefresh}
         />
         {/* </ScrollView> */}
         {
@@ -246,6 +296,8 @@ ProblemListOverview.propTypes = {
   mistakeList: PropTypes.array.isRequired,
   allGradeData: PropTypes.array.isRequired,
   getGrades: PropTypes.func.isRequired,
+  initState: PropTypes.func.isRequired,
+  controlFetch: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -253,6 +305,7 @@ const mapStateToProps = (state) => {
     mistakeListReducer: {
       mistakeList,
       total,
+      controlFetch,
     },
     problemOverviewReducer: {
       data,
@@ -268,9 +321,11 @@ const mapStateToProps = (state) => {
     total,
     problemOverviewData: data,
     allGradeData,
+    controlFetch,
   };
 };
 const mapDispatchToProps = dispatch => ({
+  initState: bindActionCreators(initStateAction, dispatch),
   onGetMistakeList: bindActionCreators(getMistakeListAction, dispatch),
   getGrades: bindActionCreators(initialFetch, dispatch),
 });

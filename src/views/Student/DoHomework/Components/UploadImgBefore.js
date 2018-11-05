@@ -2,11 +2,11 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import {
-  View, TouchableOpacity, Text,
+  View, Text,
 } from 'react-native';
 import styles from './AnswerCard.scss';
 import I18nText from '../../../../components/I18nText';
-import { CustomButton } from '../../../../components/Icon';
+import IconSet from '../../../../components/Icon';
 import UploadImage from '../../../../components/UploadImage';
 
 class UploadImgBefore extends Component {
@@ -22,7 +22,6 @@ class UploadImgBefore extends Component {
     const { updateImage } = this.props;
     updateImage(source);
   }
-
 
   render() {
     const {
@@ -43,28 +42,15 @@ class UploadImgBefore extends Component {
               <View style={styles.uploadAreaStyle}>
                 {/* 主观题上传解答过程区域 */}
                 <View style={styles.img_container}>
-                  <TouchableOpacity
-                    // 没办法传组件进去调用 selectPhotoTapped，只能通过这种方式 (为了让外面的圆点击也有效果)
-                    onPress={this.UploadImageRef && this.UploadImageRef.selectPhotoTapped}
+                  <UploadImage
+                    updateImage={this.updateImage}
+                    style={styles.iconphoto_container}
                   >
-                    <View style={styles.iconphoto_container}>
-                      <View style={styles.container}>
-                        {/* <ScrollView> */}
-                        <UploadImage
-                          ref={(node) => { this.UploadImageRef = node; }}
-                          CustomComponent={() => (
-                            <CustomButton
-                              // 没办法传组件进去调用 selectPhotoTapped，只能通过这种方式
-                              onPress={this.UploadImageRef && this.UploadImageRef.selectPhotoTapped}
-                              name="iconphoto"
-                              style={styles.iconphotoStyle}
-                            />
-                          )}
-                          updateImage={this.updateImage}
-                        />
-                      </View>
-                    </View>
-                  </TouchableOpacity>
+                    <IconSet
+                      name="iconphoto"
+                      style={styles.iconphotoStyle}
+                    />
+                  </UploadImage>
                   <Text style={styles.txtStyle}>
                     <I18nText>
                     DoHomeworks.answerCard.toUpLoadNotice
@@ -78,39 +64,24 @@ class UploadImgBefore extends Component {
             )
             : (
               <View>
-                {/* 客观题上传解答过程区域 */}
-                <TouchableOpacity
-                  activeOpacity={answered ? 0.2 : 1}
+                {/* 客观题上传解答过程区域,客观题未选择答案时不能上传图片 */}
+                <UploadImage
+                  updateImage={this.updateImage}
                   style={styles.objective_area}
-                  onPress={
-                    answered
-                      ? (this.objectiveUploadImageRef && this.objectiveUploadImageRef.selectPhotoTapped)
-                      : null
-                  }
+                  answered={answered}
                 >
                   <View style={[answered ? styles.photoCanClick_container : styles.photo_container]}>
-                    <View style={styles.container}>
-                      <UploadImage
-                        ref={(node) => { this.objectiveUploadImageRef = node; }}
-                        CustomComponent={() => (
-                          <CustomButton
-                            onPress={
-                              this.objectiveUploadImageRef && this.objectiveUploadImageRef.selectPhotoTapped
-                            }
-                            name="iconphoto"
-                            style={[answered ? styles.photoCanClick : styles.objective_photo]}
-                          />
-                        )}
-                        updateImage={this.updateImage}
-                      />
-                    </View>
+                    <IconSet
+                      name="iconphoto"
+                      style={[answered ? styles.photoCanClick : styles.objective_photo]}
+                    />
                   </View>
                   <View style={styles.text_container}>
                     <I18nText style={[answered ? styles.textCanClick : styles.objective_text]}>
                       DoHomeworks.answerCard.uploadImgAnswerNotice
                     </I18nText>
                   </View>
-                </TouchableOpacity>
+                </UploadImage>
               </View>
             )
         }

@@ -1,7 +1,9 @@
 import {
   AppRegistry, YellowBox, Alert,
 } from 'react-native';
-import { setJSExceptionHandler, setNativeExceptionHandler } from 'react-native-exception-handler-iamsb';
+// setNativeExceptionHandler捕获系统BUG，这个东西很烦，暂时不加了
+import { setJSExceptionHandler } from 'react-native-exception-handler-iamsb';
+import Logger from './src/utils/logger';
 import './src/utils/global';
 import App from './App';
 
@@ -15,15 +17,9 @@ YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTIm
 AppRegistry.registerComponent('cjhms_rn', () => App);
 
 
-const reporter = (error) => {
-  // Logic for reporting to devs
-  // Example : Log issues to github issues using github apis.
-  console.log(error); // sample
-  // create a path you want to write to
-  // :warning: on iOS, you cannot write into `RNFS.MainBundlePath`,
-  // but `RNFS.DocumentDirectoryPath` exists on both platforms and is writable
-
-  // write the file
+const reporter = (e) => {
+  console.log(e); // sample
+  Logger.appendFile('codeErrorLog.txt', Logger.formatCodeErrorLog(e.name, e.message));
 };
 const errorHandler = (e, isFatal) => {
   if (isFatal) {
@@ -46,23 +42,25 @@ const errorHandler = (e, isFatal) => {
   }
 };
 setJSExceptionHandler(errorHandler);
-setNativeExceptionHandler((errorString) => {
-  console.log(errorString);
-  // You can do something like call an api to report to dev team here
-  // example
-  // fetch('http://<YOUR API TO REPORT TO DEV TEAM>?error='+errorString);
-  //
-  Alert.alert(
-    'Hei guys, I am catching a bug~~',
-    `
-      Error: ${errorString}
-      At present ,you can do something~~
-      `,
-    [{
-      text: '返回',
-      onPress: () => {
-        Actions.pop();
-      },
-    }],
-  );
-});
+
+// 捕获 native 原生错误，当有错误时会直接弹窗。
+// setNativeExceptionHandler((errorString) => {
+//   console.log(errorString);
+//   // You can do something like call an api to report to dev team here
+//   // example
+//   // fetch('http://<YOUR API TO REPORT TO DEV TEAM>?error='+errorString);
+//   //
+//   Alert.alert(
+//     'Hei guys, I am catching a bug~~',
+//     `
+//       Error: ${errorString}
+//       At present ,you can do something~~
+//       `,
+//     [{
+//       text: '返回',
+//       onPress: () => {
+//         Actions.pop();
+//       },
+//     }],
+//   );
+// });

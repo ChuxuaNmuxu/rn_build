@@ -77,6 +77,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
 project.ext.vectoricons = [
     iconFontNames: [ 'iconfont.ttf' ] // Name of the font files you want to copy
@@ -112,7 +113,8 @@ android {
         targetSdkVersion 27
         versionCode 1
         vectorDrawables.useSupportLibrary = true
-        versionName "1.0"
+        // 默认是1.0，但是codepush需要三位数
+        versionName "1.0.3"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -160,6 +162,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-code-push')
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-image-picker')
     compile project(':react-native-i18n')
@@ -176,6 +179,7 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile project(':react-native-wheel-picker-android')
     compile project(':react-native-exception-handler')
+    compile project(':react-native-fs')
 }
 
 // Run this once to be able to run the application with BUCK
