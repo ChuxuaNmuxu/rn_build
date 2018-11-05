@@ -42,6 +42,7 @@ class MyModal extends Component {
 
       studentName: '',
       url: '',
+      bigImgUrl: '', // 大图，查看其它学生的优秀解答时展示
       imageViewType: '',
       footButton: true,
     };
@@ -146,12 +147,15 @@ class MyModal extends Component {
   }
 
   _ImageViewer=() => {
-    const { studentName, url, imageViewType } = this.state;
+    const {
+      studentName, url, bigImgUrl, imageViewType,
+    } = this.state;
     return (
       <ImageViewer
         closeFn={this.onClose}
         name={studentName}
         url={url}
+        bigImgUrl={bigImgUrl}
         type={imageViewType}
       />
     );
