@@ -7,7 +7,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import HTMLView from 'react-native-htmlview';
@@ -139,6 +138,11 @@ class HomworkRecordDetail extends Component {
     });
   })
 
+  onScrollEnd=() => {
+    // console.log(this.anserSummarization);
+    this.anserSummarization.setButton();
+  }
+
   static getDerivedStateFromProps(props, state) {
     const { detailsDataList } = props;
     console.log(state, 'statestatestate');
@@ -147,6 +151,7 @@ class HomworkRecordDetail extends Component {
     }
     return null;
   }
+
 
   // 获取图片初始化大小
   getImageSize=(url) => {
@@ -438,6 +443,7 @@ class HomworkRecordDetail extends Component {
     );
   }
 
+
   isQuestionSubmited=(objAnser, subAnser) => {
     console.log(objAnser, subAnser);
     console.log(objAnser === null && subAnser === []);
@@ -448,6 +454,16 @@ class HomworkRecordDetail extends Component {
       return true;
     }
     return false;
+  }
+
+  examCanRenderCauseOfError=() => {
+    const {
+      submitStatus,
+    } = this.props;
+    if (this.type === 'E' && submitStatus === 0) {
+      return false;
+    }
+    return true;
   }
 
 
@@ -503,7 +519,11 @@ class HomworkRecordDetail extends Component {
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
     console.log(isQuestionSubmited, 'isQuestionSubmitedisQuestionSubmited');
     return (
-      <ScrollView style={styles.homeworkDetail_container} onLayout={this.handleLayout}>
+      <ScrollView
+        style={styles.homeworkDetail_container}
+        onLayout={this.handleLayout}
+        onMomentumScrollEnd={this.onScrollEnd}
+      >
         <Modal />
         <View style={styles.homeworkDetail_header}>
           <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.myComponentWillUnmount} />
@@ -573,6 +593,8 @@ class HomworkRecordDetail extends Component {
                 homeWorkId={this.id}
                 // 题目ID
                 qsId={headerList[selectTion].id}
+
+                ref={(el) => { this.anserSummarization = el; }}
               />
             }
             {
@@ -655,11 +677,13 @@ class HomworkRecordDetail extends Component {
         {
           // 错误原因分析
           // 是否被批改且存在错误
-          status === 1 && isItCorrect !== 1 ? (
-            <View style={styles.CauseOfError}>
-              <CauseOfError defaultValue={causeOfErrorNum} onChange={this.onChange} />
-            </View>
-          ) : null
+          // submitStatus=>是否参加考试，1是
+
+         this.examCanRenderCauseOfError() && status === 1 && isItCorrect !== 1 ? (
+           <View style={styles.CauseOfError}>
+             <CauseOfError defaultValue={causeOfErrorNum} onChange={this.onChange} />
+           </View>
+         ) : null
         }
       </ScrollView>
     );
@@ -675,6 +699,7 @@ HomworkRecordDetail.propTypes = {
   detailsDataList: PropTypes.array.isRequired,
   status: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
+  submitStatus: PropTypes.number.isRequired,
 };
 
 HomworkRecordDetail.defaultProps = {
@@ -684,7 +709,7 @@ HomworkRecordDetail.defaultProps = {
 const mapStateToProps = (state) => {
   const {
     routes, recordDetailReducer: {
-      detailsDataList, headerList, status, title,
+      detailsDataList, headerList, status, title, submitStatus,
     },
   } = state;
   const { params } = routes;
@@ -695,6 +720,7 @@ const mapStateToProps = (state) => {
     headerList,
     status,
     title,
+    submitStatus,
   };
 };
 

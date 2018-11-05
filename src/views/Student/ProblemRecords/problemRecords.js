@@ -232,7 +232,6 @@ class ProblemRecords extends Component {
     footerLoading(true);
 
     this.dropDownFetch({
-
       currentRecordType,
       currentSubjectId,
       ...this.moreParams,
@@ -280,7 +279,7 @@ class ProblemRecords extends Component {
         <SelectListButton
           getItems={this.getMoreParms}
           data={recordStateData}
-          title="作业状态"
+          title={currentRecordType === 0 ? '作业状态' : '考试状态'}
           objKey="recordState"
           selectType="multi"
           selected={this.moreParams.recordState}

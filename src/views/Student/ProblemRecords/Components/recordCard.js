@@ -96,6 +96,7 @@ class RecordCard extends PureComponent {
   // 点击 去订正/去补做
   toReviseFun = () => {
     console.log(666, '去订正');
+    Actions.HomeworkTask();
   }
 
   // 点击卡片进入详情页
@@ -107,7 +108,7 @@ class RecordCard extends PureComponent {
 
   render() {
     const { datas, recordType } = this.props;
-    const accuracyData = `${(datas.accuracy * 100).toFixed(2)}%`;
+    const accuracyData = `${Math.round(datas.accuracy * 100)}%`;
     // const randomNum = 0.3;
     return (
       <TouchableOpacity

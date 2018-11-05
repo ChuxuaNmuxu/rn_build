@@ -1,12 +1,13 @@
 
 export function fetchExamDataSuccess(state, action) {
   const {
-    headerList, detailsDataList, status, title,
+    headerList, detailsDataList, status, title, submitStatus,
   } = action.payload;
   state.headerList = headerList;
   state.detailsDataList = detailsDataList;
   state.status = status;
   state.title = title;
+  state.submitStatus = submitStatus;
 }
 
 export function initailState(state) {

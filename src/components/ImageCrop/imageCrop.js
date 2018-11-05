@@ -18,6 +18,7 @@ export default class ImageCrop extends React.Component {
   constructor(props) {
     super(props);
     this.oldValue = 0;
+    this.clip = false;
     this.state = {
       value: 0,
       source: null,
@@ -35,16 +36,12 @@ export default class ImageCrop extends React.Component {
     let imageWidth = source.width;
     let imageHeight = source.height;
     // 处理判断下当前图片裁切灰色区的高度和宽度，进而控制判断图片展示的大小，以免图片超出裁切区时点击确定会报错
-    if (layout.width > layout.height - 100) {
-      if (source.height > layout.height - 100) {
-        imageHeight = layout.height - 100;
-        imageWidth = (imageHeight / source.height) * source.width;
-      }
-    } else if (layout.width < layout.height - 100) {
-      if (source.width > layout.width) {
-        imageWidth = layout.width;
-        imageHeight = (imageWidth / source.width) * source.height;
-      }
+    if (source.height > layout.height - 100) {
+      imageHeight = layout.height - 100;
+      imageWidth = (imageHeight / source.height) * source.width;
+    } else if (source.width > layout.width) {
+      imageWidth = layout.width;
+      imageHeight = (imageWidth / source.width) * source.height;
     }
     this.setState({
       source,
@@ -57,28 +54,31 @@ export default class ImageCrop extends React.Component {
 
   // 确定裁剪
   pressConfirm = () => {
-    const { containerWidth, containerHeight } = this.state;
-    const {
-      width, height, left, top,
-    } = this.imgCrop.getCropData();
-    let wid = width;
-    let heg = height;
-    if (width + left > containerWidth) {
-      wid = containerWidth - left;
+    if (!this.clip) {
+      this.clip = true;
+      const { containerWidth, containerHeight } = this.state;
+      const {
+        width, height, left, top,
+      } = this.imgCrop.getCropData();
+      let wid = width;
+      let heg = height;
+      if (width + left > containerWidth) {
+        wid = containerWidth - left;
+      }
+      if (height + top > containerHeight) {
+        heg = containerHeight - top;
+      }
+      const cropData = {
+        offset: { x: left, y: top },
+        size: { width: wid, height: heg },
+      };
+      this.imgCrop.crop().then((uri) => {
+        // Image.getSize(uri, (w, h) => {
+        //   console.log('iamge123', w, h);
+        // });
+        ImageEditor.cropImage(uri, cropData, this.success, this.error);
+      });
     }
-    if (height + top > containerHeight) {
-      heg = containerHeight - top;
-    }
-    const cropData = {
-      offset: { x: left, y: top },
-      size: { width: wid, height: heg },
-    };
-    this.imgCrop.crop().then((uri) => {
-      // Image.getSize(uri, (w, h) => {
-      //   console.log('iamge123', w, h);
-      // });
-      ImageEditor.cropImage(uri, cropData, this.success, this.error);
-    });
   }
 
   // 裁剪之后的回调

@@ -9,6 +9,7 @@ const initState = {
   // 假如存在一道未批改，则全灰，下面简要也灰色字体且同学修改的也不展示气泡
   status: 0,
   title: '',
+  submitStatus: 0,
 };
 
 const handle = {
