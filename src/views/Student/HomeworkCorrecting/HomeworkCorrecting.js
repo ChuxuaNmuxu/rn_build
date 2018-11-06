@@ -419,7 +419,7 @@ HomeworkCorrecting.propTypes = {
 };
 
 HomeworkCorrecting.defaultProps = {
-  homeworkId: '505700854901243904', // 杨海宏的作业
+  homeworkId: '509006524731883520', // 吴一凡的作业
 };
 
 const mapStateToProps = (state) => {
