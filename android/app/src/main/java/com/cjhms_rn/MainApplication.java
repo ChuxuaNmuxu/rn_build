@@ -5,6 +5,7 @@ import android.webkit.WebView;
 import com.horcrux.svg.SvgPackage;
 
 import com.facebook.react.ReactApplication;
+import com.microsoft.codepush.react.CodePush;
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -32,6 +33,12 @@ import com.rnfs.RNFSPackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+
+        @Override
+        protected String getJSBundleFile() {
+        return CodePush.getJSBundleFile();
+        }
+    
     @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
@@ -41,6 +48,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          // 第一个参数是刚刚申请的key（可以根据环境配置）
+          // 第四个参数是服务器的URL
+          new CodePush("JGndXaPJcNJAotLcnzyeeafcLmYA4ksvOXqog", getApplicationContext(), BuildConfig.DEBUG, "http://10.0.3.117:3000"),
           new RNViewShotPackage(),
           new PickerPackage(),
           new ImagePickerPackage(),

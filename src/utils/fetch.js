@@ -112,7 +112,7 @@ const Fetch = {
     return fetch(url, options)
       .then(res => res.text())
       .then((text) => {
-        Logger.appendFile('networkLog.txt', Logger.formatNetWorkLog(text, url, options, method));
+        if (!__DEV__) Logger.appendFile('networkLog.txt', Logger.formatNetWorkLog(text, url, options, method));
         return (text ? JSON.parse(text) : {});
       })
       .then(errCode)

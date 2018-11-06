@@ -4,8 +4,6 @@ import {
   TouchableOpacity,
   View,
   Text,
-  // Image,
-  StyleSheet,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 // import styles from './uploadImage.scss';
@@ -15,11 +13,11 @@ export default class UploadImage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // source: null,
     };
   }
 
   selectPhotoTapped = () => {
+    // console.log(789, '点击到了');
     const option = {
       title: '选择图片',
       cancelButtonTitle: '取消',
@@ -64,43 +62,37 @@ export default class UploadImage extends Component {
   }
 
   render() {
-    const { CustomComponent } = this.props;
-    // const { source } = this.state;
-    // console.log('image', source);
+    const { style, children, answered } = this.props;
     return (
-      <View style={styles.container}>
-        <TouchableOpacity onPress={this.selectPhotoTapped}>
-          {/* <View>
-            { source === null ? <Text>选择照片</Text> : <Image style={styles.avatar} source={source} />}
-          </View> */}
+      <TouchableOpacity
+        activeOpacity={answered ? 0.2 : 1}
+        onPress={answered ? this.selectPhotoTapped : null}
+      >
+        <View style={style}>
           {
-            CustomComponent ? (
-              <CustomComponent />
-            ) : <View><Text>选择照片</Text></View>
+            children || <View><Text>选择照片</Text></View>
           }
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: '#eee',
-  },
-});
-
 UploadImage.propTypes = {
   updateImage: PropTypes.func,
   options: PropTypes.object,
-  CustomComponent: PropTypes.func,
+  children: PropTypes.any,
+  answered: PropTypes.number, // 客观题必须要选择答案后点击此组件才能上传图片，默认为1,可上传图片状态
+  style: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]),
 };
 
 UploadImage.defaultProps = {
   options: {},
   updateImage: () => { console.log('上传了'); },
-  CustomComponent: null,
+  children: null,
+  style: null,
+  answered: 1,
 };

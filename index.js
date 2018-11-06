@@ -42,6 +42,8 @@ const errorHandler = (e, isFatal) => {
   }
 };
 setJSExceptionHandler(errorHandler);
+
+// 捕获 native 原生错误，当有错误时会直接弹窗。
 // setNativeExceptionHandler((errorString) => {
 //   console.log(errorString);
 //   // You can do something like call an api to report to dev team here
