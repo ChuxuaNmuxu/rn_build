@@ -12,18 +12,19 @@ const PlanItem = (props) => {
       estimatedCost: useTime,
       endTime,
       // beginTime: scheduledNode,
-      taskType: waitReadOver,
+      taskType,
       homeworkId,
       previewed,
     } = props.data;
     // console.log(666, waitReadOver);
-    if (waitReadOver === 4) {
+    if (taskType === 4) {
       // 待批阅作业
       Actions.TaskDetail({
         title,
         endTime: moment(endTime).format('YYYY-MM-DD HH:mm'),
         waitReadOver: true,
         homeworkId,
+        taskType,
       });
     } else {
       // 要做的作业
@@ -35,6 +36,7 @@ const PlanItem = (props) => {
         waitReadOver: false,
         homeworkId,
         previewed,
+        taskType,
       });
     }
   };

@@ -4,6 +4,7 @@ import {
   View,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import styles from './TaskDetail.scss';
 import Title from './Components/Title';
@@ -26,14 +27,16 @@ class TaskDetail extends Component {
       homeworkId,
       actions,
       previewed,
+      taskType,
     } = this.props;
+    const newEndTime = taskType === 2 ? moment(endTime).add(7, 'day').format('YYYY-MM-DD HH:mm:ss') : endTime;
     return (
       <View style={styles.wrap}>
         <Title waitReadOver={waitReadOver} title={title} />
         <View style={styles.content_wrap}>
           <Content
             beginTime={beginTime}
-            endTime={endTime}
+            endTime={newEndTime}
             waitReadOver={waitReadOver}
             useTime={useTime}
             homeworkId={homeworkId}
@@ -60,6 +63,7 @@ TaskDetail.propTypes = {
   homeworkId: PropTypes.string,
   actions: PropTypes.object.isRequired,
   previewed: PropTypes.number,
+  taskType: PropTypes.number,
 };
 TaskDetail.defaultProps = {
   title: '6-22物理作业',
@@ -69,6 +73,7 @@ TaskDetail.defaultProps = {
   waitReadOver: false,
   homeworkId: '499598186277502976',
   previewed: 0,
+  taskType: null,
 };
 
 const mapStateToProps = (state) => {
