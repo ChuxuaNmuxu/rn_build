@@ -9,6 +9,8 @@ import * as listener from '../constants/listener';
 import { SetUserInfo } from '../actions/account';
 import Logger from './logger';
 
+const findString = (data, mes) => data.indexOf(mes) !== -1;
+
 // origin表示 https://cjyun.ecaicn.com
 let origin = null;
 const apiBase = new ApiBase();
@@ -16,7 +18,6 @@ const apiBase = new ApiBase();
 DeviceEventEmitter.addListener(listener.apiBase, (params) => {
   origin = fetchApi(undefined, params);
 });
-
 
 let isConnected = true;
 // 获取初始网络
@@ -36,13 +37,14 @@ const connectUrl = async (url) => {
   }
 
   if (typeof url !== 'string') {
-    // console.error('url只能为字符串类型');
+    console.error('url只能为字符串类型');
   } else if (url.indexOf('http') === 0) {
     // 如果url是以http开头说明是个完整的地址不需要拼接，直接返回
     return url;
   } else if (url.charAt(0) === '/') {
     return origin + url;
   }
+
   return `${origin}/${url}`;
 };
 
@@ -68,6 +70,7 @@ const errCode = (json) => {
       // console.log('json.code:', json.code);
   }
   if (json.code !== 0) Toast.info(json.message);
+
   return json;
 };
 
@@ -110,14 +113,27 @@ const Fetch = {
     }
 
     return fetch(url, options)
-      .then(res => res.text())
+      .then((res) => {
+        try {
+          return res.text();
+        } catch (err) {
+          throw new Error(err);
+        }
+      })
       .then((text) => {
         if (!__DEV__) Logger.appendFile('networkLog.txt', Logger.formatNetWorkLog(text, url, options, method));
         return (text ? JSON.parse(text) : {});
       })
       .then(errCode)
       .catch((err) => {
-        if (err.stack.indexOf('Network request failed') !== -1) {
+        /**
+         * 没网络提示：
+         * 开发时：Network request failed
+         * 线上时：
+         *    爱立顺：onerror@data/user/0/com.cjhms_rn/files/CodePush/......
+         *      华为：onerror@data/data/com.cjhms_rn/files/CodePush/......
+         */
+        if (findString(err.stack, 'Network request failed') || findString(err.stack, 'com.cjhms_rn/files/CodePush/')) {
           Toast.fail('当前设备网络异常，请检查网络');
         }
         throw new Error(err);

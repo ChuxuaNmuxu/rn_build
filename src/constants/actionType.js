@@ -1,4 +1,12 @@
-export const TEST = 'TEST';
+/**
+ * 路由跳转时自动触发的action
+ */
+// 点击安卓虚拟按键会触发
+export const NAVIGATION_BACK = 'Navigation/BACK';
+// 进入页面触发
+export const REACT_NATIVE_ROUTER_FLUX_BLUR = 'REACT_NATIVE_ROUTER_FLUX_BLUR';
+// 离开页面触发
+export const REACT_NATIVE_ROUTER_FLUX_FOCUS = 'REACT_NATIVE_ROUTER_FLUX_FOCUS';
 
 /**
  * ---------------基础配置ACTIONS-----------------------

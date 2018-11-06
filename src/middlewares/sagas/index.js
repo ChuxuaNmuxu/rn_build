@@ -1,4 +1,6 @@
 import { all, fork } from 'redux-saga/effects';
+// 监听路由变化
+import router from './router';
 import commonSaga from './common';
 // 错题本
 import problemOverviewSaga from './problemOverviewSaga';
@@ -28,6 +30,7 @@ import markFailReason from './markFailReason';
 
 function* rootSaga() {
   yield all([
+    fork(router),
     fork(commonSaga),
     fork(problemOverviewSaga),
     fork(previewHomeworkSaga),
