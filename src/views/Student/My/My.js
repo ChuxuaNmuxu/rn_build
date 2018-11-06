@@ -39,7 +39,7 @@ class My extends Component {
 
   // 点击 作业PK科目设置 进入 竞争科目设置页
   goSubjectSettingPage = () => {
-
+    Actions.SubjectSetting();
   }
 
   // 点击 排行榜 进入 排行榜页面
@@ -71,7 +71,7 @@ class My extends Component {
         </View>
         <View style={styles.mine_items}>
           <TouchableOpacity style={styles.items} onPress={() => this.goSubjectSettingPage()}>
-            <I18nText style={styles.item_text}>My.subjectSettting</I18nText>
+            <I18nText style={styles.item_text}>My.subjectSetting</I18nText>
             <IconSet
               name="shangyiye"
               style={styles.iconStyle}

@@ -16,11 +16,11 @@ class Header extends Component {
   }
 
   render() {
-    const { pageTitle } = this.props;
+    const { children } = this.props;
     return (
       <View style={styles.header_box}>
         <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.goBack} />
-        <Text style={styles.titles}>{pageTitle}</Text>
+        <Text style={styles.titles}>{children}</Text>
         <Text />
       </View>
     );
@@ -28,7 +28,7 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  pageTitle: PropTypes.string.isRequired,
+  children: PropTypes.any.isRequired,
   goBackFun: PropTypes.func.isRequired,
 };
 

@@ -12,7 +12,9 @@ class PersonalInformation extends Component {
   render() {
     return (
       <View style={styles.personalInfo_container}>
-        <Header pageTitle="个人信息" goBackFun={() => { Actions.My(); }} />
+        <Header goBackFun={() => { Actions.My(); }}>
+          <I18nText>PersonalInformation.title</I18nText>
+        </Header>
         <View style={styles.personalInfo_items}>
           <View style={styles.items}>
             <I18nText style={styles.item_text}>PersonalInformation.studentName</I18nText>
