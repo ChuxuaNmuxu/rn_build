@@ -120,4 +120,13 @@ export default {
     },
     submit: '提交答案并查看结果',
   },
+
+  // 我的 页面
+  My: {
+    challengesNum: '挑战次数',
+    integral: '积分',
+    teamContribution: '团队贡献度',
+    subjectSettting: '作业PK科目设置',
+    leaderBoard: '排行榜',
+  },
 };

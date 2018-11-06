@@ -16,7 +16,7 @@ import {
 import PropTypes from 'prop-types';
 import HomeworkTask from './views/Student/HomeworkTask';
 import ProblemRecords from './views/Student/ProblemRecords';
-// import My from './views/Student/My'; // 项目人员 hqh 注释掉了
+import My from './views/Student/My';
 // import WrongNotes from './views/Student/WrongNotes'; // 项目人员 hqh 注释掉了，因为错题本是hqh写的！
 import PreviewHomework from './views/Student/PreviewHomework';
 import ReviewHomework from './views/Student/ReviewHomework';
@@ -132,7 +132,8 @@ const RouteMap = props => (
               component={ProblemOverview}
             />
           </Stack>
-          {/* <Stack
+          {/* 我的页面 */}
+          <Stack
             title="my"
             key="MyStack"
             image="wodedangxuan"
@@ -140,7 +141,7 @@ const RouteMap = props => (
             hideNavBar
           >
             <Scene key="My" component={My} />
-          </Stack> */}
+          </Stack>
         </Tabs>
       </Stack>
       <Stack key="Teacher">
