@@ -129,4 +129,12 @@ export default {
     subjectSettting: '作业PK科目设置',
     leaderBoard: '排行榜',
   },
+
+  // 个人信息
+  PersonalInformation: {
+    studentName: '姓名:',
+    school: '所在学校:',
+    grade: '年级:',
+    class: '班级:',
+  },
 };

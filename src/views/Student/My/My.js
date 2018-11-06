@@ -19,7 +19,7 @@ class My extends Component {
 
   // 点击头像进入 个人信息设置 页
   goPersonalInfo = () => {
-
+    Actions.PersonalInformation();
   }
 
   // 点击 挑战次数 进入 挑战次数详情页

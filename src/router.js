@@ -36,6 +36,8 @@ import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
 import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
 // import ExamRecordDetail from './views/Student/ExamRecordDetail';
 import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
+// 个人信息页
+import PersonalInformation from './views/Student/PersonalInformation';
 
 /**
  * 关于Actions.xxx跳转方法说明
@@ -172,6 +174,8 @@ const RouteMap = props => (
         <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar />
         {/* 任务详情 */}
         <Scene key="TaskDetail" component={TaskDetail} hideNavBar />
+        {/* 个人信息 */}
+        <Scene key="PersonalInformation" component={PersonalInformation} hideNavBar />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />
