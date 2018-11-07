@@ -120,4 +120,28 @@ export default {
     },
     submit: '提交答案并查看结果',
   },
+
+  // 我的 页面
+  My: {
+    challengesNum: '挑战次数',
+    integral: '积分',
+    teamContribution: '团队贡献度',
+    subjectSetting: '作业PK科目设置',
+    leaderBoard: '排行榜',
+  },
+
+  // 个人信息
+  PersonalInformation: {
+    title: '个人信息',
+    studentName: '姓名:',
+    school: '所在学校:',
+    grade: '年级:',
+    class: '班级:',
+  },
+
+  // 科目设置
+  SubjectSetting: {
+    title: '科目设置',
+    description: '设置以下科目的作业参与PK',
+  },
 };

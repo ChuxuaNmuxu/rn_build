@@ -1,0 +1,23 @@
+.header_box {
+  background: #30bf6c;
+  width: 100%;
+  height: 72px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buttonStyle {
+  font-size: 30px;
+  color: #fff;
+  width: 60px;
+  height: 72px;
+  text-align: center;
+  line-height: 72px;
+}
+
+.titles {
+  color: #fff;
+  font-size: 24px;
+}

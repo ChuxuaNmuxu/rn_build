@@ -182,22 +182,20 @@
   padding: 20px;
 }
 
+.border_style {
+  border-top-color: #e8e8e8;
+  border-top-width: 1px;
+}
+
 .answer_title {
   font-family:PingFangSC-Regular;
   font-size:24px;
   color:#666666;
-  padding: 0 23px;
+  margin-bottom: 16px;
 }
 
 .other_student_answer {
   flex-direction: row;
-}
-
-.dotted_line {
-  width: 100%;
-  // height: 1px;
-  margin: 19px 0;
-  border: 1px dotted #e8e8e8;
 }
 
 .subjective_bottom {
