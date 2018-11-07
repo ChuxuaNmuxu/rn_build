@@ -12,11 +12,12 @@ import styles from './ThumbnailImage.scss';
 
 class ThumbnailImage extends Component {
   constructor(props) {
-    console.log(props);
+    // console.log(props);
     super(props);
     const initState = {
       studentName: '',
       url: '', // 最好https，ios兼容问题
+      bigImgUrl: '', // 大图，打开模态层时展示大图
       imageViewType: 'rotate', // 'ordinary' || 'rotate',
       ...props.option,
     };
