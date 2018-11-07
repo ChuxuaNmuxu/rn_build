@@ -16,7 +16,7 @@ import {
 import PropTypes from 'prop-types';
 import HomeworkTask from './views/Student/HomeworkTask';
 import ProblemRecords from './views/Student/ProblemRecords';
-// import My from './views/Student/My'; // 项目人员 hqh 注释掉了
+import My from './views/Student/My';
 // import WrongNotes from './views/Student/WrongNotes'; // 项目人员 hqh 注释掉了，因为错题本是hqh写的！
 import PreviewHomework from './views/Student/PreviewHomework';
 import ReviewHomework from './views/Student/ReviewHomework';
@@ -36,6 +36,10 @@ import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
 import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
 // import ExamRecordDetail from './views/Student/ExamRecordDetail';
 import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
+// 个人信息页
+import PersonalInformation from './views/Student/PersonalInformation';
+// 科目设置页
+import SubjectSetting from './views/Student/SubjectSetting';
 
 /**
  * 关于Actions.xxx跳转方法说明
@@ -132,7 +136,8 @@ const RouteMap = props => (
               component={ProblemOverview}
             />
           </Stack>
-          {/* <Stack
+          {/* 我的页面 */}
+          <Stack
             title="my"
             key="MyStack"
             image="wodedangxuan"
@@ -140,7 +145,7 @@ const RouteMap = props => (
             hideNavBar
           >
             <Scene key="My" component={My} />
-          </Stack> */}
+          </Stack>
         </Tabs>
       </Stack>
       <Stack key="Teacher">
@@ -171,6 +176,10 @@ const RouteMap = props => (
         <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar />
         {/* 任务详情 */}
         <Scene key="TaskDetail" component={TaskDetail} hideNavBar />
+        {/* 个人信息 */}
+        <Scene key="PersonalInformation" component={PersonalInformation} hideNavBar />
+        {/* 科目设置 */}
+        <Scene key="SubjectSetting" component={SubjectSetting} hideNavBar />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />
