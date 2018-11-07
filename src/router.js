@@ -36,6 +36,7 @@ import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
 import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
 // import ExamRecordDetail from './views/Student/ExamRecordDetail';
 import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
+import DetailsHonor from './views/Student/DetailsHonor';
 
 /**
  * 关于Actions.xxx跳转方法说明
@@ -150,6 +151,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
+        initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
@@ -171,6 +173,8 @@ const RouteMap = props => (
         <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar />
         {/* 任务详情 */}
         <Scene key="TaskDetail" component={TaskDetail} hideNavBar />
+        {/** 荣誉详情，贡献度/积分/次数 */}
+        <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar initial />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />

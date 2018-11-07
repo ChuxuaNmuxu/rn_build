@@ -79,7 +79,8 @@
     "redux-actions": "^2.4.0",
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "victory-native": "^30.6.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.5",
