@@ -24,17 +24,17 @@ class My extends Component {
 
   // 点击 挑战次数 进入 挑战次数详情页
   goChallengesPage = () => {
-
+    Actions.DetailsHonor();
   }
 
   // 点击 积分 进入 积分详情页
   goIntegralPage = () => {
-
+    Actions.DetailsHonor();
   }
 
   // 点击 团队贡献度 进入 贡献度详情页
   goTeamContributionPage = () => {
-
+    Actions.DetailsHonor();
   }
 
   // 点击 作业PK科目设置 进入 竞争科目设置页

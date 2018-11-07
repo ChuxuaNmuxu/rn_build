@@ -36,6 +36,7 @@ import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
 import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
 // import ExamRecordDetail from './views/Student/ExamRecordDetail';
 import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
+import DetailsHonor from './views/Student/DetailsHonor';
 // 个人信息页
 import PersonalInformation from './views/Student/PersonalInformation';
 // 科目设置页
@@ -176,10 +177,14 @@ const RouteMap = props => (
         <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar />
         {/* 任务详情 */}
         <Scene key="TaskDetail" component={TaskDetail} hideNavBar />
+        {/** 荣誉详情，贡献度/积分/次数 */}
+        <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar />
         {/* 个人信息 */}
         <Scene key="PersonalInformation" component={PersonalInformation} hideNavBar />
         {/* 科目设置 */}
         <Scene key="SubjectSetting" component={SubjectSetting} hideNavBar />
+        {/** 荣誉详情，贡献度/积分/次数 */}
+        <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />

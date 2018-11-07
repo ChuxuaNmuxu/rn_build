@@ -6,15 +6,15 @@ import {
 } from 'react-native';
 import styles from './PersonalInformation.scss';
 import I18nText from '../../../components/I18nText';
-import Header from './Component';
+import Nav from '../../../components/Nav';
 
 class PersonalInformation extends Component {
   render() {
     return (
       <View style={styles.personalInfo_container}>
-        <Header goBackFun={() => { Actions.My(); }}>
+        <Nav goBackFun={() => { Actions.My(); }}>
           <I18nText>PersonalInformation.title</I18nText>
-        </Header>
+        </Nav>
         <View style={styles.personalInfo_items}>
           <View style={styles.items}>
             <I18nText style={styles.item_text}>PersonalInformation.studentName</I18nText>

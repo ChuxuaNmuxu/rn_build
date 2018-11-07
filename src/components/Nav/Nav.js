@@ -5,8 +5,8 @@ import {
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import styles from './Header.scss';
-import { CustomButton } from '../../../../components/Icon';
+import styles from './nav.scss';
+import { CustomButton } from '../Icon';
 
 class Header extends Component {
   // 点击 < 回到上一页
