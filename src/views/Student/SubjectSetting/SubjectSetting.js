@@ -4,8 +4,8 @@ import {
   Text,
   View,
   FlatList,
-  Switch,
 } from 'react-native';
+import { mdl } from 'react-native-material-kit';
 import styles from './SubjectSetting.scss';
 import I18nText from '../../../components/I18nText';
 import Header from '../PersonalInformation/Component';
@@ -63,24 +63,27 @@ class SubjectSetting extends Component {
       index={index}
     >
       <Text style={styles.subjectName}>{item.subjectName}</Text>
-      <Switch
-        style={styles.switch_btn}
-        onValueChange={bool => this.changeSwitchStatus(item.subjectId, bool)}
-        value={item.isSwitchOn}
-        tintColor="#e8e8e8"
-        onTintColor="#30bf6c"
-        thumbTintColor="#fff"
+      <mdl.Switch
+        onColor="#30bf6c"
+        offColor="#dbdbdb"
+        thumbOnColor="#fff" // 里面圆圈的颜色
+        rippleColor="#30bf6c" // 点击时的动画颜色
+        trackLength={96} // 开关的长度
+        trackSize={48} // 开关的高度
+        thumbRadius={23} // 里面圆圈的半径
+        checked={item.isSwitchOn}
+        onCheckedChange={e => this.changeSwitchStatus(item.subjectId, e)}
       />
     </View>
   )
 
   // 更改科目是否参与pk
-  changeSwitchStatus = (subjectId, bool) => {
+  changeSwitchStatus = (subjectId, e) => {
     const { subjectList } = this.state;
-    // console.log(777, bool);
+    // console.log(777, e);
     for (let i = 0; i < subjectList.length; i++) {
       if (subjectList[i].subjectId === subjectId) {
-        subjectList[i].isSwitchOn = bool;
+        subjectList[i].isSwitchOn = e.checked;
       }
     }
     this.setState({
