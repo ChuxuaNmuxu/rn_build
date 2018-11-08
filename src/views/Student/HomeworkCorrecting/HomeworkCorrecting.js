@@ -281,7 +281,6 @@ class HomeworkCorrecting extends Component {
 
   openTeacherAnswer = (blocks, blockArr) => {
     const { screenHeight } = this.state;
-    // this.setModalVisible(true);
     // blocks 被点击的那个block
     // blockArr 被点击的那个block与其他的swiper里的兄弟
     // blocks暂时没什么用
@@ -290,7 +289,9 @@ class HomeworkCorrecting extends Component {
     console.log(draftToHtml(JSON.parse(blocks)));
     const data = {
       customContent: (
+      // <View style={styles.wrapper}>
         <ScrollView style={styles.modal_swiper}>
+          {/* <ScrollView style={styles.modal_swiper}> */}
           <View style={{ height: screenHeight }}>
             <Swiper
             // style={styles.modal_swiper}
@@ -330,6 +331,7 @@ class HomeworkCorrecting extends Component {
             </Swiper>
           </View>
         </ScrollView>
+      // </View>
       ),
       top: 0,
       height: screenHeight,
@@ -339,11 +341,6 @@ class HomeworkCorrecting extends Component {
     ModalApi.onOppen('CustomModal', data);
   }
 
-  setModalVisible = (bol) => {
-    console.log('318', bol);
-    this.setState({
-      modalVisible: bol,
-    });
   // 用来判断当前题目是否为最后一道未批阅的题目
   judgeCurrentQuesIsLast = (index) => {
     const { list } = this.props;
