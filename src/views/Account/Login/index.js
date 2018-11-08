@@ -106,7 +106,7 @@ class Login extends Component {
           {
             !__DEV__ && (
               <View style={{ alignItems: 'center', marginBottom: 15 }}>
-                <Text style={{ fontSize: 22, color: 'red' }}>V1.0.3(build 11.05_07)</Text>
+                <Text style={{ fontSize: 22, color: 'red' }}>V1.0.0(build 11.08)</Text>
               </View>
             )
           }
