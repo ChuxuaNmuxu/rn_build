@@ -28,7 +28,7 @@ function* fetchListSaga(action) {
       if (answerContent) newContent.push(answerContent); // 标准答案
       res.data[i].newContent = newContent;
       res.data[i].score = undefined; // 批阅分数
-      res.data[i].finishBtnDisable = true; // 完成按钮是否可以点击
+      res.data[i].finishBtnDisable = true; // 完成按钮是否可以点击,刚开始都设置为不可点击状态
     }
     const { code } = res;
     if (code === 0 && res.data.length > 0) {
