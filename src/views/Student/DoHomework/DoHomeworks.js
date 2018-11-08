@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Text, View, ScrollView, TouchableOpacity,
+  Text, View, ScrollView, TouchableOpacity, BackHandler,
 } from 'react-native';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import { bindActionCreators } from 'redux';
@@ -81,6 +81,9 @@ class DoHomeworks extends Component {
         unAnswerQuesList,
       });
     }
+    // 监听后退按钮事件
+    BackHandler.removeEventListener('hardwareBackPress', this.preventDefault);
+    BackHandler.addEventListener('hardwareBackPress', this.preventDefault);
   }
 
   componentDidUpdate() {
@@ -186,6 +189,12 @@ class DoHomeworks extends Component {
     this.setState({
       checkStatus: num,
     });
+  }
+
+  // 改写虚拟按键返回的事件
+  preventDefault = () => {
+    Actions.HomeworkTask();
+    return true;
   }
 
   // 点击该图标展示各题号的作答情况
