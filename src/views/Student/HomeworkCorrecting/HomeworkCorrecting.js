@@ -5,10 +5,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  // TouchableHighlight,
   ScrollView,
 } from 'react-native';
-// import immer from 'immer';
 import PopupDialog from 'react-native-popup-dialog';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -19,7 +17,6 @@ import HTMLView from 'react-native-htmlview';
 import draftToHtml from '../../../utils/draftjsToHtml';
 import Radio from '../../../components/Radio';
 import Modal, { ModalApi } from '../../../components/Modal';
-// import WrongReason from '../../../components/WrongReason';
 import I18nText from '../../../components/I18nText';
 import styles from './HomeworkCorrecting.scss';
 import * as correctingActions from '../../../actions/homeworkCorrectingAction';
@@ -31,7 +28,6 @@ class HomeworkCorrecting extends Component {
     super(props);
     this.state = {
       index: 0,
-      // isVisible: false,
     };
     this.labelData = [ // 标签数据
       {
@@ -74,7 +70,6 @@ class HomeworkCorrecting extends Component {
   }
 
   componentDidMount() {
-    // console.log('调用 HomeworkCorrecting 组件！', this.props);
     const { actions, homeworkId } = this.props;
     actions.fetchListAction(homeworkId, 'REQUEST');
   }
@@ -100,7 +95,6 @@ class HomeworkCorrecting extends Component {
 
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
-    // console.log(draftToHtml(JSON.parse(htmlContent)));
     const htmlViewStyles = StyleSheet.create({
       p: {
         fontSize: 24,
@@ -117,19 +111,6 @@ class HomeworkCorrecting extends Component {
     );
   }
 
-  // setButton = (index) => {
-  //   const handle = findNodeHandle(this[`partOfTheError${index}`]);
-  //   if (handle) {
-  //     NativeModules.UIManager.measure(handle, (x0, y0, width, height, x, y) => {
-  //       console.log(x, y, width, height);
-  //       this.setState(immer((state) => {
-  //         state.popInfo.anchor = {
-  //           x, y, width, height,
-  //         };
-  //       }));
-  //     });
-  //   }
-  // };
 
   openPop = () => {
     const data = {
@@ -155,9 +136,10 @@ class HomeworkCorrecting extends Component {
     </View>
   )
 
-  // 完成批阅
+  // 完成批阅，下一题 按钮只能到达本题序号后面未批阅的第一道题处，如果当前是序号的最后一题且前面还有未批阅的题目则再跳到前面未批阅的第一道题那，
+  // 完成批阅 按钮只出现在最后一道未批阅 的题目处
   finishReadOver = (item, index) => {
-    const { actions, list } = this.props;
+    const { actions } = this.props;
     const params = {
       homeworkId: item.homeworkId,
       studentId: item.studentId,
@@ -173,37 +155,64 @@ class HomeworkCorrecting extends Component {
       actions.saveCorrectResultAction({
         params,
         callBack: () => {
-          // const newIndex = index < list.length - 1 ? index + 1 : index;
-          const bol = index < list.length - 1;
-          // console.log('完成批阅，下一题, 当前的 index=', index, '是否滑动', bol);
-          if (bol) this.swiperRef.scrollBy(1);
+          let ind;
+          const { list } = this.props;
+          // 从当前题目的索引开始遍历
+          for (let i = index; i < list.length + index; i++) {
+            ind = i % list.length;
+            if (list[ind].studentMarked === 0) break;
+          }
+          // 需要跳到的下一题索引
+          const nextIndex = ind;
+          // 比较一下需要跳到的题目序号与当前题目序号的差值
+          const scrollNum = nextIndex - index;
+          // 如果当前题目不是未批阅的最后一道题，则跳转到下一道未批阅的题目处
+          if (!this.judgeCurrentQuesIsLast(index)) {
+            this.swiperRef.scrollBy(scrollNum);
+          }
         },
       }, 'REQUEST');
     }
-    // 批阅到最后一题点击 完成批阅 需要跳转至首页
-    if (index === (list.length - 1)) {
+    // 如果当前题目是未批阅的最后一道题 点击 完成批阅 需要跳转至首页
+    if (this.judgeCurrentQuesIsLast(index)) {
       Actions.HomeworkTask();
     }
   }
 
+  // 用来判断当前题目是否为最后一道未批阅的题目
+  judgeCurrentQuesIsLast = (index) => {
+    const { list } = this.props;
+    // 当前批阅的题目
+    const currentQues = list[index];
+    let unCorrectNum = 0;
+    // 判断是不是最后一道未批阅的题目
+    let isLastUnCorrectQue = false;
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].studentMarked === 0) {
+        unCorrectNum++;
+      }
+    }
+    if (unCorrectNum === 1 && currentQues.studentMarked === 0) {
+      isLastUnCorrectQue = true;
+    }
+    return isLastUnCorrectQue;
+  }
 
   render() {
     const { list } = this.props;
     const { index } = this.state;
     // 当前批阅的题目
     const currentQues = list[index];
-    // 判断当前题目是否有批改好了的分数
+    // 判断当前题目是否有批改好了的分数,studentMarkScore在未批阅时默认为0，需要考虑下这种情况
     let correctScore = currentQues && currentQues.score;
-    // 学生批阅了则展示学生批阅的分数
-    if (currentQues && currentQues.studentMarked) {
-      correctScore = currentQues.studentMarkScore;
-    }
-    // 判断当前题目是否还可再修改批阅结果---当前题目已有分数结果(分数结果也可为0)且点击了完成批阅（finishBtnDisable为true）时不可修改批阅结果，不调用onChange函数
+    // 判断当前题目是否还可再修改批阅结果---当前题目studentMarked字段为1时表明该批阅结果已提交，不可修改批阅结果，不调用onChange函数
     let canChangeScoreResult = true;
-    if (correctScore >= 0 && currentQues.finishBtnDisable) {
+    if (currentQues && currentQues.studentMarked) {
+      correctScore = currentQues.score || currentQues.studentMarkScore;
       canChangeScoreResult = false;
     }
     // console.log(7878, index, list, currentQues);
+    // console.log(9999, '当前是否为最后一道未批阅的题目', this.judgeCurrentQuesIsLast(index));
     return (
       <View style={styles.wrapper}>
         <PopupDialog
@@ -228,10 +237,7 @@ class HomeworkCorrecting extends Component {
               // defaultValue={defaultValue}
               key={index}
               onChange={(score) => {
-                // console.log(score);
-                const { actions } = this.props;
-                actions.controlFinsihBtnAction({ finishBtnDisable: false, index });
-                actions.setCorrectResultAction({ score, index });
+                this.setPopScore(score, index);
                 this.popupDialog.dismiss();
               }}
               iconWrapStyle={styles.icon_btn_style}
@@ -250,9 +256,6 @@ class HomeworkCorrecting extends Component {
                 ))
               }
             </Radio.Group>
-            {/* <WrongReason
-              onChange={() => this.popupDialog.dismiss()}
-            /> */}
           </View>
           <Image
             source={TriangleImg}
@@ -316,24 +319,11 @@ class HomeworkCorrecting extends Component {
                         {
                           item.newContent.map((item2, index2) => (
                             <TouchableOpacity
-                              // 返回首页
                               onPress={() => {
-                                console.log('查看学生的答案', item2);
-                                console.log(draftToHtml(JSON.parse(item2)));
-                                // const data = {
-                                //   // studentName: '李香兰',
-                                //   url: item.answerFileUrl, // 最好https，ios兼容问题
-                                //   imageViewType: 'rotate', // 默认 "ordinary"
-                                // };
-                                // // const data = { url: , studentName: '学生' };
-                                // ModalApi.onOppen('ImageViewer', data);
+
                               }}
                               key={index2}
                             >
-                              {/* <Image
-                                  style={{ width: '100%', height: '100%' }}
-                                  source={{ uri: item.answerFileUrl }}
-                                /> */}
                               { this.htmlViewComponent(item2) }
                             </TouchableOpacity>
                           ))
@@ -344,13 +334,10 @@ class HomeworkCorrecting extends Component {
                     <TouchableOpacity
                       // 点击查看学生题目
                       onPress={() => {
-                        // console.log('查看学生的答案');
                         const data = {
-                          // studentName: '李香兰',
                           url: item.answerFileUrl, // 最好https，ios兼容问题
                           imageViewType: 'rotate', // 默认 "ordinary"
                         };
-                        // const data = { url: , studentName: '学生' };
                         ModalApi.onOppen('ImageViewer', data);
                       }}
                     >
@@ -359,7 +346,6 @@ class HomeworkCorrecting extends Component {
                           style={{ width: '100%', height: '100%' }}
                           source={{ uri: `${item.answerFileUrl}` }}
                         />
-                        {/* { this.htmlViewComponent(item.answerFileUrl) } */}
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -390,16 +376,16 @@ class HomeworkCorrecting extends Component {
                     disabled={currentQues.finishBtnDisable}
                   >
                     {
-                  index !== (list.length - 1) ? (
-                    <I18nText style={[styles.foot_btn, !currentQues.finishBtnDisable && styles.btn_color_active]}>
-                      homeworkCorrecting.finishCorrectingAndNext
-                    </I18nText>
-                  ) : (
-                    <I18nText style={[styles.foot_btn, !currentQues.finishBtnDisable && styles.btn_color_active]}>
-                      homeworkCorrecting.finishCorrectingNotNext
-                    </I18nText>
-                  )
-                }
+                      !this.judgeCurrentQuesIsLast(index) ? (
+                        <I18nText style={[styles.foot_btn, !currentQues.finishBtnDisable && styles.btn_color_active]}>
+                          homeworkCorrecting.finishCorrectingAndNext
+                        </I18nText>
+                      ) : (
+                        <I18nText style={[styles.foot_btn, !currentQues.finishBtnDisable && styles.btn_color_active]}>
+                          homeworkCorrecting.finishCorrectingNotNext
+                        </I18nText>
+                      )
+                    }
                   </TouchableOpacity>
                 </View>
               </View>

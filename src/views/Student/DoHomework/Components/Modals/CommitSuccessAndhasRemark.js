@@ -31,6 +31,7 @@ class CommitSuccessAndhasRemark extends Component {
       lCallbakFn: this.leftFn,
       rCallbakFn: this.rightFn,
       activeBtn: 'R',
+      footButton: true, // 传参展示按钮，以免受其他页面传了false而导致按钮不展示的问题（单例不可避免的问题）
       rightBtnText: '批改作业',
       leftBtnText: '稍后再批',
       content: this.hasRemarkContent(),

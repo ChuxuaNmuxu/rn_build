@@ -114,7 +114,7 @@ android {
         versionCode 1
         vectorDrawables.useSupportLibrary = true
         // 默认是1.0，但是codepush需要三位数
-        versionName "1.0.3"
+        versionName "1.0.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
