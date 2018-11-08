@@ -7,6 +7,7 @@ import {
   Image,
   // TouchableHighlight,
   ScrollView,
+  Modal,
 } from 'react-native';
 // import immer from 'immer';
 import PopupDialog from 'react-native-popup-dialog';
@@ -19,7 +20,7 @@ import HTMLView from 'react-native-htmlview';
 import _ from 'ramda';
 import draftToHtml from '../../../utils/draftjsToHtml';
 import Radio from '../../../components/Radio';
-import Modal, { ModalApi } from '../../../components/Modal';
+import ModalByShengWen, { ModalApi } from '../../../components/Modal';
 // import WrongReason from '../../../components/WrongReason';
 import I18nText from '../../../components/I18nText';
 import styles from './HomeworkCorrecting.scss';
@@ -37,6 +38,7 @@ class HomeworkCorrecting extends Component {
       screenWidth: 0,
       screenHeight: 0,
       isgetImageSize: false,
+      modalVisible: false,
       // isVisible: false,
     };
     this.labelData = [ // 标签数据
@@ -239,44 +241,6 @@ class HomeworkCorrecting extends Component {
     );
   }
 
-  // setButton = (index) => {
-  //   const handle = findNodeHandle(this[`partOfTheError${index}`]);
-  //   if (handle) {
-  //     NativeModules.UIManager.measure(handle, (x0, y0, width, height, x, y) => {
-  //       console.log(x, y, width, height);
-  //       this.setState(immer((state) => {
-  //         state.popInfo.anchor = {
-  //           x, y, width, height,
-  //         };
-  //       }));
-  //     });
-  //   }
-  // };
-
-  openPop = () => {
-    const data = {
-      customContent: this.customContent(),
-      top: 600,
-      // 高度最好跟你自己自定义的内容高度一样
-      height: 340,
-      // width: 400,
-      maskClosable: true,
-    };
-    ModalApi.onOppen('CustomModal', data);
-  }
-
-  customContent=() => (
-    <View style={styles.customContent}>
-      <View style={styles.customContentItem}>
-        {
-          [1, 2, 3].map(item => (
-            <Text key={item} style={styles.btn} onPress={() => ModalApi.onClose()}>{item}</Text>
-          ))
-        }
-      </View>
-    </View>
-  )
-
   // 完成批阅
   finishReadOver = (item, index) => {
     const { actions, list } = this.props;
@@ -308,10 +272,76 @@ class HomeworkCorrecting extends Component {
     }
   }
 
+  openTeacherAnswer = (blocks, blockArr) => {
+    const { screenHeight } = this.state;
+    // this.setModalVisible(true);
+    // blocks 被点击的那个block
+    // blockArr 被点击的那个block与其他的swiper里的兄弟
+    // blocks暂时没什么用
+    console.log('查看老师答案', screenHeight);
+    console.log('查看老师答案', blocks);
+    console.log(draftToHtml(JSON.parse(blocks)));
+    const data = {
+      customContent: (
+        <ScrollView style={styles.modal_swiper}>
+          <View style={{ height: screenHeight }}>
+            <Swiper
+            // style={styles.modal_swiper}
+              loop={false}
+    // showsPagination={false}
+              // paginationStyle={styles.paginationStyle} // 暂时没覆盖成功
+              dotStyle={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                backgroundColor: 'rgba(51, 51, 51, 0.20)',
+                marginBottom: 20,
+              }}
+              activeDotStyle={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                backgroundColor: '#30bf6c',
+                marginBottom: 20,
+              }}
+            >
+              {
+            blockArr.map((item2, index2) => (
+              <TouchableOpacity
+                onPress={() => ModalApi.onClose()}
+                key={index2}
+              >
+                {/* <Image
+                  style={{ width: '100%', height: '100%' }}
+                  source={{ uri: item.answerFileUrl }}
+                /> */}
+                {/* 教师布置作业的swiper */}
+                { this.htmlViewComponent(item2) }
+              </TouchableOpacity>
+            ))
+          }
+            </Swiper>
+          </View>
+        </ScrollView>
+      ),
+      top: 0,
+      height: screenHeight,
+      maskClosable: true,
+    };
+
+    ModalApi.onOppen('CustomModal', data);
+  }
+
+  setModalVisible = (bol) => {
+    console.log('318', bol);
+    this.setState({
+      modalVisible: bol,
+    });
+  }
 
   render() {
     const { list } = this.props;
-    const { index } = this.state;
+    const { index, modalVisible } = this.state;
     // 当前批阅的题目
     const currentQues = list[index];
     // 判断当前题目是否有批改好了的分数
@@ -325,7 +355,7 @@ class HomeworkCorrecting extends Component {
     if (correctScore >= 0 && currentQues.finishBtnDisable) {
       canChangeScoreResult = false;
     }
-    // console.log(7878, index, list, currentQues);
+    // console.log(7878, modalVisible);
     return (
       <View style={styles.wrapper}>
         <PopupDialog
@@ -381,7 +411,7 @@ class HomeworkCorrecting extends Component {
             style={{ width: 24, marginLeft: 186 }}
           />
         </PopupDialog>
-        <Modal />
+        <ModalByShengWen />
         {/* 头部自定义导航条 */}
         <View style={styles.head}>
           <TouchableOpacity
@@ -438,24 +468,14 @@ class HomeworkCorrecting extends Component {
                         {
                           item.newContent.map((item2, index2) => (
                             <TouchableOpacity
-                              // 返回首页
-                              onPress={() => {
-                                console.log('查看学生的答案', item2);
-                                console.log(draftToHtml(JSON.parse(item2)));
-                                // const data = {
-                                //   // studentName: '李香兰',
-                                //   url: item.answerFileUrl, // 最好https，ios兼容问题
-                                //   imageViewType: 'rotate', // 默认 "ordinary"
-                                // };
-                                // // const data = { url: , studentName: '学生' };
-                                // ModalApi.onOppen('ImageViewer', data);
-                              }}
+                              onPress={() => this.openTeacherAnswer(item2, item.newContent)}
                               key={index2}
                             >
                               {/* <Image
                                 style={{ width: '100%', height: '100%' }}
                                 source={{ uri: item.answerFileUrl }}
                               /> */}
+                              {/* 教师布置作业的swiper */}
                               { this.htmlViewComponent(item2) }
                             </TouchableOpacity>
                           ))
@@ -463,32 +483,34 @@ class HomeworkCorrecting extends Component {
                       </Swiper>
                     </View>
                     <View style={styles.space} />
-                    <ScrollView>
-                      <TouchableOpacity
+                    <View style={styles.body_homework_studentAnswer}>
+                      <ScrollView>
+                        <TouchableOpacity
                       // 点击查看学生题目
-                        onPress={() => {
-                        // console.log('查看学生的答案');
-                          const data = {
-                          // studentName: '李香兰',
-                            url: item.answerFileUrl, // 最好https，ios兼容问题
-                            imageViewType: 'rotate', // 默认 "ordinary"
-                          };
-                          // const data = { url: , studentName: '学生' };
-                          ModalApi.onOppen('ImageViewer', data);
-                        }}
-                      >
-                        {/* <View style={styles.body_homework_studentAnswer}>
-                        <Image
-                          style={{ width: '100%', height: '100%' }}
+                          onPress={() => {
+                            // console.log('查看学生的答案');
+                            const data = {
+                              // studentName: '李香兰',
+                              url: item.answerFileUrl, // 最好https，ios兼容问题
+                              imageViewType: 'rotate', // 默认 "ordinary"
+                            };
+                            // const data = { url: , studentName: '学生' };
+                            ModalApi.onOppen('ImageViewer', data);
+                          }}
+                        >
+                          {/* <View style={styles.body_homework_studentAnswer}>
+                          <Image
+                            style={{ width: '100%', height: '100%' }}
                           // source={{ uri: `${item.answerFileUrl}` }}
-                          source={{ uri: `${item.answerFileUrl}` }}
-                        />
-                      </View> */}
-                        {
+                            source={{ uri: `${item.answerFileUrl}` }}
+                          />
+                        </View> */}
+                          {
                         this.studentAnserImage(item.answerFileUrl)
                       }
-                      </TouchableOpacity>
-                    </ScrollView>
+                        </TouchableOpacity>
+                      </ScrollView>
+                    </View>
                   </View>
                 </View>
               ))
@@ -546,7 +568,7 @@ HomeworkCorrecting.propTypes = {
 };
 
 HomeworkCorrecting.defaultProps = {
-  homeworkId: '509732426772119552',
+  homeworkId: '509732195481419776',
 };
 
 const mapStateToProps = (state) => {

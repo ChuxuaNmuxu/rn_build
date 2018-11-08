@@ -31,7 +31,7 @@ function* fetchListSaga(action) {
       res.data[i].finishBtnDisable = true; // 完成按钮是否可以点击
     }
     const { code } = res;
-    if (code === 0) {
+    if (code === 0 && res.data.length > 0) {
       console.log(72, res.data[0].content, draftToHtml(JSON.parse(res.data[0].content)));
       yield put(actions.fetchListAction(res.data, 'SUCCESS'));
     } else {
