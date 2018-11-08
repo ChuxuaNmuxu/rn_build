@@ -99,6 +99,11 @@ class HomworkRecordDetail extends Component {
     });
   }
 
+  onScrollEnd=() => {
+    // console.log(this.anserSummarization);
+    this.anserSummarization.setButton();
+  }
+
   setImageSizes = async (index) => {
     const { detailsDataList } = this.props;
     const { selectTion, imageSize } = this.state;
@@ -137,11 +142,6 @@ class HomworkRecordDetail extends Component {
       });
     });
   })
-
-  onScrollEnd=() => {
-    // console.log(this.anserSummarization);
-    this.anserSummarization.setButton();
-  }
 
   static getDerivedStateFromProps(props, state) {
     const { detailsDataList } = props;

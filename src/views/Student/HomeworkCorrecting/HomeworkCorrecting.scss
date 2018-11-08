@@ -3,6 +3,20 @@
   flex: 1;
 }
 
+.modal_swiper {
+  height: auto;
+  // flex: 1;
+  width: 100%;
+  // background-color: red;
+}
+
+.htmlViewComponent {
+  width: auto;
+  height: auto;
+  background-color: #fff;
+  // padding: 13px 24px 31px;
+}
+
 .head {
   background-color: #30bf6c;
   flex-direction: row;
@@ -48,7 +62,7 @@
 }
 
 .body_homework_studentAnswer {
-  height: 1091;
+  height: 800;
   padding: 23px;
 }
 
@@ -77,6 +91,7 @@
   flex-direction: row;
   flex: 2;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .foot_btn {
@@ -164,4 +179,11 @@
 .score_info {
   color: #999;
   font-size: 24px;
+}
+
+.studentAnserImage {
+  padding: 12px 24px 30px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #fff;
 }
