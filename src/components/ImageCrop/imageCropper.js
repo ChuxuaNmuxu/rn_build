@@ -108,16 +108,16 @@ export default class ImageCropper extends React.Component {
             let diffY = this._height - gestureState.dy;
             let diffLeft = this._left + gestureState.dx;
             let diffTop = this._top + gestureState.dy;
-            if (diffX < 100) {
-              diffX = 100;
-              diffLeft = this._left + this._width - 100;
+            if (diffX < 50) {
+              diffX = 50;
+              diffLeft = this._left + this._width - 50;
             } else if (diffLeft < 0) {
               diffX = this._width + this._left;
               diffLeft = 0;
             }
-            if (diffY < 100) {
-              diffY = 100;
-              diffTop = this._top + this._height - 100;
+            if (diffY < 50) {
+              diffY = 50;
+              diffTop = this._top + this._height - 50;
             } else if (diffTop < 0) {
               diffY = this._height + this._top;
               diffTop = 0;
@@ -130,15 +130,15 @@ export default class ImageCropper extends React.Component {
             let diffX = this._width - gestureState.dx;
             let diffY = this._height + gestureState.dy;
             let diffLeft = this._left + gestureState.dx;
-            if (diffX < 100) {
-              diffX = 100;
+            if (diffX < 50) {
+              diffX = 50;
             } else if (diffLeft < 0) {
               diffX = this._width + this._left;
               diffLeft = 0;
             }
 
-            if (diffY < 100) {
-              diffY = 100;
+            if (diffY < 50) {
+              diffY = 50;
             } else if (diffY + this._top > containerHeight) {
               diffY = containerHeight - this._top;
             }
@@ -150,15 +150,15 @@ export default class ImageCropper extends React.Component {
             let diffY = this._height - gestureState.dy;
             let diffTop = this._top + gestureState.dy;
 
-            if (diffX < 100) {
-              diffX = 100;
+            if (diffX < 50) {
+              diffX = 50;
             } else if (diffX + this._left > containerWidth) {
               diffX = containerWidth - this._left;
             }
 
-            if (diffY < 100) {
-              diffY = 100;
-              diffTop = this._top + this._height - 100;
+            if (diffY < 50) {
+              diffY = 50;
+              diffTop = this._top + this._height - 50;
             } else if (diffTop < 0) {
               diffY = this._height + this._top;
               diffTop = 0;
@@ -170,15 +170,14 @@ export default class ImageCropper extends React.Component {
           } else if (this.scaleClipRectRB) {
             let diffX = this._width + gestureState.dx;
             let diffY = this._height + gestureState.dy;
-
-            if (diffX < 100) {
-              diffX = 100;
+            if (diffX < 50) {
+              diffX = 50;
             } else if (diffX + this._left > containerWidth) {
               diffX = containerWidth - this._left;
             }
 
-            if (diffY < 100) {
-              diffY = 100;
+            if (diffY < 50) {
+              diffY = 50;
             } else if (diffY + this._top > containerHeight) {
               diffY = containerHeight - this._top;
             }
@@ -237,9 +236,9 @@ export default class ImageCropper extends React.Component {
           if (diffLeft < 0) {
             this._width += this._left;
             this._left = 0;
-          } else if (diffX < 100) {
-            this._left += this._width - 100;
-            this._width = 100;
+          } else if (diffX < 50) {
+            this._left += this._width - 50;
+            this._width = 50;
           } else {
             this._width = diffX;
             this._left = diffLeft;
@@ -247,9 +246,9 @@ export default class ImageCropper extends React.Component {
           if (diffTop < 0) {
             this._height += this._top;
             this._top = 0;
-          } else if (diffY < 100) {
-            this._top += this._height - 100;
-            this._height = 100;
+          } else if (diffY < 50) {
+            this._top += this._height - 50;
+            this._height = 50;
           } else {
             this._height = diffY;
             this._top = diffTop;
@@ -263,16 +262,16 @@ export default class ImageCropper extends React.Component {
           if (diffLeft < 0) {
             this._width += this._left;
             this._left = 0;
-          } else if (diffX < 100) {
-            this._left += this._width - 100;
-            this._width = 100;
+          } else if (diffX < 50) {
+            this._left += this._width - 50;
+            this._width = 50;
           } else {
             this._width = diffX;
             this._left = diffLeft;
           }
 
-          if (diffY < 100) {
-            this._height = 100;
+          if (diffY < 50) {
+            this._height = 50;
           } else if (diffY + this._top > containerHeight) {
             this._height = containerHeight - this._top;
           } else {
@@ -283,8 +282,8 @@ export default class ImageCropper extends React.Component {
           const diffY = this._height - gestureState.dy;
           const diffTop = this._top + gestureState.dy;
 
-          if (diffX < 100) {
-            this._width = 100;
+          if (diffX < 50) {
+            this._width = 50;
           } else if (diffX + this._left > containerWidth) {
             this._width = containerWidth - this._left;
           } else {
@@ -294,9 +293,9 @@ export default class ImageCropper extends React.Component {
           if (diffTop < 0) {
             this._height += this._top;
             this._top = 0;
-          } else if (diffY < 100) {
-            this._top += this._height - 100;
-            this._height = 100;
+          } else if (diffY < 50) {
+            this._top += this._height - 50;
+            this._height = 50;
           } else {
             this._height = diffY;
             this._top = diffTop;
@@ -305,16 +304,16 @@ export default class ImageCropper extends React.Component {
           const diffX = this._width + gestureState.dx;
           const diffY = this._height + gestureState.dy;
 
-          if (diffX < 100) {
-            this._width = 100;
+          if (diffX < 50) {
+            this._width = 50;
           } else if (diffX + this._left > containerWidth) {
             this._width = containerWidth - this._left;
           } else {
             this._width = diffX;
           }
 
-          if (diffY < 100) {
-            this._height = 100;
+          if (diffY < 50) {
+            this._height = 50;
           } else if (diffY + this._top > containerHeight) {
             this._height = containerHeight - this._top;
           } else {
@@ -363,6 +362,7 @@ export default class ImageCropper extends React.Component {
   }
 
   onPressBtn = (e, type) => {
+    console.log('type123', type);
     switch (type) {
       case 'rect': this.dragClipRect = true; return false;
       case 'LT': this.scaleClipRectLT = true; return false;
@@ -410,6 +410,7 @@ export default class ImageCropper extends React.Component {
 
   render() {
     const { rotate = 0, containerWidth } = this.state;
+    console.log('containerWidth', containerWidth);
     const animatedImgStyle = {
       transform: [{
         scale: this.animatedScale,
@@ -486,7 +487,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderStyle: 'solid',
     borderColor: '#fa5656',
-    padding: 40,
   },
   clipRect: {
     flex: 1,
@@ -506,8 +506,8 @@ const styles = StyleSheet.create({
   },
   rectPoint: {
     position: 'absolute',
-    width: 40,
-    height: 40,
+    // width: 40,
+    // height: 40,
     borderWidth: 4,
     borderStyle: 'solid',
     borderColor: '#fa5656',
@@ -517,22 +517,30 @@ const styles = StyleSheet.create({
     top: 0,
     borderRightWidth: 0,
     borderBottomWidth: 0,
+    width: 20,
+    height: 20,
   },
   LB: {
     left: 0,
     bottom: 0,
     borderTopWidth: 0,
     borderRightWidth: 0,
+    width: 20,
+    height: 20,
   },
   RT: {
     right: 0,
     top: 0,
     borderLeftWidth: 0,
     borderBottomWidth: 0,
+    width: 20,
+    height: 20,
   },
   RB: {
     right: 0,
     bottom: 0,
+    width: 40,
+    height: 40,
     borderTopWidth: 0,
     borderLeftWidth: 0,
   },
