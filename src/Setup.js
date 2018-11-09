@@ -75,7 +75,7 @@ export default class Setup extends Component {
       // 热更新
       const updateContent = `
         升级内容：
-        作业批阅页面逻辑调整
+        修复作业记录详情页一直处于搬运数据状态而未去请求接口数据的问题
       `;
       CodePush.sync({
         // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
@@ -84,7 +84,7 @@ export default class Setup extends Component {
         updateDialog: {
           appendReleaseDescription: true,
           descriptionPrefix: updateContent,
-          title: '11.08版本升级',
+          title: '11.09版本升级',
           mandatoryUpdateMessage: '',
           mandatoryContinueButtonLabel: '更新',
         },
