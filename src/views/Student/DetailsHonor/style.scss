@@ -1,0 +1,47 @@
+.wrap {
+  flex: 1;
+}
+
+.scroll_view {
+  background-color: #fafafa;
+}
+
+.pie_chart_wrap {
+  padding: 15px 25px 0;
+  background-color: #ffffff;
+}
+
+.item {
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 32px 25px;
+  border-bottom-width: 1px;
+  border-style: solid;
+  border-bottom-color: #e8e8e8;
+}
+
+.pic_title {
+  font-size: 24px;
+  color: #999999;
+}
+
+.integral {
+  font-size: 24px;
+  color: #54cc82;
+}
+
+.list_wrap {
+  flex: 1;
+  margin-top: 12px;
+  background-color: #ffffff;
+}
+
+.title {
+  padding: 0 25px;
+  font-size: 24px;
+  color: #666666;
+  line-height: 70px;
+  border-bottom-width: 1px;
+  border-style: solid;
+  border-bottom-color: #e8e8e8;
+}

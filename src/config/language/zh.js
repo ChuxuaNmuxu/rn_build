@@ -127,7 +127,7 @@ export default {
     integral: '积分',
     teamContribution: '团队贡献度',
     subjectSetting: '作业PK科目设置',
-    leaderBoard: '排行榜',
+    rankBoard: '排行榜',
   },
 
   // 个人信息
@@ -143,5 +143,14 @@ export default {
   SubjectSetting: {
     title: '科目设置',
     description: '设置以下科目的作业参与PK',
+  },
+
+  // 排行榜
+  RankBoard: {
+    title: '排行榜',
+    integralRank: '积分排名',
+    contributionRank: '贡献度排名',
+    integral: '积分：',
+    contribution: '贡献：',
   },
 };

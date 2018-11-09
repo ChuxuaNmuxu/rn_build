@@ -8,7 +8,7 @@ import {
 import { mdl } from 'react-native-material-kit';
 import styles from './SubjectSetting.scss';
 import I18nText from '../../../components/I18nText';
-import Header from '../PersonalInformation/Component';
+import Nav from '../../../components/Nav';
 
 class SubjectSetting extends Component {
   constructor(props) {
@@ -96,9 +96,9 @@ class SubjectSetting extends Component {
     // console.log(888, subjectList);
     return (
       <View style={styles.subjectSetting_container}>
-        <Header goBackFun={() => { Actions.My(); }}>
+        <Nav goBackFun={() => { Actions.My(); }}>
           <I18nText>SubjectSetting.title</I18nText>
-        </Header>
+        </Nav>
         <View style={styles.description_box}>
           <I18nText style={styles.description}>SubjectSetting.description</I18nText>
         </View>
