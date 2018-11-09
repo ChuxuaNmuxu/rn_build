@@ -489,6 +489,7 @@ class HomworkRecordDetail extends Component {
     console.log(status, 'renderrenderrender');
     console.log(isItCorrect, 'renderrenderrender');
     const {
+      materialContent,
       htmlContent,
       AnserSummarizationData,
       studentAnserImage,
@@ -503,37 +504,53 @@ class HomworkRecordDetail extends Component {
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
     console.log(isQuestionSubmited, 'isQuestionSubmitedisQuestionSubmited');
     return (
-      <ScrollView
-        style={styles.homeworkDetail_container}
-        onLayout={this.handleLayout}
-        onMomentumScrollEnd={this.onScrollEnd}
-      >
-        <Modal />
+      <View>
         <View style={styles.homeworkDetail_header}>
           <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.myComponentWillUnmount} />
           <Text style={styles.homeworkDetailTitle}>{title}</Text>
           <Text style={styles.alt} />
         </View>
-        {
+        <ScrollView
+          style={styles.homeworkDetail_container}
+          onLayout={this.handleLayout}
+          onMomentumScrollEnd={this.onScrollEnd}
+        >
+          <Modal />
+          {
           // 如果看代码懵逼，请结合UI图，每一块分割线前的都是UI图上的一块。
         }
-        {
+          {
           // 头部的滚动选择器
-          <ScrollSelectedBar data={headerList} moveIndex={this.selectFun} status={status} selectTion={selectTion} />
+            <ScrollSelectedBar data={headerList} moveIndex={this.selectFun} status={status} selectTion={selectTion} />
         }
-        {
+          {
           // 你好我是分割线
           this.splitLine()
         }
 
-        {
+          {
+          !_.isEmpty(materialContent) ? (
+            <React.Fragment>
+              {
+                materialContent && <Text style={styles.materialContent}>材料：</Text>
+              }
+              {
+              // 材料展示
+               this.htmlViewComponent(materialContent)
+              }
+            </React.Fragment>
+          ) : null
+
+        }
+
+          {
           !_.isEmpty(htmlContent) ? (
             <React.Fragment>
               {
                 console.log(htmlContent)
               }
               {
-              // 富文本显示块，，，如果出错可能是返回数据是block而不是html字符串。形式固定，不独立组件了。
+              // 题目内容展示---富文本显示块，，，如果出错可能是返回数据是block而不是html字符串。形式固定，不独立组件了。
                this.htmlViewComponent(htmlContent)
             }
               {
@@ -545,50 +562,50 @@ class HomworkRecordDetail extends Component {
 
         }
 
-        {
-          <React.Fragment>
-            {
+          {
+            <React.Fragment>
+              {
               // 该题的摘要，包括对错得分难易同批阅之类。
               // 说起来你不信。这个页面这个组件是最复杂的，但是看起来是最少东西的。
-              <AnserSummarization
+                <AnserSummarization
                 // 状态
-                status={status}
+                  status={status}
                 // 是否正确
-                isItCorrect={isItCorrect}
+                  isItCorrect={isItCorrect}
                 // 是作业or考试
-                type={this.type}
+                  type={this.type}
                 // 题目类型
-                questionType={AnserSummarizationData.questionType}
+                  questionType={AnserSummarizationData.questionType}
                 // 难易度
-                difficultyDegree={AnserSummarizationData.difficultyDegree}
+                  difficultyDegree={AnserSummarizationData.difficultyDegree}
                 // 正确答案
-                correctAnser={AnserSummarizationData.correctAnser}
+                  correctAnser={AnserSummarizationData.correctAnser}
                 // 学生答案
-                studentAnser={AnserSummarizationData.studentAnser}
+                  studentAnser={AnserSummarizationData.studentAnser}
                 // 得分
-                score={AnserSummarizationData.score}
+                  score={AnserSummarizationData.score}
                 // 这题是否作答了
-                isQuestionSubmited={isQuestionSubmited}
+                  isQuestionSubmited={isQuestionSubmited}
                 // 学生是否批改了
-                studentMarked={AnserSummarizationData.studentMarked}
+                  studentMarked={AnserSummarizationData.studentMarked}
                 // 学生是否反馈了
-                hasMarkFeedback={AnserSummarizationData.hasMarkFeedback}
+                  hasMarkFeedback={AnserSummarizationData.hasMarkFeedback}
                 // 作业ID
-                homeWorkId={this.id}
+                  homeWorkId={this.id}
                 // 题目ID
-                qsId={headerList[selectTion].id}
+                  qsId={headerList[selectTion].id}
 
-                ref={(el) => { this.anserSummarization = el; }}
-              />
+                  ref={(el) => { this.anserSummarization = el; }}
+                />
             }
-            {
+              {
               // 你好我是分割线
               this.splitLine()
             }
-          </React.Fragment>
+            </React.Fragment>
         }
 
-        {
+          {
            _.isEmpty(studentAnserImage) ? null : (
              <React.Fragment>
                {
@@ -604,7 +621,7 @@ class HomworkRecordDetail extends Component {
              </React.Fragment>
            )
         }
-        {
+          {
           !_.isEmpty(rightAnser) ? (
             <React.Fragment>
               {
@@ -626,7 +643,7 @@ class HomworkRecordDetail extends Component {
 
         }
 
-        {
+          {
           _.isEmpty(othersAnser) ? null : (
             <React.Fragment>
 
@@ -643,7 +660,7 @@ class HomworkRecordDetail extends Component {
         }
 
 
-        {
+          {
           // 错误原因分析
           // 是否被批改且存在错误
           // submitStatus=>是否参加考试，1是
@@ -654,7 +671,8 @@ class HomworkRecordDetail extends Component {
            </View>
          ) : null
         }
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
   }
 }
