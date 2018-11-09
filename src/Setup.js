@@ -75,7 +75,7 @@ export default class Setup extends Component {
       // 热更新
       const updateContent = `
         升级内容：
-        修复作业记录详情页一直处于搬运数据状态而未去请求接口数据的问题
+        对作业记录详情页和考试记录详情页增加材料内容的展示
       `;
       CodePush.sync({
         // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
