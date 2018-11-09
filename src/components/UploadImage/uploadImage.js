@@ -12,11 +12,22 @@ import ImagePicker from 'react-native-image-picker';
 export default class UploadImage extends Component {
   constructor(props) {
     super(props);
+    this.isPrevent = false;
     this.state = {
     };
   }
 
   selectPhotoTapped = () => {
+    if (!this.isPrevent) {
+      this.isPrevent = true;
+      this.selectPhotoTappedFn();
+      setTimeout(() => {
+        this.isPrevent = false;
+      }, 1000);
+    }
+  }
+
+  selectPhotoTappedFn = () => {
     // console.log(789, '点击到了');
     const option = {
       title: '选择图片',

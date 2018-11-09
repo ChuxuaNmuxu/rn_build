@@ -5,11 +5,13 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  Dimensions,
 } from 'react-native';
 import styles from './recordCard.scss';
 import CIcon from '../../../../components/Icon';
 import NotViewImg from '../../../../public/img/notView.png';
 import { formatTimeToshow } from '../../../../utils/common/common';
+import { adaptiveRotation } from '../../../../utils/resolution';
 
 const getIconNameFun = (subjectName) => {
   let iconName;
@@ -60,7 +62,32 @@ class RecordCard extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      textWidth: 0, // 作业名称及考试名称部分需要固定的宽度，超出部分展示省略号
     };
+  }
+
+  componentDidMount() {
+    this.getTextWidth();
+    // 监听屏幕旋转
+    Dimensions.addEventListener('change', () => {
+      this.getTextWidth();
+    });
+  }
+
+  // 移除监听
+  componentWillUnmount() {
+    Dimensions.removeEventListener('change', () => {
+      this.getTextWidth();
+    });
+  }
+
+  // 通过adaptiveRotation函数去取作业题目部分的固定宽度
+  getTextWidth = () => {
+    const { width } = adaptiveRotation();
+    const textWidth = width - 530;
+    this.setState({
+      textWidth,
+    });
   }
 
   // 判断zuoye状态
@@ -93,6 +120,7 @@ class RecordCard extends PureComponent {
       }
     }
 
+
   // 点击 去订正/去补做
   toReviseFun = () => {
     console.log(666, '去订正');
@@ -108,8 +136,8 @@ class RecordCard extends PureComponent {
 
   render() {
     const { datas, recordType } = this.props;
+    const { textWidth } = this.state;
     const accuracyData = `${Math.round(datas.accuracy * 100)}%`;
-    // const randomNum = 0.3;
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -121,7 +149,14 @@ class RecordCard extends PureComponent {
             <CIcon style={styles.subjectIcon} name={getIconNameFun(datas.subjectName)} />
           </View>
           <View style={styles.subjectInfo}>
-            <Text style={[styles.subjectName]} ellipsizeMode="tail" numberOfLines={1}>{datas.title}</Text>
+            <View style={styles.titles}>
+              <Text style={[styles.subjectName, { maxWidth: textWidth }]} ellipsizeMode="tail" numberOfLines={1}>
+                {datas.title}
+              </Text>
+              <Text style={[datas.competeResult ? styles.competeResult : { width: 0, height: 0 }]}>
+                {datas.competeResult > 7 ? '胜' : (datas.competeResult > 4 ? '平' : '待定')}
+              </Text>
+            </View>
             <View style={styles.bottomInfo}>
               <Text
                 style={[styles.otherInfo, { color: datas.type === 0 ? '#f5a623' : '#999999' }]}

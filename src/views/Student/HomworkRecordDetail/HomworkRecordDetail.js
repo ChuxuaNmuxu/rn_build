@@ -99,14 +99,17 @@ class HomworkRecordDetail extends Component {
     });
   }
 
+  onScrollEnd=() => {
+    // console.log(this.anserSummarization);
+    this.anserSummarization.setButton();
+  }
+
   setImageSizes = async (index) => {
     const { detailsDataList } = this.props;
     const { selectTion, imageSize } = this.state;
-
     const {
       htmlContent,
     } = detailsDataList[index || selectTion];
-
     const sizes = await this.getBlockImageSize(htmlContent);
 
     this.setState({
@@ -137,11 +140,6 @@ class HomworkRecordDetail extends Component {
       });
     });
   })
-
-  onScrollEnd=() => {
-    // console.log(this.anserSummarization);
-    this.anserSummarization.setButton();
-  }
 
   static getDerivedStateFromProps(props, state) {
     const { detailsDataList } = props;
@@ -233,7 +231,7 @@ class HomworkRecordDetail extends Component {
     const { screenWidth, imageSize } = this.state;
     const attr = node.attribs;
 
-    console.log(246, attr)
+    console.log(246, attr);
 
     if (node.name === 'img') {
       const size = imageSize[attr.src];
@@ -260,6 +258,7 @@ class HomworkRecordDetail extends Component {
 
         return (
           <Image
+            key={index}
             style={style}
             source={{ uri: attr.src }}
           />
@@ -277,10 +276,6 @@ class HomworkRecordDetail extends Component {
         color: '#999999',
       },
     });
-    // const htmlContent = '<p>zhazhazha</p>'
-    // + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
-    // + 'alt="undefined" style="float:none;height: auto;width: auto"/>'
-    // + '<p>曹尼玛的富文本</p>';
     return (
       <View style={styles.htmlViewComponent}>
         <HTMLView
@@ -314,11 +309,6 @@ class HomworkRecordDetail extends Component {
       _width *= widthPixel;
       _height *= widthPixel;
     }
-
-    // if (_width < screenWidth) {
-    //   _width *= Dimensions.get('window').scale;
-    //   console.log(Dimensions.get('window').scale, 'Diemnsions.get().scale');
-    // }
 
     // 如果此时高度还大于屏幕高度,整体缩放到高度是屏幕高度
     if (_height > screenHeight) {
@@ -389,10 +379,6 @@ class HomworkRecordDetail extends Component {
   }
 
   selectFun= async (index, questionId) => {
-    // homeworkId,
-    // questionId,
-    // index,
-    console.log(index);
     // 应该写个中转函数，检测数据是否存在，如果reducer里面存在该index的对应项，则直接拿数据。
     // 如果没有则触发请求去拉取数据。那么页面也应该稍微调整增加个loading状态。不过产品没说，真是渣渣。
     const { detailsDataList } = this.props;
@@ -402,9 +388,7 @@ class HomworkRecordDetail extends Component {
       isgetImageSize: false,
     });
 
-    await this.setImageSizes(index);
-
-    // 如果没有数据的话就去拉取,不过考试的数据都存在，所以可以忽视请求了
+    if (detailsDataList[index]) await this.setImageSizes(index);
     console.log({ homeworkId: this.id, questionId, index }, '我要去请求数据啦啦啦啦啦');
     if (_.isNil(detailsDataList[index])) {
       console.log({ homeworkId: this.id, questionId, index }, '我要去请求数据啦啦啦啦啦');
@@ -620,21 +604,6 @@ class HomworkRecordDetail extends Component {
              </React.Fragment>
            )
         }
-
-        {/* {
-          _.isEmpty(rightAnser) ? null : (
-            <React.Fragment>
-              {
-              // 题目答案
-              this.correctAndOthersAnser(rightAnser, '题目答案：')
-            }
-              {
-              // 你好我是分割线
-              this.splitLine()
-            }
-            </React.Fragment>
-          )
-        } */}
         {
           !_.isEmpty(rightAnser) ? (
             <React.Fragment>

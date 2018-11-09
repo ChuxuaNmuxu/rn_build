@@ -31,7 +31,7 @@
     "stop": "adb shell am force-stop com.cjhms_rn",
     "start-app": "adb shell am start -n com.cjhms_rn/.MainActivity",
     "remove": "adb uninstall com.cjhms_rn",
-    "deploy": "code-push release-react 课业 android -t 1.0.3 --des 2018.11.05_05 -d Staging -m true",
+    "deploy": "code-push release-react 课业 android -t 1.0.0 --des 2018.11.09.03 -d Staging -m true",
     "deploy-history": "code-push deployment history 课业 Staging",
     "clear-deploy-history": "code-push clear history 课业 Staging"
   },

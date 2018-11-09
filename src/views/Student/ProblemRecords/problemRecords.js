@@ -301,12 +301,6 @@ class ProblemRecords extends Component {
 
   renderContent=() => {
     const { subjectData, recordData } = this.props;
-    // if (_.isEmpty(subjectData)) {
-    //   return null;
-    // }
-    // if (_.isEmpty(recordData)) {
-    //   return <Text>YOU HAVE NOT DATA</Text>;
-    // }
     const {
       currentRecordType, showExtendView, currentSubjectId,
     } = this.state;
