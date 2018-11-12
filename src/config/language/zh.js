@@ -162,4 +162,15 @@ export default {
     integral: '积分',
     contributionOfTeam: '团队贡献度',
   },
+
+  // 作业提交成功提示页面
+  CommitSuccessNotice: {
+    notice: '作业提交成功',
+    hasMarkNotice: '老师还布置了互批任务，快去完成吧',
+    noMarkNotice: '快去作业任务列表查看其它未完成的任务吧！',
+    returnIndex: '返回首页',
+    laterToMark: '稍后再批',
+    goToMark: '批改作业',
+    reportTitle: '战况播报：',
+  },
 };

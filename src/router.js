@@ -45,6 +45,9 @@ import SubjectSetting from './views/Student/SubjectSetting';
 import RankBoard from './views/Student/RankBoard';
 // 战绩热报
 import HotReport from './views/Student/HotReport';
+// 作业提交成功的提示页面
+import CommitSuccessNotice from './views/Student/CommitSuccessNotice';
+//
 
 /**
  * 关于Actions.xxx跳转方法说明
@@ -195,7 +198,9 @@ const RouteMap = props => (
         {/** 荣誉详情，贡献度/积分/次数 */}
         <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar />
         {/* 战绩热报 */}
-        <Scene key="HotReport" component={HotReport} hideNavBar initial />
+        <Scene key="HotReport" component={HotReport} hideNavBar />
+        {/* 作业提交成功的提示页面 */}
+        <Scene key="CommitSuccessNotice" component={CommitSuccessNotice} hideNavBar initial />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />
