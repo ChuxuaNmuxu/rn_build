@@ -153,4 +153,13 @@ export default {
     integral: '积分：',
     contribution: '贡献：',
   },
+
+  // 战绩热报
+  HotReport: {
+    title: '战绩热报',
+    accuracy: '正确率：',
+    reward: '奖励：',
+    integral: '积分',
+    contributionOfTeam: '团队贡献度',
+  },
 };

@@ -26,6 +26,8 @@ import inCorrectProblemDetail from './inCorrectProblemDetail';
 import mistakeListSaga from './mistakeListSaga';
 // 标记错题原因
 import markFailReason from './markFailReason';
+// 战绩热报
+import hotReportSaga from './hotReportSaga';
 
 
 function* rootSaga() {
@@ -44,6 +46,7 @@ function* rootSaga() {
     fork(inCorrectProblemDetail),
     fork(mistakeListSaga),
     fork(markFailReason),
+    fork(hotReportSaga),
   ]);
 }
 export default rootSaga;

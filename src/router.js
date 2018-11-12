@@ -43,6 +43,8 @@ import PersonalInformation from './views/Student/PersonalInformation';
 import SubjectSetting from './views/Student/SubjectSetting';
 // 排行榜
 import RankBoard from './views/Student/RankBoard';
+// 战绩热报
+import HotReport from './views/Student/HotReport';
 
 /**
  * 关于Actions.xxx跳转方法说明
@@ -160,7 +162,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        // initial
+        initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
@@ -192,6 +194,8 @@ const RouteMap = props => (
         <Scene key="RankBoard" component={RankBoard} hideNavBar />
         {/** 荣誉详情，贡献度/积分/次数 */}
         <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar />
+        {/* 战绩热报 */}
+        <Scene key="HotReport" component={HotReport} hideNavBar initial />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />
