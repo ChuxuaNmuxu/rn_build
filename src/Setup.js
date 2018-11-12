@@ -75,7 +75,7 @@ export default class Setup extends Component {
       // 热更新
       const updateContent = `
         升级内容：
-        1.测试正式包网络异常时没有提示bug07
+        对作业记录详情页和考试记录详情页增加材料内容的展示
       `;
       CodePush.sync({
         // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
@@ -84,7 +84,7 @@ export default class Setup extends Component {
         updateDialog: {
           appendReleaseDescription: true,
           descriptionPrefix: updateContent,
-          title: '11.05_7版本升级',
+          title: '11.09版本升级',
           mandatoryUpdateMessage: '',
           mandatoryContinueButtonLabel: '更新',
         },

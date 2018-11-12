@@ -49,6 +49,23 @@
   height: 154px;
 }
 
+.titles {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.competeResult {
+  height: 34px;
+  margin-left: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 50px;
+  font-size: 24px;
+  color: #ffffff;
+  background-color: #fa5656;
+}
+
 .bottomInfo {
     flex: 1;
     display: flex;

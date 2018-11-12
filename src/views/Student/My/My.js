@@ -22,29 +22,14 @@ class My extends Component {
     Actions.PersonalInformation();
   }
 
-  // 点击 挑战次数 进入 挑战次数详情页
-  goChallengesPage = () => {
-    Actions.DetailsHonor();
-  }
-
-  // 点击 积分 进入 积分详情页
-  goIntegralPage = () => {
-    Actions.DetailsHonor();
-  }
-
-  // 点击 团队贡献度 进入 贡献度详情页
-  goTeamContributionPage = () => {
-    Actions.DetailsHonor();
-  }
-
   // 点击 作业PK科目设置 进入 竞争科目设置页
   goSubjectSettingPage = () => {
     Actions.SubjectSetting();
   }
 
   // 点击 排行榜 进入 排行榜页面
-  goLeaderBoardPage = () => {
-
+  goRankBoardPage = () => {
+    Actions.RankBoard();
   }
 
   render() {
@@ -52,25 +37,25 @@ class My extends Component {
     const currentAvatar = Math.random() > 0.5 ? boyImg : girlImg;
     return (
       <View style={styles.wrap}>
-        <TouchableOpacity style={styles.avatar} onPress={() => this.goPersonalInfo()}>
+        <TouchableOpacity style={styles.avatar} onPress={this.goPersonalInfo}>
           <Image source={currentAvatar} width={145} height={145} />
         </TouchableOpacity>
         <View style={styles.mine_content}>
-          <TouchableOpacity style={styles.content_list} onPress={() => this.goChallengesPage()}>
+          <TouchableOpacity style={styles.content_list} onPress={() => Actions.DetailsHonor()}>
             <Text style={styles.numbers}>10</Text>
             <I18nText style={styles.texts}>My.challengesNum</I18nText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.content_list} onPress={() => this.goIntegralPage()}>
+          <TouchableOpacity style={styles.content_list} onPress={() => Actions.DetailsHonor()}>
             <Text style={styles.numbers}>21</Text>
             <I18nText style={styles.texts}>My.integral</I18nText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.content_list} onPress={() => this.goTeamContributionPage()}>
+          <TouchableOpacity style={styles.content_list} onPress={() => Actions.DetailsHonor()}>
             <Text style={styles.numbers}>15</Text>
             <I18nText style={styles.texts}>My.teamContribution</I18nText>
           </TouchableOpacity>
         </View>
         <View style={styles.mine_items}>
-          <TouchableOpacity style={styles.items} onPress={() => this.goSubjectSettingPage()}>
+          <TouchableOpacity style={styles.items} onPress={this.goSubjectSettingPage}>
             <I18nText style={styles.item_text}>My.subjectSetting</I18nText>
             <IconSet
               name="shangyiye"
@@ -78,8 +63,8 @@ class My extends Component {
             />
           </TouchableOpacity>
           <View style={styles.borderSpace} />
-          <TouchableOpacity style={styles.items} onPress={() => this.goLeaderBoardPage()}>
-            <I18nText style={styles.item_text}>My.leaderBoard</I18nText>
+          <TouchableOpacity style={styles.items} onPress={this.goRankBoardPage}>
+            <I18nText style={styles.item_text}>My.rankBoard</I18nText>
             <IconSet
               name="shangyiye"
               style={styles.iconStyle}
