@@ -93,6 +93,22 @@ export const formatTimeToshow = (timeData) => {
   return finalTime;
 };
 
+// 把当前日期和前后两天转为中文
+export const formatTimeToChinese = (time) => {
+  const today = new Date();
+  const yesterday = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+  const tomorrow = moment(new Date()).add(1, 'days').format('YYYY-MM-DD');
+
+  if (moment(today).isSame(time, 'day')) { // 判断 isSame方法
+    return '今天';
+  } if (moment(yesterday).isSame(time, 'day')) {
+    return '昨天';
+  } if (moment(tomorrow).isSame(time, 'day')) {
+    return '明天';
+  }
+  return moment(time).format('YYYY-MM-DD');
+};
+
 // 各类题型
 export const subjectType = ['单选题', '多选题', '判断题', '对应题', '填空题', '主观题', '综合题'];
 

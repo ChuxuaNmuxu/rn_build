@@ -18,36 +18,37 @@ import * as actions from '../../../../../actions/previewHomeworkAction';
 import * as taskDetailAction from '../../../../../actions/taskDetailAction';
 import I18nText from '../../../../../components/I18nText';
 import styles from './Content.scss';
+import { formatTimeToChinese } from '../../../../../utils/common';
 
 const moment = extendMoment(Moment);
 class Content extends Component {
   constructor(props) {
     super(props);
     const { beginTime, endTime } = props;
-    // const today = new Date();
+    // 初始化时间区间
+    this.wheelPickerData = null;
+    this.mapping = {};
+    this.initWheelPickerData(endTime);
+    const defaultSelectData = this.defaultSelectData(beginTime);
+
     this.state = {
       beginTime,
       // endTime,
       selectedStartDate: moment().format('YYYY-MM-DD'),
       selectedEndDate: moment().format('YYYY-MM-DD'),
       showPicker: false,
-      endDateIndex: 0,
-      startIndex: 0,
+      endIndex: defaultSelectData.endIndex,
+      startIndex: defaultSelectData.startIndex,
     };
-    // 初始化时间区间
-    this.initWheelPickerData(endTime);
-    console.log(props, '00000000');
   }
 
   componentDidUpdate() {
     console.log('wogengxinla');
     const {
-      selectedStartDate, selectedEndDate, endDateIndex, startIndex,
+      selectedStartDate, selectedEndDate, endIndex, startIndex,
     } = this.state;
     console.log(selectedStartDate, selectedEndDate);
-    console.log(startIndex, endDateIndex);
   }
-
 
   onStartItemSelected = (item) => {
     // do something
@@ -62,14 +63,32 @@ class Content extends Component {
     this.autoGoStartDate(data, position);
   }
 
-  getNowToEndDateList=() => {
+  defaultSelectData = (beginTime) => {
+    // 默认选中日期
 
+    const formatBeginTime = this.strFormatDate(beginTime);
+    const startIndex = this.wheelPickerData.findIndex(v => v === formatBeginTime.start);
+    const endIndex = this.wheelPickerData.findIndex(v => v === formatBeginTime.end);
+
+    return {
+      startIndex,
+      endIndex,
+    };
+  }
+
+  strFormatDate=(time) => {
+    const arr = time.split('~');
+    return {
+      start: formatTimeToChinese(arr[0]),
+      end: formatTimeToChinese(arr[1]),
+    };
   }
 
   // 初始化获得时间区间数据
   initWheelPickerData=(endTime) => {
     const start = moment().format('YYYY-MM-DD');
     const end = moment(endTime, 'YYYY-MM-DD');
+
     let r1 = null;
     if (moment().isAfter(endTime)) {
       r1 = moment.range(start, start);
@@ -78,8 +97,8 @@ class Content extends Component {
     }
     const r2 = r1.snapTo('day');
     const wheelPickerData = Array.from(r2.by('days')).map(m => m.format('YYYY-MM-DD'));
-    this.mapping = {};
-    wheelPickerData.map((i, index) => {
+
+    wheelPickerData.forEach((i, index) => {
       if (index === 0) {
         this.mapping['今天'] = i;
         return;
@@ -90,7 +109,7 @@ class Content extends Component {
       }
       this.mapping[i] = i;
     });
-    console.log(this.mapping);
+
     this.wheelPickerData = Object.keys(this.mapping);
   }
 
@@ -100,7 +119,7 @@ class Content extends Component {
       showPicker: bol,
       selectedStartDate: moment().format('YYYY-MM-DD'),
       selectedEndDate: moment().format('YYYY-MM-DD'),
-      endDateIndex: 0,
+      endIndex: 0,
       startIndex: 0,
     });
   }
@@ -174,7 +193,7 @@ class Content extends Component {
       this.setState({
         selectedStartDate: this.mapping[date],
         selectedEndDate: this.mapping[date],
-        endDateIndex: index,
+        endIndex: index,
         startIndex: index,
       });
     } else {
@@ -198,7 +217,7 @@ class Content extends Component {
         selectedStartDate: this.mapping[date],
         selectedEndDate: this.mapping[date],
         startIndex: index,
-        endDateIndex: index,
+        endIndex: index,
       });
     } else {
       this.setState({
@@ -211,9 +230,9 @@ class Content extends Component {
     // const wheelPickerData = [
     //   '2018-10-19', '2018-10-20', '2018-10-21', '2018-10-22', '2018-10-23', '2018-10-24', '2018-10-25',
     // ];
-    const { endDateIndex, startIndex } = this.state;
+    const { endIndex, startIndex } = this.state;
     console.log('我的位置');
-    console.log(startIndex, endDateIndex);
+    console.log(startIndex, endIndex);
     return (
       <View style={[styles.renderWheelPicker]}>
         <View style={[styles.renderWheelPickerItem]}>
@@ -253,7 +272,7 @@ class Content extends Component {
             // 预览多少个
             visibleItemCount={7}
             // 初始化位置
-            selectedItemPosition={endDateIndex}
+            selectedItemPosition={endIndex}
             // 样式
             style={styles.wheelPicker}
             // 间隙
@@ -278,6 +297,7 @@ class Content extends Component {
     const {
       beginTime, showPicker,
     } = this.state;
+    const formatBeginTime = this.strFormatDate(beginTime);
 
     // 待批阅的显示
     if (waitReadOver) {
@@ -342,7 +362,8 @@ class Content extends Component {
             onPress={() => this.controlCalendarVisible(true)}
           >
             <Text style={[styles.content_child_right, styles.content_child_beginTime]}>
-              {beginTime}<Entypo name="chevron-thin-right" size={50} color="#30bf6c" />
+              {`${formatBeginTime.start}~${formatBeginTime.end}`}
+              <Entypo name="chevron-thin-right" size={50} color="#30bf6c" />
             </Text>
           </TouchableOpacity>
         </View>
