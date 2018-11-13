@@ -75,7 +75,7 @@ export default class Setup extends Component {
       // 热更新
       const updateContent = `
         升级内容：
-        对作业记录详情页和考试记录详情页增加材料内容的展示
+        修复任务默认时间bug
       `;
       CodePush.sync({
         // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
@@ -84,7 +84,7 @@ export default class Setup extends Component {
         updateDialog: {
           appendReleaseDescription: true,
           descriptionPrefix: updateContent,
-          title: '11.09版本升级',
+          title: '11.13版本升级',
           mandatoryUpdateMessage: '',
           mandatoryContinueButtonLabel: '更新',
         },

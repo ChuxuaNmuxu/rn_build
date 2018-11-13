@@ -504,14 +504,13 @@ class HomworkRecordDetail extends Component {
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
     console.log(isQuestionSubmited, 'isQuestionSubmitedisQuestionSubmited');
     return (
-      <View>
+      <View style={styles.homeworkDetail_container}>
         <View style={styles.homeworkDetail_header}>
           <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.myComponentWillUnmount} />
           <Text style={styles.homeworkDetailTitle}>{title}</Text>
           <Text style={styles.alt} />
         </View>
         <ScrollView
-          style={styles.homeworkDetail_container}
           onLayout={this.handleLayout}
           onMomentumScrollEnd={this.onScrollEnd}
         >
