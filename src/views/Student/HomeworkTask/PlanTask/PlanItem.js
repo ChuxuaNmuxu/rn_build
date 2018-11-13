@@ -18,8 +18,11 @@ const PlanItem = (props) => {
       previewed,
     } = props.data;
 
+    let beginTime = moment().format('YYYY-MM-DD');
+    if (scheduledStart) {
+      beginTime = `${scheduledStart}~${scheduledEnd}`;
+    }
 
-    const beginTime = `${scheduledStart}~${scheduledEnd}`;
     // console.log(666, waitReadOver);
     if (taskType === 4) {
       // 待批阅作业
