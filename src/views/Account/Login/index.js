@@ -51,8 +51,6 @@ class Login extends Component {
       username,
       password,
     } = this.state;
-    console.log(53, username,
-      password);
     const { apiFlag } = this.props;
 
     Fetch.post(`${fetchApi(fetchApi.cjyun, apiFlag)}/unlogin/login`, {

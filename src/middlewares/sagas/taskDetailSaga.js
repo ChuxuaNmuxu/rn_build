@@ -1,8 +1,8 @@
 import {
-  takeLatest, put, call,
+  takeLatest, call,
 } from 'redux-saga/effects';
 // import api from '../../utils/fetch';
-import * as actions from '../../actions/taskDetailAction';
+// import * as actions from '../../actions/taskDetailAction';
 import enhanceSaga from './enhanceSaga';
 
 export default function* taskDetailSaga() {
@@ -20,11 +20,11 @@ function* putDateSaga(action) {
     console.log(res);
     const { code } = res;
     if (code === 0) {
-      yield put(actions.putHomeworkDateAction({ result: '不做任何操作' }, 'SUCCESS'));
+      // yield put(actions.putHomeworkDateAction({ result: '不做任何操作' }, 'SUCCESS'));
     } else {
-      yield put(actions.putHomeworkDateAction(code, 'ERROR'));
+      // yield put(actions.putHomeworkDateAction(code, 'ERROR'));
     }
   } catch (e) {
-    yield put(actions.putHomeworkDateAction(e, 'ERROR'));
+    // yield put(actions.putHomeworkDateAction(e, 'ERROR'));
   }
 }
