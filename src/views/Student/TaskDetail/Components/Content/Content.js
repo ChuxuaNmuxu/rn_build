@@ -47,7 +47,7 @@ class Content extends Component {
     const {
       selectedStartDate, selectedEndDate, endIndex, startIndex,
     } = this.state;
-    console.log(selectedStartDate, selectedEndDate);
+    console.log(selectedStartDate, selectedEndDate, endIndex, startIndex);
   }
 
   onStartItemSelected = (item) => {
