@@ -141,10 +141,18 @@ function* submitHomeworkSaga(action) {
     const res = yield call(fetch, {}, 'json');
     const { code, data } = res;
     if (code === 0) {
-      // 提交作业成功后判断是否有互批作业
-      const { needMark } = data;
-      // console.log(789, '提交作业成功', needMark);
-      yield put(actions.submitHomeworkAction(needMark, 'SUCCESS'));
+      // 添加一些模拟数据
+      data.homeworkId = homeworkId;
+      data.game = true; // 作业是否参与比赛
+      data.gameResultSnapshot = { // 作业比赛结果
+        gameName: '12-22历史作业', // 比赛名称
+        accuracy: 0.5, // 客观题正确率
+        gameType: 1, // 用户参加的比赛类型 比赛分组: 1.单人 2.双人 3.三人 10.漏选（未匹配到对手）
+        groupResult: 1, // 小组比赛结果 0:没有结果 1:胜利 2:平手 3:失败
+        personResult: 1, // 个人比赛结果 0没有结果（对手还未提交） 1胜利  2平手 3失败
+        rivalAccuracy: 0.4, // 对手客观题正确率
+      };
+      yield put(actions.submitHomeworkAction(data, 'SUCCESS'));
     } else {
       yield put(actions.submitHomeworkAction(code, 'ERROR'));
     }

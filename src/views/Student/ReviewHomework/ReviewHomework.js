@@ -21,8 +21,6 @@ import styles from './ReviewHomework.scss';
 import QuestionCard from '../DoHomework/Components/QuestionCard';
 import AnswerCard from '../DoHomework/Components/AnswerCard';
 import CommitHomeworkModal from '../DoHomework/Components/Modals/CommitHomeworkModal';
-import CommitSuccessAndnoRemark from '../DoHomework/Components/Modals/CommitSuccessAndnoRemark';
-import CommitSuccessAndhasRemark from '../DoHomework/Components/Modals/CommitSuccessAndhasRemark';
 
 class ReviewHomework extends Component {
   constructor(props) {
@@ -36,12 +34,9 @@ class ReviewHomework extends Component {
       uploadImgQid: null, // 当前上传图片的题目id
       currentStartTime: new Date(), // 开始检查作业的时间
       commitHomeworkModalStatus: false, // 二次确认模态框的显隐
-      tipStatus: false, // 提交作业成功且无互批任务的模态框显隐
-      hasRemarkStatus: false, // 提交作业成功且有互批任务的模态框显隐
       imgLoading: false, // 图片上传loading状态
     };
     this.tryToUploadImg = false; // 是否上传了图片--防止componentDidUpdate一直执行出现死循环
-    this.commitHomework = false; // 是否点击了二次确认的提交作业按钮
   }
 
   componentDidMount() {
@@ -50,26 +45,12 @@ class ReviewHomework extends Component {
   }
 
   componentDidUpdate() {
-    const { uploadImgSuccess, needMark } = this.props;
+    const { uploadImgSuccess } = this.props;
     // 上传图片成功后提交答案
     if (uploadImgSuccess && this.tryToUploadImg) {
       const { uploadImgQid } = this.state;
       this.fetchSaveQuestion(uploadImgQid);
       this.tryToUploadImg = false;
-    }
-    // 提交作业成功后是否有互批作业needMark为---0:没有互批作业, 1:有互批作业，其初始值为-1，表示还未接收到接口数据
-    if (this.commitHomework && needMark >= 0) {
-      if (needMark) {
-        this.setRemarkModalVisibleFun(true);
-      } else {
-        // 没有互批作业2秒后跳到首页
-        this.setTipModalVisibleFun(true);
-        setTimeout(() => {
-          Actions.HomeworkTask();
-        }, 2000);
-      }
-
-      this.commitHomework = false;
     }
   }
 
@@ -85,21 +66,6 @@ class ReviewHomework extends Component {
       currentStartTime: new Date(),
     });
   }
-
-  // 控制提交作业成功且无互批任务的模态框显隐
-  setTipModalVisibleFun = (visible) => {
-    this.setState({
-      tipStatus: visible,
-    });
-  }
-
-  // 控制提交作业成功且有互批任务的模态框显隐
-  setRemarkModalVisibleFun = (visible) => {
-    this.setState({
-      hasRemarkStatus: visible,
-    });
-  }
-
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { data } = nextProps;
@@ -135,20 +101,6 @@ class ReviewHomework extends Component {
     return null;
   }
 
-  // 去批改作业
-  presenttoCorrentFun = () => {
-    const { data: { homeworkId } } = this.state;
-    this.setRemarkModalVisibleFun(false);
-    // 到批阅作业界面
-    Actions.HomeworkCorrecting({ homeworkId });
-  }
-
-  // 稍后再批
-  laterToCorrentFun = () => {
-    this.setRemarkModalVisibleFun(false);
-    Actions.HomeworkTask();
-  }
-
   // 返回继续做题
   goDoHomework = () => {
     const { data } = this.state;
@@ -165,11 +117,14 @@ class ReviewHomework extends Component {
 
   // 二次确认提交作业
   commitHomeworkFun = () => {
-    this.commitHomework = true;
     this.setCommitModalVisibleFun(false);
     // 请求提交作业的接口
     const { actions: { submitHomeworkAction }, data } = this.props;
     submitHomeworkAction({ homeworkId: data.homeworkId }, 'REQUEST');
+    // 提交后跳转到提交成功的提示页面
+    setTimeout(() => {
+      Actions.CommitSuccessNotice();
+    }, 0);
   }
 
   // 二次确认选择检查
@@ -344,8 +299,6 @@ class ReviewHomework extends Component {
       notAnswerQuesNum,
       data,
       commitHomeworkModalStatus,
-      tipStatus,
-      hasRemarkStatus,
       imgLoading,
     } = this.state;
     return (
@@ -431,19 +384,6 @@ class ReviewHomework extends Component {
           />
           )
         }
-        {/* 二次确认点击提交成功后--无互批任务 */}
-        {
-          tipStatus && <CommitSuccessAndnoRemark />
-        }
-        {/* 二次确认点击提交成功后--有互批任务 */}
-        {
-          hasRemarkStatus && (
-          <CommitSuccessAndhasRemark
-            laterToCorrentFun={this.laterToCorrentFun}
-            presenttoCorrentFun={this.presenttoCorrentFun}
-          />
-          )
-        }
       </View>
     );
   }
@@ -452,16 +392,14 @@ class ReviewHomework extends Component {
 ReviewHomework.propTypes = {
   data: PropTypes.object.isRequired,
   uploadImgSuccess: PropTypes.bool.isRequired,
-  needMark: PropTypes.number.isRequired, // 提交作业后是否有互批作业的标识
   actions: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
-  const { data, uploadImgSuccess, needMark } = state.doHomeworkReducer;
+  const { data, uploadImgSuccess } = state.doHomeworkReducer;
   return {
     data,
     uploadImgSuccess,
-    needMark,
   };
 };
 
