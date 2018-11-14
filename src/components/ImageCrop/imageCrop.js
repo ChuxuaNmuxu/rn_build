@@ -13,6 +13,7 @@ import {
 import { Slider } from 'antd-mobile-rn';
 import IconSet from '../Icon';
 import ImageCropper from './imageCropper';
+import OrderButtons from '../OrderButtons';
 
 export default class ImageCrop extends React.Component {
   constructor(props) {
@@ -26,6 +27,7 @@ export default class ImageCrop extends React.Component {
       imageHeight: null,
       containerWidth: null,
       containerHeight: null,
+      multipleStatus: true,
     };
   }
 
@@ -36,8 +38,8 @@ export default class ImageCrop extends React.Component {
     let imageWidth = source.width;
     let imageHeight = source.height;
     // 处理判断下当前图片裁切灰色区的高度和宽度，进而控制判断图片展示的大小，以免图片超出裁切区时点击确定会报错
-    if (source.height > layout.height - 100) {
-      imageHeight = layout.height - 100;
+    if (source.height > layout.height - 122) {
+      imageHeight = layout.height - 122;
       imageWidth = (imageHeight / source.height) * source.width;
     } else if (source.width > layout.width) {
       imageWidth = layout.width;
@@ -48,7 +50,7 @@ export default class ImageCrop extends React.Component {
       imageWidth,
       imageHeight,
       containerWidth: layout.width,
-      containerHeight: layout.height - 100,
+      containerHeight: layout.height - 122,
     });
   }
 
@@ -86,6 +88,9 @@ export default class ImageCrop extends React.Component {
     const {
       width, height,
     } = this.imgCrop.getCropData();
+    // this.imgCrop.setCropData({
+    //   top: 100, left: 100, width: 100, height: 100,
+    // });
     const { croppedImage } = this.props;
     croppedImage(uri, width, height);
   }
@@ -125,6 +130,7 @@ export default class ImageCrop extends React.Component {
       imageHeight,
       containerWidth,
       containerHeight,
+      multipleStatus,
     } = this.state;
     // const { source } = this.props;
     return (
@@ -158,27 +164,37 @@ export default class ImageCrop extends React.Component {
               ref={(crop) => { this.imgCrop = crop; }}
             />
           )}
-          <View style={[styles.toolBar, { backgroundColor: '#fff' }]}>
-            <TouchableOpacity style={styles.btn} onPress={() => this.rotateImg(90)}>
-              <View><IconSet style={{ color: '#30bf6c', fontSize: 20 }} name="xuanzhuan" /></View>
-            </TouchableOpacity>
-            <View style={styles.slider}>
-              <Slider
-                step={4.5}
-                defaultValue={0}
-                value={value}
-                min={-45}
-                max={45}
-                maximumTrackTintColor="#30bf6c"
-                minimumTrackTintColor="#ffc14d"
-                onChange={val => this.handleChange(val)}
-              />
-              <Text style={styles.slideText}>{value}</Text>
-            </View>
-            <TouchableOpacity style={styles.btn} onPress={() => this.resetRotate(0)}>
-              <Text style={[styles.text, { color: '#30bf6c' }]}>还原</Text>
-            </TouchableOpacity>
-          </View>
+          {
+            multipleStatus
+              ? (
+                <View style={[styles.bottomBar, { backgroundColor: '#fff' }]}>
+                  <OrderButtons />
+                </View>
+              )
+              : (
+                <View style={[styles.bottomBar, { backgroundColor: '#fff' }]}>
+                  <TouchableOpacity style={styles.bottomBtn} onPress={() => this.rotateImg(90)}>
+                    <View><IconSet style={{ color: '#30bf6c', fontSize: 20 }} name="xuanzhuan" /></View>
+                  </TouchableOpacity>
+                  <View style={styles.slider}>
+                    <Slider
+                      step={4.5}
+                      defaultValue={0}
+                      value={value}
+                      min={-45}
+                      max={45}
+                      maximumTrackTintColor="#30bf6c"
+                      minimumTrackTintColor="#ffc14d"
+                      onChange={val => this.handleChange(val)}
+                    />
+                    <Text style={styles.slideText}>{value}</Text>
+                  </View>
+                  <TouchableOpacity style={styles.bottomBtn} onPress={() => this.resetRotate(0)}>
+                    <Text style={[styles.text, { color: '#30bf6c' }]}>还原</Text>
+                  </TouchableOpacity>
+                </View>
+              )
+          }
         </View>
       </Modal>
     );
@@ -211,14 +227,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  bottomBar: {
+    flexDirection: 'row',
+    height: 72,
+    justifyContent: 'space-between',
+  },
+  bottomBtn: {
+    width: 100,
+    height: 72,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   slider: {
     flex: 1,
-    height: 50,
+    height: 72,
     justifyContent: 'center',
   },
   slideText: {
-    flex: 1,
-    height: 25,
     textAlign: 'center',
     fontSize: 10,
   },

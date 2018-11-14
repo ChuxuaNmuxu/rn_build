@@ -393,6 +393,16 @@ export default class ImageCropper extends React.Component {
     };
   }
 
+  setCropData = (croperBoxData) => {
+    const {
+      top, left, width, height,
+    } = croperBoxData;
+    this._animatedLeft.setValue(left);
+    this._animatedTop.setValue(top);
+    this._animatedWidth.setValue(width);
+    this._animatedHeight.setValue(height);
+  }
+
   crop = () => captureRef(this.cropper, { format: 'png', quality: 1 })
 
   rotate = (digit) => {
