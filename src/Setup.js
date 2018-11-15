@@ -73,10 +73,7 @@ export default class Setup extends Component {
     // 正式包才执行一下代码
     if (!__DEV__) {
       // 热更新
-      const updateContent = `
-        升级内容：
-        修复任务默认时间bug
-      `;
+      const updateContent = '';
       CodePush.sync({
         // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
         installMode: CodePush.InstallMode.IMMEDIATE,
@@ -84,7 +81,7 @@ export default class Setup extends Component {
         updateDialog: {
           appendReleaseDescription: true,
           descriptionPrefix: updateContent,
-          title: '11.13版本升级',
+          title: '优化',
           mandatoryUpdateMessage: '',
           mandatoryContinueButtonLabel: '更新',
         },
