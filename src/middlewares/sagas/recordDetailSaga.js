@@ -178,6 +178,7 @@ function transFromExamdetailsDataList(data) {
     studentExamQuestionDetailDtos.map((item) => {
       if (qitem.questionNum === item.questionNum) {
         cusdata.push({
+          materialContent: item.materialContent, // 题目材料
           htmlContent: item.questionContent,
           AnserSummarizationData: {
             // 正确答案
@@ -262,6 +263,7 @@ function transFromExamdetailsDataList(data) {
  */
 function transFromHomeworkDataList(data) {
   return {
+    materialContent: data.materialContent, // 题目材料
     htmlContent: data.content,
     AnserSummarizationData: {
       // 正确答案

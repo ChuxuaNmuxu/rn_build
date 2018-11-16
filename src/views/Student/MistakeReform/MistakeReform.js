@@ -225,6 +225,7 @@ class MistakeReform extends Component {
       lCallbakFn: this.leftFn,
       rCallbakFn: () => this.rightFn(item),
       activeBtn: 'R',
+      footButton: true, // 传参展示按钮，以免受其他页面传了false而导致按钮不展示的问题（单例不可避免的问题）
       rightBtnText: '确定',
       leftBtnText: '取消',
       content: this.modalContent('移除后将不可恢复，请确定是否移除错题本'),

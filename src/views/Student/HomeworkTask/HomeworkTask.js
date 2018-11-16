@@ -47,29 +47,29 @@ class HomeworkTask extends Component {
     } = this.props;
     onFetchStudentTaskList();
 
-    // if (isFirstOpenHomepage) {
-    //   onIsFirstOpenHomepage();
-    //   ModalApi.onOppen('AnimationsModal', {
-    //     svgName: 'finger', // 选择提示信息的svg
-    //     animationType: 'slideInDown', // 选择动画类型
-    //     bottomTips: '把作业向下拖动到具体时间段吧', // 提示文字信息
-    //     maskClosable: true, // 是否点击蒙层关闭
-    //     svgOption: {
-    //       width: 120,
-    //       height: 120,
-    //     },
-    //   });
-    // }
+    if (isFirstOpenHomepage) {
+      onIsFirstOpenHomepage();
+      ModalApi.onOppen('AnimationsModal', {
+        svgName: 'finger', // 选择提示信息的svg
+        animationType: 'slideInDown', // 选择动画类型
+        bottomTips: '把作业向下拖动到具体时间段吧', // 提示文字信息
+        maskClosable: true, // 是否点击蒙层关闭
+        svgOption: {
+          width: 120,
+          height: 120,
+        },
+      });
+    }
 
     // 战机播报
-    const data = {
-      content: <ModalContent />,
-      height: 960,
-      style: {
-        width: 958,
-      },
-    };
-    ModalApi.onOppen('RecordModal', data);
+    // const data = {
+    //   content: <ModalContent />,
+    //   height: 960,
+    //   style: {
+    //     width: 958,
+    //   },
+    // };
+    // ModalApi.onOppen('RecordModal', data);
 
     // NativeModules.MyNativeModule.show();
 

@@ -1,0 +1,77 @@
+.rankBoard_container {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+.imgStyle {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 47px;
+  margin-bottom: 47px;
+}
+.borderSpace {
+  width: 100%;
+  height: 1px;
+  background-color: #dbdbdb;
+}
+.tabsHeader {
+  width: 100%;
+  height: 68px;
+  border-bottom-width: 1px;
+  border-bottom-color: #dbdbdb;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.tabsBtn {
+  width: 50%;
+  height: 68px;
+  background: #fff;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.activeTabsBtn {
+  background: #8befaa;
+}
+.tabsTxt {
+  font-size: 24px;
+  color: #8befaa;
+}
+.activeTabsTxt {
+  color: #fff;
+}
+.rankCard {
+  width: 100%;
+  height: 90px;
+  padding-left: 24px;
+  padding-right: 24px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom-width: 1px;
+  border-bottom-color: #dbdbdb;
+}
+.leftText {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.rankNum {
+  font-size: 24px;
+  color: #7cd99c;
+}
+.studentName {
+  color: #666;
+  font-size: 24px;
+  margin-left: 20px;
+}
+.rightText{
+  font-size: 36px;
+  color: #ffc14d;
+}
+.numText {
+  font-size: 24px;
+  color: #bfbfbf;
+}

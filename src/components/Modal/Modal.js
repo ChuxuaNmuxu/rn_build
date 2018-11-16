@@ -197,6 +197,7 @@ class MyModal extends Component {
                 CustomModal: this._CustomModal,
                 ImageViewer: this._ImageViewer,
                 RecordModal: this._Record,
+                // FullScreen: this._FullScreen,
               }[type]()
           }
         </Resolution>

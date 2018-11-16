@@ -41,6 +41,13 @@ import DetailsHonor from './views/Student/DetailsHonor';
 import PersonalInformation from './views/Student/PersonalInformation';
 // 科目设置页
 import SubjectSetting from './views/Student/SubjectSetting';
+// 排行榜
+import RankBoard from './views/Student/RankBoard';
+// 战绩热报
+import HotReport from './views/Student/HotReport';
+// 作业提交成功的提示页面
+import CommitSuccessNotice from './views/Student/CommitSuccessNotice';
+//
 
 /**
  * 关于Actions.xxx跳转方法说明
@@ -79,6 +86,7 @@ const RouteMap = props => (
       <Stack
         key="Student"
         hideNavBar
+        // initial
       >
         <Tabs
           key="StudentTabs"
@@ -124,6 +132,7 @@ const RouteMap = props => (
           </Stack>
           {/* 错题本 */}
           <Stack
+            // initial
             title="wrongNotes" // 配好在zh.js、en.js那边了
             key="ProblemOverviewStack"
             image="cuotiben1"
@@ -156,6 +165,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
+        // initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
@@ -183,8 +193,14 @@ const RouteMap = props => (
         <Scene key="PersonalInformation" component={PersonalInformation} hideNavBar />
         {/* 科目设置 */}
         <Scene key="SubjectSetting" component={SubjectSetting} hideNavBar />
+        {/* 排行榜 */}
+        <Scene key="RankBoard" component={RankBoard} hideNavBar />
         {/** 荣誉详情，贡献度/积分/次数 */}
         <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar />
+        {/* 战绩热报 */}
+        <Scene key="HotReport" component={HotReport} hideNavBar />
+        {/* 作业提交成功的提示页面 */}
+        <Scene key="CommitSuccessNotice" component={CommitSuccessNotice} hideNavBar initial />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />

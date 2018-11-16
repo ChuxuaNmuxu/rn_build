@@ -127,7 +127,7 @@ export default {
     integral: '积分',
     teamContribution: '团队贡献度',
     subjectSetting: '作业PK科目设置',
-    leaderBoard: '排行榜',
+    rankBoard: '排行榜',
   },
 
   // 个人信息
@@ -143,5 +143,34 @@ export default {
   SubjectSetting: {
     title: '科目设置',
     description: '设置以下科目的作业参与PK',
+  },
+
+  // 排行榜
+  RankBoard: {
+    title: '排行榜',
+    integralRank: '积分排名',
+    contributionRank: '贡献度排名',
+    integral: '积分：',
+    contribution: '贡献：',
+  },
+
+  // 战绩热报
+  HotReport: {
+    title: '战绩热报',
+    accuracy: '正确率：',
+    reward: '奖励：',
+    integral: '积分',
+    contributionOfTeam: '团队贡献度',
+  },
+
+  // 作业提交成功提示页面
+  CommitSuccessNotice: {
+    notice: '作业提交成功',
+    hasMarkNotice: '老师还布置了互批任务，快去完成吧',
+    noMarkNotice: '快去作业任务列表查看其它未完成的任务吧！',
+    returnIndex: '返回首页',
+    laterToMark: '稍后再批',
+    goToMark: '批改作业',
+    reportTitle: '战况播报：',
   },
 };
