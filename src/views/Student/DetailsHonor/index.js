@@ -21,11 +21,11 @@ export default class DetailsHonor extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, title } = this.props;
     return (
       <View style={styles.wrap}>
         <Nav goBackFun={() => { Actions.My(); }}>
-          <Text>积分</Text>
+          <Text>{title}</Text>
         </Nav>
         <ScrollView style={styles.scroll_view}>
           <View key="pieChartWrap" style={styles.pie_chart_wrap}>
@@ -43,6 +43,7 @@ export default class DetailsHonor extends Component {
 
 DetailsHonor.propTypes = {
   data: PropTypes.array,
+  title: PropTypes.string,
 };
 
 DetailsHonor.defaultProps = {
@@ -55,4 +56,5 @@ DetailsHonor.defaultProps = {
     { title: '语文第一章作业', integral: -1 },
     { title: '语文第一章作业', integral: -1 },
   ],
+  title: null,
 };

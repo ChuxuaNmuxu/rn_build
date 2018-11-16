@@ -130,7 +130,7 @@ const Fetch = {
         if (findString(err.stack, 'Network request failed') || findString(err.stack, 'com.cjhms_rn/files/CodePush/')) {
           Toast.fail('当前设备网络异常，请检查网络');
         } else {
-          Toast.fail(err.message);
+          Toast.fail(`url:${url}, message:${err.message}`);
         }
 
         throw new Error(err);
