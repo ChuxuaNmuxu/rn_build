@@ -13,6 +13,7 @@ import homeworkCorrectingReducer from './homeworkCorrectingReducer';
 import incorrectProblemDetail from './incorrectProblemDetail';
 import mistakeListReducer from './mistakeList';
 import hotReportReducer from './hotReportReducer';
+import myIndexReducer from './myIndexReducer';
 import account from './account';
 
 export default combineReducers({
@@ -42,6 +43,8 @@ export default combineReducers({
   mistakeListReducer,
   // 战绩热报
   hotReportReducer,
+  // 我的 页面
+  myIndexReducer,
   // 账号信息
   account,
 });

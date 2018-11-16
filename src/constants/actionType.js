@@ -161,6 +161,11 @@ export const HOMEWORK_CORRECTING_SAVE_SCORE = 'HOMEWORK_CORRECTING_SAVE_SCORE';
 export const HOMEWORK_CORRECTING_CONTROL_FINISH_BTN = 'HOMEWORK_CORRECTING_CONTROL_FINISH_BTN';
 
 /**
+ * -----------------------------------我的页面------------------------------------------------------
+ */
+export const FETCH_MYINDEX_DATA = 'FETCH_MYINDEX_DATA';
+
+/**
  * -----------------------------战绩热报-------------------------------------------------------------------------
  */
 export const FETCH_HOTREPORT_DATA = 'FETCH_HOTREPORT_DATA';
