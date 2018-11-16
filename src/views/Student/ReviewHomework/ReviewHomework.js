@@ -328,6 +328,7 @@ class ReviewHomework extends Component {
                 <View key={index} style={styles.ques_card}>
                   <QuestionCard questions={item} reviewHomework />
                   <AnswerCard
+                    checkHomework
                     questions={item}
                     handleDifficultLevel={this.handleDifficultLevel}
                     handleToClickRadio={this.handleToClickRadio}

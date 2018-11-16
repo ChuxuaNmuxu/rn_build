@@ -14,6 +14,8 @@ export default function* doHomeworkSaga() {
   yield takeLatest('FETCH_DOHOMEWORK_QUESTION_REQUEST', enhanceSaga(fetchDoHomeworkSaga));
   // 提交答题数据
   yield takeLatest('SUBMIT_DOHOMEWORK_ANSWER_REQUEST', enhanceSaga(submitDoHomeworkAnswerSaga));
+  // 批量答题（应用于多题）
+  yield takeLatest('SUBMIT_MULTIPLE_ANSWER_REQUEST', enhanceSaga(submitMultipleAnswerSaga));
   // 第一次进入该份作业时弹窗判断是否想检查作业
   yield takeLatest('TOCHECK_HOMEWORK_QUESTION_REQUEST', enhanceSaga(checkHomeworkSaga));
   // 保存检查耗时
@@ -63,6 +65,7 @@ function* fetchDoHomeworkSaga(action) {
         }
       }
       homeworkData.finalQuestionList = finalQuestionList;
+      // console.log(8997, homeworkData);
       yield put(actions.fetchdoHomeworkAction(homeworkData, 'SUCCESS'));
     } else {
       yield put(actions.fetchdoHomeworkAction(code, 'ERROR'));
@@ -78,13 +81,13 @@ function* submitDoHomeworkAnswerSaga(action) {
     const { homeworkId, id, answerParam } = action.payload;
     // 拿到了题目id再去请求接口
     if (id) {
-      console.log(77777, action.payload);
-      console.log(88888, answerParam);
+      // console.log(77777, action.payload);
+      // console.log(88888, answerParam);
       const url = `app/api/student/homeworks/${homeworkId}/questions/${id}/answer`;
       const fetch = (arg, type) => Fetch.put(url, arg, type);
       const res = yield call(fetch, answerParam, 'json');
       const { code } = res;
-      console.log(999999999, res);
+      // console.log(999999999, res);
       if (code === 0) {
         yield put(actions.submitDoHomeworkAnswerAction(code, 'SUCCESS'));
       } else {
@@ -93,6 +96,24 @@ function* submitDoHomeworkAnswerSaga(action) {
     }
   } catch (error) {
     yield put(actions.submitDoHomeworkAnswerAction(error, 'ERROR'));
+  }
+}
+
+// 批量答题---应用于多题---所用时间不计入单题时间，直接计入总时间中
+function* submitMultipleAnswerSaga(action) {
+  try {
+    const { homeworkId, extraTimeSpent, answerParam } = action.payload;
+    const url = `app/api/student/homeworks/${homeworkId}/answer?extraTimeSpent=${extraTimeSpent}`;
+    const fetch = (arg, type) => Fetch.put(url, arg, type);
+    const res = yield call(fetch, answerParam, 'json');
+    const { code } = res;
+    if (code === 0) {
+      yield put(actions.submitMultipleAnswerAction(code, 'SUCCESS'));
+    } else {
+      yield put(actions.submitMultipleAnswerAction(code, 'ERROR'));
+    }
+  } catch (error) {
+    yield put(actions.submitMultipleAnswerAction(error, 'ERROR'));
   }
 }
 

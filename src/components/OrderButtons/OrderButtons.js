@@ -11,42 +11,27 @@ const RadioButton = Radio.Button;
 class OrderButtons extends Component {
   static defaultProps = {
     onChange: (a) => { console.log(123, a); },
-    defaultValue: 7,
-    unAnswerQuesList: [{
-      number: 1,
-      answered: 1,
-    }, {
-      number: 2,
-      answered: 0,
-    }, {
-      number: 5,
-      answered: 0,
-    }, {
-      number: 7,
-      answered: 0,
-    }, {
-      number: 9,
-      answered: 1,
-    }],
+    defaultValue: '',
+    unAnswerQuesList: [],
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      currentIndex: props.defaultValue,
+      currentQid: props.defaultValue,
     };
   }
 
   orderChange = (a) => {
     const { onChange } = this.props;
-    onChange();
+    onChange(a);
     this.setState({
-      currentIndex: a,
+      currentQid: a,
     });
   }
 
   render() {
-    const { currentIndex } = this.state;
+    const { currentQid } = this.state;
     const { unAnswerQuesList } = this.props;
     return (
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -60,17 +45,17 @@ class OrderButtons extends Component {
           {
             unAnswerQuesList.map((item, index) => (
               <RadioButton
-                value={item.number}
+                value={item.id}
                 key={index}
                 iconWrapStyle={[
                   styles.orderStyle,
-                  (item.number === currentIndex) && styles.currentOrderStyle,
-                  (item.answered && item.number !== currentIndex) && styles.answeredOrderStyle,
+                  (item.id === currentQid) && styles.currentOrderStyle,
+                  (item.answered && item.id !== currentQid) && styles.answeredOrderStyle,
                 ]}
                 textStyle={[
                   styles.radioTextStyle,
-                  (item.number === currentIndex) && styles.currentRadioTextStyle,
-                  (item.answered && item.number !== currentIndex) && styles.answeredOrderTextStyle,
+                  (item.id === currentQid) && styles.currentRadioTextStyle,
+                  (item.answered && item.id !== currentQid) && styles.answeredOrderTextStyle,
                 ]}
               >
                 {item.number}
@@ -86,7 +71,7 @@ class OrderButtons extends Component {
 OrderButtons.propTypes = {
   onChange: PropTypes.func,
   unAnswerQuesList: PropTypes.array,
-  defaultValue: PropTypes.number,
+  defaultValue: PropTypes.string,
 };
 
 export default OrderButtons;

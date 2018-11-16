@@ -54,8 +54,10 @@ export const CHECK_HOMEWORK_ISOPERABLE = 'CHECK_HOMEWORK_ISOPERABLE';
  */
 // 获取做作业的题目数据
 export const FETCH_DOHOMEWORK_QUESTION = 'FETCH_DOHOMEWORK_QUESTION';
-// 答题，提交小题答案
+// 答题，提交单题答案
 export const SUBMIT_DOHOMEWORK_ANSWER = 'SUBMIT_DOHOMEWORK_ANSWER';
+// 批量答题（应用于多题）
+export const SUBMIT_MULTIPLE_ANSWER = 'SUBMIT_MULTIPLE_ANSWER';
 // 第一次进入该份作业时弹窗判断是否想检查作业
 export const TOCHECK_HOMEWORK_QUESTION = 'TOCHECK_HOMEWORK_QUESTION';
 // 保存检查耗时

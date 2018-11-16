@@ -427,6 +427,12 @@ class DoHomeworks extends Component {
     }, 0);
   }
 
+  // 点击选择 应用于多题 时，开始计算多题裁切所用的总时间，此时时间不计入单题
+  mulImageCostTime = (id) => {
+    // 先把当前题目提交一次答案保存时间
+    this.fetchSaveQuestion(id);
+  }
+
   // 渲染需要展示在扩展列表视图中的组件
   renderQuestionOrder = (showQuesArray, currentIndex) => {
     // 拿到当前题目的number
@@ -549,6 +555,7 @@ class DoHomeworks extends Component {
     }
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
+    // console.log(1115, showQuesArray);
     return (
       <View style={styles.containers}>
         {!R.isEmpty(homeworkData) && this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
@@ -569,6 +576,8 @@ class DoHomeworks extends Component {
                   <QuestionCard questions={item} />
                   <AnswerCard
                     questions={item}
+                    homeworkList={showQuesArray}
+                    mulImageCostTime={this.mulImageCostTime}
                     handleDifficultLevel={this.handleDifficultLevel}
                     handleToClickRadio={this.handleToClickRadio}
                     handlePreviewImage={this.handlePreviewImage}

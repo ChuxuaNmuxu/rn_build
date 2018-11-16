@@ -14,6 +14,7 @@ import { Slider } from 'antd-mobile-rn';
 import IconSet from '../Icon';
 import ImageCropper from './imageCropper';
 import OrderButtons from '../OrderButtons';
+import SelectModal from '../SelectModal';
 
 export default class ImageCrop extends React.Component {
   constructor(props) {
@@ -27,7 +28,11 @@ export default class ImageCrop extends React.Component {
       imageHeight: null,
       containerWidth: null,
       containerHeight: null,
-      multipleStatus: true,
+      unAnswerSubjectiveList: props.unAnswerSubjectiveList || [], // 已查看且未作答的主观题列表
+      isMultipleSelect: props.isMultipleSelect || false, // 用来判断当前题目是否需要展示：应用于本题 应用于多题 的选择模态层
+      currentQid: props.currentQid, // 当前裁切的题目id
+      multipleStatus: false, // 当前是否处于多题裁切状态
+      selectModalStatus: false, // 选择模态框的显隐
     };
   }
 
@@ -54,8 +59,8 @@ export default class ImageCrop extends React.Component {
     });
   }
 
-  // 确定裁剪
-  pressConfirm = () => {
+  // 剪切图片事件
+  toCropImage = () => {
     if (!this.clip) {
       this.clip = true;
       const { containerWidth, containerHeight } = this.state;
@@ -80,6 +85,20 @@ export default class ImageCrop extends React.Component {
         // });
         ImageEditor.cropImage(uri, cropData, this.success, this.error);
       });
+    }
+  }
+
+  // 确定裁剪 点击 √
+  pressConfirm = () => {
+    const { multipleStatus, isMultipleSelect } = this.state;
+    // 先判断是否处于多题裁切状态，是则裁切图片，否则判断是否要展示选择模态层
+    if (multipleStatus) {
+      // 应用于多题
+      this.selectModalStatusFun(false);
+    } else if (isMultipleSelect) {
+      this.selectModalStatusFun(true);
+    } else {
+      this.toCropImage();
     }
   }
 
@@ -122,6 +141,51 @@ export default class ImageCrop extends React.Component {
     cancelCrop();
   }
 
+  // 控制 选择是否应用于多题的 modal 显隐
+  selectModalStatusFun = (visible) => {
+    this.setState({
+      selectModalStatus: visible,
+    });
+  }
+
+  // 应用于本题
+  currentQuesFun = () => {
+    this.toCropImage();
+    this.selectModalStatusFun(false);
+  }
+
+  // 应用于多题
+  multipleQuesFun = () => {
+    this.selectModalStatusFun(false);
+    // 开始给裁剪多题单独计时
+    const { mulImageCostTime, currentQid } = this.props;
+    mulImageCostTime(currentQid);
+    // 截取新的图片供多题裁切使用---?????
+    const {
+      width, height,
+    } = this.imgCrop.getCropData();
+    console.log(12, width, height);
+    this.imgCrop.crop().then((uri) => {
+      const source = {};
+      source.uri = uri;
+      this.setState({
+        source,
+        // imageWidth: width,
+        // imageHeight: height,
+        multipleStatus: true,
+      });
+    });
+  }
+
+  // 应用于多题---主观题题号切换
+  handleOrderChange = (e) => {
+    // 先保存下切换题号之前的题目的裁剪框位置数据
+    // const { currentQid: prevId } = this.state;
+    this.setState({
+      currentQid: e,
+    });
+  }
+
   render() {
     const {
       value,
@@ -131,8 +195,13 @@ export default class ImageCrop extends React.Component {
       containerWidth,
       containerHeight,
       multipleStatus,
+      selectModalStatus,
+      currentQid,
+      unAnswerSubjectiveList,
     } = this.state;
-    // const { source } = this.props;
+    console.log(6666666000, '当前是多题裁剪状态吗', multipleStatus);
+    console.log(7777777000, 'source', source);
+    console.log(8888888000, 'imageWidth', imageWidth);
     return (
       <Modal
         animationType="slide"
@@ -157,6 +226,7 @@ export default class ImageCrop extends React.Component {
           {source && (
             <ImageCropper
               source={{ uri: source.uri }}
+              // autoCropArea={multipleStatus ? 0.34 : 1}
               imageWidth={imageWidth}
               imageHeight={imageHeight}
               containerWidth={containerWidth}
@@ -168,7 +238,11 @@ export default class ImageCrop extends React.Component {
             multipleStatus
               ? (
                 <View style={[styles.bottomBar, { backgroundColor: '#fff' }]}>
-                  <OrderButtons />
+                  <OrderButtons
+                    unAnswerQuesList={unAnswerSubjectiveList}
+                    defaultValue={currentQid}
+                    onChange={this.handleOrderChange}
+                  />
                 </View>
               )
               : (
@@ -196,6 +270,10 @@ export default class ImageCrop extends React.Component {
               )
           }
         </View>
+        {
+          selectModalStatus
+          && <SelectModal currentQuesFun={this.currentQuesFun} multipleQuesFun={this.multipleQuesFun} />
+        }
       </Modal>
     );
   }
@@ -204,6 +282,10 @@ ImageCrop.propTypes = {
   source: PropTypes.any.isRequired,
   croppedImage: PropTypes.any.isRequired,
   cancelCrop: PropTypes.func.isRequired,
+  mulImageCostTime: PropTypes.func.isRequired,
+  isMultipleSelect: PropTypes.bool.isRequired,
+  currentQid: PropTypes.string.isRequired,
+  unAnswerSubjectiveList: PropTypes.array.isRequired,
 };
 
 const styles = StyleSheet.create({
