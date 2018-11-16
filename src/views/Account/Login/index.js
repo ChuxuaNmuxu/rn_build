@@ -51,8 +51,6 @@ class Login extends Component {
       username,
       password,
     } = this.state;
-    console.log(53, username,
-      password);
     const { apiFlag } = this.props;
 
     Fetch.post(`${fetchApi(fetchApi.cjyun, apiFlag)}/unlogin/login`, {
@@ -106,7 +104,7 @@ class Login extends Component {
           {
             !__DEV__ && (
               <View style={{ alignItems: 'center', marginBottom: 15 }}>
-                <Text style={{ fontSize: 22, color: 'red' }}>V1.0.0(build 11.09.pm)</Text>
+                <Text style={{ fontSize: 22, color: 'red' }}>V1.0.0</Text>
               </View>
             )
           }

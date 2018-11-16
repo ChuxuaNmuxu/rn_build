@@ -1,4 +1,4 @@
-// 初次进入做作业页面时用来询问是否想检查作业的modal
+// 提交作业时二次确认是否提交的modal
 import React, { Component } from 'react';
 import {
   Text,

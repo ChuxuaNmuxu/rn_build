@@ -276,6 +276,8 @@ function transFromHomeworkDataList(data) {
       questionType: (data.type === 10 || data.type === 11) ? 'sub' : 'obj',
       // 难易度(考试不展示难易度，写着先而已)
       difficultyDegree: getdifficultyDegree(data.difficultyLevel),
+      // 教师是否批改
+      teacherMarked: data.teacherMarked,
       // 学生是否批改
       studentMarked: data.studentMarked,
       // 学生是否反馈

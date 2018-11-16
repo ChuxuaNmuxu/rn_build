@@ -71,7 +71,7 @@ export default class Setup extends Component {
       });
     });
 
-    // 正式包才执行一下代码
+    // 正式包才执行以下代码
     if (!__DEV__) {
       // 热更新
       // const updateContent = `
