@@ -71,27 +71,27 @@ export default class Setup extends Component {
     });
 
     // 正式包才执行一下代码
-    if (!__DEV__) {
-      // 热更新
-      const updateContent = '';
-      CodePush.sync({
-        // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
-        installMode: CodePush.InstallMode.IMMEDIATE,
-        // 苹果公司和中国区安卓的热更新，是不允许弹窗提示的，所以不能设置为true
-        updateDialog: {
-          appendReleaseDescription: true,
-          descriptionPrefix: updateContent,
-          title: '优化',
-          mandatoryUpdateMessage: '',
-          mandatoryContinueButtonLabel: '更新',
-        },
-      });
+    // if (!__DEV__) {
+    //   // 热更新
+    //   const updateContent = '';
+    //   CodePush.sync({
+    //     // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
+    //     installMode: CodePush.InstallMode.IMMEDIATE,
+    //     // 苹果公司和中国区安卓的热更新，是不允许弹窗提示的，所以不能设置为true
+    //     updateDialog: {
+    //       appendReleaseDescription: true,
+    //       descriptionPrefix: updateContent,
+    //       title: '优化',
+    //       mandatoryUpdateMessage: '',
+    //       mandatoryContinueButtonLabel: '更新',
+    //     },
+    //   });
 
-      // 删除日志networkLog.text，codeErrorLog.text
-      // await Logger
-      //   .callChaining('deleteFile', 'networkLog.txt') // 删除网络日志
-      //   .callChaining('deleteFile', 'codeErrorLog.txt'); // 删除bug日志
-    }
+    //   // 删除日志networkLog.text，codeErrorLog.text
+    //   // await Logger
+    //   //   .callChaining('deleteFile', 'networkLog.txt') // 删除网络日志
+    //   //   .callChaining('deleteFile', 'codeErrorLog.txt'); // 删除bug日志
+    // }
   }
 
   componentWillUnmount() {
