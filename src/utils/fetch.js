@@ -113,13 +113,7 @@ const Fetch = {
     }
 
     return fetch(url, options)
-      .then((res) => {
-        try {
-          return res.text();
-        } catch (err) {
-          throw new Error(err);
-        }
-      })
+      .then(res => res.text())
       .then((text) => {
         if (!__DEV__) Logger.appendFile('networkLog.txt', Logger.formatNetWorkLog(text, url, options, method));
         return (text ? JSON.parse(text) : {});

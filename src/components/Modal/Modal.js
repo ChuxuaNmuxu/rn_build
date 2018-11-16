@@ -10,6 +10,7 @@ import TipsModal from './TipsModal';
 import AnimationsModal from './AnimationsModal';
 import CustomModal from './CustomModal';
 import ImageViewer from './ImageViewer';
+import RecordModal from './RecordModal/RecordModal';
 
 class Method {}
 
@@ -146,6 +147,20 @@ class MyModal extends Component {
     );
   }
 
+  _Record=() => {
+    const {
+      content, top, height, style,
+    } = this.state;
+    return (
+      <RecordModal
+        content={content}
+        top={top}
+        height={height}
+        style={style}
+      />
+    );
+  }
+
   _ImageViewer=() => {
     const {
       studentName, url, bigImgUrl, imageViewType,
@@ -181,6 +196,7 @@ class MyModal extends Component {
                 AnimationsModal: this._AnimationsModal,
                 CustomModal: this._CustomModal,
                 ImageViewer: this._ImageViewer,
+                RecordModal: this._Record,
                 // FullScreen: this._FullScreen,
               }[type]()
           }

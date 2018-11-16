@@ -7,6 +7,7 @@ import {
   NetInfo,
   View,
   Text,
+  Alert,
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
@@ -73,28 +74,48 @@ export default class Setup extends Component {
     // 正式包才执行一下代码
     if (!__DEV__) {
       // 热更新
-      const updateContent = `
-        升级内容：
-        对作业记录详情页和考试记录详情页增加材料内容的展示
-      `;
-      CodePush.sync({
+      // const updateContent = `
+      //   升级内容：09.05
+      // `;
+
+
+      CodePush.sync(
+        {
         // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
-        installMode: CodePush.InstallMode.IMMEDIATE,
-        // 苹果公司和中国区安卓的热更新，是不允许弹窗提示的，所以不能设置为true
-        updateDialog: {
-          appendReleaseDescription: true,
-          descriptionPrefix: updateContent,
-          title: '11.09版本升级',
-          mandatoryUpdateMessage: '',
-          mandatoryContinueButtonLabel: '更新',
+          installMode: CodePush.InstallMode.IMMEDIATE,
+          // 应用程序进程启动时检查更新。
+          checkFrequency: CodePush.CheckFrequency.ON_APP_START,
+          // 苹果公司和中国区安卓的热更新，是不允许弹窗提示的，所以不能设置为true
+          // updateDialog: {
+          //   appendReleaseDescription: true,
+          //   descriptionPrefix: updateContent,
+          //   title: '09.05版本升级',
+          //   mandatoryUpdateMessage: '这是什么', // 用作更新通知正文的文本
+          //   mandatoryContinueButtonLabel: '更新', // 用于最终用户必须按下的按钮的文本，以便安装强制更新
+          //   optionalInstallButtonLabel: '是哈',
+          //   optionalIgnoreButtonLabel: '忽略本次更新',
+          // },
         },
-      });
+        this.syncStatusChangedCallback,
+        this.downloadProgressCallback,
+      // this.handleBinaryVersionMismatchCallback
+      );
 
       // 删除日志networkLog.text，codeErrorLog.text
       // await Logger
       //   .callChaining('deleteFile', 'networkLog.txt') // 删除网络日志
       //   .callChaining('deleteFile', 'codeErrorLog.txt'); // 删除bug日志
     }
+
+    // const { checkForUpdate } = CodePush;
+    // checkForUpdate()
+    //   .then((update) => {
+    //     if (!update) {
+    //       Toast.info('当前已是最新版本');
+    //     } else {
+    //       Toast.info('下载更新');
+    //     }
+    //   });
   }
 
   componentWillUnmount() {
@@ -102,6 +123,36 @@ export default class Setup extends Component {
       Immersive.removeImmersiveListener(this.restoreImmersive);
     }
   }
+
+  syncStatusChangedCallback = (syncStatus) => {
+    /**
+     * syncStatus 取值
+     * 0. 应用程序与配置的部署完全一致
+     * 1. 已安装可用更新，将在syncStatusChangedCallback函数返回后立即运行，或者在下次应用程序恢复/重新启动时运行，具体取决于InstallMode指定的内容SyncOptions。
+     * 2. 应用程序有一个可选的更新，最终用户选择忽略。（仅在updateDialog使用时适用）
+     * 3. 同步操作遇到未知错误。
+     * 4. 正在sync运行的正在进行的操作阻止当前调用被执行
+     * 5. 正在查询CodePush服务器以进行更新
+     * 6. 提供更新，并向最终用户显示确认对话框。（仅在updateDialog使用时适用）
+     * 7. 正在从CodePush服务器下载可用更新。
+     * 8. 已下载可用更新，即将安装。
+     *
+     * 如果有更新大概得步骤是7，5，0
+     */
+    // console.log(syncStatus);
+
+    Alert.alert(`syncStatus: ${syncStatus}`);
+    // if (syncStatus === 7) {
+    //   CodePush.restartApp();
+    // }
+  }
+
+  downloadProgressCallback = (progress) => {
+    Alert.alert(11);
+    Alert.alert(`progress: ${JSON.parse(progress)}`);
+  }
+
+  // handleBinaryVersionMismatchCallback = (update: RemotePackage) => {}
 
   listenerNetwork = (isConnected) => {
     this.setState({
