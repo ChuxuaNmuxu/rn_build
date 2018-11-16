@@ -173,4 +173,10 @@ export default {
     goToMark: '批改作业',
     reportTitle: '战况播报：',
   },
+
+  // 选择是否应用于多题的modal
+  SelectModal: {
+    usedInCurrent: '应用于本题',
+    usedInMultiple: '应用于多题',
+  },
 };
