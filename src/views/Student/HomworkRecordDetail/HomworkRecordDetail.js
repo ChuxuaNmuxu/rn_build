@@ -38,7 +38,14 @@ class HomworkRecordDetail extends Component {
     console.log(id, '我是垃圾ID');
     this.id = id;
     // 总类型为作业的还是考试的
-    this.type = routeName === 'HomworkRecordDetail' ? 'H' : 'E';
+    let types;
+    if (routeName === 'HomworkRecordDetail') {
+      types = 'H';
+    }
+    if (routeName === 'ExamRecordDetail') {
+      types = 'E';
+    }
+    this.type = types;
 
     // 初始化请求数据
     this.init(this.type, id);
@@ -188,26 +195,28 @@ class HomworkRecordDetail extends Component {
 
 
   init=(type, id) => {
-    const {
-      actions: {
-        fetchExaminationData,
-        fetchHomeworkListData,
-        fetchHomeworkData,
-      },
-    } = this.props;
-    const initFunc = {
-      E: fetchExaminationData,
-      H: fetchHomeworkListData,
-    };
-    // 根据不同的类型选择不同的初始化请求
-    initFunc[type](
-      {
-        id,
-        callback: type === 'H' && fetchHomeworkData,
-        type,
-      },
-      'REQUEST',
-    );
+    if (type && id) {
+      const {
+        actions: {
+          fetchExaminationData,
+          fetchHomeworkListData,
+          fetchHomeworkData,
+        },
+      } = this.props;
+      const initFunc = {
+        E: fetchExaminationData,
+        H: fetchHomeworkListData,
+      };
+      // 根据不同的类型选择不同的初始化请求
+      initFunc[type](
+        {
+          id,
+          callback: type === 'H' && fetchHomeworkData,
+          type,
+        },
+        'REQUEST',
+      );
+    }
   }
 
 
