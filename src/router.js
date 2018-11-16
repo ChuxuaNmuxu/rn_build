@@ -48,6 +48,12 @@ import HotReport from './views/Student/HotReport';
 // 作业提交成功的提示页面
 import CommitSuccessNotice from './views/Student/CommitSuccessNotice';
 //
+// 积分
+import IntegralDetails from './views/Student/IntegralDetails';
+// 团队贡献度
+import ContributionDetails from './views/Student/ContributionDetails';
+// 挑战次数
+import ChallengeDetails from './views/Student/ChallengeDetails';
 
 /**
  * 关于Actions.xxx跳转方法说明
@@ -154,6 +160,7 @@ const RouteMap = props => (
             image="wodedangxuan"
             selectedImage="wodedangxuan"
             hideNavBar
+            // initial
           >
             <Scene key="My" component={My} />
           </Stack>
@@ -188,7 +195,13 @@ const RouteMap = props => (
         {/* 任务详情 */}
         <Scene key="TaskDetail" component={TaskDetail} hideNavBar />
         {/** 荣誉详情，贡献度/积分/次数 */}
-        <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar />
+        {/* <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar /> */}
+        {/** 积分详情 */}
+        <Scene key="IntegralDetails" component={IntegralDetails} hideNavBar />
+        {/** 贡献度详情 */}
+        <Scene key="ContributionDetails" component={ContributionDetails} hideNavBar />
+        {/** 挑战次数详情 */}
+        <Scene key="ChallengeDetails" component={ChallengeDetails} hideNavBar />
         {/* 个人信息 */}
         <Scene key="PersonalInformation" component={PersonalInformation} hideNavBar />
         {/* 科目设置 */}
@@ -200,7 +213,7 @@ const RouteMap = props => (
         {/* 战绩热报 */}
         <Scene key="HotReport" component={HotReport} hideNavBar />
         {/* 作业提交成功的提示页面 */}
-        <Scene key="CommitSuccessNotice" component={CommitSuccessNotice} hideNavBar initial />
+        <Scene key="CommitSuccessNotice" component={CommitSuccessNotice} hideNavBar />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />
