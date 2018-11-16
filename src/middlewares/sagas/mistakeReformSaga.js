@@ -24,7 +24,7 @@ const getState = state => state;
 function* saveQeustionsSaga(action) {
   try {
     const questions = action.payload;
-    console.log(23, questions);
+    // console.log(23, questions);
     const result = immer(questions, (draft) => {
       for (let i = 0; i < draft.length; i++) {
         draft[i].controlComponent = {
@@ -86,7 +86,7 @@ function* submitRadioSaga(action) {
       reason: value,
     };
     const res = yield call(fetch, params);
-    console.log('错题radio', res);
+    // console.log('错题radio', res);
     const { code } = res;
     if (res.code === 0) {
       yield put(actions.submitRadioAction({ value, index }, 'SUCCESS')); // 目前没做什么操作
@@ -111,6 +111,7 @@ function* confirmDeleteSaga(action) {
       const { questions } = state.mistakeReformReducer;
       // 成功后删除
       const newQuestions = R.remove(index, 1, questions);
+      // console.log(114, questions, newQuestions);
       yield put(actions.correctConfirmAction(newQuestions, 'SUCCESS')); // 目前没做什么操作
       yield call(delay, 5000); // 试试等callback函数那边执行完后（那边的执行是2秒），再执行这边
       callback();
@@ -125,25 +126,25 @@ function* confirmDeleteSaga(action) {
 
 function* objectiveSaga(action) {
   try {
-    console.log('客观题saga', action.payload);
+    // console.log('客观题saga', action.payload);
     const { index, item } = action.payload;
     // console.log(action);
     const state = yield select(getState);
     const startTime = moment(new Date()).format();
     const endTime = moment(new Date()).format();
     // console.log(startTime, endTime);
-    console.log(state.mistakeReformReducer.questions[index].controlComponent.objectiveAnswer.value);
+    // console.log(state.mistakeReformReducer.questions[index].controlComponent.objectiveAnswer.value);
     const params = {
       startTime,
       endTime,
       answer: state.mistakeReformReducer.questions[index].controlComponent.objectiveAnswer.value,
       // answerFileId: item.answerFileId, // 没有图片就不需要传
     };
-    console.log(params);
+    // console.log(params);
     const url = `/app/api/student/failed-questions/${item.id}/answer?category=${item.category}`;
     const fetch = arg => Fetch.post(url, arg);
     const res = yield call(fetch, params);
-    console.log(120, res);
+    // console.log(120, res);
     const { code } = res;
     let { data } = res;
     if (code === 0) {
@@ -174,17 +175,17 @@ function* subjectiveSaga(action) {
   // 请求正确答案、别人答案
   try {
     const { index, item } = action.payload;
-    console.log('主观题saga', action.payload);
+    // console.log('主观题saga', action.payload);
     const state = yield select(getState);
     const { urlSource } = state.mistakeReformReducer.questions[index].controlComponent.showSubjectiveInfo;
-    console.log(181, urlSource);
+    // console.log(181, urlSource);
     // OSS的操作
     const { questionId, file, imgName } = urlSource;
     const imgNameType = imgName ? imgName.substring(imgName.lastIndexOf('.'), imgName.length) : '.png';
     const url = '/api/oss-upload-parameters';
     const fetch = (arg, type) => Fetch.post(url, arg, type);
     const res = yield call(fetch, {}, 'json');
-    console.log('OSS第一步res=', res);
+    // console.log('OSS第一步res=', res);
     const { code, data } = res;
     // 第二部
     if (code === 0) {
@@ -207,7 +208,7 @@ function* subjectiveSaga(action) {
       const code2 = res2.code;
       const data2 = res2.data;
       // 第二部
-      console.log('OSS第二部res2=', res2);
+      // console.log('OSS第二部res2=', res2);
       if (code2 === 0) {
         const startTime = moment(new Date()).format();
         const endTime = moment(new Date()).format();
@@ -220,12 +221,12 @@ function* subjectiveSaga(action) {
         const thirdUrl = `/app/api/student/failed-questions/${item.id}/answer?category=${item.category}`;
         // 这个接口貌似有问题
         // const thirdUrl = `/app/api/student/homeworks/${item.homeworkExamId}/questions/${item.id}`;
-        console.log(220, thirdUrl);
+        // console.log(220, thirdUrl);
         const thirdFetch = arg => Fetch.post(thirdUrl, arg);
         // const res333 = yield thirdFetch(thirdParams);
         // console.log('res333=', res333);
         const res3 = yield call(thirdFetch, thirdParams);
-        console.log('OSS 第三部 res3=', res3);
+        // console.log('OSS 第三部 res3=', res3);
         const code3 = res3.code;
         const data3 = res3.data;
         if (code3 === 0) {
