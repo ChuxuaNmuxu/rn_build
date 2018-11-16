@@ -61,9 +61,13 @@ export const changeTodoTask = (state, action) => {
       delete action.payload.cancelTask;
     } else {
       // 取消排期
+
+      // 查询当前任务类型首次出现的位置
       const findIndex = state.todoList.findIndex(v => v.taskType === action.payload.taskType);
-      if (findIndex) {
-        state.todoList.splice(findIndex, 1, action.payload);
+
+      if (findIndex > 0) {
+        state.todoList.splice(findIndex, 0, action.payload);
+        console.log(70);
       } else if (findIndex === 0) {
         state.todoList.unshift(action.payload);
       } else {

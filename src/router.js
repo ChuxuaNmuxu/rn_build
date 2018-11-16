@@ -44,13 +44,16 @@ import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
  * 注意：只能使用Stack的key进行跳转，不能使用Scene的key进行跳转
  *
  * Actions.replace
- * 替换当前场景，没有动画。会触发unmount
+ * 替换当前场景，没有动画。在同一个Stack中进行Scene跳转会触发unmount
  *
  * Actions.refresh
  * 刷新当前页面，没用过度动画
  *
  * Actions.[key]
  * 使用路由的key跳转页面，不会执行unmount
+ *
+ * Actions.popTo
+ * 返回，在同一个Stack中进行Scene跳转会触发unmount
  */
 
 const RouteMap = props => (
