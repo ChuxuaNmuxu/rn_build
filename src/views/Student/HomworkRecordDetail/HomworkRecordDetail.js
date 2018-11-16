@@ -585,6 +585,8 @@ class HomworkRecordDetail extends Component {
                   score={AnserSummarizationData.score}
                 // 这题是否作答了
                   isQuestionSubmited={isQuestionSubmited}
+                // 教师是否批改了
+                  teacherMarked={AnserSummarizationData.teacherMarked || 0}
                 // 学生是否批改了
                   studentMarked={AnserSummarizationData.studentMarked}
                 // 学生是否反馈了
