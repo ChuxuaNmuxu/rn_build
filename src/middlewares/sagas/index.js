@@ -30,6 +30,8 @@ import markFailReason from './markFailReason';
 import hotReportSaga from './hotReportSaga';
 // 我的 页面
 import myIndexSaga from './myIndexSaga';
+// 竞争科目设置
+import subjectSettingSaga from './subjectSettingSaga';
 
 
 function* rootSaga() {
@@ -50,6 +52,7 @@ function* rootSaga() {
     fork(markFailReason),
     fork(hotReportSaga),
     fork(myIndexSaga),
+    fork(subjectSettingSaga),
   ]);
 }
 export default rootSaga;

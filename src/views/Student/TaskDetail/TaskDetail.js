@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import styles from './TaskDetail.scss';
 import Title from './Components/Title';
 import Content from './Components/Content';
-import { formatTimeToshow } from '../../../utils/common';
 import * as taskActions from '../../../actions/taskDetailAction';
 
 class TaskDetail extends Component {
@@ -22,14 +21,15 @@ class TaskDetail extends Component {
       title,
       useTime,
       endTime,
-      beginTime,
       waitReadOver,
       homeworkId,
       actions,
       previewed,
       taskType,
+      beginTime,
     } = this.props;
     const newEndTime = taskType === 2 ? moment(endTime).add(7, 'day').format('YYYY-MM-DD HH:mm:ss') : endTime;
+
     return (
       <View style={styles.wrap}>
         <Title waitReadOver={waitReadOver} title={title} />
@@ -69,23 +69,17 @@ TaskDetail.defaultProps = {
   title: '6-22物理作业',
   useTime: '15分钟',
   endTime: '2018-10-28 23:59:59',
-  beginTime: formatTimeToshow(new Date()), // 默认今天
+  beginTime: null, // 默认今天
   waitReadOver: false,
   homeworkId: '499598186277502976',
   previewed: 0,
   taskType: null,
 };
 
-const mapStateToProps = (state) => {
-  const { beginTime } = state.taskDetailReducer;
-  return {
-    beginTime,
-  };
-};
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(taskActions, dispatch),
 });
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(TaskDetail);
+export default connect(null, mapDispatchToProps)(TaskDetail);

@@ -10,7 +10,7 @@ export default function* myIndexSaga() {
 }
 
 // 请求 我的 页面数据
-function* fetchMyIndexSaga(action) {
+function* fetchMyIndexSaga() {
   try {
     const res = yield Fetch.get('/app/api/game/game/info');
     const { code, data } = res;

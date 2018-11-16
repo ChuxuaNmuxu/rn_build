@@ -169,3 +169,10 @@ export const FETCH_MYINDEX_DATA = 'FETCH_MYINDEX_DATA';
  * -----------------------------战绩热报-------------------------------------------------------------------------
  */
 export const FETCH_HOTREPORT_DATA = 'FETCH_HOTREPORT_DATA';
+
+/**
+ * 获取设置是否参加比赛的科目列表
+ */
+export const FETCH_SUBJECT_DATA_LIST = 'FETCH_SUBJECT_DATA_LIST';
+// 设置是否参加比赛
+export const SETTING_SUBJECT_ISJOIN = 'SETTING_SUBJECT_ISJOIN';

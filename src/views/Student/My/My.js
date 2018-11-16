@@ -52,15 +52,15 @@ class My extends Component {
           <Image source={currentAvatar} width={145} height={145} />
         </TouchableOpacity>
         <View style={styles.mine_content}>
-          <TouchableOpacity style={styles.content_list} onPress={() => Actions.DetailsHonor()}>
+          <TouchableOpacity style={styles.content_list} onPress={() => Actions.ChallengeDetails()}>
             <Text style={styles.numbers}>{myIndexData.gameCount}</Text>
             <I18nText style={styles.texts}>My.challengesNum</I18nText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.content_list} onPress={() => Actions.DetailsHonor()}>
+          <TouchableOpacity style={styles.content_list} onPress={() => Actions.IntegralDetails()}>
             <Text style={styles.numbers}>{myIndexData.score}</Text>
             <I18nText style={styles.texts}>My.integral</I18nText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.content_list} onPress={() => Actions.DetailsHonor()}>
+          <TouchableOpacity style={styles.content_list} onPress={() => Actions.ContributionDetails()}>
             <Text style={styles.numbers}>{myIndexData.contributeScore}</Text>
             <I18nText style={styles.texts}>My.teamContribution</I18nText>
           </TouchableOpacity>

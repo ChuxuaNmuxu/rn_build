@@ -113,13 +113,7 @@ const Fetch = {
     }
 
     return fetch(url, options)
-      .then((res) => {
-        try {
-          return res.text();
-        } catch (err) {
-          throw new Error(err);
-        }
-      })
+      .then(res => res.text())
       .then((text) => {
         if (!__DEV__) Logger.appendFile('networkLog.txt', Logger.formatNetWorkLog(text, url, options, method));
         return (text ? JSON.parse(text) : {});
@@ -135,7 +129,10 @@ const Fetch = {
          */
         if (findString(err.stack, 'Network request failed') || findString(err.stack, 'com.cjhms_rn/files/CodePush/')) {
           Toast.fail('当前设备网络异常，请检查网络');
+        } else {
+          Toast.fail(`url:${url}, message:${err.message}`);
         }
+
         throw new Error(err);
       });
   },

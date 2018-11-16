@@ -1,4 +1,4 @@
-// 二次确认是否提交作业的modal
+// 提交作业时二次确认是否提交的modal
 import React, { Component } from 'react';
 import {
   Text,
