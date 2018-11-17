@@ -171,7 +171,11 @@ export const FETCH_MYINDEX_DATA = 'FETCH_MYINDEX_DATA';
 export const FETCH_HOTREPORT_DATA = 'FETCH_HOTREPORT_DATA';
 
 /**
- * 获取设置是否参加比赛的科目列表
+ * 荣誉详情包含
+ * 积分、挑战次数、团队奉献度
+ */
+export const GET_DETAILS_HONOR = 'GET_DETAILS_HONOR';
+/**
  */
 export const FETCH_SUBJECT_DATA_LIST = 'FETCH_SUBJECT_DATA_LIST';
 // 设置是否参加比赛

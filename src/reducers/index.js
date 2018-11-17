@@ -4,7 +4,7 @@ import config from './common/config';
 import problemOverviewReducer from './problemOverviewReducer';
 import previewHomeworkReducer from './previewHomeworkReducer';
 import doHomeworkReducer from './doHomeworkReducer';
-import homeworkTaskReducer from './HomeworkTask';
+import homeworkTaskReducer from './homeworkTask';
 import recordDetailReducer from './recordDetailReducer';
 import mistakeReformReducer from './mistakeReformReducer';
 import ProblemRecordsReducer from './problemRecordsReducer';
@@ -16,6 +16,7 @@ import hotReportReducer from './hotReportReducer';
 import myIndexReducer from './myIndexReducer';
 import subjectSettingReducer from './subjectSettingReducer';
 import account from './account';
+import detailsHonor from './detailsHonor';
 
 export default combineReducers({
   routes,
@@ -50,4 +51,9 @@ export default combineReducers({
   subjectSettingReducer,
   // 账号信息
   account,
+  /**
+ * 荣誉详情包含
+ * 积分、挑战次数、团队奉献度
+ */
+  detailsHonor,
 });
