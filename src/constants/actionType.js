@@ -162,3 +162,10 @@ export const HOMEWORK_CORRECTING_CONTROL_FINISH_BTN = 'HOMEWORK_CORRECTING_CONTR
  * -----------------------------战绩热报-------------------------------------------------------------------------
  */
 export const FETCH_HOTREPORT_DATA = 'FETCH_HOTREPORT_DATA';
+
+
+/**
+ * 荣誉详情包含
+ * 积分、挑战次数、团队奉献度
+ */
+export const GET_DETAILS_HONOR = 'GET_DETAILS_HONOR';

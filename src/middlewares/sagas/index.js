@@ -28,6 +28,11 @@ import mistakeListSaga from './mistakeListSaga';
 import markFailReason from './markFailReason';
 // 战绩热报
 import hotReportSaga from './hotReportSaga';
+/**
+ * 荣誉详情包含
+ * 积分、挑战次数、团队奉献度
+ */
+import detailsHonor from './detailsHonor';
 
 
 function* rootSaga() {
@@ -47,6 +52,7 @@ function* rootSaga() {
     fork(mistakeListSaga),
     fork(markFailReason),
     fork(hotReportSaga),
+    fork(detailsHonor),
   ]);
 }
 export default rootSaga;

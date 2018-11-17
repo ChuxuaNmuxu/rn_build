@@ -160,7 +160,6 @@ const RouteMap = props => (
             image="wodedangxuan"
             selectedImage="wodedangxuan"
             hideNavBar
-            // initial
           >
             <Scene key="My" component={My} />
           </Stack>
@@ -173,6 +172,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
+        // initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
@@ -197,7 +197,7 @@ const RouteMap = props => (
         {/** 荣誉详情，贡献度/积分/次数 */}
         {/* <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar /> */}
         {/** 积分详情 */}
-        <Scene key="IntegralDetails" component={IntegralDetails} hideNavBar />
+        <Scene key="IntegralDetails" component={IntegralDetails} hideNavBar initial />
         {/** 贡献度详情 */}
         <Scene key="ContributionDetails" component={ContributionDetails} hideNavBar />
         {/** 挑战次数详情 */}

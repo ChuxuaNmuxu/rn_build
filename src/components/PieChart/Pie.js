@@ -10,6 +10,12 @@ export default class Pie extends Component {
     const {
       colorScale, data, radius, innerRadius, labels,
     } = this.props;
+
+    let total = 0;
+    data.forEach((v) => {
+      total += v.y;
+    });
+
     return (
       <Svg width={radius} height={radius}>
         <Text
@@ -20,12 +26,12 @@ export default class Pie extends Component {
           x={radius / 2 - 10}
           y={radius / 2 + 22}
           textAnchor="middle"
-        >30
+        >{total}
           <Text
             fill="#30bf6c"
             stroke="#30bf6c"
             fontSize="24"
-            fontWeight="bold"
+            fontWeight="600"
             x={radius / 2 + 40}
             y={radius / 2 + 22}
           >分
@@ -56,17 +62,7 @@ Pie.propTypes = {
 Pie.defaultProps = {
   colorScale: ['#f97a76', '#fca77e', '#fdf376', '#f1ffc5',
     '#ccff98', '#8ff688', '#05e1de', '#32c9fe', '#e461ff'],
-  data: [
-    { x: '语文', y: 10 },
-    { x: '数学', y: 10 },
-    { x: '英语', y: 15 },
-    { x: '政治', y: 15 },
-    { x: '历史', y: 10 },
-    { x: '地理', y: 10 },
-    { x: '物理', y: 10 },
-    { x: '化学', y: 10 },
-    { x: '生物', y: 10 },
-  ],
+  data: [],
   radius: 520,
   innerRadius: 130,
   labels: () => {},
