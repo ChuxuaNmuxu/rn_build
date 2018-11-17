@@ -54,8 +54,10 @@ export const CHECK_HOMEWORK_ISOPERABLE = 'CHECK_HOMEWORK_ISOPERABLE';
  */
 // 获取做作业的题目数据
 export const FETCH_DOHOMEWORK_QUESTION = 'FETCH_DOHOMEWORK_QUESTION';
-// 答题，提交小题答案
+// 答题，提交单题答案
 export const SUBMIT_DOHOMEWORK_ANSWER = 'SUBMIT_DOHOMEWORK_ANSWER';
+// 批量答题（应用于多题）
+export const SUBMIT_MULTIPLE_ANSWER = 'SUBMIT_MULTIPLE_ANSWER';
 // 第一次进入该份作业时弹窗判断是否想检查作业
 export const TOCHECK_HOMEWORK_QUESTION = 'TOCHECK_HOMEWORK_QUESTION';
 // 保存检查耗时
@@ -159,13 +161,22 @@ export const HOMEWORK_CORRECTING_SAVE_SCORE = 'HOMEWORK_CORRECTING_SAVE_SCORE';
 export const HOMEWORK_CORRECTING_CONTROL_FINISH_BTN = 'HOMEWORK_CORRECTING_CONTROL_FINISH_BTN';
 
 /**
+ * -----------------------------------我的页面------------------------------------------------------
+ */
+export const FETCH_MYINDEX_DATA = 'FETCH_MYINDEX_DATA';
+
+/**
  * -----------------------------战绩热报-------------------------------------------------------------------------
  */
 export const FETCH_HOTREPORT_DATA = 'FETCH_HOTREPORT_DATA';
-
 
 /**
  * 荣誉详情包含
  * 积分、挑战次数、团队奉献度
  */
 export const GET_DETAILS_HONOR = 'GET_DETAILS_HONOR';
+/**
+ */
+export const FETCH_SUBJECT_DATA_LIST = 'FETCH_SUBJECT_DATA_LIST';
+// 设置是否参加比赛
+export const SETTING_SUBJECT_ISJOIN = 'SETTING_SUBJECT_ISJOIN';

@@ -19,8 +19,6 @@ import AnswerCard from './Components/AnswerCard';
 import ExtendListView from '../../../components/ExtendListView';
 import WillingToCheckModal from './Components/Modals/WillingToCheckModal';
 import CommitHomeworkModal from './Components/Modals/CommitHomeworkModal';
-import CommitSuccessAndnoRemark from './Components/Modals/CommitSuccessAndnoRemark';
-import CommitSuccessAndhasRemark from './Components/Modals/CommitSuccessAndhasRemark';
 import DifficultLevelModal from './Components/Modals/DifficultLevelModal';
 import { ModalApi } from '../../../components/Modal';
 
@@ -32,8 +30,6 @@ class DoHomeworks extends Component {
     this.state = {
       WillingToCheckModalStatus: false, // 提示是否愿意检查的modal显隐
       commitHomeworkModalStatus: false, // 二次确认模态框的显隐
-      tipStatus: false, // 提交作业成功且无互批任务的模态框显隐
-      hasRemarkStatus: false, // 提交作业成功且有互批任务的模态框显隐
       difficultModalStatus: false, // 滑动到下一题时是展示选择难易程度的模态层
       showExtendView: false, // 是否显示该份作业所有题目序号的扩展视图
       currentIndex: 0, // 当前题目index
@@ -46,7 +42,6 @@ class DoHomeworks extends Component {
       clickQuesOrderIndex: null, // 点击题号时该题所在列表索引
       imgLoading: false, // 图片上传loading状态
     };
-    this.commitHomework = false; // 是否点击了二次确认的提交作业按钮
     this.tryToUploadImg = false; // 是否上传了图片--防止componentDidUpdate一直执行出现死循环
     this.fetchHomeworkStatus = false; // 刚进入页面时是否请求到作业数据
     this.switchQuesGuidData = { // 切换上下题手势指引的内容
@@ -87,26 +82,12 @@ class DoHomeworks extends Component {
   }
 
   componentDidUpdate() {
-    const { uploadImgSuccess, needMark } = this.props;
+    const { uploadImgSuccess } = this.props;
     const { uploadImgQuesId, homeworkData } = this.state;
     // 上传图片成功后提交答案
     if (uploadImgSuccess && uploadImgQuesId && this.tryToUploadImg) {
       this.fetchSaveQuestion(uploadImgQuesId);
       this.tryToUploadImg = false;
-    }
-    // 提交作业成功后是否有互批作业needMark为---0:没有互批作业, 1:有互批作业，其初始值为-1，表示还未接收到接口数据
-    if (this.commitHomework && needMark >= 0) {
-      if (needMark) {
-        this.setRemarkModalVisibleFun(true);
-      } else {
-        // 没有互批作业2秒后跳到首页
-        this.setTipModalVisibleFun(true);
-        setTimeout(() => {
-          Actions.HomeworkTask();
-        }, 2000);
-      }
-
-      this.commitHomework = false;
     }
     // 在页面请求到作业数据后在此判断是否要展示 是否想检查 的模态框
     if (!this.fetchHomeworkStatus && !R.isEmpty(homeworkData)) {
@@ -170,20 +151,6 @@ class DoHomeworks extends Component {
     });
   }
 
-  // 控制提交作业成功且无互批任务的模态框显隐
-  setTipModalVisibleFun = (visible) => {
-    this.setState({
-      tipStatus: visible,
-    });
-  }
-
-  // 控制提交作业成功且有互批任务的模态框显隐
-  setRemarkModalVisibleFun = (visible) => {
-    this.setState({
-      hasRemarkStatus: visible,
-    });
-  }
-
   // 控制右上角展示的按钮
   setBtnText = (num) => {
     this.setState({
@@ -223,8 +190,11 @@ class DoHomeworks extends Component {
     // 提交整份作业的操作--请求提交作业的接口
     const { actions: { submitHomeworkAction }, homeworkId } = this.props;
     submitHomeworkAction({ homeworkId }, 'REQUEST');
-    this.commitHomework = true;
     this.setCommitModalVisbleFun(false);
+    // 提交后跳转到提交成功的提示页面
+    setTimeout(() => {
+      Actions.CommitSuccessNotice();
+    }, 0);
   }
 
   // 点击查看已答题目/检查---进入作业检查页面,如果是点击 查看已答题目 按钮则先要判断当前题目是否有选难易程度，没有则弹窗让其选择难易程度
@@ -244,20 +214,6 @@ class DoHomeworks extends Component {
       Actions.ReviewHomework();
       this.setCommitModalVisbleFun(false);
     }
-  }
-
-  // 稍后再批
-  laterToCorrentFun = () => {
-    this.setRemarkModalVisibleFun(false);
-    Actions.HomeworkTask();
-  }
-
-  // 去批改作业
-  presenttoCorrentFun = () => {
-    this.setRemarkModalVisibleFun(false);
-    const { homeworkId } = this.props;
-    // 到批阅作业界面
-    Actions.HomeworkCorrecting({ homeworkId });
   }
 
   // 左右滑动(切换tab)页面切换题目---如果当前题目未选择难易程度，则需要先弹出难易程度标签，选择后再跳到下一题
@@ -471,6 +427,12 @@ class DoHomeworks extends Component {
     }, 0);
   }
 
+  // 点击选择 应用于多题 时，开始计算多题裁切所用的总时间，此时时间不计入单题
+  mulImageCostTime = (id) => {
+    // 先把当前题目提交一次答案保存时间
+    this.fetchSaveQuestion(id);
+  }
+
   // 渲染需要展示在扩展列表视图中的组件
   renderQuestionOrder = (showQuesArray, currentIndex) => {
     // 拿到当前题目的number
@@ -569,7 +531,6 @@ class DoHomeworks extends Component {
     const {
       WillingToCheckModalStatus,
       commitHomeworkModalStatus,
-      tipStatus, hasRemarkStatus,
       difficultModalStatus,
       showExtendView,
       currentIndex,
@@ -594,6 +555,7 @@ class DoHomeworks extends Component {
     }
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
+    // console.log(1115, showQuesArray);
     return (
       <View style={styles.containers}>
         {!R.isEmpty(homeworkData) && this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
@@ -614,6 +576,8 @@ class DoHomeworks extends Component {
                   <QuestionCard questions={item} />
                   <AnswerCard
                     questions={item}
+                    homeworkList={showQuesArray}
+                    mulImageCostTime={this.mulImageCostTime}
                     handleDifficultLevel={this.handleDifficultLevel}
                     handleToClickRadio={this.handleToClickRadio}
                     handlePreviewImage={this.handlePreviewImage}
@@ -657,19 +621,6 @@ class DoHomeworks extends Component {
           />
           )
         }
-        {/* 二次确认点击提交成功后--无互批任务 */}
-        {
-          tipStatus && <CommitSuccessAndnoRemark />
-        }
-        {/* 二次确认点击提交成功后--有互批任务 */}
-        {
-          hasRemarkStatus && (
-          <CommitSuccessAndhasRemark
-            laterToCorrentFun={this.laterToCorrentFun}
-            presenttoCorrentFun={this.presenttoCorrentFun}
-          />
-          )
-        }
         {/* 切换题目如果未选择难易程度则弹框提示选择 */}
         {
           difficultModalStatus && (
@@ -686,7 +637,6 @@ class DoHomeworks extends Component {
 DoHomeworks.propTypes = {
   data: PropTypes.object.isRequired,
   uploadImgSuccess: PropTypes.bool.isRequired, // 上传图片并成功改变redux数据的标识
-  needMark: PropTypes.number.isRequired, // 提交作业后是否有互批作业的标识
   actions: PropTypes.object.isRequired,
   homeworkId: PropTypes.string,
   showUnAnswerQues: PropTypes.bool,
@@ -698,11 +648,10 @@ DoHomeworks.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
-  const { data, uploadImgSuccess, needMark } = state.doHomeworkReducer;
+  const { data, uploadImgSuccess } = state.doHomeworkReducer;
   return {
     data,
     uploadImgSuccess,
-    needMark,
   };
 };
 

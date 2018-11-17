@@ -1,11 +1,15 @@
 // 科目设置页面
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Text,
   View,
   FlatList,
 } from 'react-native';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { mdl } from 'react-native-material-kit';
+import * as actions from '../../../actions/subjectSettingAction';
 import styles from './SubjectSetting.scss';
 import I18nText from '../../../components/I18nText';
 import Nav from '../../../components/Nav';
@@ -14,45 +18,13 @@ class SubjectSetting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // 科目模拟数据
-      subjectList: [{
-        subjectId: 1,
-        subjectName: '语文',
-        isSwitchOn: true, // 开关状态
-      }, {
-        subjectId: 2,
-        subjectName: '数学',
-        isSwitchOn: true,
-      }, {
-        subjectId: 3,
-        subjectName: '英语',
-        isSwitchOn: true,
-      }, {
-        subjectId: 4,
-        subjectName: '政治',
-        isSwitchOn: true,
-      }, {
-        subjectId: 5,
-        subjectName: '历史',
-        isSwitchOn: true,
-      }, {
-        subjectId: 6,
-        subjectName: '地理',
-        isSwitchOn: true,
-      }, {
-        subjectId: 7,
-        subjectName: '物理',
-        isSwitchOn: false,
-      }, {
-        subjectId: 8,
-        subjectName: '化学',
-        isSwitchOn: false,
-      }, {
-        subjectId: 9,
-        subjectName: '生物',
-        isSwitchOn: false,
-      }],
     };
+  }
+
+  componentDidMount() {
+    // 请求数据
+    const { actions: { fetchSubjectSettingDataAction } } = this.props;
+    fetchSubjectSettingDataAction(null, 'REQUEST');
   }
 
   // 渲染子组件
@@ -71,7 +43,7 @@ class SubjectSetting extends Component {
         trackLength={96} // 开关的长度
         trackSize={48} // 开关的高度
         thumbRadius={23} // 里面圆圈的半径
-        checked={item.isSwitchOn}
+        checked={item.join}
         onCheckedChange={e => this.changeSwitchStatus(item.subjectId, e)}
       />
     </View>
@@ -79,21 +51,15 @@ class SubjectSetting extends Component {
 
   // 更改科目是否参与pk
   changeSwitchStatus = (subjectId, e) => {
-    const { subjectList } = this.state;
-    // console.log(777, e);
-    for (let i = 0; i < subjectList.length; i++) {
-      if (subjectList[i].subjectId === subjectId) {
-        subjectList[i].isSwitchOn = e.checked;
-      }
-    }
-    this.setState({
-      subjectList,
-    });
+    const { actions: { settingSubjectIsJoinAction } } = this.props;
+    const answerParam = {};
+    answerParam.join = e.checked;
+    answerParam.subjectId = subjectId;
+    settingSubjectIsJoinAction({ answerParam }, 'REQUEST');
   }
 
   render() {
-    const { subjectList } = this.state;
-    // console.log(888, subjectList);
+    const { subjectList } = this.props;
     return (
       <View style={styles.subjectSetting_container}>
         <Nav goBackFun={() => { Actions.My(); }}>
@@ -118,4 +84,20 @@ class SubjectSetting extends Component {
   }
 }
 
-export default SubjectSetting;
+SubjectSetting.propTypes = {
+  subjectList: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  const { subjectList } = state.subjectSettingReducer;
+  return {
+    subjectList,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SubjectSetting);

@@ -28,20 +28,21 @@ export default class ImageCropper extends React.Component {
       imageHeight = 0,
       containerWidth: CWidth = 0,
       containerHeight: CHeight = 0,
+      autoCropArea,
     } = this.props;
 
     // 当前/动画 x 位移
-    this._left = CWidth / 2 - imageWidth / 2;
+    this._left = (CWidth / 2 - imageWidth * autoCropArea / 2);
     this._animatedLeft = new Animated.Value(this._left);
 
     // 当前/动画 y 位移
-    this._top = CHeight / 2 - imageHeight / 2;
+    this._top = (CHeight / 2 - imageHeight * autoCropArea / 2);
     this._animatedTop = new Animated.Value(this._top);
 
     this._width = imageWidth;
     this._height = imageHeight;
-    this._animatedWidth = new Animated.Value(imageWidth);
-    this._animatedHeight = new Animated.Value(imageHeight);
+    this._animatedWidth = new Animated.Value(imageWidth * autoCropArea);
+    this._animatedHeight = new Animated.Value(imageHeight * autoCropArea);
 
     // 缩放大小
     this.scale = 1;
@@ -393,6 +394,16 @@ export default class ImageCropper extends React.Component {
     };
   }
 
+  setCropData = (croperBoxData) => {
+    const {
+      top, left, width, height,
+    } = croperBoxData;
+    this._animatedLeft.setValue(left);
+    this._animatedTop.setValue(top);
+    this._animatedWidth.setValue(width);
+    this._animatedHeight.setValue(height);
+  }
+
   crop = () => captureRef(this.cropper, { format: 'png', quality: 1 })
 
   rotate = (digit) => {
@@ -411,6 +422,7 @@ export default class ImageCropper extends React.Component {
   render() {
     const { rotate = 0, containerWidth } = this.state;
     console.log('containerWidth', containerWidth);
+    console.log('animatedScale', this.animatedScale);
     const animatedImgStyle = {
       transform: [{
         scale: this.animatedScale,
@@ -425,6 +437,7 @@ export default class ImageCropper extends React.Component {
       height: this._animatedHeight,
     };
     const { source = {}, imageWidth, imageHeight } = this.props;
+    console.log('cropperImage', imageWidth, imageHeight);
     return (
       <View
         style={styles.container}
@@ -471,6 +484,11 @@ ImageCropper.propTypes = {
   imageHeight: PropTypes.number.isRequired,
   containerWidth: PropTypes.number.isRequired,
   containerHeight: PropTypes.number.isRequired,
+  autoCropArea: PropTypes.number, // 定义自动裁剪区域大小，相对图片而言--0到1之间的数字,默认为1，即裁切框和图片一样大，裁切框的中心点为图片的中心点
+};
+
+ImageCropper.defaultProps = {
+  autoCropArea: 1,
 };
 
 const styles = StyleSheet.create({
