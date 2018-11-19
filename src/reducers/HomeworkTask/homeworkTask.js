@@ -10,6 +10,10 @@ import {
   IS_GET_DROP_LISTENER_RANGE,
   IS_FIRST_GET_DROP_LISTENER_RANGE,
   IS_FIRST_OPEN_HOMEPAGE,
+  GET_ACHIEVEMENTS_BROADCAST,
+  IS_MANUAL_CLOSE_ACHIEVEMENTS_BROADCAST,
+  CHANGE_ACHIEVEMENTS_BROADCAST_STATUS,
+  CHANGE_ACHIEVEMENTS_BROADCAST_CHECKED_ID,
 } from '../../constants/actionType';
 import { createHalfHourPeriod, currentTimeToPeriod } from '../../utils/common';
 import * as fn from './fn';
@@ -36,6 +40,10 @@ const initial = {
   isRegetDropListenerRange: false, // 是否重新获取时间段监听范围
   isFirstRegetDropListenerRange: false, // 是否重新获取时间段监听范围
   isFirstOpenHomepage: true, // 第一次进入首页
+  isManualCloseAchievementsBroadcast: false, // 是否关闭战绩播报
+  achievementsBroadcastData: [], // 战绩播报
+  achievementsBroadcastStatus: false, // 战绩播报模态状态
+  achievementsBroadcastId: null, // 战机播报索引
 };
 
 const handle = {
@@ -49,6 +57,10 @@ const handle = {
   [IS_GET_DROP_LISTENER_RANGE]: fn.isGetDropListenerRange,
   [IS_FIRST_GET_DROP_LISTENER_RANGE]: fn.isFirstGetDropListenerRange,
   [IS_FIRST_OPEN_HOMEPAGE]: fn.isFirstOpenHomepage,
+  [IS_MANUAL_CLOSE_ACHIEVEMENTS_BROADCAST]: fn.isManualCloseAchievementsBroadcast,
+  [`${GET_ACHIEVEMENTS_BROADCAST}_SUCCESS`]: fn.getAchievementsBroadcast,
+  [CHANGE_ACHIEVEMENTS_BROADCAST_STATUS]: fn.changeAchievementsBroadcastStatus,
+  [CHANGE_ACHIEVEMENTS_BROADCAST_CHECKED_ID]: fn.changeAchievementsBroadcasCheckedId,
 };
 
 const homeworkTask = createReducer(initial, handle);

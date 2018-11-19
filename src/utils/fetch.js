@@ -133,6 +133,7 @@ const Fetch = {
         } else {
           Toast.fail(`url:${url}, message:${err.message}`);
         }
+        console.log(`fetch err: ${err}`);
 
         throw new Error(err);
       });

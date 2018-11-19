@@ -16,6 +16,7 @@ import styles from './HotReport.scss';
 import I18nText from '../../../components/I18nText';
 import Nav from '../../../components/Nav';
 import MatchNoOpponent from './Component/MatchNoOpponent';
+import { ChangeAchievementsBroadcastStatus } from '../../../actions/homeworkTask';
 
 class HotReport extends Component {
   constructor(props) {
@@ -54,9 +55,14 @@ class HotReport extends Component {
   render() {
     const { currentIndex, hotReportData } = this.state;
     const dataLen = hotReportData.length;
+    const { onChangeAchievementsBroadcastStatus } = this.props;
     return (
       <View style={styles.hotReport_container}>
-        <Nav goBackFun={() => { Actions.HomeworkTask(); }}>
+        <Nav goBackFun={() => {
+          onChangeAchievementsBroadcastStatus(true);
+          Actions.HomeworkTask();
+        }}
+        >
           <I18nText>HotReport.title</I18nText>
         </Nav>
         <Swiper
@@ -129,11 +135,12 @@ class HotReport extends Component {
 HotReport.propTypes = {
   hotReportData: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
+  onChangeAchievementsBroadcastStatus: PropTypes.func,
 };
 
-// HotReport.defaultProps = {
-//   hotReportData: [],
-// };
+HotReport.defaultProps = {
+  onChangeAchievementsBroadcastStatus: () => {},
+};
 
 const mapStateToProps = (state) => {
   const { hotReportData } = state.hotReportReducer;
@@ -144,6 +151,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(actions, dispatch),
+  onChangeAchievementsBroadcastStatus: bindActionCreators(ChangeAchievementsBroadcastStatus, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HotReport);
