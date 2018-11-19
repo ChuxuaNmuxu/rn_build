@@ -109,3 +109,19 @@ export const isFirstGetDropListenerRange = (state, action) => {
 export const isFirstOpenHomepage = (state, action) => {
   state.isFirstOpenHomepage = action.payload;
 };
+
+export const isManualCloseAchievementsBroadcast = (state, action) => {
+  state.isManualCloseAchievementsBroadcast = action.payload;
+};
+
+export const getAchievementsBroadcast = (state, action) => {
+  state.achievementsBroadcastData = action.payload;
+};
+
+export const changeAchievementsBroadcastStatus = (state, action) => {
+  state.achievementsBroadcastStatus = action.payload;
+};
+
+export const changeAchievementsBroadcasCheckedId = (state, action) => {
+  state.achievementsBroadcastId = action.payload;
+};
