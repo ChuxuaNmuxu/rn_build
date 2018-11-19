@@ -16,6 +16,7 @@ import hotReportReducer from './hotReportReducer';
 import myIndexReducer from './myIndexReducer';
 import subjectSettingReducer from './subjectSettingReducer';
 import rankBoardReducer from './rankBoardReducer';
+import personalInformationReducer from './personalInformationReducer';
 import account from './account';
 import detailsHonor from './detailsHonor';
 
@@ -52,6 +53,8 @@ export default combineReducers({
   subjectSettingReducer,
   // 排行榜
   rankBoardReducer,
+  // 个人信息
+  personalInformationReducer,
   // 账号信息
   account,
   /**
