@@ -2,7 +2,6 @@ FROM jenkins/jenkins:2.122
 
 USER root
 
-
 # JAVA
 RUN apt update
 RUN apt-get install openjdk-8-jre -y
