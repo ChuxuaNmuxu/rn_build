@@ -52,6 +52,10 @@ function* initailSaga(action) {
     console.log(getSubjectAndGrade, 'getSubjectAndGradegetSubjectAndGrade');
     if (getRecordData.code === 0 && getSubjectAndGrade.code === 0) {
       const { grades, subjects } = getSubjectAndGrade.data;
+      // 如果是作业记录，则添加胜负标识---模拟数据
+      if (currentRecordType === 0) {
+        getRecordData.data.map(item => item.competeResult = parseInt(Math.random() * 10));
+      }
       // 初始化结果转换，注释里有前端开发需要的字段，转换结果就是酱紫。
       yield put(actions.initialFetch({
         subjectData: getSubjectData(subjects),
@@ -139,9 +143,13 @@ function* dropDownSaga(action) {
     const fetch = params => api.get(url, params);
     const res = yield call(fetch, currentRecordType === 0 ? homeworkParams : examParams);
     const { code, data, total } = res;
-    console.log(res);
+    // console.log(900000000000, res);
     // console.warn('年级接口res=', res)
     if (code === 0) {
+      // 如果是作业记录，则添加胜负标识---模拟数据
+      if (currentRecordType === 0) {
+        data.map(item => item.competeResult = parseInt(Math.random() * 10));
+      }
       yield put(actions.dropDownRefresh({
         recordData: transfromRecordData(data, currentRecordType),
         total,
@@ -234,6 +242,7 @@ function transfromRecordData(data, type) {
         type: getHomeWorkType(item),
         // 是否可以去重做
         unknownRedo: item.allowMakeUp,
+        competeResult: item.competeResult, // 作业记录胜负字段
       })
     ));
   } else {

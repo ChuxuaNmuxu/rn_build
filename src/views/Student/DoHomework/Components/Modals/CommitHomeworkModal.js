@@ -1,4 +1,4 @@
-// 初次进入做作业页面时用来询问是否想检查作业的modal
+// 提交作业时二次确认是否提交的modal
 import React, { Component } from 'react';
 import {
   Text,
@@ -31,6 +31,7 @@ class CommitHomeworkModal extends Component {
       lCallbakFn: this.leftFn,
       rCallbakFn: this.rightFn,
       activeBtn: 'L',
+      footButton: true, // 传参展示按钮，以免受其他页面传了false而导致按钮不展示的问题（单例不可避免的问题）
       rightBtnText: '提交',
       leftBtnText: '检查',
       content: this.commitHomeworkContent(),

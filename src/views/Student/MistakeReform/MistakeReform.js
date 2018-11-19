@@ -11,8 +11,8 @@ import PropTypes from 'prop-types';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Swiper from 'react-native-swiper';
 import HTMLView from 'react-native-htmlview';
+import Swiper from '../../../components/Swiper';
 import draftToHtml from '../../../utils/draftjsToHtml';
 import Modal, { ModalApi } from '../../../components/Modal';
 import ThumbnailImage from '../../../components/ThumbnailImage';
@@ -46,8 +46,9 @@ class MistakeReform extends Component {
   }
 
   componentDidMount() {
-    // console.log('调用 错题重做 MistakeReform 组件', this.props);
+    console.log('调用 错题重做 MistakeReform 组件', this.props);
   }
+
 
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
@@ -71,7 +72,7 @@ class MistakeReform extends Component {
   // 导航条右侧是否有 index
   haveIndex = (index) => {
     const { questions } = this.props;
-    console.log(questions, index);
+    // console.log(questions, index);
     const newIndex = index + 1;
     if (questions.length > 1) {
       return (
@@ -225,6 +226,7 @@ class MistakeReform extends Component {
       lCallbakFn: this.leftFn,
       rCallbakFn: () => this.rightFn(item),
       activeBtn: 'R',
+      footButton: true, // 传参展示按钮，以免受其他页面传了false而导致按钮不展示的问题（单例不可避免的问题）
       rightBtnText: '确定',
       leftBtnText: '取消',
       content: this.modalContent('移除后将不可恢复，请确定是否移除错题本'),
@@ -432,7 +434,7 @@ class MistakeReform extends Component {
   render() {
     const { questions, currentSubjectId } = this.props;
     const { index } = this.state;
-    // console.log(8888000, questions);
+    console.log('index:', index);
     return (
       <View style={styles.mistakeReform_container}>
         <Modal />
@@ -441,7 +443,7 @@ class MistakeReform extends Component {
           <View style={styles.head_icon}>
             <TouchableOpacity
               // 回去的时候要重新请求
-              onPress={() => Actions.ProblemListOverview({ subjectId: currentSubjectId })}
+              onPress={() => Actions.popTo('ProblemListOverview', { subjectId: currentSubjectId })}
             >
               <Entypo name="chevron-thin-left" size={40} color="white" />
             </TouchableOpacity>
@@ -456,6 +458,7 @@ class MistakeReform extends Component {
         <Swiper
           ref={(node) => { this.swiperRef = node; }}
           loop={false}
+          index={index}
           showsPagination={false}
           onIndexChanged={(nextIndex) => {
             console.log('onIndexChanged, nextIndex=', nextIndex);

@@ -123,6 +123,17 @@ class AnswerCard extends Component {
     });
   }
 
+  // 筛选出已查看且未作答的主观题列表
+  filterUASL = (homeworkList) => {
+    const unAnswerSubjectiveList = [];
+    for (let i = 0; i < homeworkList.length; i++) {
+      if (homeworkList[i].type > 4 && !homeworkList[i].answered && homeworkList[i].read) {
+        unAnswerSubjectiveList.push(homeworkList[i]);
+      }
+    }
+    return unAnswerSubjectiveList;
+  }
+
   renderUpdateImg = () => {
     let UpdateImgDiv;
     const {
@@ -168,14 +179,27 @@ class AnswerCard extends Component {
     return UpdateImgDiv;
   }
 
+
   // 图片裁剪模块
-  renderCropper = source => (
-    <ImageCrop
-      source={source}
-      croppedImage={this.croppedImage}
-      cancelCrop={this.cancelCrop}
-    />
-  )
+  renderCropper = (source) => {
+    const {
+      homeworkList, questions, mistakeReform, checkHomework, mulImageCostTime,
+    } = this.props;
+    const unAnswerSubjectiveList = (homeworkList && this.filterUASL(homeworkList)) || [];
+    // 主观题支持应用于多题---作业检查或者错题重做页面不需要此功能
+    const isMultipleSelect = (questions.type > 4) && !mistakeReform && !checkHomework;
+    return (
+      <ImageCrop
+        isMultipleSelect={isMultipleSelect}
+        currentQid={questions.id}
+        mulImageCostTime={mulImageCostTime}
+        unAnswerSubjectiveList={unAnswerSubjectiveList}
+        source={source}
+        croppedImage={this.croppedImage}
+        cancelCrop={this.cancelCrop}
+      />
+    );
+  }
 
   render() {
     const { questions, mistakeReform } = this.props;
@@ -284,19 +308,24 @@ class AnswerCard extends Component {
 }
 
 AnswerCard.propTypes = {
+  homeworkList: PropTypes.array, // 所有小题题目数据--用来筛选已查看且未作答的主观题
   questions: PropTypes.object.isRequired,
   mistakeReform: PropTypes.bool, // 错题重做页面调用时用来标识调用方的
+  checkHomework: PropTypes.bool, // 作业检查页面调用时用来标识调用方的
   imgLoading: PropTypes.bool, // 图片上传loading状态
   handleDifficultLevel: PropTypes.func, // 难易程度发生改变的函数
   handleToClickRadio: PropTypes.func, // 单选题的回调函数
   handlePreviewImage: PropTypes.func, // 上传图片后的回调函数
   deleteImg: PropTypes.func, // 删除图片答案的函数
+  mulImageCostTime: PropTypes.func, // 点击应用于多题按钮执行的函数
   handleCheckboxChange: PropTypes.func, // 改变不是很懂，请老师解答的复选框
   showDeleteIcon: PropTypes.bool, // 错题重做页面用来标识是否需要展示删除图片的icon
 };
 
 AnswerCard.defaultProps = {
+  homeworkList: [],
   mistakeReform: false,
+  checkHomework: false,
   imgLoading: false,
   showDeleteIcon: true,
   handleToClickRadio: () => {},
@@ -304,6 +333,7 @@ AnswerCard.defaultProps = {
   handlePreviewImage: () => {},
   handleCheckboxChange: () => {},
   deleteImg: () => {},
+  mulImageCostTime: () => {},
 };
 
 

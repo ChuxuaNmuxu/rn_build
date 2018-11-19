@@ -1,7 +1,7 @@
-// 请求接口做作业数据--此时将needMark还原为-1
+// 请求接口做作业数据--此时将commitSuccessData还原为{}
 export function fetchDataSuccess(state, action) {
   state.data = action.payload;
-  state.needMark = -1;
+  state.commitSuccessData = {};
 }
 
 // 改变redux中所存数据对应客观题的答案
@@ -35,7 +35,7 @@ export function submitAnswerSuccess(state, action) {
   state.uploadImgSuccess = false;
 }
 
-// 提交作业成功后去改变redux中needMark值，判断是否有互批作业
+// 提交作业成功后去改变redux中commitSuccessData值
 export function submitHomeworkSuccess(state, action) {
-  state.needMark = action.payload;
+  state.commitSuccessData = action.payload;
 }

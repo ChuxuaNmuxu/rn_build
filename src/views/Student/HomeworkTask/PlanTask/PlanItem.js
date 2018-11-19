@@ -11,11 +11,18 @@ const PlanItem = (props) => {
       title,
       estimatedCost: useTime,
       endTime,
-      // beginTime: scheduledNode,
+      scheduledStart,
+      scheduledEnd,
       taskType,
       homeworkId,
       previewed,
     } = props.data;
+
+    let beginTime = moment().format('YYYY-MM-DD');
+    if (scheduledStart) {
+      beginTime = `${scheduledStart}~${scheduledEnd}`;
+    }
+
     // console.log(666, waitReadOver);
     if (taskType === 4) {
       // 待批阅作业
@@ -25,14 +32,15 @@ const PlanItem = (props) => {
         waitReadOver: true,
         homeworkId,
         taskType,
+        beginTime,
       });
     } else {
       // 要做的作业
       Actions.TaskDetail({
         title,
         useTime: `${useTime}分钟`,
-        endTime: moment(endTime).format('YYYY-MM-DD HH:mm'),
-        // beginTime: '占位',
+        endTime: moment(endTime).format('YYYY-MM-DD'),
+        beginTime,
         waitReadOver: false,
         homeworkId,
         previewed,
@@ -40,6 +48,8 @@ const PlanItem = (props) => {
       });
     }
   };
+
+
   const { type, ...rest } = props;
 
   const renderTask = () => (

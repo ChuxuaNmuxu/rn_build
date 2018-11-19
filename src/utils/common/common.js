@@ -74,7 +74,7 @@ export const formatTimeToshow = (timeData) => {
   const today = new Date();
   const yesterday = moment(new Date()).subtract(1, 'days');
   const weekOfday = parseInt(moment().format('E')); // 计算今天是这周第几天
-  const lastSunday = moment().subtract(weekOfday, 'days').format('YYYY/MM/DD'); // 上周日日期
+  const lastSunday = moment().subtract(weekOfday, 'days').format('YYYY-MM-DD'); // 上周日日期
   let finalTime;
   // 还要判断下今天星期几，计算当前周要往前推几天
   const weekData = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -91,6 +91,22 @@ export const formatTimeToshow = (timeData) => {
     finalTime = moment(timeData).format('YYYY/MM/DD');
   }
   return finalTime;
+};
+
+// 把当前日期和前后两天转为中文
+export const formatTimeToChinese = (time) => {
+  const today = new Date();
+  const yesterday = moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD');
+  const tomorrow = moment(new Date()).add(1, 'days').format('YYYY-MM-DD');
+
+  if (moment(today).isSame(time, 'day')) { // 判断 isSame方法
+    return '今天';
+  } if (moment(yesterday).isSame(time, 'day')) {
+    return '昨天';
+  } if (moment(tomorrow).isSame(time, 'day')) {
+    return '明天';
+  }
+  return moment(time).format('YYYY-MM-DD');
 };
 
 // 各类题型

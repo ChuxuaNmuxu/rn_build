@@ -15,6 +15,7 @@ import Drag from './component/Drag';
 import { FetchStudentTaskList, IsFirstOpenHomepage } from '../../../actions/homeworkTask';
 import Modal, { ModalApi } from '../../../components/Modal';
 import Debug from '../../../components/Debug';
+import ModalContent from './component/ModalContent';
 
 @connect((state) => {
   const {
@@ -59,6 +60,18 @@ class HomeworkTask extends Component {
         },
       });
     }
+
+    // 战机播报
+    // const data = {
+    //   content: <ModalContent />,
+    //   height: 960,
+    //   style: {
+    //     width: 958,
+    //   },
+    // };
+    // ModalApi.onOppen('RecordModal', data);
+
+    // NativeModules.MyNativeModule.show();
 
     console.log('挂载homeworkTask');
     this.timer = setInterval(() => {

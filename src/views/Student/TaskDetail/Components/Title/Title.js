@@ -18,6 +18,8 @@ const Title = ({ waitReadOver, title }) => {
         </TouchableOpacity>
       </View>
       <Text style={styles.title}>{temTitle}</Text>
+      {/* 做作业时展示竞争提示 */}
+      <Text style={styles.complete_info}>本次作业你需要和XX同学一决高下，胜利者将会获得更多积分哦，加油吧！</Text>
     </View>
   );
 };

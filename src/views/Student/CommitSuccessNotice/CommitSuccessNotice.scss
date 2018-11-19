@@ -1,0 +1,93 @@
+.commitSuccessNotice_box {
+  flex: 1;
+  background-color: #fff;
+}
+.successNotices_box {
+  width: 100%;
+  padding-top: 120px;
+  padding-bottom: 120px;
+  flex-direction: column;
+  align-items: center;
+}
+.iconStyle {
+  font-size: 96px;
+  color: #8befaa;
+  margin-bottom: 10px;
+}
+.notice_success {
+  font-size: 36px;
+  color: #30bf6c;
+}
+.hasmark_style {
+  flex-direction: column;
+  align-items: center;
+}
+.markNotice {
+  font-size: 24px;
+  color: #999999;
+}
+.buttons {
+  width: 200px;
+  height: 70px;
+  border: 1px solid #30bf6c;
+  justify-content: center;
+  align-items: center;
+  margin-top: 56px;
+  border-radius: 50px;
+}
+.btnTxt {
+  font-size: 24px;
+  color: #30bf6c;
+}
+.btn_box {
+  flex-direction: row;
+  justify-content: space-around;
+}
+.goToMark {
+  background-color: #30bf6c;
+  margin-left: 15px;
+}
+.goToMarkTxt {
+  color: #fff;
+}
+
+.space{
+  width: 100%;
+  height: 12px;
+  background-color: #fafafa;
+}
+
+.report_box {
+  width: 100%;
+  padding-top: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.report_radius {
+  border: 4px solid rgba(139,239,170,0.50);
+  border-radius: 50px;
+  padding: 50px;
+}
+.report_header {
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.reportIconStyle {
+  font-size: 40px;
+  color: #30bf6c;
+}
+.reportTitle {
+  font-size: 30px;
+  color: #30bf6c;
+}
+.report_content {
+  margin-top: 36px;
+}
+.contentTxt {
+  font-size: 24px;
+  color: #999999;
+  margin-bottom: 10px;
+}
+.highlight {
+  color: #30bf6c;
+}

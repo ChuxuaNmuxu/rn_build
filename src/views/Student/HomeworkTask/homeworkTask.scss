@@ -34,7 +34,33 @@
   font-size: 30px;
 }
 
-
 .flex_1 {
   flex: 1;
+}
+
+.modal_wrap {
+  flex: 1;
+  align-items: center;
+  padding: 48px 0;
+  border-radius:8px;
+  background-color: #ffffff;
+}
+
+.close_btn {
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 100000000;
+  right: -100px;
+  top: 0;
+  width: 59px;
+  height: 59px;
+  border: 1px solid #fff;
+  border-radius: 60px;
+  background-color: red;
+}
+
+.close_icon {
+  color: #ffffff;
+  font-size: 24px;
 }

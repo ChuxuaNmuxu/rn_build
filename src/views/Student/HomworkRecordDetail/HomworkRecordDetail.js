@@ -38,7 +38,14 @@ class HomworkRecordDetail extends Component {
     console.log(id, '我是垃圾ID');
     this.id = id;
     // 总类型为作业的还是考试的
-    this.type = routeName === 'HomworkRecordDetail' ? 'H' : 'E';
+    let types;
+    if (routeName === 'HomworkRecordDetail') {
+      types = 'H';
+    }
+    if (routeName === 'ExamRecordDetail') {
+      types = 'E';
+    }
+    this.type = types;
 
     // 初始化请求数据
     this.init(this.type, id);
@@ -99,14 +106,17 @@ class HomworkRecordDetail extends Component {
     });
   }
 
+  onScrollEnd=() => {
+    // console.log(this.anserSummarization);
+    this.anserSummarization.setButton();
+  }
+
   setImageSizes = async (index) => {
     const { detailsDataList } = this.props;
     const { selectTion, imageSize } = this.state;
-
     const {
       htmlContent,
     } = detailsDataList[index || selectTion];
-
     const sizes = await this.getBlockImageSize(htmlContent);
 
     this.setState({
@@ -137,11 +147,6 @@ class HomworkRecordDetail extends Component {
       });
     });
   })
-
-  onScrollEnd=() => {
-    // console.log(this.anserSummarization);
-    this.anserSummarization.setButton();
-  }
 
   static getDerivedStateFromProps(props, state) {
     const { detailsDataList } = props;
@@ -190,26 +195,28 @@ class HomworkRecordDetail extends Component {
 
 
   init=(type, id) => {
-    const {
-      actions: {
-        fetchExaminationData,
-        fetchHomeworkListData,
-        fetchHomeworkData,
-      },
-    } = this.props;
-    const initFunc = {
-      E: fetchExaminationData,
-      H: fetchHomeworkListData,
-    };
-    // 根据不同的类型选择不同的初始化请求
-    initFunc[type](
-      {
-        id,
-        callback: type === 'H' && fetchHomeworkData,
-        type,
-      },
-      'REQUEST',
-    );
+    if (type && id) {
+      const {
+        actions: {
+          fetchExaminationData,
+          fetchHomeworkListData,
+          fetchHomeworkData,
+        },
+      } = this.props;
+      const initFunc = {
+        E: fetchExaminationData,
+        H: fetchHomeworkListData,
+      };
+      // 根据不同的类型选择不同的初始化请求
+      initFunc[type](
+        {
+          id,
+          callback: type === 'H' && fetchHomeworkData,
+          type,
+        },
+        'REQUEST',
+      );
+    }
   }
 
 
@@ -233,7 +240,7 @@ class HomworkRecordDetail extends Component {
     const { screenWidth, imageSize } = this.state;
     const attr = node.attribs;
 
-    console.log(246, attr)
+    console.log(246, attr);
 
     if (node.name === 'img') {
       const size = imageSize[attr.src];
@@ -260,6 +267,7 @@ class HomworkRecordDetail extends Component {
 
         return (
           <Image
+            key={index}
             style={style}
             source={{ uri: attr.src }}
           />
@@ -277,10 +285,6 @@ class HomworkRecordDetail extends Component {
         color: '#999999',
       },
     });
-    // const htmlContent = '<p>zhazhazha</p>'
-    // + '<img src="https://photo.tuchong.com/1382088/f/66585051.jpg" '
-    // + 'alt="undefined" style="float:none;height: auto;width: auto"/>'
-    // + '<p>曹尼玛的富文本</p>';
     return (
       <View style={styles.htmlViewComponent}>
         <HTMLView
@@ -314,11 +318,6 @@ class HomworkRecordDetail extends Component {
       _width *= widthPixel;
       _height *= widthPixel;
     }
-
-    // if (_width < screenWidth) {
-    //   _width *= Dimensions.get('window').scale;
-    //   console.log(Dimensions.get('window').scale, 'Diemnsions.get().scale');
-    // }
 
     // 如果此时高度还大于屏幕高度,整体缩放到高度是屏幕高度
     if (_height > screenHeight) {
@@ -389,10 +388,6 @@ class HomworkRecordDetail extends Component {
   }
 
   selectFun= async (index, questionId) => {
-    // homeworkId,
-    // questionId,
-    // index,
-    console.log(index);
     // 应该写个中转函数，检测数据是否存在，如果reducer里面存在该index的对应项，则直接拿数据。
     // 如果没有则触发请求去拉取数据。那么页面也应该稍微调整增加个loading状态。不过产品没说，真是渣渣。
     const { detailsDataList } = this.props;
@@ -402,9 +397,7 @@ class HomworkRecordDetail extends Component {
       isgetImageSize: false,
     });
 
-    await this.setImageSizes(index);
-
-    // 如果没有数据的话就去拉取,不过考试的数据都存在，所以可以忽视请求了
+    if (detailsDataList[index]) await this.setImageSizes(index);
     console.log({ homeworkId: this.id, questionId, index }, '我要去请求数据啦啦啦啦啦');
     if (_.isNil(detailsDataList[index])) {
       console.log({ homeworkId: this.id, questionId, index }, '我要去请求数据啦啦啦啦啦');
@@ -505,6 +498,7 @@ class HomworkRecordDetail extends Component {
     console.log(status, 'renderrenderrender');
     console.log(isItCorrect, 'renderrenderrender');
     const {
+      materialContent,
       htmlContent,
       AnserSummarizationData,
       studentAnserImage,
@@ -519,37 +513,52 @@ class HomworkRecordDetail extends Component {
     console.log(causeOfErrorNum, 'causeOfErrorNumcauseOfErrorNum');
     console.log(isQuestionSubmited, 'isQuestionSubmitedisQuestionSubmited');
     return (
-      <ScrollView
-        style={styles.homeworkDetail_container}
-        onLayout={this.handleLayout}
-        onMomentumScrollEnd={this.onScrollEnd}
-      >
-        <Modal />
+      <View style={styles.homeworkDetail_container}>
         <View style={styles.homeworkDetail_header}>
           <CustomButton name="jiantou-copy-copy" style={styles.buttonStyle} onPress={this.myComponentWillUnmount} />
           <Text style={styles.homeworkDetailTitle}>{title}</Text>
           <Text style={styles.alt} />
         </View>
-        {
+        <ScrollView
+          onLayout={this.handleLayout}
+          onMomentumScrollEnd={this.onScrollEnd}
+        >
+          <Modal />
+          {
           // 如果看代码懵逼，请结合UI图，每一块分割线前的都是UI图上的一块。
         }
-        {
+          {
           // 头部的滚动选择器
-          <ScrollSelectedBar data={headerList} moveIndex={this.selectFun} status={status} selectTion={selectTion} />
+            <ScrollSelectedBar data={headerList} moveIndex={this.selectFun} status={status} selectTion={selectTion} />
         }
-        {
+          {
           // 你好我是分割线
           this.splitLine()
         }
 
-        {
+          {
+          !_.isEmpty(materialContent) ? (
+            <React.Fragment>
+              {
+                materialContent && <Text style={styles.materialContent}>材料：</Text>
+              }
+              {
+              // 材料展示
+               this.htmlViewComponent(materialContent)
+              }
+            </React.Fragment>
+          ) : null
+
+        }
+
+          {
           !_.isEmpty(htmlContent) ? (
             <React.Fragment>
               {
                 console.log(htmlContent)
               }
               {
-              // 富文本显示块，，，如果出错可能是返回数据是block而不是html字符串。形式固定，不独立组件了。
+              // 题目内容展示---富文本显示块，，，如果出错可能是返回数据是block而不是html字符串。形式固定，不独立组件了。
                this.htmlViewComponent(htmlContent)
             }
               {
@@ -561,50 +570,52 @@ class HomworkRecordDetail extends Component {
 
         }
 
-        {
-          <React.Fragment>
-            {
+          {
+            <React.Fragment>
+              {
               // 该题的摘要，包括对错得分难易同批阅之类。
               // 说起来你不信。这个页面这个组件是最复杂的，但是看起来是最少东西的。
-              <AnserSummarization
+                <AnserSummarization
                 // 状态
-                status={status}
+                  status={status}
                 // 是否正确
-                isItCorrect={isItCorrect}
+                  isItCorrect={isItCorrect}
                 // 是作业or考试
-                type={this.type}
+                  type={this.type}
                 // 题目类型
-                questionType={AnserSummarizationData.questionType}
+                  questionType={AnserSummarizationData.questionType}
                 // 难易度
-                difficultyDegree={AnserSummarizationData.difficultyDegree}
+                  difficultyDegree={AnserSummarizationData.difficultyDegree}
                 // 正确答案
-                correctAnser={AnserSummarizationData.correctAnser}
+                  correctAnser={AnserSummarizationData.correctAnser}
                 // 学生答案
-                studentAnser={AnserSummarizationData.studentAnser}
+                  studentAnser={AnserSummarizationData.studentAnser}
                 // 得分
-                score={AnserSummarizationData.score}
+                  score={AnserSummarizationData.score}
                 // 这题是否作答了
-                isQuestionSubmited={isQuestionSubmited}
+                  isQuestionSubmited={isQuestionSubmited}
+                // 教师是否批改了
+                  teacherMarked={AnserSummarizationData.teacherMarked || 0}
                 // 学生是否批改了
-                studentMarked={AnserSummarizationData.studentMarked}
+                  studentMarked={AnserSummarizationData.studentMarked}
                 // 学生是否反馈了
-                hasMarkFeedback={AnserSummarizationData.hasMarkFeedback}
+                  hasMarkFeedback={AnserSummarizationData.hasMarkFeedback}
                 // 作业ID
-                homeWorkId={this.id}
+                  homeWorkId={this.id}
                 // 题目ID
-                qsId={headerList[selectTion].id}
+                  qsId={headerList[selectTion].id}
 
-                ref={(el) => { this.anserSummarization = el; }}
-              />
+                  ref={(el) => { this.anserSummarization = el; }}
+                />
             }
-            {
+              {
               // 你好我是分割线
               this.splitLine()
             }
-          </React.Fragment>
+            </React.Fragment>
         }
 
-        {
+          {
            _.isEmpty(studentAnserImage) ? null : (
              <React.Fragment>
                {
@@ -620,22 +631,7 @@ class HomworkRecordDetail extends Component {
              </React.Fragment>
            )
         }
-
-        {/* {
-          _.isEmpty(rightAnser) ? null : (
-            <React.Fragment>
-              {
-              // 题目答案
-              this.correctAndOthersAnser(rightAnser, '题目答案：')
-            }
-              {
-              // 你好我是分割线
-              this.splitLine()
-            }
-            </React.Fragment>
-          )
-        } */}
-        {
+          {
           !_.isEmpty(rightAnser) ? (
             <React.Fragment>
               {
@@ -657,7 +653,7 @@ class HomworkRecordDetail extends Component {
 
         }
 
-        {
+          {
           _.isEmpty(othersAnser) ? null : (
             <React.Fragment>
 
@@ -674,7 +670,7 @@ class HomworkRecordDetail extends Component {
         }
 
 
-        {
+          {
           // 错误原因分析
           // 是否被批改且存在错误
           // submitStatus=>是否参加考试，1是
@@ -685,7 +681,8 @@ class HomworkRecordDetail extends Component {
            </View>
          ) : null
         }
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
   }
 }

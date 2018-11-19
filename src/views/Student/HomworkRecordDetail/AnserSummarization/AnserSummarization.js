@@ -64,11 +64,19 @@ class AnserSummarization extends Component {
       partialCorrect,
       unCorrect,
     ] = [
-      questionType === 'obj' ? `回答错误，答案是${this.getJudgeMentText(correctAnser)}，你的答案是${this.getJudgeMentText(studentAnser)}${isH ? '' : `，得分：${score}分`}` : `回答错误${isH ? '' : `，得分：${score}分`}`,
-      questionType === 'obj' ? `回答正确，答案是${this.getJudgeMentText(correctAnser)}${isH ? '' : `，得分：${score}分`}` : `回答正确${isH ? '' : `，得分：${score}分`}`,
+      questionType === 'obj'
+        ? `回答错误，答案是${this.getJudgeMentText(correctAnser)}，你的答案是${this.getJudgeMentText(studentAnser)}${isH ? '' : `，得分：${score}分`}`
+        : `回答错误${isH ? '' : `，得分：${score}分`}`,
+      questionType === 'obj'
+        ? `回答正确，答案是${this.getJudgeMentText(correctAnser)}${isH ? '' : `，得分：${score}分`}`
+        : `回答正确${isH ? '' : `，得分：${score}分`}`,
       questionType === 'obj' ? `未作答，答案是${this.getJudgeMentText(correctAnser)}` : '未作答',
-      questionType === 'obj' ? `部分正确，答案是${correctAnser}，你的答案是${this.getJudgeMentText(studentAnser)}，得分：${score}分` : `部分正确，得分：${score}分`,
-      questionType === 'obj' ? `答案是${this.getJudgeMentText(correctAnser)}，你的答案是${this.getJudgeMentText(studentAnser)}` : '解答过程',
+      questionType === 'obj'
+        ? `部分正确，答案是${correctAnser}，你的答案是${this.getJudgeMentText(studentAnser)}，得分：${score}分`
+        : `部分正确，得分：${score}分`,
+      questionType === 'obj'
+        ? `答案是${this.getJudgeMentText(correctAnser)}，你的答案是${this.getJudgeMentText(studentAnser)}`
+        : '解答过程',
     ];
     console.log(isQuestionSubmited, '!isQuestionSubmited!isQuestionSubmited!isQuestionSubmited');
     if (isQuestionSubmited) {
@@ -146,7 +154,7 @@ class AnserSummarization extends Component {
   homeworkSummary=() => {
     console.log('垃圾ESlint标准');
     const {
-      isItCorrect, status, difficultyDegree, questionType, studentMarked,
+      isItCorrect, status, difficultyDegree, questionType, studentMarked, teacherMarked,
     } = this.props;
     const iconArr = ['wrongIcon', 'corectIcon', 'partialCorrect'];
     const colorArr = ['#fa5656', '#30bf6c', '#f5a623', '#999999'];
@@ -173,15 +181,22 @@ class AnserSummarization extends Component {
           <View style={styles.difficultyView}>
             {/* <Text style={styles.difficultyDegree}>难易程度：</Text> */}
             {difficultyDegree === 3 ? null : (
-              <Text style={[styles.difficultyDegree, { backgroundColor: colorArr[difficultyDegree], color: '#ffffff' }]}>
+              <Text
+                style={[
+                  styles.difficultyDegree,
+                  {
+                    backgroundColor: colorArr[difficultyDegree], color: '#ffffff',
+                  },
+                ]}
+              >
                 {['难', '易', '适中'][difficultyDegree]}
               </Text>
             )}
           </View>
         </View>
         {
-          // 同学批阅才会出现的
-          questionType === 'sub' && studentMarked === 1 && this.popoverComponent()
+          // 同学批阅且老师未批阅的主观题才会出现的
+          questionType === 'sub' && studentMarked === 1 && !teacherMarked && this.popoverComponent()
         }
 
       </View>
@@ -324,6 +339,7 @@ AnserSummarization.propTypes = {
   // 得分
   score: PropTypes.number,
   isQuestionSubmited: PropTypes.bool,
+  teacherMarked: PropTypes.number,
   studentMarked: PropTypes.number,
   hasMarkFeedback: PropTypes.number,
   homeWorkId: PropTypes.string,
@@ -343,6 +359,7 @@ AnserSummarization.defaultProps = {
   // 得分
   score: 0,
   isQuestionSubmited: false,
+  teacherMarked: 0,
   studentMarked: 0,
   hasMarkFeedback: 1,
   homeWorkId: '',

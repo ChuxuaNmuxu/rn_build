@@ -16,7 +16,7 @@ import {
 import PropTypes from 'prop-types';
 import HomeworkTask from './views/Student/HomeworkTask';
 import ProblemRecords from './views/Student/ProblemRecords';
-// import My from './views/Student/My'; // 项目人员 hqh 注释掉了
+import My from './views/Student/My';
 // import WrongNotes from './views/Student/WrongNotes'; // 项目人员 hqh 注释掉了，因为错题本是hqh写的！
 import PreviewHomework from './views/Student/PreviewHomework';
 import ReviewHomework from './views/Student/ReviewHomework';
@@ -36,6 +36,24 @@ import HomeworkCorrecting from './views/Student/HomeworkCorrecting';
 import HomworkRecordDetail from './views/Student/HomworkRecordDetail';
 // import ExamRecordDetail from './views/Student/ExamRecordDetail';
 import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
+import DetailsHonor from './views/Student/DetailsHonor';
+// 个人信息页
+import PersonalInformation from './views/Student/PersonalInformation';
+// 科目设置页
+import SubjectSetting from './views/Student/SubjectSetting';
+// 排行榜
+import RankBoard from './views/Student/RankBoard';
+// 战绩热报
+import HotReport from './views/Student/HotReport';
+// 作业提交成功的提示页面
+import CommitSuccessNotice from './views/Student/CommitSuccessNotice';
+//
+// 积分
+import IntegralDetails from './views/Student/IntegralDetails';
+// 团队贡献度
+import ContributionDetails from './views/Student/ContributionDetails';
+// 挑战次数
+import ChallengeDetails from './views/Student/ChallengeDetails';
 
 /**
  * 关于Actions.xxx跳转方法说明
@@ -44,13 +62,16 @@ import HomeworkProblemDetail from './views/Student/HomeworkProblemDetail';
  * 注意：只能使用Stack的key进行跳转，不能使用Scene的key进行跳转
  *
  * Actions.replace
- * 替换当前场景，没有动画。会触发unmount
+ * 替换当前场景，没有动画。在同一个Stack中进行Scene跳转会触发unmount
  *
  * Actions.refresh
  * 刷新当前页面，没用过度动画
  *
  * Actions.[key]
  * 使用路由的key跳转页面，不会执行unmount
+ *
+ * Actions.popTo
+ * 返回，在同一个Stack中进行Scene跳转会触发unmount
  */
 
 const RouteMap = props => (
@@ -132,7 +153,8 @@ const RouteMap = props => (
               component={ProblemOverview}
             />
           </Stack>
-          {/* <Stack
+          {/* 我的页面 */}
+          <Stack
             title="my"
             key="MyStack"
             image="wodedangxuan"
@@ -140,7 +162,7 @@ const RouteMap = props => (
             hideNavBar
           >
             <Scene key="My" component={My} />
-          </Stack> */}
+          </Stack>
         </Tabs>
       </Stack>
       <Stack key="Teacher">
@@ -150,6 +172,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
+        // initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
@@ -171,6 +194,26 @@ const RouteMap = props => (
         <Scene key="HomeworkProblemDetail" component={HomeworkProblemDetail} hideNavBar />
         {/* 任务详情 */}
         <Scene key="TaskDetail" component={TaskDetail} hideNavBar />
+        {/** 荣誉详情，贡献度/积分/次数 */}
+        {/* <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar /> */}
+        {/** 积分详情 */}
+        <Scene key="IntegralDetails" component={IntegralDetails} hideNavBar initial />
+        {/** 贡献度详情 */}
+        <Scene key="ContributionDetails" component={ContributionDetails} hideNavBar />
+        {/** 挑战次数详情 */}
+        <Scene key="ChallengeDetails" component={ChallengeDetails} hideNavBar />
+        {/* 个人信息 */}
+        <Scene key="PersonalInformation" component={PersonalInformation} hideNavBar />
+        {/* 科目设置 */}
+        <Scene key="SubjectSetting" component={SubjectSetting} hideNavBar />
+        {/* 排行榜 */}
+        <Scene key="RankBoard" component={RankBoard} hideNavBar />
+        {/** 荣誉详情，贡献度/积分/次数 */}
+        <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar />
+        {/* 战绩热报 */}
+        <Scene key="HotReport" component={HotReport} hideNavBar />
+        {/* 作业提交成功的提示页面 */}
+        <Scene key="CommitSuccessNotice" component={CommitSuccessNotice} hideNavBar />
       </Stack>
       <Stack key="TeacherAll" hideNavBar>
         <Scene title="作业" key="homework" component={Homework} />
