@@ -1,4 +1,4 @@
-const apiDefault = 'dev';
+const apiDefault = 'test';
 const cjyun = 'cjyun-api.ecaicn.com';
 const cjhms = 'cjhms-api.ecaicn.com';
 
