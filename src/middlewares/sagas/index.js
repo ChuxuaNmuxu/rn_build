@@ -37,6 +37,8 @@ import detailsHonor from './detailsHonor';
 import myIndexSaga from './myIndexSaga';
 // 竞争科目设置
 import subjectSettingSaga from './subjectSettingSaga';
+// 排行榜
+import rankBoardSaga from './rankBoardSaga';
 
 
 function* rootSaga() {
@@ -59,6 +61,7 @@ function* rootSaga() {
     fork(detailsHonor),
     fork(myIndexSaga),
     fork(subjectSettingSaga),
+    fork(rankBoardSaga),
   ]);
 }
 export default rootSaga;
