@@ -120,6 +120,22 @@ class RecordCard extends PureComponent {
       }
     }
 
+    // 如果当前这份作业记录参与了pk,则返回比赛结果--game：作业是否参与比赛,gameResult：0:没有结果（待定） 1:胜利（胜） 2:平手（平） 3:失败（败）
+    getGameResult = (gameResult) => {
+      let result;
+      if (gameResult) {
+        if (gameResult === 3) {
+          result = '败';
+        } else if (gameResult === 2) {
+          result = '平';
+        } else {
+          result = '胜';
+        }
+      } else {
+        result = '待定';
+      }
+      return result;
+    }
 
   // 点击 去订正/去补做
   toReviseFun = () => {
@@ -132,7 +148,6 @@ class RecordCard extends PureComponent {
     const { gotoDetailFun, datas } = this.props;
     gotoDetailFun(datas.id, datas.publishTime, datas.subjectName, datas.resultRead);
   }
-
 
   render() {
     const { datas, recordType } = this.props;
@@ -153,8 +168,8 @@ class RecordCard extends PureComponent {
               <Text style={[styles.subjectName, { maxWidth: textWidth }]} ellipsizeMode="tail" numberOfLines={1}>
                 {datas.title}
               </Text>
-              <Text style={[datas.competeResult ? styles.competeResult : { width: 0, height: 0 }]}>
-                {datas.competeResult > 7 ? '胜' : (datas.competeResult > 4 ? '平' : '待定')}
+              <Text style={[datas.game ? styles.gameResult : { width: 0, height: 0 }]}>
+                {this.getGameResult(parseInt(datas.gameResult))}
               </Text>
             </View>
             <View style={styles.bottomInfo}>
