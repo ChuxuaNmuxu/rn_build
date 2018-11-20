@@ -27,12 +27,13 @@ class TaskDetail extends Component {
       previewed,
       taskType,
       beginTime,
+      gameData,
     } = this.props;
     const newEndTime = taskType === 2 ? moment(endTime).add(7, 'day').format('YYYY-MM-DD HH:mm:ss') : endTime;
 
     return (
       <View style={styles.wrap}>
-        <Title waitReadOver={waitReadOver} title={title} />
+        <Title waitReadOver={waitReadOver} title={title} gameData={gameData} />
         <View style={styles.content_wrap}>
           <Content
             beginTime={beginTime}
@@ -64,6 +65,7 @@ TaskDetail.propTypes = {
   actions: PropTypes.object.isRequired,
   previewed: PropTypes.number,
   taskType: PropTypes.number,
+  gameData: PropTypes.object, // 比赛数据
 };
 TaskDetail.defaultProps = {
   title: '6-22物理作业',
@@ -74,6 +76,7 @@ TaskDetail.defaultProps = {
   homeworkId: '499598186277502976',
   previewed: 0,
   taskType: null,
+  gameData: {},
 };
 
 

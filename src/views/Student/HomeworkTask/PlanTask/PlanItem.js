@@ -13,14 +13,19 @@ const PlanItem = (props) => {
       endTime,
       scheduledStart,
       scheduledEnd,
-      taskType,
+      taskType, // 任务类型[1:作业任务,2:补做任务3:订正任务,4:批阅任务] ,
       homeworkId,
       previewed,
-      // game, // 此份作业是否参与比赛
-      // noGroup, // 是否匹配失败（没有对手）
-      // rivalName, // 比赛对手姓名
+      game, // 此份作业是否参与比赛
+      gameType, // 用户参加比赛的类型，比赛分组：1单人，2双人，3三人，10漏选
+      rivals, // 比赛对手姓名集合
+      teammates, // 比赛队友姓名集合
     } = props.data;
-    // console.log(7777777777, props.data);
+    // 如果此份作业参与了比赛且为作业任务，则将比赛数据传给TaskDetail页面
+    let gameData = {};
+    if (taskType === 1 && game) {
+      gameData = { gameType, rivals, teammates };
+    }
     let beginTime = moment().format('YYYY-MM-DD');
     if (scheduledStart) {
       beginTime = `${scheduledStart}~${scheduledEnd}`;
@@ -48,6 +53,7 @@ const PlanItem = (props) => {
         homeworkId,
         previewed,
         taskType,
+        gameData,
       });
     }
   };
