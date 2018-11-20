@@ -12,7 +12,11 @@ import PlanList from './PlanTask/PlanList';
 import TodoList from './TodoTask/TodoList';
 import I18nText from '../../../components/I18nText';
 import Drag from './component/Drag';
-import { FetchStudentTaskList, IsFirstOpenHomepage } from '../../../actions/homeworkTask';
+import {
+  FetchStudentTaskList, IsFirstOpenHomepage,
+  GetAchievementsBroadcast, ChangeAchievementsBroadcasCheckedId,
+  IsManualCloseAchievementsBroadcast, ChangeAchievementsBroadcastStatus,
+} from '../../../actions/homeworkTask';
 import Modal, { ModalApi } from '../../../components/Modal';
 import Debug from '../../../components/Debug';
 import ModalContent from './component/ModalContent';
@@ -24,6 +28,9 @@ import ModalContent from './component/ModalContent';
       dragData,
       todoList,
       isFirstOpenHomepage,
+      achievementsBroadcastData,
+      achievementsBroadcastStatus,
+      achievementsBroadcastId,
     },
   } = state;
   return {
@@ -31,10 +38,17 @@ import ModalContent from './component/ModalContent';
     dragData,
     todoList,
     isFirstOpenHomepage,
+    achievementsBroadcastData,
+    achievementsBroadcastStatus,
+    achievementsBroadcastId,
   };
 }, dispatch => ({
   onFetchStudentTaskList: bindActionCreators(FetchStudentTaskList, dispatch),
   onIsFirstOpenHomepage: bindActionCreators(IsFirstOpenHomepage, dispatch),
+  onGetAchievementsBroadcast: bindActionCreators(GetAchievementsBroadcast, dispatch),
+  onChangeAchievementsBroadcasCheckedId: bindActionCreators(ChangeAchievementsBroadcasCheckedId, dispatch),
+  onChangeAchievementsBroadcastStatus: bindActionCreators(ChangeAchievementsBroadcastStatus, dispatch),
+  onIsManualCloseAchievementsBroadcast: bindActionCreators(IsManualCloseAchievementsBroadcast, dispatch),
 }))
 class HomeworkTask extends Component {
   timer = null
@@ -44,34 +58,26 @@ class HomeworkTask extends Component {
       onFetchStudentTaskList,
       onIsFirstOpenHomepage,
       isFirstOpenHomepage,
+      onGetAchievementsBroadcast,
     } = this.props;
+    onGetAchievementsBroadcast();
     onFetchStudentTaskList();
 
-    if (isFirstOpenHomepage) {
-      onIsFirstOpenHomepage();
-      ModalApi.onOppen('AnimationsModal', {
-        svgName: 'finger', // 选择提示信息的svg
-        animationType: 'slideInDown', // 选择动画类型
-        bottomTips: '把作业向下拖动到具体时间段吧', // 提示文字信息
-        maskClosable: true, // 是否点击蒙层关闭
-        svgOption: {
-          width: 120,
-          height: 120,
-        },
-      });
-    }
+    this.openAchievementsBroadcast();
 
-    // 战机播报
-    // const data = {
-    //   content: <ModalContent />,
-    //   height: 960,
-    //   style: {
-    //     width: 958,
-    //   },
-    // };
-    // ModalApi.onOppen('RecordModal', data);
-
-    // NativeModules.MyNativeModule.show();
+    // if (isFirstOpenHomepage) {
+    //   onIsFirstOpenHomepage();
+    //   ModalApi.onOppen('AnimationsModal', {
+    //     svgName: 'finger', // 选择提示信息的svg
+    //     animationType: 'slideInDown', // 选择动画类型
+    //     bottomTips: '把作业向下拖动到具体时间段吧', // 提示文字信息
+    //     maskClosable: true, // 是否点击蒙层关闭
+    //     svgOption: {
+    //       width: 120,
+    //       height: 120,
+    //     },
+    //   });
+    // }
 
     console.log('挂载homeworkTask');
     this.timer = setInterval(() => {
@@ -80,9 +86,41 @@ class HomeworkTask extends Component {
     }, 1000 * 60);
   }
 
+  componentDidUpdate(prevProps) {
+    const { achievementsBroadcastStatus } = this.props;
+
+    if (prevProps.achievementsBroadcastStatus !== achievementsBroadcastStatus) {
+      this.openAchievementsBroadcast();
+    }
+  }
+
   componentWillUnmount() {
     clearInterval(this.timer);
     console.log('卸载homeworkTask');
+  }
+
+  openAchievementsBroadcast = () => {
+    const {
+      achievementsBroadcastData, achievementsBroadcastStatus, onChangeAchievementsBroadcastStatus,
+      achievementsBroadcastId, onChangeAchievementsBroadcasCheckedId, onIsManualCloseAchievementsBroadcast,
+    } = this.props;
+
+    // 战机播报
+    const data = {
+      content: <ModalContent
+        contentData={achievementsBroadcastData}
+        checkedId={achievementsBroadcastId}
+        changeCheckedId={onChangeAchievementsBroadcasCheckedId}
+        changeStatus={onChangeAchievementsBroadcastStatus}
+        manualClose={onIsManualCloseAchievementsBroadcast}
+      />,
+      height: 960,
+      style: {
+        width: 1040,
+      },
+    };
+
+    if (achievementsBroadcastStatus) ModalApi.onOppen('RecordModal', data);
   }
 
   renderHeader = () => {
@@ -134,6 +172,13 @@ HomeworkTask.propTypes = {
   todoList: PropTypes.array,
   onIsFirstOpenHomepage: PropTypes.func,
   isFirstOpenHomepage: PropTypes.bool,
+  onGetAchievementsBroadcast: PropTypes.func,
+  achievementsBroadcastData: PropTypes.array,
+  achievementsBroadcastStatus: PropTypes.bool,
+  achievementsBroadcastId: PropTypes.string,
+  onChangeAchievementsBroadcasCheckedId: PropTypes.func,
+  onChangeAchievementsBroadcastStatus: PropTypes.func,
+  onIsManualCloseAchievementsBroadcast: PropTypes.func,
 };
 
 HomeworkTask.defaultProps = {
@@ -143,6 +188,13 @@ HomeworkTask.defaultProps = {
   dragData: {},
   todoList: [],
   isFirstOpenHomepage: false,
+  onGetAchievementsBroadcast: () => {},
+  achievementsBroadcastData: [],
+  achievementsBroadcastStatus: false,
+  achievementsBroadcastId: null,
+  onChangeAchievementsBroadcasCheckedId: () => {},
+  onChangeAchievementsBroadcastStatus: () => {},
+  onIsManualCloseAchievementsBroadcast: () => {},
 };
 
 export default HomeworkTask;

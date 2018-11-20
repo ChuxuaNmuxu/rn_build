@@ -106,6 +106,17 @@ export const SAVE_TASK = 'SAVE_TASK';
 export const IS_FIRST_OPEN_HOMEPAGE = 'IS_FIRST_OPEN_HOMEPAGE';
 
 /**
+ * ------------------战绩播报---------------------
+ */
+export const GET_ACHIEVEMENTS_BROADCAST = 'GET_ACHIEVEMENTS_BROADCAST';
+// 是否手动关闭战绩播报模块
+export const IS_MANUAL_CLOSE_ACHIEVEMENTS_BROADCAST = 'IS_MANUAL_CLOSE_ACHIEVEMENTS_BROADCAST';
+// 更改战绩播报状态
+export const CHANGE_ACHIEVEMENTS_BROADCAST_STATUS = 'CHANGE_ACHIEVEMENTS_BROADCAST_STATUS';
+// 更改战绩播报选中索引
+export const CHANGE_ACHIEVEMENTS_BROADCAST_CHECKED_ID = 'CHANGE_ACHIEVEMENTS_BROADCAST_CHECKED_ID';
+
+/**
  *------------------------作业与考试详情页面-----------------------------------------
  */
 // '考试或者作业页面--请求考试数据--全部返回'

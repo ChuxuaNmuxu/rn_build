@@ -16,23 +16,28 @@ import styles from './HotReport.scss';
 import I18nText from '../../../components/I18nText';
 import Nav from '../../../components/Nav';
 import MatchNoOpponent from './Component/MatchNoOpponent';
+import { ChangeAchievementsBroadcastStatus } from '../../../actions/homeworkTask';
 
 class HotReport extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentIndex: 0, // 当前展示的热报，当查看详情时需要滑动展示多此作业PK的结果，如果是单次作业则只有一页展示
+      currentIndex: 0, // 当前展示的热报，需要滑动展示多份作业PK的结果
       hotReportData: props.hotReportData || {}, // 战绩热报数据
     };
   }
 
   componentDidMount() {
-    // 先暂时使用下模拟的数据
-    const { data } = this.props;
-    const classGameId = data.ids[data.index];
-    // 请求战绩热报的数据
-    const { actions: { fetchHotReportAction } } = this.props;
-    fetchHotReportAction({ classGameId }, 'REQUEST');
+    const { ids, index } = this.props;
+    const classGameId = ids[index];
+    this.fetchHotReportData(classGameId);
+    // 根据传过来的index让Swiper组件滚动到指定页,并设置currentIndex的值
+    if (index > 0) {
+      this.swiperRef.scrollBy(index);
+      this.setState({
+        currentIndex: index,
+      });
+    }
   }
 
   // 滑动查看结果改变currentIndex
@@ -40,13 +45,12 @@ class HotReport extends Component {
     this.setState({
       currentIndex: nextIndex,
     }, () => {
-      const { data } = this.props;
-      const classGameId = data.ids[nextIndex];
-      // 请求战绩热报的数据
-      const { actions: { fetchHotReportAction } } = this.props;
-      fetchHotReportAction({ classGameId }, 'REQUEST');
+      const { ids } = this.props;
+      const classGameId = ids[nextIndex];
+      this.fetchHotReportData(classGameId);
     });
   }
+
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { hotReportData } = nextProps;
@@ -79,6 +83,12 @@ class HotReport extends Component {
     return titles;
   }
 
+  // 请求战绩热报的数据
+  fetchHotReportData = (id) => {
+    const { actions: { fetchHotReportAction } } = this.props;
+    fetchHotReportAction({ classGameId: id }, 'REQUEST');
+  }
+
   // 正在加载时展示
   renderLoadingDom = i => (
     <View style={styles.loadBox} key={i || -1}>
@@ -88,15 +98,18 @@ class HotReport extends Component {
 
   render() {
     const { currentIndex, hotReportData } = this.state;
-    const { data: { ids } } = this.props;
-    const dataLen = ids.length;
+    const { ids, onChangeAchievementsBroadcastStatus } = this.props;
     return (
       <View style={styles.hotReport_container}>
         {
         !R.isEmpty(hotReportData)
           ? (
             <View style={styles.hotReport_container}>
-              <Nav goBackFun={() => { Actions.HomeworkTask(); }}>
+              <Nav goBackFun={() => {
+                onChangeAchievementsBroadcastStatus(true);
+                Actions.HomeworkTask();
+              }}
+              >
                 <I18nText>HotReport.title</I18nText>
               </Nav>
               <Swiper
@@ -157,7 +170,7 @@ class HotReport extends Component {
               </Swiper>
               <View style={styles.footer_container}>
                 <View style={styles.footers}>
-                  <Text style={styles.footer_txt}>{currentIndex + 1}/{dataLen}</Text>
+                  <Text style={styles.footer_txt}>{currentIndex + 1}/{ids.length}</Text>
                 </View>
               </View>
             </View>
@@ -171,15 +184,14 @@ class HotReport extends Component {
 
 HotReport.propTypes = {
   hotReportData: PropTypes.object.isRequired,
-  data: PropTypes.object, // 首页比赛报告传过来的数据，包括所有报告的id集合和当前需要展示的index
+  ids: PropTypes.array.isRequired, // 首页比赛报告传过来的所有报告的id集合
+  index: PropTypes.number.isRequired, // 首页比赛报告传过来的当前点击的报告索引index
   actions: PropTypes.object.isRequired,
+  onChangeAchievementsBroadcastStatus: PropTypes.func,
 };
 
 HotReport.defaultProps = {
-  data: {
-    ids: ['512583454899044352'], // 曾昊鑫的一份比赛报告id
-    index: 0,
-  },
+  onChangeAchievementsBroadcastStatus: () => {},
 };
 
 const mapStateToProps = (state) => {
@@ -191,6 +203,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(actions, dispatch),
+  onChangeAchievementsBroadcastStatus: bindActionCreators(ChangeAchievementsBroadcastStatus, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HotReport);

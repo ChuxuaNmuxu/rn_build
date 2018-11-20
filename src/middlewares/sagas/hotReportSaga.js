@@ -18,7 +18,7 @@ function* fetchHotReportSaga(action) {
     const { classGameId } = action.payload;
     const res = yield Fetch.get(`app/api/game/student/detail/${classGameId}`);
     const { code, data } = res;
-    console.log(123, data);
+    // console.log(123, data);
     if (code === 0) {
       yield put(actions.fetchHotReportAction(data, 'SUCCESS'));
     } else {

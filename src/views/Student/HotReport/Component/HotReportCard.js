@@ -44,6 +44,7 @@ class HotReportCard extends Component {
       let accuracy1 = 0.5;
       let accuracy2 = 0.5;
       if ((data.accuracy + data.rival.accuracy) > 0) {
+        // 保留小数点后两位
         accuracy1 = data.accuracy / (data.accuracy + data.rival.accuracy);
         accuracy2 = data.rival.accuracy / (data.accuracy + data.rival.accuracy);
       }
