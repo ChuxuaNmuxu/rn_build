@@ -4,7 +4,7 @@ import config from './common/config';
 import problemOverviewReducer from './problemOverviewReducer';
 import previewHomeworkReducer from './previewHomeworkReducer';
 import doHomeworkReducer from './doHomeworkReducer';
-import homeworkTaskReducer from './HomeworkTask';
+import homeworkTaskReducer from './homeworkTask';
 import recordDetailReducer from './recordDetailReducer';
 import mistakeReformReducer from './mistakeReformReducer';
 import ProblemRecordsReducer from './problemRecordsReducer';
