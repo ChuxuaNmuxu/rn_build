@@ -174,7 +174,9 @@ class ProblemListOverview extends Component {
   randomMistakeReform = (list) => {
     const { currentSubjectId } = this.state;
     const datas = getRandomArrayItem(list, 5);
+
     console.log('原数组list=', list, '随鸡5到题', datas);
+
     Actions.MistakeReform({
       problemCardInfo: datas,
       currentSubjectId, // 回来的时候重新请求数据用的

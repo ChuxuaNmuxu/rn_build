@@ -22,7 +22,7 @@
     "install-dev": "adb install ./android/app/build/outputs/apk/app-debug.apk",
     "install-build": "adb install ./android/app/build/outputs/apk/app-release.apk",
     "clear-build-cache": "cd android && gradlew clean",
-    "clear-build-file": "rimraf android/app/build",
+    "clear-build": "rimraf android/app/build",
     "clear": "npm run clear-build-cache && npm run clear-build-cache",
     "clear-all": "yarn cache clean -f && npm cache clean -f && cnpm cache clean -f && npm run clear",
     "gradle-debug": "cd android && gradlew compiledebug --debug",
@@ -31,9 +31,11 @@
     "stop": "adb shell am force-stop com.cjhms_rn",
     "start-app": "adb shell am start -n com.cjhms_rn/.MainActivity",
     "remove": "adb uninstall com.cjhms_rn",
-    "deploy": "code-push release-react 课业 android -t 1.0.0 --des 2018.11.13 -d Staging -m true",
+    "deploy": "code-push release-react 课业 android -t 1.0.0 --des 2018.11.20-错题重做 -d Staging -m false",
     "deploy-history": "code-push deployment history 课业 Staging",
-    "clear-deploy-history": "code-push clear history 课业 Staging"
+    "clear-deploy-history": "code-push clear history 课业 Staging",
+    "see-key": "code-push deployment ls 课业 -k",
+    "add-key": "code-push deployment add 课业 Develop"
   },
   "dependencies": {
     "@cjfed/draftjs-to-html": "^0.7.7",
@@ -71,7 +73,7 @@
     "react-native-svg": "^6.5.1",
     "react-native-svg-uri": "^1.2.3",
     "react-native-swipeout": "^2.3.6",
-    "react-native-swiper": "^1.5.13",
+    "react-native-swiper-1": "^1.5.14",
     "react-native-vector-icons": "^4.6.0",
     "react-native-view-shot": "^2.4.0",
     "react-native-wheel-picker-android-iamsb": "^2.1.5",

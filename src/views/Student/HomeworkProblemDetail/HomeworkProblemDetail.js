@@ -10,7 +10,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Swiper from 'react-native-swiper';
+import Swiper from 'react-native-swiper-1';
 import _ from 'ramda';
 import { getIncorrectInfo, markFailReason, initialState } from '../../../actions/incorrectProblemDetail';
 // import CIcon from '../../../components/Icon';

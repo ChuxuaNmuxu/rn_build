@@ -5839,13 +5839,6 @@ react-native-immersive@^1.1.1:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/react-native-immersive/download/react-native-immersive-1.1.1.tgz#5c2da8afe5367e97851ed58e6e7944ddc1efbf9a"
 
-react-native-material-kit@^0.5.1:
-  version "0.5.1"
-  resolved "http://registry.npm.taobao.org/react-native-material-kit/download/react-native-material-kit-0.5.1.tgz#fc05605273bfa0d145c6e36cca755cbde5b8db3a"
-  dependencies:
-    prop-types "^15.5.10"
-    ramda "^0.24.1"
-
 react-native-menu@^0.23.0:
   version "0.23.0"
   resolved "http://registry.npm.taobao.org/react-native-menu/download/react-native-menu-0.23.0.tgz#3c023239aed95d419275df50c199982ad7eb062b"
@@ -5941,9 +5934,9 @@ react-native-swipeout@^2.3.6:
     prop-types "^15.5.10"
     react-tween-state "^0.1.5"
 
-react-native-swiper@^1.5.13:
-  version "1.5.13"
-  resolved "http://registry.npm.taobao.org/react-native-swiper/download/react-native-swiper-1.5.13.tgz#fa695cd4ab77b9a9df2d2bfee38ea7274dd07a2e"
+react-native-swiper-1@^1.5.14:
+  version "1.5.14"
+  resolved "http://registry.npm.taobao.org/react-native-swiper-1/download/react-native-swiper-1-1.5.14.tgz#7a18538498e65404d28618e2928a8f399c91577e"
   dependencies:
     prop-types "^15.5.10"
 
