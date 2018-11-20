@@ -73,7 +73,7 @@ export default class Setup extends Component {
     // 正式包才执行一下代码
     // if (!__DEV__) {
     //   // 热更新
-    //   const updateContent = '';
+    //   const updateContent = '错题重做bug';
     //   CodePush.sync({
     //     // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
     //     installMode: CodePush.InstallMode.IMMEDIATE,
@@ -82,8 +82,11 @@ export default class Setup extends Component {
     //       appendReleaseDescription: true,
     //       descriptionPrefix: updateContent,
     //       title: '优化',
-    //       mandatoryUpdateMessage: '',
-    //       mandatoryContinueButtonLabel: '更新',
+    //       mandatoryUpdateMessage: '这是什么', // 用作更新通知正文的文本
+    //       mandatoryContinueButtonLabel: '更新', // 用于最终用户必须按下的按钮的文本，以便安装强制更新
+    //       // 在非强制更新下的弹窗文本提示
+    //       optionalInstallButtonLabel: '立即更新',
+    //       optionalIgnoreButtonLabel: '忽略更新',
     //     },
     //   });
 

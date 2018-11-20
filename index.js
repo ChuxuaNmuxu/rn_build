@@ -25,10 +25,10 @@ const errorHandler = (e, isFatal) => {
   if (isFatal) {
     reporter(e);
     Alert.alert(
-      'Hei guys, I am catching a bug~~~',
+      '程序崩溃',
       `
-        Error: ${(isFatal) ? 'Fatal:' : ''} ${e.name} ${e.message}
-        At present ,you can do something~~
+        错误原因：${(isFatal) ? '致命错误' : ''} ${e.name} 
+        错误信息：${e.message}
         `,
       [{
         text: '返回',

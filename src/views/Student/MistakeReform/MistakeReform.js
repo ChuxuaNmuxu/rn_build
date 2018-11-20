@@ -12,7 +12,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import HTMLView from 'react-native-htmlview';
-import Swiper from '../../../components/Swiper';
+import Swiper from 'react-native-swiper-1';
 import draftToHtml from '../../../utils/draftjsToHtml';
 import Modal, { ModalApi } from '../../../components/Modal';
 import ThumbnailImage from '../../../components/ThumbnailImage';
@@ -52,7 +52,6 @@ class MistakeReform extends Component {
 
   // 富文本数据展示框
   htmlViewComponent=(htmlContent) => {
-    // console.log(draftToHtml(JSON.parse(htmlContent)));
     const htmlViewStyles = StyleSheet.create({
       p: {
         fontSize: 24,
