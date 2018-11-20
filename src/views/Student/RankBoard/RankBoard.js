@@ -100,38 +100,53 @@ class RankBoard extends Component {
         <Nav goBackFun={() => { Actions.My(); }}>
           <I18nText>RankBoard.title</I18nText>
         </Nav>
-        <View style={styles.imgStyle}>
-          <Image source={trophyBigImg} width={560} height={560} />
-        </View>
-        <View style={styles.borderSpace} />
-        <View style={styles.tabsHeader}>
-          <TouchableOpacity
-            style={[styles.tabsBtn, currentTab === 0 && styles.activeTabsBtn]}
-            onPress={() => this.changeTabs(0)}
-          >
-            <I18nText
-              style={[styles.tabsTxt, currentTab === 0 && styles.activeTabsTxt]}
+        <ScrollView>
+          <View style={styles.imgStyle}>
+            <Image source={trophyBigImg} width={560} height={560} />
+          </View>
+          <View style={styles.borderSpace} />
+          <View style={styles.tabsHeader}>
+            <TouchableOpacity
+              style={[styles.tabsBtn, currentTab === 0 && styles.activeTabsBtn]}
+              onPress={() => this.changeTabs(0)}
             >
-            RankBoard.integralRank
-            </I18nText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tabsBtn, currentTab === 1 && styles.activeTabsBtn]}
-            onPress={() => this.changeTabs(1)}
-          >
-            <I18nText
-              style={[styles.tabsTxt, currentTab === 1 && styles.activeTabsTxt]}
+              <I18nText
+                style={[styles.tabsTxt, currentTab === 0 && styles.activeTabsTxt]}
+              >
+              RankBoard.integralRank
+              </I18nText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tabsBtn, currentTab === 1 && styles.activeTabsBtn]}
+              onPress={() => this.changeTabs(1)}
             >
-            RankBoard.contributionRank
-            </I18nText>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.borderSpace} />
-        {
-          currentTab === 0
-            ? (
-              <ScrollView key={0}>
-                {
+              <I18nText
+                style={[styles.tabsTxt, currentTab === 1 && styles.activeTabsTxt]}
+              >
+              RankBoard.contributionRank
+              </I18nText>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.borderSpace} />
+          {
+            currentTab === 0
+              ? (
+                <View key={0}>
+                  {
+                    list
+                      && (
+                      <FlatList
+                        keyExtractor={() => `${Math.random()}`}
+                        data={list}
+                        renderItem={this._renderItem}
+                      />
+                      )
+                  }
+                </View>
+              )
+              : (
+                <View key={1}>
+                  {
                   list
                     && (
                     <FlatList
@@ -141,23 +156,10 @@ class RankBoard extends Component {
                     />
                     )
                 }
-              </ScrollView>
-            )
-            : (
-              <ScrollView key={1}>
-                {
-                list
-                  && (
-                  <FlatList
-                    keyExtractor={() => `${Math.random()}`}
-                    data={list}
-                    renderItem={this._renderItem}
-                  />
-                  )
-              }
-              </ScrollView>
-            )
-        }
+                </View>
+              )
+          }
+        </ScrollView>
       </View>
     );
   }
