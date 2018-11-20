@@ -104,4 +104,4 @@ RUN git clone https://github.com/ChuxuaNmuxu/rn_build.git \
     && cd rn_build \
     && git checkout sunb/build \
     && npm i
-RUN npm run build
+
