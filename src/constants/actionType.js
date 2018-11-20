@@ -186,8 +186,24 @@ export const FETCH_HOTREPORT_DATA = 'FETCH_HOTREPORT_DATA';
  * 积分、挑战次数、团队奉献度
  */
 export const GET_DETAILS_HONOR = 'GET_DETAILS_HONOR';
+
 /**
+ * 获取设置是否参加比赛的科目列表
  */
 export const FETCH_SUBJECT_DATA_LIST = 'FETCH_SUBJECT_DATA_LIST';
 // 设置是否参加比赛
 export const SETTING_SUBJECT_ISJOIN = 'SETTING_SUBJECT_ISJOIN';
+
+/**
+ * 获取排行榜数据
+ */
+// 积分排名数据
+export const FETCH_INTEGRALT_DATA_LIST = 'FETCH_INTEGRALT_DATA_LIST';
+// 贡献度排名数据
+export const FETCH_CONTRIBUTION_DATA_LIST = 'FETCH_CONTRIBUTION_DATA_LIST';
+
+/**
+ * 获取个人信息
+ */
+// 获取该学生所在的学校信息
+export const FETCH_PERSONAL_INFO = 'FETCH_PERSONAL_INFO';

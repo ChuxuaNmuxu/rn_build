@@ -2,11 +2,11 @@ import createReducer from '../createReducer';
 import * as fn from './fn';
 
 const initState = {
-  hotReportData: {},
+  data: {},
 };
 
 const handle = {
-  FETCH_HOTREPORT_DATA_SUCCESS: fn.getHotReportDataSuccess,
+  FETCH_PERSONAL_INFO_SUCCESS: fn.getPersonalInfoSuccess,
 };
 
 export default createReducer(initState, handle);

@@ -21,8 +21,8 @@ class MatchNoOpponent extends Component {
     return (
       <View style={styles.matchNoOpponent_container}>
         <Image style={styles.imgs} source={emptyViewImg} width={364} />
-        <Text style={styles.txt}>虽然在《{data.title}》中未帮能你找到到合适的对手，</Text>
-        <Text style={styles.txt}>{`但是你已经战胜了${data.successResult * 100}%的人哦！`}</Text>
+        <Text style={styles.txt}>虽然在《{data.gameName}》中未帮能你找到到合适的对手，</Text>
+        <Text style={styles.txt}>{`但是你已经战胜了${data.ranking * 100}%的人哦！`}</Text>
       </View>
     );
   }

@@ -4,7 +4,7 @@ import config from './common/config';
 import problemOverviewReducer from './problemOverviewReducer';
 import previewHomeworkReducer from './previewHomeworkReducer';
 import doHomeworkReducer from './doHomeworkReducer';
-import homeworkTaskReducer from './homeworkTask';
+import homeworkTaskReducer from './HomeworkTask';
 import recordDetailReducer from './recordDetailReducer';
 import mistakeReformReducer from './mistakeReformReducer';
 import ProblemRecordsReducer from './problemRecordsReducer';
@@ -15,6 +15,8 @@ import mistakeListReducer from './mistakeList';
 import hotReportReducer from './hotReportReducer';
 import myIndexReducer from './myIndexReducer';
 import subjectSettingReducer from './subjectSettingReducer';
+import rankBoardReducer from './rankBoardReducer';
+import personalInformationReducer from './personalInformationReducer';
 import account from './account';
 import detailsHonor from './detailsHonor';
 
@@ -49,6 +51,10 @@ export default combineReducers({
   myIndexReducer,
   // 竞争科目设置
   subjectSettingReducer,
+  // 排行榜
+  rankBoardReducer,
+  // 个人信息
+  personalInformationReducer,
   // 账号信息
   account,
   /**

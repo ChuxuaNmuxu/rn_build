@@ -197,7 +197,7 @@ const RouteMap = props => (
         {/** 荣誉详情，贡献度/积分/次数 */}
         {/* <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar /> */}
         {/** 积分详情 */}
-        <Scene key="IntegralDetails" component={IntegralDetails} hideNavBar initial />
+        <Scene key="IntegralDetails" component={IntegralDetails} hideNavBar />
         {/** 贡献度详情 */}
         <Scene key="ContributionDetails" component={ContributionDetails} hideNavBar />
         {/** 挑战次数详情 */}

@@ -77,6 +77,7 @@ class CommitSuccessNotice extends Component {
               <Text style={styles.contentTxt}>
                 {gameResultSnapshot.personResult === 3 && '很遗憾未能战胜对手，期待你的继续努力！'}
                 {gameResultSnapshot.personResult === 1 && '恭喜你赢得本次比赛的胜利！'}
+                {gameResultSnapshot.personResult === 2 && '此次比赛你与对手持平，期待你的继续努力！'}
                 {gameResultSnapshot.personResult === 0 && '你的对手正在准备迎战中···'}
               </Text>
             )
