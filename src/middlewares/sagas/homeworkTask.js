@@ -2,6 +2,7 @@ import {
   takeLatest, put, call, select,
 } from 'redux-saga/effects';
 import R from 'ramda';
+import { Toast } from 'antd-mobile-rn';
 import * as actions from '../../actions/homeworkTask';
 import * as actionTypes from '../../constants/actionType';
 
@@ -10,6 +11,7 @@ import enhanceSaga from './enhanceSaga';
 export default function* homeworkTask() {
   yield takeLatest(actionTypes.FETCH_STUDENT_TASK_LIST, enhanceSaga(fetchStudentTaskListSaga));
   yield takeLatest(actionTypes.SAVE_TASK, enhanceSaga(saveTaskSaga));
+  yield takeLatest(actionTypes.GET_ACHIEVEMENTS_BROADCAST, enhanceSaga(getAchievementsBroadcastSaga));
 }
 
 // 获取任务
@@ -69,5 +71,24 @@ function* saveTaskSaga({ payload: { id, scheduledNode, taskType } }) {
   } catch (err) {
     yield put(actions.SaveTask(null, 'ERROR'));
     console.log('更改任务失败：', err);
+  }
+}
+
+// 获取战绩播报信息
+function* getAchievementsBroadcastSaga() {
+  try {
+    const url = '/app/api/game/report';
+    const fetch = () => Fetch.get(url);
+    const res = yield call(fetch);
+    const { code, data, message } = res;
+    if (code === 0) {
+      yield put(actions.GetAchievementsBroadcast(data, 'SUCCESS'));
+      yield put(actions.ChangeAchievementsBroadcastStatus(true));
+    } else {
+      Toast.fail(message);
+    }
+    console.log(res);
+  } catch (e) {
+    console.log('获取战绩播报失败', e);
   }
 }
