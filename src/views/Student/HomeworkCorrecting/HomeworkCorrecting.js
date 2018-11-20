@@ -11,7 +11,7 @@ import PopupDialog from 'react-native-popup-dialog';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Swiper from 'react-native-swiper';
+import Swiper from 'react-native-swiper-1';
 import Entypo from 'react-native-vector-icons/Entypo';
 import HTMLView from 'react-native-htmlview';
 import _ from 'ramda';
