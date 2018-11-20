@@ -18,7 +18,17 @@ class HotReportCard extends Component {
     };
   }
 
-  componentDidMount() {
+  // 个人比赛结果--personResult: 1:胜利 2:平手 3:失败
+  getPersonResult = (personResult) => {
+    let result;
+    if (personResult === 1) {
+      result = '胜利';
+    } else if (personResult === 2) {
+      result = '平手';
+    } else {
+      result = '失败';
+    }
+    return result;
   }
 
   render() {
@@ -30,11 +40,16 @@ class HotReportCard extends Component {
     // 计算圆环开始渲染数据的位置
     let startAngle = 0;
     if (data) {
-      const accuracy1 = data.student1.accuracy;
-      const accuracy2 = data.student2.accuracy;
+      // 需要判断下两人的正确率是否有0的情况
+      let accuracy1 = 0.5;
+      let accuracy2 = 0.5;
+      if ((data.accuracy + data.rival.accuracy) > 0) {
+        accuracy1 = data.accuracy / (data.accuracy + data.rival.accuracy);
+        accuracy2 = data.rival.accuracy / (data.accuracy + data.rival.accuracy);
+      }
       pieData = [
-        { x: data.student1.studentName, y: accuracy1 * 100 },
-        { x: data.student2.studentName, y: accuracy2 * 100 },
+        { x: data.userName, y: accuracy1 * 100 },
+        { x: data.rival.userName, y: accuracy2 * 100 },
       ];
       if (accuracy1 < accuracy2) {
         colorScale = ['#ff8480', '#54cc82'];
@@ -47,28 +62,28 @@ class HotReportCard extends Component {
           data && (
           <View style={styles.hotReportCard}>
             <View style={styles.student_info}>
-              <Image source={data.student1.sex ? girlImg : boyImg} width={145} height={145} />
-              <Text style={styles.studentName}>{data.student1.studentName}</Text>
-              <Text style={[data.student1.result ? styles.result_success : styles.result_faild]}>
-                {data.student1.result ? '胜利' : '失败'}
+              <Image source={Math.random() > 0.5 ? girlImg : boyImg} width={145} height={145} />
+              <Text style={styles.studentName}>{data.userName}</Text>
+              <Text style={[data.personResult === 1 ? styles.result_success : styles.result_faild]}>
+                {this.getPersonResult(data.personResult)}
               </Text>
               <Text style={styles.accuracy}>
                 <I18nText>HotReport.accuracy</I18nText>
-                {`${data.student1.accuracy * 100}%`}
+                {`${data.accuracy * 100}%`}
               </Text>
             </View>
             <View style={styles.pieBox}>
               <Pie data={pieData} colorScale={colorScale} startAngle={startAngle} />
             </View>
             <View style={styles.student_info}>
-              <Image source={data.student2.sex ? girlImg : boyImg} width={145} height={145} />
-              <Text style={styles.studentName}>{data.student2.studentName}</Text>
-              <Text style={[data.student2.result ? styles.result_success : styles.result_faild]}>
-                {data.student2.result ? '胜利' : '失败'}
+              <Image source={Math.random() > 0.5 ? girlImg : boyImg} width={145} height={145} />
+              <Text style={styles.studentName}>{data.rival.userName}</Text>
+              <Text style={[data.rival.personResult !== 3 ? styles.result_success : styles.result_faild]}>
+                {this.getPersonResult(data.rival.personResult)}
               </Text>
               <Text style={styles.accuracy}>
                 <I18nText>HotReport.accuracy</I18nText>
-                {`${data.student2.accuracy * 100}%`}
+                {`${data.rival.accuracy * 100}%`}
               </Text>
             </View>
           </View>

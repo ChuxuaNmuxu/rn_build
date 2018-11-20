@@ -16,8 +16,11 @@ const PlanItem = (props) => {
       taskType,
       homeworkId,
       previewed,
+      // game, // 此份作业是否参与比赛
+      // noGroup, // 是否匹配失败（没有对手）
+      // rivalName, // 比赛对手姓名
     } = props.data;
-
+    // console.log(7777777777, props.data);
     let beginTime = moment().format('YYYY-MM-DD');
     if (scheduledStart) {
       beginTime = `${scheduledStart}~${scheduledEnd}`;

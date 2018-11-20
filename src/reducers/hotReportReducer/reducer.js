@@ -2,7 +2,7 @@ import createReducer from '../createReducer';
 import * as fn from './fn';
 
 const initState = {
-  hotReportData: [],
+  hotReportData: {},
 };
 
 const handle = {

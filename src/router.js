@@ -172,7 +172,7 @@ const RouteMap = props => (
       </Stack>
       <Stack
         key="StudentAll"
-        // initial
+        initial
       >
         {/* 作业预览 */}
         <Scene key="PreviewHomework" component={PreviewHomework} hideNavBar />
@@ -211,7 +211,7 @@ const RouteMap = props => (
         {/** 荣誉详情，贡献度/积分/次数 */}
         <Scene key="DetailsHonor" component={DetailsHonor} hideNavBar />
         {/* 战绩热报 */}
-        <Scene key="HotReport" component={HotReport} hideNavBar />
+        <Scene key="HotReport" component={HotReport} hideNavBar initial />
         {/* 作业提交成功的提示页面 */}
         <Scene key="CommitSuccessNotice" component={CommitSuccessNotice} hideNavBar />
       </Stack>
