@@ -31,14 +31,14 @@ RUN mkdir -p opt/android/sdk
 RUN chown -R jenkins.jenkins /opt/android/sdk 
 RUN cd opt/android/sdk/ 
 RUN curl https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip -o android-sdk.zip
-RUN sudo unzip android-sdk.zip -d . 
-RUN sudo rm android-sdk.zip
+RUN unzip android-sdk.zip -d . 
+RUN rm android-sdk.zip
 
 RUN yes | ./tools/bin/sdkmanager --licenses \
-    && sudo ./tools/bin/sdkmanager "tools" \
-    && sudo ./tools/bin/sdkmanager "build-tools;28.0.3" "build-tools;28.0.2" "build-tools;28.0.1" "build-tools;28.0.0-rc2" "build-tools;28.0.0-rc1" "build-tools;28.0.0" "build-tools;27.0.3" "build-tools;26.0.2" "build-tools;26.0.1" "build-tools;25.0.3" "build-tools;25.0.2" "build-tools;25.0.1" "build-tools;25.0.0" "build-tools;23.0.1" "platforms;android-28" "platforms;android-27" "platforms;android-26" "platforms;android-25" "platforms;android-23" "extras;android;m2repository" "extras;google;m2repository" --no_https \
-    && sudo ./tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2" "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2" --no_https \
-    && sudo ./tools/bin/sdkmanager --list 
+    && ./tools/bin/sdkmanager "tools" \
+    && ./tools/bin/sdkmanager "build-tools;28.0.3" "build-tools;28.0.2" "build-tools;28.0.1" "build-tools;28.0.0-rc2" "build-tools;28.0.0-rc1" "build-tools;28.0.0" "build-tools;27.0.3" "build-tools;26.0.2" "build-tools;26.0.1" "build-tools;25.0.3" "build-tools;25.0.2" "build-tools;25.0.1" "build-tools;25.0.0" "build-tools;23.0.1" "platforms;android-28" "platforms;android-27" "platforms;android-26" "platforms;android-25" "platforms;android-23" "extras;android;m2repository" "extras;google;m2repository" --no_https \
+    && ./tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2" "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2" --no_https \
+    && ./tools/bin/sdkmanager --list 
 
 
 # Setup environment
