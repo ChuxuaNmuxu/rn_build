@@ -42,6 +42,19 @@ class My extends Component {
     Actions.RankBoard();
   }
 
+  // 点击 挑战次数/积分/团队贡献度 分别进入对应页面---当为0时不跳转页面,且展示不可点击状态
+  goDetailsPage = (type, num) => {
+    if (num) {
+      if (type === 'challengesNum') {
+        Actions.ChallengeDetails();
+      } else if (type === 'integral') {
+        Actions.IntegralDetails();
+      } else {
+        Actions.ContributionDetails();
+      }
+    }
+  }
+
   render() {
     // 随机显示当前任务头像---男生头像或者女生头像
     const { myIndexData, sex } = this.props;
@@ -52,16 +65,34 @@ class My extends Component {
           <Image source={currentAvatar} width={145} height={145} />
         </TouchableOpacity>
         <View style={styles.mine_content}>
-          <TouchableOpacity style={styles.content_list} onPress={() => Actions.ChallengeDetails()}>
-            <Text style={styles.numbers}>{myIndexData.gameCount}</Text>
+          <TouchableOpacity
+            style={styles.content_list}
+            activeOpacity={myIndexData.gameCount ? 0.2 : 1}
+            onPress={() => this.goDetailsPage('challengesNum', myIndexData.gameCount)}
+          >
+            <Text style={[myIndexData.gameCount ? styles.numbers : styles.zeroNum]}>
+              {myIndexData.gameCount}
+            </Text>
             <I18nText style={styles.texts}>My.challengesNum</I18nText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.content_list} onPress={() => Actions.IntegralDetails()}>
-            <Text style={styles.numbers}>{myIndexData.score}</Text>
+          <TouchableOpacity
+            style={styles.content_list}
+            activeOpacity={myIndexData.score ? 0.2 : 1}
+            onPress={() => this.goDetailsPage('integral', myIndexData.score)}
+          >
+            <Text style={[myIndexData.score ? styles.numbers : styles.zeroNum]}>
+              {myIndexData.score}
+            </Text>
             <I18nText style={styles.texts}>My.integral</I18nText>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.content_list} onPress={() => Actions.ContributionDetails()}>
-            <Text style={styles.numbers}>{myIndexData.contributeScore}</Text>
+          <TouchableOpacity
+            style={styles.content_list}
+            activeOpacity={myIndexData.contributeScore ? 0.2 : 1}
+            onPress={() => this.goDetailsPage('teamContribution', myIndexData.contributeScore)}
+          >
+            <Text style={[myIndexData.contributeScore ? styles.numbers : styles.zeroNum]}>
+              {myIndexData.contributeScore}
+            </Text>
             <I18nText style={styles.texts}>My.teamContribution</I18nText>
           </TouchableOpacity>
         </View>
