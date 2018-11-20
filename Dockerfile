@@ -102,6 +102,7 @@ ENV LANG en_US.UTF-8
 
 RUN git clone https://github.com/ChuxuaNmuxu/rn_build.git \
     && cd rn_build \
-    && git checkout sunb/build \
+    && git checkout -b sunb/build origin/sunb/build \
+    && sudo npm install node-sass --unsafe-perm --save-dev \
     && npm i
 
