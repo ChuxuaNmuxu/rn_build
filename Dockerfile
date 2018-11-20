@@ -27,8 +27,8 @@ RUN dpkg --add-architecture i386 && \
     apt-get clean
 
 # Install android sdk 
-RUN sudo mkdir -p opt/android/sdk \
-    && chown -R jenkins.jenkins /opt/android/sdk \
+RUN mkdir -p opt/android/sdk
+RUN chown -R jenkins.jenkins /opt/android/sdk \
     && cd opt/android/sdk/ \
     && curl https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip -o android-sdk.zip && sudo unzip android-sdk.zip -d . && sudo rm android-sdk.zip
 
