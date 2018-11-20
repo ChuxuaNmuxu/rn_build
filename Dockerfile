@@ -30,7 +30,9 @@ RUN dpkg --add-architecture i386 && \
 RUN mkdir -p opt/android/sdk
 RUN chown -R jenkins.jenkins /opt/android/sdk 
 RUN cd opt/android/sdk/ 
-RUN curl https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip -o android-sdk.zip && sudo unzip android-sdk.zip -d . && sudo rm android-sdk.zip
+RUN curl https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip -o android-sdk.zip
+RUN sudo unzip android-sdk.zip -d . 
+RUN sudo rm android-sdk.zip
 
 RUN yes | ./tools/bin/sdkmanager --licenses \
     && sudo ./tools/bin/sdkmanager "tools" \
