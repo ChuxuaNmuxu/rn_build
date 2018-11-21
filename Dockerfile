@@ -60,7 +60,7 @@ RUN curl -L "${ANDROID_SDK_URL}" -o /tmp/android-sdk-linux.zip && \
     ls ${ANDROID_HOME}/tools && chown -R root:root ${ANDROID_HOME}
 
 # Install Android SDK components
-RUN echo y | sdkmanager --proxy='http://mirrors.neusoft.edu.cn' --proxy_host='80' --no_https "platform-tools" "build-tools;26.0.2" "build-tools;25.0.3" "platforms;android-26" "platforms;android-25" \
+RUN echo y | sdkmanager --proxy='http' --proxy_host='mirrors.neusoft.edu.cn' --proxy_port='80' --no_https "platform-tools" "build-tools;26.0.2" "build-tools;25.0.3" "platforms;android-26" "platforms;android-25" \
                 "extras;google;m2repository" "extras;android;m2repository" "extras;google;google_play_services"
 
 RUN echo ANDROID_HOME="$ANDROID_HOME" >> /etc/environment
