@@ -52,7 +52,8 @@ class HotReportCard extends Component {
         { x: data.userName, y: accuracy1 * 100 },
         { x: data.rival.userName, y: accuracy2 * 100 },
       ];
-      if (accuracy1 < accuracy2) {
+      // 根据比赛胜负来判断两方颜色，因为正确率有可能一致的情况下出现胜负
+      if (data.personResult === 3) {
         colorScale = ['#ff8480', '#54cc82'];
       }
       startAngle = parseInt((accuracy1 / (accuracy1 + accuracy2)) * 180) + 90;
