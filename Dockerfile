@@ -14,6 +14,11 @@ RUN wget https://npm.taobao.org/mirrors/node/v8.9.2/node-v8.9.2-linux-x64.tar.gz
     tar -C /usr/local --strip-components 1 -xzf node-v8.9.2-linux-x64.tar.gz && \
     rm node-v8.9.2-linux-x64.tar.gz
 
+# Global install yarn package manager
+RUN apt-get update && apt-get install -y curl apt-transport-https && \
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && apt-get install -y yarn
 
 # ——————————
 # Installs i386 architecture required for running 32 bit Android tools
