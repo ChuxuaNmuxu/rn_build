@@ -10,6 +10,7 @@ import {
   // Dimensions,
   Modal,
 } from 'react-native';
+import R from 'ramda';
 import { Slider } from 'antd-mobile-rn';
 import IconSet from '../Icon';
 import ImageCropper from './imageCropper';
@@ -22,6 +23,7 @@ export default class ImageCrop extends React.Component {
     this.oldValue = 0;
     this.clip = false;
     this.state = {
+      randomNum: Math.random(), // 随机数
       value: 0,
       source: null,
       imageWidth: null,
@@ -33,6 +35,7 @@ export default class ImageCrop extends React.Component {
       currentQid: props.currentQid, // 当前裁切的题目id
       multipleStatus: false, // 当前是否处于多题裁切状态
       selectModalStatus: false, // 选择模态框的显隐
+      initCropBox: {}, // 初始截图框的大小
     };
   }
 
@@ -57,6 +60,18 @@ export default class ImageCrop extends React.Component {
       containerWidth: layout.width,
       containerHeight: layout.height - 122,
     });
+  }
+
+  // 获取指定的的题目数据
+  getTargetQuestionFun = (targetId) => {
+    let targetQuestion;
+    const { unAnswerSubjectiveList } = this.state;
+    for (let i = 0; i < unAnswerSubjectiveList.length; i++) {
+      if (unAnswerSubjectiveList[i].id === targetId) {
+        targetQuestion = unAnswerSubjectiveList[i];
+      }
+    }
+    return targetQuestion;
   }
 
   // 剪切图片事件
@@ -154,36 +169,70 @@ export default class ImageCrop extends React.Component {
     this.selectModalStatusFun(false);
   }
 
-  // 应用于多题
+  // 应用于多题---拿取新的图片供多题裁切使用还有点问题，后续再加上
   multipleQuesFun = () => {
     this.selectModalStatusFun(false);
     // 开始给裁剪多题单独计时
     const { mulImageCostTime, currentQid } = this.props;
     mulImageCostTime(currentQid);
-    // 截取新的图片供多题裁切使用---?????
-    const {
-      width, height,
-    } = this.imgCrop.getCropData();
-    console.log(12, width, height);
-    this.imgCrop.crop().then((uri) => {
-      const source = {};
-      source.uri = uri;
-      this.setState({
-        source,
-        // imageWidth: width,
-        // imageHeight: height,
-        multipleStatus: true,
-      });
+    this.setState({
+      multipleStatus: true,
+      randomNum: Math.random(),
     });
   }
+
 
   // 应用于多题---主观题题号切换
   handleOrderChange = (e) => {
     // 先保存下切换题号之前的题目的裁剪框位置数据
-    // const { currentQid: prevId } = this.state;
-    this.setState({
-      currentQid: e,
-    });
+    const { currentQid: prevId, unAnswerSubjectiveList, initCropBox } = this.state;
+    let getInitCropBox = initCropBox;
+    const prevQuestion = this.getTargetQuestionFun(prevId);
+    // 克隆未作答的题目列表数据
+    const newList = R.clone(unAnswerSubjectiveList);
+    const {
+      width, height, left, top,
+    } = this.imgCrop.getCropData();
+    if (R.isEmpty(initCropBox)) {
+      getInitCropBox = {
+        left,
+        top,
+        width,
+        height,
+      };
+    }
+    const cropBox = {
+      left,
+      top,
+      width,
+      height,
+    };
+    if (!R.equals(prevQuestion.cropBox, cropBox)) {
+      this.imgCrop.crop().then((uri) => {
+        for (let i = 0; i < newList.length; i++) {
+          if (newList[i].id === prevId) {
+            newList[i].answerFileUrl = uri;
+            newList[i].answered = 1;
+            newList[i].cropBox = cropBox;
+            break;
+          }
+        }
+      }).then(() => {
+        this.setState({
+          currentQid: e,
+          randomNum: Math.random(),
+          initCropBox: getInitCropBox,
+          unAnswerSubjectiveList: newList,
+        }, () => {
+          const currentQuestion = this.getTargetQuestionFun(e);
+          const croperBoxData = currentQuestion.cropBox || getInitCropBox;
+          console.log(123, croperBoxData);
+          this.imgCrop.setCropData(croperBoxData);
+        });
+        console.log(456, '原先的未作答题目', unAnswerSubjectiveList);
+        console.log(778, '更改后的题目列表', newList);
+      });
+    }
   }
 
   render() {
@@ -198,10 +247,8 @@ export default class ImageCrop extends React.Component {
       selectModalStatus,
       currentQid,
       unAnswerSubjectiveList,
+      randomNum,
     } = this.state;
-    console.log(6666666000, '当前是多题裁剪状态吗', multipleStatus);
-    console.log(7777777000, 'source', source);
-    console.log(8888888000, 'imageWidth', imageWidth);
     return (
       <Modal
         animationType="slide"
@@ -225,8 +272,9 @@ export default class ImageCrop extends React.Component {
           </View>
           {source && (
             <ImageCropper
+              key={randomNum}
               source={{ uri: source.uri }}
-              // autoCropArea={multipleStatus ? 0.34 : 1}
+              autoCropArea={multipleStatus ? 0.34 : 1}
               imageWidth={imageWidth}
               imageHeight={imageHeight}
               containerWidth={containerWidth}

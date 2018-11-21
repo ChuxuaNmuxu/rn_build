@@ -305,6 +305,7 @@ class DoHomeworks extends Component {
     const clickParams = {
       questionId: unAnswerQuesList[num - 1].id,
       number: unAnswerQuesList[num - 1].number,
+      read: unAnswerQuesList[num - 1].read,
     };
     this.fetchSaveQuestion(unAnswerQuesList[currentIndex].id, 'orderClick', clickParams);
     // 如果当前题目未选择难易程度，则切换其他题目时要弹出难易程度的选择框让其选择
@@ -401,11 +402,21 @@ class DoHomeworks extends Component {
       const { number } = finalQuestionList[currentIndexs + 1];
       answerParam.number = number;
       answerParam.nextQuestionId = nextQuestionId;
+      // 更新reducer数据---对下一题增加已读标识
+      if (!finalQuestionList[currentIndexs + 1].read) {
+        const { actions: { addQuestionReadSignAction } } = this.props;
+        addQuestionReadSignAction({ questionId: nextQuestionId });
+      }
     }
     if (optType === 'orderClick') {
       // 如果是查看未作答题目时点击题号进入下一道题，则要将点击的那道题的number和nextQuestionId传给接口
       answerParam.number = clickParams.number;
       answerParam.nextQuestionId = clickParams.questionId;
+      // 更新reducer数据---对点击的题目增加已读标识
+      if (!clickParams.read) {
+        const { actions: { addQuestionReadSignAction } } = this.props;
+        addQuestionReadSignAction({ questionId: clickParams.questionId });
+      }
     }
     const { actions: { submitDoHomeworkAnswerAction }, homeworkId } = this.props;
     // console.log('homeworkId', homeworkId);
@@ -568,7 +579,7 @@ class DoHomeworks extends Component {
     }
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
-    // console.log(1115, showQuesArray);
+    console.log(1115, '题目数据', showQuesArray);
     return (
       <View style={styles.containers}>
         {!R.isEmpty(homeworkData) && this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}

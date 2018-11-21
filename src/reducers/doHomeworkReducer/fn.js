@@ -49,3 +49,8 @@ export function submitHomeworkSuccess(state, action) {
 export function updateImageStatus(state, action) {
   state.uploadImgSuccess = 0;
 }
+
+// 对已查看的题目增加已读标识
+export function addQuestionReadSignSuccess(state, action) {
+  state.data = action.payload;
+}

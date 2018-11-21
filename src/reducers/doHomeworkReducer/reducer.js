@@ -29,6 +29,8 @@ const handle = {
   SUBMIT_THIS_HOMEWORK_SUCCESS: fn.submitHomeworkSuccess,
   // 改变图片上传oss是否成功的状态
   UPDATE_UPLOAD_IMAGE_STATUS: fn.updateImageStatus,
+  // 对已查看的题目增加已读标识
+  ADD_QUESTION_READ_SIGN_SUCCESS: fn.addQuestionReadSignSuccess,
 };
 
 const doHomeworkReducer = createReducer(initState, handle);
