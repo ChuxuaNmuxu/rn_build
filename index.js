@@ -6,6 +6,7 @@ import { setJSExceptionHandler } from 'react-native-exception-handler-iamsb';
 import Logger from './src/utils/logger';
 import './src/utils/global';
 import App from './App';
+import './src/config/console';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader',
 //   'Warning: BackAndroid is deprecated.  Please use BackHandler instead.',

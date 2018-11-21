@@ -14,6 +14,7 @@ const ModalContent = ({
   checkedId,
   changeStatus,
   manualClose,
+  openGuide,
 }) => {
   const keyExtractor = data => data.classGameId;
 
@@ -48,6 +49,8 @@ const ModalContent = ({
 
   const closeBtn = () => {
     manualClose(true);
+    changeStatus(false);
+    openGuide(true);
     ModalApi.onClose();
   };
 
@@ -109,6 +112,7 @@ ModalContent.defaultProps = {
   checkedId: null,
   changeStatus: () => {},
   manualClose: () => {},
+  openGuide: () => {},
 };
 
 ModalContent.propTypes = {
@@ -117,6 +121,7 @@ ModalContent.propTypes = {
   checkedId: PropTypes.string,
   changeStatus: PropTypes.func,
   manualClose: PropTypes.func,
+  openGuide: PropTypes.func,
 };
 
 export default ModalContent;

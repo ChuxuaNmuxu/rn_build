@@ -83,9 +83,15 @@ function* getAchievementsBroadcastSaga() {
     const { code, data, message } = res;
     if (code === 0) {
       yield put(actions.GetAchievementsBroadcast(data, 'SUCCESS'));
-      yield put(actions.ChangeAchievementsBroadcastStatus(true));
+
+      if (data.length) {
+        yield put(actions.ChangeAchievementsBroadcastStatus(true));
+      } else {
+        yield put(actions.ChangeHomeGuideStatus(true));
+      }
     } else {
       Toast.fail(message);
+      yield put(actions.ChangeHomeGuideStatus(true));
     }
     console.log(res);
   } catch (e) {
