@@ -5839,6 +5839,13 @@ react-native-immersive@^1.1.1:
   version "1.1.1"
   resolved "http://registry.npm.taobao.org/react-native-immersive/download/react-native-immersive-1.1.1.tgz#5c2da8afe5367e97851ed58e6e7944ddc1efbf9a"
 
+react-native-material-kit@^0.5.1:
+  version "0.5.1"
+  resolved "http://registry.npm.taobao.org/react-native-material-kit/download/react-native-material-kit-0.5.1.tgz#fc05605273bfa0d145c6e36cca755cbde5b8db3a"
+  dependencies:
+    prop-types "^15.5.10"
+    ramda "^0.24.1"
+
 react-native-menu@^0.23.0:
   version "0.23.0"
   resolved "http://registry.npm.taobao.org/react-native-menu/download/react-native-menu-0.23.0.tgz#3c023239aed95d419275df50c199982ad7eb062b"

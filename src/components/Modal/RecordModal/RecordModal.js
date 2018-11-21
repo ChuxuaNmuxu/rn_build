@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  View, TouchableOpacity,
+  TouchableOpacity,
 } from 'react-native';
 import { mergeStyles } from '../../../utils/common';
 import Style from './recordModal.scss';

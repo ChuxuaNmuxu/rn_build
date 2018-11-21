@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Swiper from 'react-native-swiper';
+import Swiper from 'react-native-swiper-1';
 import HotReportCard from './Component/HotReportCard';
 import * as actions from '../../../actions/hotReportActions';
 import styles from './HotReport.scss';
@@ -30,13 +30,19 @@ class HotReport extends Component {
   componentDidMount() {
     const { ids, index } = this.props;
     const classGameId = ids[index];
+    let timer = null;
     this.fetchHotReportData(classGameId);
     // 根据传过来的index让Swiper组件滚动到指定页,并设置currentIndex的值
     if (index > 0) {
-      this.swiperRef.scrollBy(index);
-      this.setState({
-        currentIndex: index,
-      });
+      timer = setInterval(() => {
+        if (this.swiperRef) {
+          this.swiperRef.scrollBy(index);
+          this.setState({
+            currentIndex: index,
+          });
+          clearInterval(timer);
+        }
+      }, 200);
     }
   }
 
@@ -117,6 +123,7 @@ class HotReport extends Component {
                 loop={false}
                 showsPagination={false}
                 onIndexChanged={this.onIndexChanged}
+                index={currentIndex}
               >
                 {
                 ids && ids.map((item, index) => (index === currentIndex
@@ -134,7 +141,9 @@ class HotReport extends Component {
                               </View>
                             </View>
                             {
-                              hotReportData.playerInfo.map((items, indexs) => <HotReportCard data={items} key={indexs} />)
+                              hotReportData.playerInfo.map(
+                                (items, indexs) => <HotReportCard data={items} key={indexs} />,
+                              )
                             }
                             <View style={styles.account_result}>
                               <I18nText style={styles.reward}>HotReport.reward</I18nText>

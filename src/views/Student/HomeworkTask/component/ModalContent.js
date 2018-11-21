@@ -15,7 +15,7 @@ const ModalContent = ({
   changeStatus,
   manualClose,
 }) => {
-  const keyExtractor = data => data.toString();
+  const keyExtractor = data => data.classGameId;
 
   const gotoDetails = (id, index) => {
     const ids = contentData.map(v => v.classGameId);
