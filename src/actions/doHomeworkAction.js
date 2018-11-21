@@ -18,3 +18,4 @@ export const changeDifficuiltLevelAction = actionCreator(types.CHANGE_QUESTION_D
 export const changeNeedExplainStatusAction = actionCreator(types.CHANGE_NEEDEXPLAIN_STATUS, '是否需要老师讲解');
 export const uploadImageToOssAction = actionCreator(types.UPLOAD_IMAGE_TOOSS, '上传图片到oss以获得图片fileId和url');
 export const deleteImageUrlAnswwerAction = actionCreator(types.DELETE_IMAGEURL_ANSWER, '删除主观题或者客观题的图片答案');
+export const updateImageStatusAction = actionCreator(types.UPDATE_UPLOAD_IMAGE_STATUS, '改变图片上传oss是否成功的状态--还原为0');

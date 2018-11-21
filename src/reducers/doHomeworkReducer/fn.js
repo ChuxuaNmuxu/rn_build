@@ -19,10 +19,15 @@ export function changeNeedExplainStatusSuccess(state, action) {
   state.data = action.payload;
 }
 
-// 上传图片成功后将对应的图片id和地址url存到redux数据中
+// 上传图片成功后将对应的图片id和地址url存到redux数据中--将uploadImgSuccess置为1
 export function uploadImageToOssSuccess(state, action) {
   state.data = action.payload;
-  state.uploadImgSuccess = true;
+  state.uploadImgSuccess = 1;
+}
+
+// 图片上传oss失败后将uploadImgSuccess置为2
+export function uploadImageToOssError(state, action) {
+  state.uploadImgSuccess = 2;
 }
 
 // 删除主观题或者填空题答案
@@ -30,12 +35,17 @@ export function deleteImageUrlAnswerSuccess(state, action) {
   state.data = action.payload;
 }
 
-// 成功提交答案--如果是提交的图片答案则要将uploadImgSuccess恢复为false
+// 成功提交单题答案
 export function submitAnswerSuccess(state, action) {
-  state.uploadImgSuccess = false;
+
 }
 
 // 提交作业成功后去改变redux中needMark值，判断是否有互批作业
 export function submitHomeworkSuccess(state, action) {
   state.needMark = action.payload;
+}
+
+// 还原上传图片到oss的状态为0
+export function updateImageStatus(state, action) {
+  state.uploadImgSuccess = 0;
 }
