@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import {
   Text, View, ScrollView, TouchableOpacity, BackHandler,
 } from 'react-native';
+import {
+  Toast,
+} from 'antd-mobile-rn';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -87,12 +90,23 @@ class DoHomeworks extends Component {
   }
 
   componentDidUpdate() {
-    const { uploadImgSuccess, needMark } = this.props;
+    const { uploadImgSuccess, needMark, actions: { updateImageStatusAction } } = this.props;
     const { uploadImgQuesId, homeworkData } = this.state;
-    // 上传图片成功后提交答案
-    if (uploadImgSuccess && uploadImgQuesId && this.tryToUploadImg) {
-      this.fetchSaveQuestion(uploadImgQuesId);
+    if (uploadImgQuesId && this.tryToUploadImg && uploadImgSuccess) {
       this.tryToUploadImg = false;
+      // 还原uploadImgSuccess为0
+      updateImageStatusAction();
+      // 关闭图片loading状态
+      this.setState({
+        imgLoading: false,
+      });
+      if (uploadImgSuccess === 1) {
+        // 上传图片成功后提交答案
+        this.fetchSaveQuestion(uploadImgQuesId);
+      } else {
+        // 如果上传图片失败则提示
+        Toast.fail('上传图片失败，请稍后重试', 2);
+      }
     }
     // 提交作业成功后是否有互批作业needMark为---0:没有互批作业, 1:有互批作业，其初始值为-1，表示还未接收到接口数据
     if (this.commitHomework && needMark >= 0) {
@@ -442,7 +456,6 @@ class DoHomeworks extends Component {
     submitDoHomeworkAnswerAction({ homeworkId, id, answerParam }, 'REQUEST');
     this.setState({
       currentStartTime: new Date(),
-      imgLoading: false,
     });
   }
 
@@ -685,7 +698,7 @@ class DoHomeworks extends Component {
 
 DoHomeworks.propTypes = {
   data: PropTypes.object.isRequired,
-  uploadImgSuccess: PropTypes.bool.isRequired, // 上传图片并成功改变redux数据的标识
+  uploadImgSuccess: PropTypes.number.isRequired, // 上传图片并成功改变redux数据的标识
   needMark: PropTypes.number.isRequired, // 提交作业后是否有互批作业的标识
   actions: PropTypes.object.isRequired,
   homeworkId: PropTypes.string,
