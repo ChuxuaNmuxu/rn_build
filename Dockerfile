@@ -60,7 +60,7 @@ RUN curl -L "${ANDROID_SDK_URL}" -o /tmp/android-sdk-linux.zip && \
     ls ${ANDROID_HOME}/tools && chown -R root:root ${ANDROID_HOME}
 
 # Install Android SDK components
-RUN echo y | sdkmanager --proxy='http' --proxy_host='mirrors.dormforce.net' --proxy_port='80' --no_https "platform-tools"
+RUN echo y | sdkmanager --proxy='http' --proxy_host='sdk.gdgshanghai.com' --proxy_port='8000' "platform-tools"
 
 RUN echo ANDROID_HOME="$ANDROID_HOME" >> /etc/environment
 # drop back to the regular jenkins user - good practice
