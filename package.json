@@ -16,7 +16,7 @@
     "dev-android": "react-native run-android",
     "dev-ios": "react-native run-ios",
     "build-js": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
-    "build": "npm run build-js && cd android && gradlew.bat assembleRelease --console plain",
+    "build": "npm run build-js && cd android",
     "build-1": "cd android && gradlew assembleRelease",
     "test-build&&install": "cd android && gradlew installRelease",
     "install-dev": "adb install ./android/app/build/outputs/apk/app-debug.apk",
