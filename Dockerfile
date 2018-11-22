@@ -4,6 +4,7 @@ RUN mkdir /myrepo/
 WORKDIR /myrepo
 
 RUN git clone https://github.com/ChuxuaNmuxu/rn_build.git \
+    && cd rn_build/ \ 
     && git checkout -b sunb/build origin/sunb/build
 
 WORKDIR /myrepo/rn_build
