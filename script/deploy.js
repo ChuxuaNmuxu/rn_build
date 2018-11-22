@@ -10,6 +10,7 @@ exec('npm run build');
 
 console.log('build success');
 
-exec('chmod +x ./android/gradlew')
+// exec('chmod +x ./android/gradlew')
+exec('gradle -v')
 
-exec('./android/gradlew clean aR -b ./android/app/build.gradle')
+exec('gradle clean aR')
