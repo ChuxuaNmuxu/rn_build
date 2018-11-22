@@ -457,6 +457,45 @@ class DoHomeworks extends Component {
     this.fetchSaveQuestion(id);
   }
 
+  // 应用于多题模式下点击 √逐一上传图片数据到阿里云
+  handleSaveMulImage = (question, imgName) => {
+    // this.tryToUploadImg = true;
+    // this.setState({
+    //   imgLoading: true,
+    // }, () => {
+    //   const { actions: { uploadImageToOssAction } } = this.props;
+    //   uploadImageToOssAction({ questionId: question.id, file: question.answerFileUrl, imgName });
+    // });
+    const { actions: { uploadImageToOssAction } } = this.props;
+    uploadImageToOssAction({ questionId: question.id, file: question.answerFileUrl, imgName });
+  }
+
+  // 应用于多题模式下上传图片到oss成功后将答案提交给课业接口---批量答题
+  submitMulImageAnswer = (list) => {
+    const { homeworkId, actions: { submitMultipleAnswerAction } } = this.props;
+    const { currentStartTime, homeworkData: { finalQuestionList } } = this.state;
+    const extraTimeSpent = Math.floor((new Date() - currentStartTime) / 1000);
+    const submitQues = [];
+    // 根据要提交答案的题目去取reducer中的数据
+    for (let i = 0; i < list.length; i++) {
+      for (let j = 0; j < finalQuestionList.length; j++) {
+        if (list[i].id === finalQuestionList[j].id) {
+          submitQues.push(finalQuestionList[j]);
+        }
+      }
+    }
+    const answerParam = submitQues.map((v) => {
+      const params = {
+        questionId: v.id,
+        fileId: v.answerFileId,
+        difficultyLevel: v.difficultyLevel,
+        needsExplain: v.needsExplain,
+      };
+      return params;
+    });
+    submitMultipleAnswerAction({ homeworkId, extraTimeSpent, answerParam }, 'REQUEST');
+  }
+
   // 渲染需要展示在扩展列表视图中的组件
   renderQuestionOrder = (showQuesArray, currentIndex) => {
     // 拿到当前题目的number
@@ -608,6 +647,8 @@ class DoHomeworks extends Component {
                     handleCheckboxChange={this.handleCheckboxChange}
                     deleteImg={this.deleteImg}
                     imgLoading={imgLoading}
+                    handleSaveMulImage={this.handleSaveMulImage}
+                    submitMulImageAnswer={this.submitMulImageAnswer}
                   />
                 </ScrollView>
               ))

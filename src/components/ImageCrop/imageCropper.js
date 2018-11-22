@@ -14,6 +14,7 @@ import { captureRef } from 'react-native-view-shot';
 
 export default class ImageCropper extends React.Component {
   constructor(props) {
+    console.log(789, '走了propslallla');
     super(props);
     // 是否拖动裁剪框
     this.dragClipRect = false;
@@ -39,10 +40,10 @@ export default class ImageCropper extends React.Component {
     this._top = (CHeight / 2 - imageHeight * autoCropArea / 2);
     this._animatedTop = new Animated.Value(this._top);
 
-    this._width = imageWidth;
-    this._height = imageHeight;
-    this._animatedWidth = new Animated.Value(imageWidth * autoCropArea);
-    this._animatedHeight = new Animated.Value(imageHeight * autoCropArea);
+    this._width = imageWidth * autoCropArea;
+    this._height = imageHeight * autoCropArea;
+    this._animatedWidth = new Animated.Value(this._width);
+    this._animatedHeight = new Animated.Value(this._height);
 
     // 缩放大小
     this.scale = 1;
@@ -384,6 +385,28 @@ export default class ImageCropper extends React.Component {
     return null;
   }
 
+   // 保存一个初始的裁切框位置信息---供应用于多题时切换题号设置裁切框初始位置
+   getInitialCropBoxData = () => {
+     const { scale } = Dimensions.get('screen');
+     const {
+       imageWidth = 0,
+       imageHeight = 0,
+       containerWidth: CWidth = 0,
+       containerHeight: CHeight = 0,
+       autoCropArea,
+     } = this.props;
+     const left = (CWidth / 2 - imageWidth * autoCropArea / 2) * scale;
+     const top = (CHeight / 2 - imageHeight * autoCropArea / 2) * scale;
+     const width = imageWidth * autoCropArea * scale;
+     const height = imageHeight * autoCropArea * scale;
+     return {
+       left,
+       top,
+       width,
+       height,
+     };
+   }
+
   getCropData = () => {
     const { scale } = Dimensions.get('screen');
     return {
@@ -395,13 +418,14 @@ export default class ImageCropper extends React.Component {
   }
 
   setCropData = (croperBoxData) => {
+    const { scale } = Dimensions.get('screen');
     const {
       top, left, width, height,
     } = croperBoxData;
-    this._animatedLeft.setValue(left);
-    this._animatedTop.setValue(top);
-    this._animatedWidth.setValue(width);
-    this._animatedHeight.setValue(height);
+    this._animatedLeft.setValue(left / scale);
+    this._animatedTop.setValue(top / scale);
+    this._animatedWidth.setValue(width / scale);
+    this._animatedHeight.setValue(height / scale);
   }
 
   crop = () => captureRef(this.cropper, { format: 'png', quality: 1 })
@@ -420,9 +444,7 @@ export default class ImageCropper extends React.Component {
   }
 
   render() {
-    const { rotate = 0, containerWidth } = this.state;
-    console.log('containerWidth', containerWidth);
-    console.log('animatedScale', this.animatedScale);
+    const { rotate = 0 } = this.state;
     const animatedImgStyle = {
       transform: [{
         scale: this.animatedScale,
@@ -437,7 +459,7 @@ export default class ImageCropper extends React.Component {
       height: this._animatedHeight,
     };
     const { source = {}, imageWidth, imageHeight } = this.props;
-    console.log('cropperImage', imageWidth, imageHeight);
+    console.log(900000, animatedRectStyle);
     return (
       <View
         style={styles.container}

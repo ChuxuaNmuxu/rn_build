@@ -183,7 +183,7 @@ class AnswerCard extends Component {
   // 图片裁剪模块
   renderCropper = (source) => {
     const {
-      homeworkList, questions, mistakeReform, checkHomework, mulImageCostTime,
+      homeworkList, questions, mistakeReform, checkHomework, mulImageCostTime, handleSaveMulImage, submitMulImageAnswer,
     } = this.props;
     const unAnswerSubjectiveList = (homeworkList && this.filterUASL(homeworkList)) || [];
     // 主观题支持应用于多题---作业检查或者错题重做页面不需要此功能
@@ -193,6 +193,8 @@ class AnswerCard extends Component {
         isMultipleSelect={isMultipleSelect}
         currentQid={questions.id}
         mulImageCostTime={mulImageCostTime}
+        handleSaveMulImage={handleSaveMulImage}
+        submitMulImageAnswer={submitMulImageAnswer}
         unAnswerSubjectiveList={unAnswerSubjectiveList}
         source={source}
         croppedImage={this.croppedImage}
@@ -318,6 +320,8 @@ AnswerCard.propTypes = {
   handlePreviewImage: PropTypes.func, // 上传图片后的回调函数
   deleteImg: PropTypes.func, // 删除图片答案的函数
   mulImageCostTime: PropTypes.func, // 点击应用于多题按钮执行的函数
+  handleSaveMulImage: PropTypes.func, // 应用于多题时点击勾确定上传图片
+  submitMulImageAnswer: PropTypes.func, // 应用于多题--批量答题
   handleCheckboxChange: PropTypes.func, // 改变不是很懂，请老师解答的复选框
   showDeleteIcon: PropTypes.bool, // 错题重做页面用来标识是否需要展示删除图片的icon
 };
@@ -334,6 +338,8 @@ AnswerCard.defaultProps = {
   handleCheckboxChange: () => {},
   deleteImg: () => {},
   mulImageCostTime: () => {},
+  handleSaveMulImage: () => {},
+  submitMulImageAnswer: () => {},
 };
 
 

@@ -105,10 +105,13 @@ function* submitDoHomeworkAnswerSaga(action) {
 function* submitMultipleAnswerSaga(action) {
   try {
     const { homeworkId, extraTimeSpent, answerParam } = action.payload;
+    const answerParamDto = { answerParam };
+    console.log(111, homeworkId, extraTimeSpent, answerParamDto);
     const url = `app/api/student/homeworks/${homeworkId}/answer?extraTimeSpent=${extraTimeSpent}`;
     const fetch = (arg, type) => Fetch.put(url, arg, type);
-    const res = yield call(fetch, answerParam, 'json');
+    const res = yield call(fetch, answerParamDto, 'json');
     const { code } = res;
+    console.log(222, res);
     if (code === 0) {
       yield put(actions.submitMultipleAnswerAction(code, 'SUCCESS'));
     } else {
