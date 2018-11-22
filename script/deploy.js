@@ -6,7 +6,9 @@ exec('cd ..');
 
 // exec('npm i')
 
-exec('echo npm run build');
+const res = exec('npm run build');
+
+console.log(11, res)
 
 console.log('build success');
 
