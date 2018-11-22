@@ -12,5 +12,6 @@ console.log('build success');
 
 // exec('chmod +x ./android/gradlew')
 exec('gradle -v')
+exec('TERM -v')
 
 exec('gradle clean aR')
