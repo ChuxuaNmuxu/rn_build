@@ -18,7 +18,9 @@ export const INITIAL_CONFIG = 'INITIAL_CONFIG';
 // 更改语言
 export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
 // 更改当前获取数据的环境
-export const SET_API_FLAG = 'SET_API_FLAG';
+export const CHANGE_API_FLAG = 'CHANGE_API_FLAG';
+// 是否需要更新
+export const IS_HOT_UPDATING = 'IS_HOT_UPDATING';
 
 // 设置登陆的账号信息
 export const SET_USER_INFO = 'SET_USER_INFO';

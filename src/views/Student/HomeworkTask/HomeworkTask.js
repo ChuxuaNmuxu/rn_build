@@ -3,6 +3,7 @@ import {
   View,
   TouchableOpacity,
   BackHandler,
+  Alert,
 } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -20,6 +21,7 @@ import {
 import Modal, { ModalApi } from '../../../components/Modal';
 import Debug from '../../../components/Debug';
 import ModalContent from './component/ModalContent';
+import Logger from '../../../utils/logger';
 
 @connect((state) => {
   const {
@@ -33,6 +35,7 @@ import ModalContent from './component/ModalContent';
       achievementsBroadcastId,
       isManualCloseAchievementsBroadcast,
     },
+    config: { isHotUpdating },
   } = state;
   return {
     position,
@@ -43,6 +46,7 @@ import ModalContent from './component/ModalContent';
     achievementsBroadcastStatus,
     achievementsBroadcastId,
     isManualCloseAchievementsBroadcast,
+    isHotUpdating,
   };
 }, dispatch => ({
   onFetchStudentTaskList: bindActionCreators(FetchStudentTaskList, dispatch),
@@ -59,7 +63,7 @@ class HomeworkTask extends Component {
     const {
       onFetchStudentTaskList,
       onGetAchievementsBroadcast,
-
+      isHotUpdating,
     } = this.props;
     // 获取战绩播报
     onGetAchievementsBroadcast();
@@ -67,21 +71,36 @@ class HomeworkTask extends Component {
     onFetchStudentTaskList();
 
     // 显示模态
-    this.showModal();
+    if (!isHotUpdating) {
+      this.showModal('DidMount');
+    }
 
     console.log('挂载homeworkTask');
     this.timer = setInterval(() => {
       onFetchStudentTaskList();
-      console.log('轮询中');
     }, 1000 * 60);
   }
 
   componentDidUpdate(prevProps) {
-    const { achievementsBroadcastStatus, isOpenHomeGuide } = this.props;
+    const {
+      achievementsBroadcastStatus, isOpenHomeGuide, isHotUpdating,
+    } = this.props;
 
-    if (prevProps.achievementsBroadcastStatus !== achievementsBroadcastStatus
-      || isOpenHomeGuide) {
-      this.showModal();
+    // Logger.appendFile('consoleLog.txt',
+    //   Logger.formatConsole('isManualCloseAchievementsBroadcast:', isManualCloseAchievementsBroadcast));
+
+    // Logger.appendFile('consoleLog.txt',
+    //   Logger.formatConsole('achievementsBroadcastStatus:', achievementsBroadcastStatus));
+
+    // Logger.appendFile('consoleLog.txt',
+    //   Logger.formatConsole('isOpenHomeGuide:', isOpenHomeGuide));
+
+    console.log(98, prevProps.achievementsBroadcastStatus, achievementsBroadcastStatus);
+    if (!isHotUpdating) {
+      if (prevProps.achievementsBroadcastStatus !== achievementsBroadcastStatus
+        || isOpenHomeGuide) {
+        this.showModal('DidUpdate');
+      }
     }
   }
 
@@ -96,6 +115,7 @@ class HomeworkTask extends Component {
       achievementsBroadcastStatus,
       isManualCloseAchievementsBroadcast,
     } = this.props;
+
     if (!isManualCloseAchievementsBroadcast && achievementsBroadcastStatus) {
       this.openAchievementsBroadcast();
     }
@@ -212,6 +232,7 @@ HomeworkTask.propTypes = {
   onChangeAchievementsBroadcastStatus: PropTypes.func,
   onIsManualCloseAchievementsBroadcast: PropTypes.func,
   isManualCloseAchievementsBroadcast: PropTypes.bool,
+  isHotUpdating: PropTypes.bool,
 };
 
 HomeworkTask.defaultProps = {
@@ -229,6 +250,7 @@ HomeworkTask.defaultProps = {
   onChangeAchievementsBroadcastStatus: () => {},
   onIsManualCloseAchievementsBroadcast: () => {},
   isManualCloseAchievementsBroadcast: false,
+  isHotUpdating: false,
 };
 
 export default HomeworkTask;

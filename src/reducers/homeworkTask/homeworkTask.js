@@ -39,7 +39,7 @@ const initial = {
   lastHandlePeriodIndex: null, // 最后操作时间段的索引
   isRegetDropListenerRange: false, // 是否重新获取时间段监听范围
   isFirstRegetDropListenerRange: false, // 是否重新获取时间段监听范围
-  isOpenHomeGuide: false, // 第一次进入首页
+  isOpenHomeGuide: false, // 是否打开首页手势指引
   isManualCloseAchievementsBroadcast: false, // 是否关闭战绩播报
   achievementsBroadcastData: [], // 战绩播报
   achievementsBroadcastStatus: false, // 战绩播报模态状态

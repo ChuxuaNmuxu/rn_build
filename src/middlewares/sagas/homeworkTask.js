@@ -5,7 +5,6 @@ import R from 'ramda';
 import { Toast } from 'antd-mobile-rn';
 import * as actions from '../../actions/homeworkTask';
 import * as actionTypes from '../../constants/actionType';
-
 import enhanceSaga from './enhanceSaga';
 
 export default function* homeworkTask() {
@@ -40,13 +39,6 @@ function* fetchStudentTaskListSaga() {
     }
   } catch (err) {
     yield put(actions.FetchStudentTaskList(null, 'ERROR'));
-    // try {
-    //   // Toast(err.toString());
-    //   console.log(44, err);
-    // } catch (e) {
-    //   Toast(JSON.stringify(err));
-    //   console.log(47, err);
-    // }
   }
 }
 
