@@ -6,7 +6,7 @@ exec('cd ..');
 
 // exec('npm i')
 
-exec('npm run build');
+exec('echo npm run build');
 
 console.log('build success');
 
