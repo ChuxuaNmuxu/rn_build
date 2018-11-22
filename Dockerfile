@@ -1,5 +1,5 @@
 FROM entria/react-native-android
 
 RUN mkdir /myrepo/
-RUN 'android sdk ready'
+RUN echo 'android sdk ready'
 
