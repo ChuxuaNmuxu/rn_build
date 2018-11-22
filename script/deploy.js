@@ -1,8 +1,7 @@
 const shelljs = require('shelljs');
+const path = require('path');
 
-const exec = shelljs.exec;
-
-exec('cd __dirname');
+exec(`cd ${__dirname}`);
 
 exec('cd ..');
 
