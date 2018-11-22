@@ -4,7 +4,7 @@ const exec = shelljs.exec;
 
 exec('cd ..');
 
-exec('npm i')
+// exec('npm i')
 
 exec('npm run build');
 
