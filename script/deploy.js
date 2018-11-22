@@ -13,7 +13,7 @@ exec('npm run build');
 
 console.log('build success');
 
-exec(`cd ${__dirname}`);
+exec(`cd ${__dirname}/..`);
 
 exec('chmod +x ./android/gradlew')
 
