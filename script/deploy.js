@@ -2,18 +2,16 @@ const shelljs = require('shelljs');
 
 const exec = shelljs.exec;
 
+exec('cd __dirname');
+
 exec('cd ..');
 
 // exec('npm i')
 
-const res = exec('npm run build');
-
-console.log(11, res)
+exec('npm run build');
 
 console.log('build success');
 
-// exec('chmod +x ./android/gradlew')
-exec('gradle -v')
-exec('TERM -v')
+exec('chmod +x ./android/gradlew')
 
-exec('gradle clean aR')
+exec('./android/gradlew clean aR -b ./android/app/build.gradle')
