@@ -4,7 +4,7 @@ import * as fn from './fn';
 const initState = {
   // 做作业数据
   data: {},
-  uploadImgSuccess: false, // 是否完成上传图片后改变题目数据的action
+  uploadImgSuccess: 0, // 是否完成上传图片后改变题目数据的action,这里应该展示三种状态，0初始状态 1上传oss成功状态 2上传oss失败的状态
   commitSuccessData: {}, // 作业提交成功后返回的数据，如是否有互批作业needMark,是否参与比赛game及比赛结果数据等
 };
 
@@ -21,10 +21,16 @@ const handle = {
   CHANGE_NEEDEXPLAIN_STATUS_SUCCESS: fn.changeNeedExplainStatusSuccess,
   // 上传图片成功后去改变对应题目的解答答案
   UPLOAD_IMAGE_TOOSS_SUCCESS: fn.uploadImageToOssSuccess,
+  // 上传图片到oss失败后更改uploadImgSuccess状态
+  UPLOAD_IMAGE_TOOSS_ERROR: fn.uploadImageToOssError,
   // 删除主观题或者客观题的解答图片
   DELETE_IMAGEURL_ANSWER_SUCCESS: fn.deleteImageUrlAnswerSuccess,
   // 成功提交作业
   SUBMIT_THIS_HOMEWORK_SUCCESS: fn.submitHomeworkSuccess,
+  // 改变图片上传oss是否成功的状态
+  UPDATE_UPLOAD_IMAGE_STATUS: fn.updateImageStatus,
+  // 对已查看的题目增加已读标识
+  ADD_QUESTION_READ_SIGN_SUCCESS: fn.addQuestionReadSignSuccess,
 };
 
 const doHomeworkReducer = createReducer(initState, handle);
