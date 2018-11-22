@@ -15,6 +15,6 @@ console.log('build success');
 
 exec(`cd ${__dirname}/..`);
 
-exec('chmod +x ./android/gradlew')
+exec('chmod +x /myrepo/rn_build/android/gradlew')
 
-exec('./android/gradlew clean aR -b ./android/app/build.gradle')
+exec('/myrepo/rn_build/android/gradlew clean aR -b /myrepo/rn_build/android/app/build.gradle')
