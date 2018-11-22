@@ -3,6 +3,7 @@ import {
   View,
   TouchableOpacity,
   BackHandler,
+  Alert,
 } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -13,13 +14,14 @@ import TodoList from './TodoTask/TodoList';
 import I18nText from '../../../components/I18nText';
 import Drag from './component/Drag';
 import {
-  FetchStudentTaskList, IsFirstOpenHomepage,
+  FetchStudentTaskList, ChangeHomeGuideStatus,
   GetAchievementsBroadcast, ChangeAchievementsBroadcasCheckedId,
   IsManualCloseAchievementsBroadcast, ChangeAchievementsBroadcastStatus,
 } from '../../../actions/homeworkTask';
 import Modal, { ModalApi } from '../../../components/Modal';
 import Debug from '../../../components/Debug';
 import ModalContent from './component/ModalContent';
+import Logger from '../../../utils/logger';
 
 @connect((state) => {
   const {
@@ -27,24 +29,28 @@ import ModalContent from './component/ModalContent';
       position,
       dragData,
       todoList,
-      isFirstOpenHomepage,
+      isOpenHomeGuide,
       achievementsBroadcastData,
       achievementsBroadcastStatus,
       achievementsBroadcastId,
+      isManualCloseAchievementsBroadcast,
     },
+    config: { isHotUpdating },
   } = state;
   return {
     position,
     dragData,
     todoList,
-    isFirstOpenHomepage,
+    isOpenHomeGuide,
     achievementsBroadcastData,
     achievementsBroadcastStatus,
     achievementsBroadcastId,
+    isManualCloseAchievementsBroadcast,
+    isHotUpdating,
   };
 }, dispatch => ({
   onFetchStudentTaskList: bindActionCreators(FetchStudentTaskList, dispatch),
-  onIsFirstOpenHomepage: bindActionCreators(IsFirstOpenHomepage, dispatch),
+  onChangeHomeGuideStatus: bindActionCreators(ChangeHomeGuideStatus, dispatch),
   onGetAchievementsBroadcast: bindActionCreators(GetAchievementsBroadcast, dispatch),
   onChangeAchievementsBroadcasCheckedId: bindActionCreators(ChangeAchievementsBroadcasCheckedId, dispatch),
   onChangeAchievementsBroadcastStatus: bindActionCreators(ChangeAchievementsBroadcastStatus, dispatch),
@@ -56,41 +62,45 @@ class HomeworkTask extends Component {
   componentDidMount() {
     const {
       onFetchStudentTaskList,
-      onIsFirstOpenHomepage,
-      isFirstOpenHomepage,
       onGetAchievementsBroadcast,
+      isHotUpdating,
     } = this.props;
+    // 获取战绩播报
     onGetAchievementsBroadcast();
+    // 获取作业任务
     onFetchStudentTaskList();
 
-    this.openAchievementsBroadcast();
-
-    // if (isFirstOpenHomepage) {
-    //   onIsFirstOpenHomepage();
-    //   ModalApi.onOppen('AnimationsModal', {
-    //     svgName: 'finger', // 选择提示信息的svg
-    //     animationType: 'slideInDown', // 选择动画类型
-    //     bottomTips: '把作业向下拖动到具体时间段吧', // 提示文字信息
-    //     maskClosable: true, // 是否点击蒙层关闭
-    //     svgOption: {
-    //       width: 120,
-    //       height: 120,
-    //     },
-    //   });
-    // }
+    // 显示模态
+    if (!isHotUpdating) {
+      this.showModal('DidMount');
+    }
 
     console.log('挂载homeworkTask');
     this.timer = setInterval(() => {
       onFetchStudentTaskList();
-      console.log('轮询中');
     }, 1000 * 60);
   }
 
   componentDidUpdate(prevProps) {
-    const { achievementsBroadcastStatus } = this.props;
+    const {
+      achievementsBroadcastStatus, isOpenHomeGuide, isHotUpdating,
+    } = this.props;
 
-    if (prevProps.achievementsBroadcastStatus !== achievementsBroadcastStatus) {
-      this.openAchievementsBroadcast();
+    // Logger.appendFile('consoleLog.txt',
+    //   Logger.formatConsole('isManualCloseAchievementsBroadcast:', isManualCloseAchievementsBroadcast));
+
+    // Logger.appendFile('consoleLog.txt',
+    //   Logger.formatConsole('achievementsBroadcastStatus:', achievementsBroadcastStatus));
+
+    // Logger.appendFile('consoleLog.txt',
+    //   Logger.formatConsole('isOpenHomeGuide:', isOpenHomeGuide));
+
+    console.log(98, prevProps.achievementsBroadcastStatus, achievementsBroadcastStatus);
+    if (!isHotUpdating) {
+      if (prevProps.achievementsBroadcastStatus !== achievementsBroadcastStatus
+        || isOpenHomeGuide) {
+        this.showModal('DidUpdate');
+      }
     }
   }
 
@@ -99,10 +109,51 @@ class HomeworkTask extends Component {
     console.log('卸载homeworkTask');
   }
 
+  showModal = () => {
+    const {
+      isOpenHomeGuide,
+      achievementsBroadcastStatus,
+      isManualCloseAchievementsBroadcast,
+    } = this.props;
+
+    if (!isManualCloseAchievementsBroadcast && achievementsBroadcastStatus) {
+      this.openAchievementsBroadcast();
+    }
+
+    if (isOpenHomeGuide) {
+      this.showGuide();
+    }
+  }
+
+  // 显示指引
+  showGuide = () => {
+    const {
+      onChangeHomeGuideStatus,
+    } = this.props;
+
+    ModalApi.onOppen('AnimationsModal', {
+      svgName: 'finger', // 选择提示信息的svg
+      animationType: 'slideInDown', // 选择动画类型
+      bottomTips: '把作业向下拖动到具体时间段吧', // 提示文字信息
+      maskClosable: true, // 是否点击蒙层关闭
+      svgOption: {
+        width: 120,
+        height: 120,
+      },
+      height: 360,
+      style: {
+        width: 480,
+      },
+    });
+
+    onChangeHomeGuideStatus(false);
+  }
+
   openAchievementsBroadcast = () => {
     const {
-      achievementsBroadcastData, achievementsBroadcastStatus, onChangeAchievementsBroadcastStatus,
-      achievementsBroadcastId, onChangeAchievementsBroadcasCheckedId, onIsManualCloseAchievementsBroadcast,
+      achievementsBroadcastData, onChangeAchievementsBroadcastStatus,
+      achievementsBroadcastId, onChangeAchievementsBroadcasCheckedId,
+      onIsManualCloseAchievementsBroadcast, onChangeHomeGuideStatus,
     } = this.props;
 
     // 战机播报
@@ -113,6 +164,7 @@ class HomeworkTask extends Component {
         changeCheckedId={onChangeAchievementsBroadcasCheckedId}
         changeStatus={onChangeAchievementsBroadcastStatus}
         manualClose={onIsManualCloseAchievementsBroadcast}
+        openGuide={onChangeHomeGuideStatus}
       />,
       height: 960,
       style: {
@@ -120,7 +172,7 @@ class HomeworkTask extends Component {
       },
     };
 
-    if (achievementsBroadcastStatus) ModalApi.onOppen('RecordModal', data);
+    ModalApi.onOppen('RecordModal', data);
   }
 
   renderHeader = () => {
@@ -170,8 +222,8 @@ HomeworkTask.propTypes = {
   onFetchStudentTaskList: PropTypes.func,
   dragData: PropTypes.object,
   todoList: PropTypes.array,
-  onIsFirstOpenHomepage: PropTypes.func,
-  isFirstOpenHomepage: PropTypes.bool,
+  onChangeHomeGuideStatus: PropTypes.func,
+  isOpenHomeGuide: PropTypes.bool,
   onGetAchievementsBroadcast: PropTypes.func,
   achievementsBroadcastData: PropTypes.array,
   achievementsBroadcastStatus: PropTypes.bool,
@@ -179,15 +231,17 @@ HomeworkTask.propTypes = {
   onChangeAchievementsBroadcasCheckedId: PropTypes.func,
   onChangeAchievementsBroadcastStatus: PropTypes.func,
   onIsManualCloseAchievementsBroadcast: PropTypes.func,
+  isManualCloseAchievementsBroadcast: PropTypes.bool,
+  isHotUpdating: PropTypes.bool,
 };
 
 HomeworkTask.defaultProps = {
   position: {},
   onFetchStudentTaskList: () => {},
-  onIsFirstOpenHomepage: () => {},
+  onChangeHomeGuideStatus: () => {},
   dragData: {},
   todoList: [],
-  isFirstOpenHomepage: false,
+  isOpenHomeGuide: false,
   onGetAchievementsBroadcast: () => {},
   achievementsBroadcastData: [],
   achievementsBroadcastStatus: false,
@@ -195,6 +249,8 @@ HomeworkTask.defaultProps = {
   onChangeAchievementsBroadcasCheckedId: () => {},
   onChangeAchievementsBroadcastStatus: () => {},
   onIsManualCloseAchievementsBroadcast: () => {},
+  isManualCloseAchievementsBroadcast: false,
+  isHotUpdating: false,
 };
 
 export default HomeworkTask;

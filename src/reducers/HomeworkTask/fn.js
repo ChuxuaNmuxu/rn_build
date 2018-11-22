@@ -106,8 +106,8 @@ export const isFirstGetDropListenerRange = (state, action) => {
   state.isFirstRegetDropListenerRange = action.payload;
 };
 
-export const isFirstOpenHomepage = (state, action) => {
-  state.isFirstOpenHomepage = action.payload;
+export const isOpenHomeGuide = (state, action) => {
+  state.isOpenHomeGuide = action.payload;
 };
 
 export const isManualCloseAchievementsBroadcast = (state, action) => {
