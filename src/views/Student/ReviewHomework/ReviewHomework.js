@@ -45,12 +45,22 @@ class ReviewHomework extends Component {
   }
 
   componentDidUpdate() {
-    const { uploadImgSuccess } = this.props;
-    // 上传图片成功后提交答案
-    if (uploadImgSuccess && this.tryToUploadImg) {
-      const { uploadImgQid } = this.state;
-      this.fetchSaveQuestion(uploadImgQid);
+    const { uploadImgSuccess, actions: { updateImageStatusAction } } = this.props;
+    if (this.tryToUploadImg && uploadImgSuccess) {
       this.tryToUploadImg = false;
+      // 还原uploadImgSuccess为0
+      updateImageStatusAction();
+      this.setState({
+        imgLoading: false, // 取消图片loading状态
+      });
+      // 上传图片成功后提交答案
+      if (uploadImgSuccess === 1) {
+        const { uploadImgQid } = this.state;
+        this.fetchSaveQuestion(uploadImgQid);
+      } else {
+        // 如果上传图片失败则关闭loading状态并提示
+        Toast.fail('上传图片失败，请稍后重试', 2);
+      }
     }
   }
 
@@ -178,7 +188,7 @@ class ReviewHomework extends Component {
     } else {
       // 未作答题目数为0时继续留在检查页面，更新作业检查开始时间
       this.setState({ currentStartTime: new Date() });
-      Toast.info('您已全部作答完毕，请检查后提交作业！');
+      Toast.info('您已全部作答完毕，请检查后提交作业！', 2);
     }
   }
 
@@ -276,9 +286,6 @@ class ReviewHomework extends Component {
     // answerParam.answerFileUrl = (answerFileUrl && answerFileUrl.length) ? answerFileUrl : null;
     const { actions: { submitDoHomeworkAnswerAction } } = this.props;
     submitDoHomeworkAnswerAction({ homeworkId, id, answerParam }, 'REQUEST');
-    this.setState({
-      imgLoading: false,
-    });
   }
 
   // 已作答题目数为0时展示
@@ -392,7 +399,7 @@ class ReviewHomework extends Component {
 
 ReviewHomework.propTypes = {
   data: PropTypes.object.isRequired,
-  uploadImgSuccess: PropTypes.bool.isRequired,
+  uploadImgSuccess: PropTypes.number.isRequired,
   actions: PropTypes.object.isRequired,
 };
 

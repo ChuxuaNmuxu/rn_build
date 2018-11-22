@@ -32,6 +32,8 @@ export default function* doHomeworkSaga() {
   yield takeLatest('UPLOAD_IMAGE_TOOSS', enhanceSaga(uploadImageToOssSaga));
   // 删除主观题或者客观题的图片答案
   yield takeLatest('DELETE_IMAGEURL_ANSWER', enhanceSaga(deleteImageUrlAnswerSaga));
+  // 对已查看的题目增加已读标识
+  yield takeLatest('ADD_QUESTION_READ_SIGN', enhanceSaga(addQuestionReadSignSaga));
 }
 
 // 请求作业数据---optType(操作类型  1:预览 2:作答)
@@ -300,5 +302,23 @@ function* deleteImageUrlAnswerSaga(action) {
     yield put(actions.deleteImageUrlAnswwerAction(homeworkData, 'SUCCESS'));
   } catch (e) {
     yield put(actions.deleteImageUrlAnswwerAction(e, 'ERROR'));
+  }
+}
+
+// 对已查看的题目增加已读标识
+function* addQuestionReadSignSaga(action) {
+  try {
+    const { questionId } = action.payload;
+    const state = yield select(getStateHomework);
+    const homeworkData = immer(state, (draft) => {
+      for (let i = 0; i < draft.finalQuestionList.length; i++) {
+        if (draft.finalQuestionList[i].id === questionId) {
+          draft.finalQuestionList[i].read = true;
+        }
+      }
+    });
+    yield put(actions.addQuestionReadSignAction(homeworkData, 'SUCCESS'));
+  } catch (e) {
+    yield put(actions.addQuestionReadSignAction(e, 'ERROR'));
   }
 }

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import {
   Text, View, ScrollView, TouchableOpacity, BackHandler,
 } from 'react-native';
+import {
+  Toast,
+} from 'antd-mobile-rn';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -82,12 +85,23 @@ class DoHomeworks extends Component {
   }
 
   componentDidUpdate() {
-    const { uploadImgSuccess } = this.props;
+    const { uploadImgSuccess, actions: { updateImageStatusAction } } = this.props;
     const { uploadImgQuesId, homeworkData } = this.state;
-    // 上传图片成功后提交答案
-    if (uploadImgSuccess && uploadImgQuesId && this.tryToUploadImg) {
-      this.fetchSaveQuestion(uploadImgQuesId);
+    if (uploadImgQuesId && this.tryToUploadImg && uploadImgSuccess) {
       this.tryToUploadImg = false;
+      // 还原uploadImgSuccess为0
+      updateImageStatusAction();
+      // 关闭图片loading状态
+      this.setState({
+        imgLoading: false,
+      });
+      if (uploadImgSuccess === 1) {
+        // 上传图片成功后提交答案
+        this.fetchSaveQuestion(uploadImgQuesId);
+      } else {
+        // 如果上传图片失败则提示
+        Toast.fail('上传图片失败，请稍后重试', 2);
+      }
     }
     // 在页面请求到作业数据后在此判断是否要展示 是否想检查 的模态框
     if (!this.fetchHomeworkStatus && !R.isEmpty(homeworkData)) {
@@ -291,6 +305,7 @@ class DoHomeworks extends Component {
     const clickParams = {
       questionId: unAnswerQuesList[num - 1].id,
       number: unAnswerQuesList[num - 1].number,
+      read: unAnswerQuesList[num - 1].read,
     };
     this.fetchSaveQuestion(unAnswerQuesList[currentIndex].id, 'orderClick', clickParams);
     // 如果当前题目未选择难易程度，则切换其他题目时要弹出难易程度的选择框让其选择
@@ -387,18 +402,27 @@ class DoHomeworks extends Component {
       const { number } = finalQuestionList[currentIndexs + 1];
       answerParam.number = number;
       answerParam.nextQuestionId = nextQuestionId;
+      // 更新reducer数据---对下一题增加已读标识
+      if (!finalQuestionList[currentIndexs + 1].read) {
+        const { actions: { addQuestionReadSignAction } } = this.props;
+        addQuestionReadSignAction({ questionId: nextQuestionId });
+      }
     }
     if (optType === 'orderClick') {
       // 如果是查看未作答题目时点击题号进入下一道题，则要将点击的那道题的number和nextQuestionId传给接口
       answerParam.number = clickParams.number;
       answerParam.nextQuestionId = clickParams.questionId;
+      // 更新reducer数据---对点击的题目增加已读标识
+      if (!clickParams.read) {
+        const { actions: { addQuestionReadSignAction } } = this.props;
+        addQuestionReadSignAction({ questionId: clickParams.questionId });
+      }
     }
     const { actions: { submitDoHomeworkAnswerAction }, homeworkId } = this.props;
     // console.log('homeworkId', homeworkId);
     submitDoHomeworkAnswerAction({ homeworkId, id, answerParam }, 'REQUEST');
     this.setState({
       currentStartTime: new Date(),
-      imgLoading: false,
     });
   }
 
@@ -555,7 +579,7 @@ class DoHomeworks extends Component {
     }
     // 如果showUnAnswerQues为真就只展示未作答题目集合unAnswerQuesList，否则展示全部题目数据finalQuestionList
     const showQuesArray = showUnAnswerQues ? unAnswerQuesList : finalQuestionList;
-    // console.log(1115, showQuesArray);
+    console.log(1115, '题目数据', showQuesArray);
     return (
       <View style={styles.containers}>
         {!R.isEmpty(homeworkData) && this.renderDohomeworkTop(homeworkData, currentIndex, showQuesArray)}
@@ -636,7 +660,7 @@ class DoHomeworks extends Component {
 
 DoHomeworks.propTypes = {
   data: PropTypes.object.isRequired,
-  uploadImgSuccess: PropTypes.bool.isRequired, // 上传图片并成功改变redux数据的标识
+  uploadImgSuccess: PropTypes.number.isRequired, // 上传图片并成功改变redux数据的标识
   actions: PropTypes.object.isRequired,
   homeworkId: PropTypes.string,
   showUnAnswerQues: PropTypes.bool,

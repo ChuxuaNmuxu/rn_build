@@ -24,7 +24,7 @@ class HotReportCard extends Component {
     if (personResult === 1) {
       result = '胜利';
     } else if (personResult === 2) {
-      result = '平手';
+      result = '平';
     } else {
       result = '失败';
     }
@@ -35,7 +35,7 @@ class HotReportCard extends Component {
     const { data } = this.props;
     // 传给环形图的数据
     let pieData = [];
-    // 传给环形图对应数据的颜色--胜的那方颜色为绿色#54cc82，输的那方为红色#ff8480
+    // 传给环形图对应数据的颜色--胜的那方颜色为绿色#54cc82，输的那方为红色#ff8480,如果是平手（personResult为2）则为黄色单色#ffc14d;
     let colorScale = ['#54cc82', '#ff8480'];
     // 计算圆环开始渲染数据的位置
     let startAngle = 0;
@@ -52,10 +52,16 @@ class HotReportCard extends Component {
         { x: data.userName, y: accuracy1 * 100 },
         { x: data.rival.userName, y: accuracy2 * 100 },
       ];
-      if (accuracy1 < accuracy2) {
+      // 根据比赛胜负来判断两方颜色，因为正确率有可能一致的情况下出现胜负
+      if (data.personResult === 3) {
         colorScale = ['#ff8480', '#54cc82'];
       }
       startAngle = parseInt((accuracy1 / (accuracy1 + accuracy2)) * 180) + 90;
+      // 判断下是否为平局
+      if (data.personResult === 2) {
+        pieData = [{ x: '平局', y: 100 }];
+        colorScale = ['#ffc14d'];
+      }
     }
     return (
       <View style={styles.hotReportCard_container}>
@@ -65,7 +71,12 @@ class HotReportCard extends Component {
             <View style={styles.student_info}>
               <Image source={Math.random() > 0.5 ? girlImg : boyImg} width={145} height={145} />
               <Text style={styles.studentName}>{data.userName}</Text>
-              <Text style={[data.personResult === 1 ? styles.result_success : styles.result_faild]}>
+              <Text style={[
+                data.personResult === 1 && styles.result_success,
+                data.personResult === 2 && styles.result_tied,
+                data.personResult === 3 && styles.result_faild,
+              ]}
+              >
                 {this.getPersonResult(data.personResult)}
               </Text>
               <Text style={styles.accuracy}>
@@ -79,7 +90,12 @@ class HotReportCard extends Component {
             <View style={styles.student_info}>
               <Image source={Math.random() > 0.5 ? girlImg : boyImg} width={145} height={145} />
               <Text style={styles.studentName}>{data.rival.userName}</Text>
-              <Text style={[data.rival.personResult !== 3 ? styles.result_success : styles.result_faild]}>
+              <Text style={[
+                data.rival.personResult === 1 && styles.result_success,
+                data.rival.personResult === 2 && styles.result_tied,
+                data.rival.personResult === 3 && styles.result_faild,
+              ]}
+              >
                 {this.getPersonResult(data.rival.personResult)}
               </Text>
               <Text style={styles.accuracy}>

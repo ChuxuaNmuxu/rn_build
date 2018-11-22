@@ -15,7 +15,7 @@ import * as actions from '../../../actions/previewHomeworkAction';
 import draftToHtml from '../HomworkRecordDetail/lib/draftjs-to-html';
 
 class PreviewHomework extends Component {
-  timeSetInterval = null
+  timers = null;
 
   constructor(props) {
     super(props);
@@ -33,12 +33,13 @@ class PreviewHomework extends Component {
       fetchPreviewHomeworkAction({ homeworkId }, 'REQUEST');
     }
     // 进入页面后开始计时，时间到了自动跳转至做作业页面
-    this.timeSetInterval = setInterval(() => {
+    this.timers = setInterval(() => {
       const { previewTime } = this.state;
+      const newPreviewTime = previewTime - 1;
       this.setState({
-        previewTime: previewTime - 1,
+        previewTime: newPreviewTime,
       }, () => {
-        if (this.state.previewTime <= 0) {
+        if (newPreviewTime <= 0) {
           this.doHomeWork();
         }
       });
@@ -48,14 +49,13 @@ class PreviewHomework extends Component {
   // 离开页面时清除计时器
   componentWillUnmount() {
     // console.log(9999, '执行了componentWillUnmount函数。。。。。。');
-    clearInterval(this.timeSetInterval);
+    clearInterval(this.timers);
   }
 
   // 点击左上角箭头回到首页
   goIndex = () => {
+    clearInterval(this.timers);
     Actions.replace('HomeworkTask');
-    clearInterval(this.timeSetInterval);
-    // 用这种方式跳转页面就能执行componentWillUnmount函数
   }
 
   // 完成预览，开始作业
@@ -65,6 +65,7 @@ class PreviewHomework extends Component {
 
   // 跳转到做作业页面时需要请求检查该份作业状态的接口
   doHomeWork = () => {
+    clearInterval(this.timers);
     const { actions: { checkHomeworkStatusAction }, homeworkId } = this.props;
     if (homeworkId) {
       checkHomeworkStatusAction({ homeworkId }, 'REQUEST');
