@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import Account from '../../utils/account';
+import Account from '../../config/account';
 import { SetUserInfo } from '../../actions/account';
 import tokenKey from '../../constants/stroage';
 
@@ -27,14 +27,14 @@ class Welcome extends React.Component {
   getToken = () => {
     this.account.getAccount(tokenKey)
       .then((ret) => {
-        const tokenData = ret.token;
         const {
           userinfo,
+          token,
         } = ret;
 
         const { onSetUserInfo } = this.props;
         onSetUserInfo(userinfo);
-        if (tokenData) {
+        if (token) {
           const {
             currentSchoolRole,
           } = JSON.parse(userinfo);

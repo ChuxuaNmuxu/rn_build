@@ -10,9 +10,9 @@ import { ModalApi } from '../Modal';
 import Radio from '../Radio';
 import fetchApi from '../../config/apiBase/fetchApi';
 import ApiBase from '../../config/apiBase';
-import { SetApiFlag } from '../../actions/config';
+import { ChangeApiFlag } from '../../actions/config';
 import { SetUserInfo } from '../../actions/account';
-import Account from '../../utils/account';
+import Account from '../../config/account';
 import styles from './style.scss';
 
 const GroupRadio = Radio.Group;
@@ -23,7 +23,7 @@ const GroupRadio = Radio.Group;
   apiFlag,
   userName,
 }), dispatch => ({
-  onSetApiFlag: bindActionCreators(SetApiFlag, dispatch),
+  onChangeApiFlag: bindActionCreators(ChangeApiFlag, dispatch),
   onSetUserInfo: bindActionCreators(SetUserInfo, dispatch),
 }))
 class Debug extends Component {
@@ -56,11 +56,11 @@ class Debug extends Component {
 
   // 切换环境：更改缓存、store数据，关闭模态。如果当前处于登陆状态则退出登陆并跳到登陆界面
   onChange = (data) => {
-    const { onSetApiFlag, userName } = this.props;
+    const { onChangeApiFlag, userName } = this.props;
     this.apiBase.setApiBase(data)
       .then(() => {
         ModalApi.onClose();
-        onSetApiFlag(data);
+        onChangeApiFlag(data);
       })
       .then(() => {
         if (userName) {
@@ -133,7 +133,7 @@ class Debug extends Component {
 
 Debug.propTypes = {
   apiFlag: PropTypes.string,
-  onSetApiFlag: PropTypes.func,
+  onChangeApiFlag: PropTypes.func,
   onSetUserInfo: PropTypes.func,
   userName: PropTypes.string,
   children: PropTypes.element,
@@ -141,7 +141,7 @@ Debug.propTypes = {
 
 Debug.defaultProps = {
   apiFlag: '',
-  onSetApiFlag: () => {},
+  onChangeApiFlag: () => {},
   onSetUserInfo: () => {},
   userName: '',
   children: null,

@@ -99,12 +99,13 @@ class Logger {
   // TODO:上传到服务器，但是首先我们要搭建一个服务器？我觉得不现实，毕竟为了个只对开发有意义的日志……还不如先把开发硬件升级一下是吧
 
   // 网络请求日志格式
-  formatNetWorkLog=(text, url, options, method) => (
+  formatNetWorkLog=(text, url, options, method, headers) => (
     text
       ? `date:${moment().format('YYYY-MM-DD HH:mm:ss')}
       url:${url}
       options:${JSON.stringify(options)}
       method:${method}
+      headers:${headers}
       data: ${JSON.stringify(JSON.parse(text))}
       /----------------------------------------------------------------/
 
