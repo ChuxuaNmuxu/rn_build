@@ -46,10 +46,9 @@ FROM library/hello-world
 
 # RUN echo ANDROID_HOME="$ANDROID_HOME" >> /etc/environment
 
+RUN chmod +x /deploy.sh
 COPY deploy.sh /deploy.sh
-
-# RUN chmod +x /deploy.sh
 
 WORKDIR /
 
-ENTRYPOINT [ "./deploy.sh" ]
+CMD [ "./deploy.sh" ]
