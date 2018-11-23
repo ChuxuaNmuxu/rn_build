@@ -3,8 +3,6 @@ const path = require('path');
 
 const exec = shelljs.exec;
 
-exec(`cd /myrepo/rn_build`);
-
 exec('pwd')
 
 exec('npm i')
