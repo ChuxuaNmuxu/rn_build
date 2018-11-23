@@ -1,4 +1,4 @@
-FROM library/hello-world
+# FROM library/hello-world
 
 # FROM openjdk:8
 
@@ -46,9 +46,7 @@ FROM library/hello-world
 
 # RUN echo ANDROID_HOME="$ANDROID_HOME" >> /etc/environment
 
-RUN chmod +x /deploy.sh
+FROM nginx
 COPY deploy.sh /deploy.sh
-
-WORKDIR /
-
-CMD [ "./deploy.sh" ]
+RUN chmod +x /deploy.sh
+CMD ["/deploy.sh"]
