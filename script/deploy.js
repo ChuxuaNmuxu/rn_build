@@ -5,6 +5,8 @@ const exec = shelljs.exec;
 
 exec(`cd /myrepo/rn_build`);
 
+exec('pwd')
+
 exec('npm i')
 
 exec('npm run build');
