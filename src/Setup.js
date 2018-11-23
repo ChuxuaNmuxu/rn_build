@@ -52,6 +52,8 @@ export default class Setup extends Component {
   }
 
   async componentDidMount() {
+    Logger.appendFile('consoleLog.txt',
+      Logger.formatConsole('更新状态码', '间隔符'));
     // 全屏
     if (Android) {
       Immersive.addImmersiveListener(this.restoreImmersive);
@@ -159,6 +161,9 @@ export default class Setup extends Component {
       onChangeHotUpdateStatus(false);
     }
 
+    Logger.appendFile('consoleLog.txt',
+      Logger.formatConsole('更新状态码', syncStatus));
+
     // Alert.alert(`syncStatus: ${syncStatus}`);
     // if (syncStatus === 7) {
     //   CodePush.restartApp();
@@ -167,7 +172,7 @@ export default class Setup extends Component {
 
   downloadProgressCallback = (progress) => {
     Logger.appendFile('consoleLog.txt',
-      Logger.formatConsole('更新进度:', progress));
+      Logger.formatConsole('更新进度', progress));
   }
 
   // handleBinaryVersionMismatchCallback = (update: RemotePackage) => {}

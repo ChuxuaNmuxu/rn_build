@@ -116,7 +116,7 @@ const Fetch = {
       .then(res => res.text())
       .then((text) => {
         if (!__DEV__) Logger.appendFile('networkLog.txt', Logger.formatNetWorkLog(text, url, options, method));
-        console.log(`url:${url}\ndata:${text}`);
+        console.log(`url:${url}\nparams:${JSON.stringify(params)}\ndata:${text}`);
         return (text ? JSON.parse(text) : {});
       })
       .then(errCode)
