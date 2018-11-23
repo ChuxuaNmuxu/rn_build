@@ -10,14 +10,13 @@ export default function* myIndexSaga() {
   yield takeLatest('FETCH_PERSONAL_INFO_REQUEST', enhanceSaga(fetchPersonalInfoSaga));
 }
 
-function* fetchPersonalInfoSaga(action) {
+function* fetchPersonalInfoSaga() {
   try {
-    const { schoolId } = action.payload;
     const apiFlag = yield select(state => state.config.apiFlag);
-    const res = yield Fetch.get(`${fetchApi(fetchApi.cjyun, apiFlag)}/school/${schoolId}`);
+    const res = yield Fetch.get(`${fetchApi(fetchApi.cjyun, apiFlag)}/user/studentInfo`);
     const { code, data } = res;
     if (code === 0) {
-      yield put(actions.fetchPersonalInfoAction(data.rows[0], 'SUCCESS'));
+      yield put(actions.fetchPersonalInfoAction(data, 'SUCCESS'));
     } else {
       yield put(actions.fetchPersonalInfoAction(code, 'ERROR'));
     }

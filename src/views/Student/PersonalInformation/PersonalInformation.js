@@ -14,14 +14,13 @@ import Nav from '../../../components/Nav';
 
 class PersonalInformation extends Component {
   componentDidMount() {
-    const { schoolId } = this.props;
     // 请求数据
     const { actions: { fetchPersonalInfoAction } } = this.props;
-    fetchPersonalInfoAction({ schoolId }, 'REQUEST');
+    fetchPersonalInfoAction({}, 'REQUEST');
   }
 
   render() {
-    const { data, realName } = this.props;
+    const { data } = this.props;
     return (
       <View style={styles.personalInfo_container}>
         <Nav goBackFun={() => { Actions.My(); }}>
@@ -30,7 +29,7 @@ class PersonalInformation extends Component {
         <View style={styles.personalInfo_items}>
           <View style={styles.items}>
             <I18nText style={styles.item_text}>PersonalInformation.studentName</I18nText>
-            <Text style={styles.item_style}>{realName}</Text>
+            <Text style={styles.item_style}>{data.studentName}</Text>
           </View>
           <View style={styles.items}>
             <I18nText style={styles.item_text}>PersonalInformation.school</I18nText>
@@ -38,12 +37,12 @@ class PersonalInformation extends Component {
           </View>
           <View style={styles.items}>
             <I18nText style={styles.item_text}>PersonalInformation.grade</I18nText>
-            <Text style={styles.item_style}>七年级</Text>
+            <Text style={styles.item_style}>{data.gradeName}</Text>
           </View>
           <View style={styles.borderSpace} />
           <View style={styles.items}>
             <I18nText style={styles.item_text}>PersonalInformation.class</I18nText>
-            <Text style={styles.item_style}>一班</Text>
+            <Text style={styles.item_style}>{data.className}</Text>
           </View>
         </View>
       </View>
@@ -53,18 +52,13 @@ class PersonalInformation extends Component {
 
 PersonalInformation.propTypes = {
   data: PropTypes.object.isRequired,
-  schoolId: PropTypes.string.isRequired,
-  realName: PropTypes.string.isRequired,
   actions: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
   const { data } = state.personalInformationReducer;
-  const { userInfo: { schoolId, realName } } = state.account;
   return {
     data,
-    schoolId: schoolId[0],
-    realName,
   };
 };
 
