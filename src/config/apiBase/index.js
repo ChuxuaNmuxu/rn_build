@@ -1,4 +1,3 @@
-
 import { DeviceEventEmitter } from 'react-native';
 import { apiKey } from '../../constants/stroage';
 import fetchApi from './fetchApi';

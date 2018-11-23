@@ -12,7 +12,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import Account from '../../../utils/account';
+import Account from '../../../config/account';
 import Madal from '../../../components/Modal';
 import { SetUserInfo } from '../../../actions/account';
 import fetchApi from '../../../config/apiBase/fetchApi';
@@ -79,6 +79,7 @@ class Login extends Component {
            */
           switch (currentSchoolRole) {
             case 'STUDENT':
+              console.log(82, '登陆成功啦');
               this.savaToken(data).then(() => {
                 Toast.success('登陆成功');
                 Actions.reset('Student');
