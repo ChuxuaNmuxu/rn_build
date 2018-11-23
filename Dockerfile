@@ -14,21 +14,21 @@ RUN wget https://npm.taobao.org/mirrors/node/v${NODE_VERSION}/node-v${NODE_VERSI
     rm node-v${NODE_VERSION}-linux-x64.tar.gz
 
 # Global install yarn package manager
-RUN apt-get update && apt-get install -y curl apt-transport-https && \
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && apt-get install -y yarn
+# RUN apt-get update && apt-get install -y curl apt-transport-https && \
+#     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+#     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+#     apt-get update && apt-get install -y yarn
 
 # ——————————
 # Installs i386 architecture required for running 32 bit Android tools
 # ——————————
 
-RUN dpkg --add-architecture i386 && \
-    apt-get update -y && \
-    apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get autoremove -y && \
-    apt-get clean
+# RUN dpkg --add-architecture i386 && \
+#     apt-get update -y && \
+#     apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 && \
+#     rm -rf /var/lib/apt/lists/* && \
+#     apt-get autoremove -y && \
+#     apt-get clean
 
 # Install android sdk 
 # RUN mkdir -p opt/android/sdk
@@ -47,26 +47,27 @@ RUN dpkg --add-architecture i386 && \
 # ENV ANDROID_HOME /opt/android/sdk
 # ENV PATH ${PATH}:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
-ENV ANDROID_HOME="/opt/android-sdk-linux"
-ENV ANDROID_SDK="${ANDROID_HOME}"
-ENV PATH="${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools:${ANDROID_SDK}/tools/bin:${PATH}"
-RUN echo "export PATH=${PATH}" > /root/.profile
+# ENV ANDROID_HOME="/opt/android-sdk-linux"
+# ENV ANDROID_SDK="${ANDROID_HOME}"
+# ENV PATH="${ANDROID_SDK}/tools:${ANDROID_SDK}/platform-tools:${ANDROID_SDK}/tools/bin:${PATH}"
+# RUN echo "export PATH=${PATH}" > /root/.profile
 
-ENV ANDROID_SDK_URL https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+# ENV ANDROID_SDK_URL https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
 
-RUN curl -L "${ANDROID_SDK_URL}" -o /tmp/android-sdk-linux.zip && \
-    unzip /tmp/android-sdk-linux.zip -d /opt/ && \
-    chown -R root:root /opt && \
-    rm /tmp/android-sdk-linux.zip && \
-    mkdir ${ANDROID_HOME} && \
-    mv /opt/tools ${ANDROID_HOME}/ && \
-    ls ${ANDROID_HOME} && \
-    ls ${ANDROID_HOME}/tools && chown -R root:root ${ANDROID_HOME}
+# RUN curl -L "${ANDROID_SDK_URL}" -o /tmp/android-sdk-linux.zip && \
+#     unzip /tmp/android-sdk-linux.zip -d /opt/ && \
+#     chown -R root:root /opt && \
+#     rm /tmp/android-sdk-linux.zip && \
+#     mkdir ${ANDROID_HOME} && \
+#     mv /opt/tools ${ANDROID_HOME}/ && \
+#     ls ${ANDROID_HOME} && \
+#     ls ${ANDROID_HOME}/tools && chown -R root:root ${ANDROID_HOME}
 
 # Install Android SDK components
+# RUN echo y | sdkmanager "platform-tools" "build-tools;26.0.2" "build-tools;25.0.3" "platforms;android-26" "platforms;android-25" "extras;google;m2repository" "extras;android;m2repository" "extras;google;google_play_services"
+
 # RUN echo y | sdkmanager "platform-tools"
 #  --proxy='http' --proxy_host='mirrors.neusoft.edu.cn' --proxy_port='80' 
-RUN echo y | sdkmanager "platform-tools" "build-tools;26.0.2" "build-tools;25.0.3" "platforms;android-26" "platforms;android-25" "extras;google;m2repository" "extras;android;m2repository" "extras;google;google_play_services"
 # RUN "build-tools;26.0.2"
 # RUN "build-tools;25.0.3"
 # RUN "platforms;android-26"
@@ -75,5 +76,7 @@ RUN echo y | sdkmanager "platform-tools" "build-tools;26.0.2" "build-tools;25.0.
 # RUN "extras;android;m2repository"
 # RUN "extras;google;google_play_services"
 
-RUN echo ANDROID_HOME="$ANDROID_HOME" >> /etc/environment
+# RUN echo ANDROID_HOME="$ANDROID_HOME" >> /etc/environment
 # drop back to the regular jenkins user - good practice
+
+WORKDIR /myrepo/rn_build
