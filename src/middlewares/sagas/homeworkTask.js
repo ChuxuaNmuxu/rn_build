@@ -11,6 +11,7 @@ export default function* homeworkTask() {
   yield takeLatest(actionTypes.FETCH_STUDENT_TASK_LIST, enhanceSaga(fetchStudentTaskListSaga));
   yield takeLatest(actionTypes.SAVE_TASK, enhanceSaga(saveTaskSaga));
   yield takeLatest(actionTypes.GET_ACHIEVEMENTS_BROADCAST, enhanceSaga(getAchievementsBroadcastSaga));
+  yield takeLatest(actionTypes.IS_MANUAL_CLOSE_ACHIEVEMENTS_BROADCAST, enhanceSaga(closeAchievementsBroadcastSaga));
 }
 
 // 获取任务
@@ -85,8 +86,26 @@ function* getAchievementsBroadcastSaga() {
       Toast.fail(message);
       yield put(actions.ChangeHomeGuideStatus(true));
     }
-    console.log(res);
   } catch (e) {
     console.log('获取战绩播报失败', e);
+  }
+}
+
+// 关闭战绩播报
+function* closeAchievementsBroadcastSaga({ payload: { ids } }) {
+  try {
+    const url = '/app/api/game/result/read';
+    const fetch = (params) => {
+      console.log(99, params);
+      return Fetch.put(url, params);
+    };
+    const res = yield call(fetch, { readDto: { ids } });
+    const { code, message } = res;
+
+    if (code !== 0) {
+      Toast.fail(message);
+    }
+  } catch (e) {
+    yield put(actions.IsManualCloseAchievementsBroadcast(null, 'ERROR'));
   }
 }

@@ -4,13 +4,15 @@ import { Toast } from 'antd-mobile-rn';
 import { DeviceEventEmitter, NetInfo } from 'react-native';
 import fetchApi from '../config/apiBase/fetchApi';
 import ApiBase from '../config/apiBase';
-import Account from './account';
+import Account from '../config/account';
 import * as listener from '../constants/listener';
 import { SetUserInfo } from '../actions/account';
+import tokenKey from '../constants/stroage';
 import Logger from './logger';
 
 const findString = (data, mes) => data.indexOf(mes) !== -1;
 
+// api
 // origin表示 https://cjyun.ecaicn.com
 let origin = null;
 const apiBase = new ApiBase();
@@ -19,6 +21,7 @@ DeviceEventEmitter.addListener(listener.apiBase, (params) => {
   origin = fetchApi(undefined, params);
 });
 
+// 网络
 let isConnected = true;
 // 获取初始网络
 NetInfo.isConnected.fetch().then((isConnect) => {
@@ -29,11 +32,27 @@ DeviceEventEmitter.addListener(listener.netConnected, (param) => {
   isConnected = param;
 });
 
+// token
+let token = null;
+const account = new Account();
+// 监听重新登陆token更改状态
+DeviceEventEmitter.addListener(listener.tokenListener, (param) => {
+  token = param;
+});
+
 // 拼接url
 const connectUrl = async (url) => {
   if (!origin) {
     origin = await apiBase.getApiBase();
     origin = fetchApi(undefined, origin);
+  }
+  if (!token) {
+    try {
+      const ret = await account.getAccount(tokenKey);
+      ({ token } = ret);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   if (typeof url !== 'string') {
@@ -60,7 +79,7 @@ const errCode = (json) => {
        */
       Actions.reset('Account');
       Store.dispatch(SetUserInfo());
-      new Account().removeAccount();
+      account.removeAccount();
       Toast.info(json.message);
       throw new Error(json.message);
     case -1:
@@ -87,7 +106,10 @@ const Fetch = {
     if (!isConnected) {
       return Toast.info('当前设备网络异常，请检查网络');
     }
+
+    if (!__DEV__) Logger.appendFile('consoleLog.txt', Logger.formatConsole('记录token', token));
     const headers = {};
+    if (token) headers.token = token;
     if (method === 'post') {
       headers.Accept = 'application/json';
       headers['Content-Type'] = 'application/json';
@@ -115,8 +137,10 @@ const Fetch = {
     return fetch(url, options)
       .then(res => res.text())
       .then((text) => {
-        if (!__DEV__) Logger.appendFile('networkLog.txt', Logger.formatNetWorkLog(text, url, options, method));
-        console.log(`url:${url}\ndata:${text}`);
+        if (!__DEV__) Logger.appendFile('networkLog.txt', Logger.formatNetWorkLog(text, url, options, method, headers));
+        console.log(
+          `url:${url}\nparams:${JSON.stringify(params)}\nmethod:${JSON.stringify(method)}\nheaders:${JSON.stringify(headers)}\ndata:${text}`,
+        );
         return (text ? JSON.parse(text) : {});
       })
       .then(errCode)

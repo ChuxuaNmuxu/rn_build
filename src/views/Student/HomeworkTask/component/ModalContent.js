@@ -17,9 +17,9 @@ const ModalContent = ({
   openGuide,
 }) => {
   const keyExtractor = data => data.classGameId;
+  const ids = contentData.map(v => v.classGameId);
 
   const gotoDetails = (id, index) => {
-    const ids = contentData.map(v => v.classGameId);
     if (id) {
       Actions.HotReport({
         ids,
@@ -48,7 +48,10 @@ const ModalContent = ({
   };
 
   const closeBtn = () => {
-    manualClose(true);
+    manualClose({
+      isManualCloseAchievementsBroadcast: true,
+      ids: ids.toString(),
+    });
     changeStatus(false);
     openGuide(true);
     ModalApi.onClose();

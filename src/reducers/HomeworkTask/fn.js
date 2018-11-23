@@ -111,7 +111,7 @@ export const isOpenHomeGuide = (state, action) => {
 };
 
 export const isManualCloseAchievementsBroadcast = (state, action) => {
-  state.isManualCloseAchievementsBroadcast = action.payload;
+  state.isManualCloseAchievementsBroadcast = action.payload.isManualCloseAchievementsBroadcast;
 };
 
 export const getAchievementsBroadcast = (state, action) => {
