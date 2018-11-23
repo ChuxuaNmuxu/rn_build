@@ -76,4 +76,3 @@ RUN echo y | sdkmanager "platform-tools" "build-tools;26.0.2" "build-tools;25.0.
 
 RUN echo ANDROID_HOME="$ANDROID_HOME" >> /etc/environment
 # drop back to the regular jenkins user - good practice
-USER jenkins
