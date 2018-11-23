@@ -31,6 +31,8 @@ const handle = {
   UPDATE_UPLOAD_IMAGE_STATUS: fn.updateImageStatus,
   // 对已查看的题目增加已读标识
   ADD_QUESTION_READ_SIGN_SUCCESS: fn.addQuestionReadSignSuccess,
+  // 应用于多题上传图片到oss成功后去改变reducer数据
+  UPLOAD_MULIMAGE_TOOSS_SUCCESS: fn.uploadMulImageToOssSuccess,
 };
 
 const doHomeworkReducer = createReducer(initState, handle);

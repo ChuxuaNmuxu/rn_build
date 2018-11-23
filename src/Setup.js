@@ -16,8 +16,9 @@ import SplashScreen from 'react-native-splash-screen';
 import CodePush from 'react-native-code-push';
 import Language from './config/language';
 import ApiBase from './config/apiBase';
-import { InitialConfog } from './actions/config';
+import { InitialConfog, ChangeHotUpdateStatus } from './actions/config';
 import * as listener from './constants/listener';
+import Logger from './utils/logger';
 // import Logger from './utils/logger';
 
 @connect(
@@ -27,6 +28,7 @@ import * as listener from './constants/listener';
   }),
   dispatch => ({
     doInitialConfog: bindActionCreators(InitialConfog, dispatch),
+    onChangeHotUpdateStatus: bindActionCreators(ChangeHotUpdateStatus, dispatch),
   }),
 )
 export default class Setup extends Component {
@@ -55,6 +57,9 @@ export default class Setup extends Component {
       Immersive.addImmersiveListener(this.restoreImmersive);
     }
 
+    // 热更新
+    this.hot();
+
     // 初始化 主题、语言等配置
     await this.initialConfig();
 
@@ -71,56 +76,62 @@ export default class Setup extends Component {
       });
     });
 
-    // 正式包才执行以下代码
-    if (!__DEV__) {
-      // 热更新
-      // const updateContent = `
-      //   升级内容：09.05
-      // `;
-
-      CodePush.sync(
-        {
-        // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
-          installMode: CodePush.InstallMode.IMMEDIATE,
-          // 应用程序进程启动时检查更新。
-          checkFrequency: CodePush.CheckFrequency.ON_APP_START,
-          // 苹果公司和中国区安卓的热更新，是不允许弹窗提示的，所以不能设置为true
-          // updateDialog: {
-          //   appendReleaseDescription: true,
-          //   descriptionPrefix: updateContent,
-          //   title: '09.05版本升级',
-          //   mandatoryUpdateMessage: '这是什么', // 用作更新通知正文的文本
-          //   mandatoryContinueButtonLabel: '更新', // 用于最终用户必须按下的按钮的文本，以便安装强制更新
-          //       // 在非强制更新下的弹窗文本提示
-          //       optionalInstallButtonLabel: '立即更新',
-          //       optionalIgnoreButtonLabel: '忽略更新',
-          // },
-        },
-        this.syncStatusChangedCallback,
-        this.downloadProgressCallback,
-      // this.handleBinaryVersionMismatchCallback
-      );
-
-      // 删除日志networkLog.text，codeErrorLog.text
-      // await Logger
-      //   .callChaining('deleteFile', 'networkLog.txt') // 删除网络日志
-      //   .callChaining('deleteFile', 'codeErrorLog.txt'); // 删除bug日志
-    }
-
-    // const { checkForUpdate } = CodePush;
-    // checkForUpdate()
-    //   .then((update) => {
-    //     if (!update) {
-    //       Toast.info('当前已是最新版本');
-    //     } else {
-    //       Toast.info('下载更新');
-    //     }
-    //   });
+    // 删除日志networkLog.text，codeErrorLog.text
+    // await Logger
+    //   .callChaining('deleteFile', 'networkLog.txt') // 删除网络日志
+    //   .callChaining('deleteFile', 'codeErrorLog.txt'); // 删除bug日志
   }
 
   componentWillUnmount() {
     if (Android) {
       Immersive.removeImmersiveListener(this.restoreImmersive);
+    }
+  }
+
+  hot = () => {
+    // 正式包才执行以下代码
+    if (!__DEV__) {
+      // 热更新
+      const updateContent = `
+        升级
+      `;
+
+      CodePush.sync(
+        {
+          // 启动模式三种：ON_NEXT_RESUME、ON_NEXT_RESTART、IMMEDIATE
+          installMode: CodePush.InstallMode.IMMEDIATE,
+          // 应用程序进程启动时检查更新。
+          checkFrequency: CodePush.CheckFrequency.ON_APP_START,
+          // 苹果公司和中国区安卓的热更新，是不允许弹窗提示的，所以不能设置为true
+          updateDialog: {
+            appendReleaseDescription: true,
+            descriptionPrefix: updateContent,
+            title: '版本升级',
+            mandatoryUpdateMessage: '这是什么', // 用作更新通知正文的文本
+            mandatoryContinueButtonLabel: '更新', // 用于最终用户必须按下的按钮的文本，以便安装强制更新
+            // 在非强制更新下的弹窗文本提示
+            optionalInstallButtonLabel: '立即更新',
+            optionalIgnoreButtonLabel: '忽略更新',
+          },
+        },
+        this.syncStatusChangedCallback,
+        this.downloadProgressCallback,
+        // this.handleBinaryVersionMismatchCallback
+      );
+
+      // const { checkForUpdate } = CodePush;
+      // checkForUpdate()
+      //   .then((update) => {
+      //     if (!update) {
+      //       Alert.alert('当前已是最新版本');
+      //     } else {
+      //       Alert.alert('下载更新');
+      //     }
+      //   });
+    } else {
+      // 如果是开发模式直接将正在热更新状态改为false
+      const { onChangeHotUpdateStatus } = this.props;
+      onChangeHotUpdateStatus(false);
     }
   }
 
@@ -137,19 +148,26 @@ export default class Setup extends Component {
      * 7. 正在从CodePush服务器下载可用更新。
      * 8. 已下载可用更新，即将安装。
      *
-     * 如果有更新大概得步骤是7，5，0
+     * 更新取消流程：6 5 更新提示框 2
+     * 更新确定流程：6 5 更新提示框 7 8 1（会重启然后执行 0 5）
      */
     // console.log(syncStatus);
 
-    Alert.alert(`syncStatus: ${syncStatus}`);
+    const { onChangeHotUpdateStatus } = this.props;
+
+    if (syncStatus === 2 || syncStatus === 0) {
+      onChangeHotUpdateStatus(false);
+    }
+
+    // Alert.alert(`syncStatus: ${syncStatus}`);
     // if (syncStatus === 7) {
     //   CodePush.restartApp();
     // }
   }
 
   downloadProgressCallback = (progress) => {
-    Alert.alert(11);
-    Alert.alert(`progress: ${JSON.parse(progress)}`);
+    Logger.appendFile('consoleLog.txt',
+      Logger.formatConsole('更新进度:', progress));
   }
 
   // handleBinaryVersionMismatchCallback = (update: RemotePackage) => {}
@@ -160,7 +178,6 @@ export default class Setup extends Component {
     });
     DeviceEventEmitter.emit(listener.netConnected, isConnected);
   }
-
 
   initialConfig = () => {
     const { doInitialConfog } = this.props;
@@ -217,6 +234,7 @@ export default class Setup extends Component {
 
 Setup.defaultProps = {
   doInitialConfog: () => {},
+  onChangeHotUpdateStatus: () => {},
   // theme: {
   //   brandPrimary: 'transparent',
   // },
@@ -226,4 +244,5 @@ Setup.propTypes = {
   doInitialConfog: PropTypes.func,
   // theme: PropTypes.object,
   children: PropTypes.element.isRequired,
+  onChangeHotUpdateStatus: PropTypes.func,
 };

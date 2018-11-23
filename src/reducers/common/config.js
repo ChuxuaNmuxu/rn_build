@@ -1,47 +1,27 @@
-import { handleActions } from 'redux-actions';
+import createReducer from '../createReducer';
 import {
-  InitialConfog,
-  // ChangeTheme,
-  ChangeLanguage,
-  SetApiFlag,
-} from '../../actions/config';
+  INITIAL_CONFIG,
+  // CHANGE_THEME,
+  CHANGE_LANGUAGE,
+  CHANGE_API_FLAG,
+  IS_HOT_UPDATING,
+} from '../../constants/actionType';
+import * as fn from './fn';
 
-const initialState = {
+const initial = {
   // theme: {},
   language: '',
   apiFlag: '',
+  isHotUpdating: true,
 };
-export default handleActions({
-  // [ChangeTheme](state, action) {
-  //   return {
-  //     ...state,
-  //     theme: action.payload,
-  //   };
-  // },
-  [ChangeLanguage](state, action) {
-    return {
-      ...state,
-      language: action.payload,
-    };
-  },
-  [SetApiFlag](state, action) {
-    return {
-      ...state,
-      apiFlag: action.payload,
-    };
-  },
 
-  [InitialConfog](state, action) {
-    const {
-      // theme,
-      language,
-      apiFlag,
-    } = action.payload;
-    return {
-      ...state,
-      // theme,
-      language,
-      apiFlag,
-    };
-  },
-}, initialState);
+const handle = {
+  [CHANGE_LANGUAGE]: fn.changeLanguge,
+  [CHANGE_API_FLAG]: fn.changeApiFlat,
+  [INITIAL_CONFIG]: fn.initialConfig,
+  [IS_HOT_UPDATING]: fn.changeHotUpdateStatus,
+};
+
+const common = createReducer(initial, handle);
+
+export default common;

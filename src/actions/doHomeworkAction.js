@@ -22,3 +22,4 @@ export const uploadImageToOssAction = actionCreator(types.UPLOAD_IMAGE_TOOSS, '�
 export const deleteImageUrlAnswwerAction = actionCreator(types.DELETE_IMAGEURL_ANSWER, '删除主观题或者客观题的图片答案');
 export const updateImageStatusAction = actionCreator(types.UPDATE_UPLOAD_IMAGE_STATUS, '改变图片上传oss是否成功的状态--还原为0');
 export const addQuestionReadSignAction = actionCreator(types.ADD_QUESTION_READ_SIGN, '对已查看的题目增加已读标识');
+export const uploadMulImageToOssAction = actionCreator(types.UPLOAD_MULIMAGE_TOOSS, '应用于多题时多张图片上传oss');

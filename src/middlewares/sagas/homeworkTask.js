@@ -5,7 +5,6 @@ import R from 'ramda';
 import { Toast } from 'antd-mobile-rn';
 import * as actions from '../../actions/homeworkTask';
 import * as actionTypes from '../../constants/actionType';
-
 import enhanceSaga from './enhanceSaga';
 
 export default function* homeworkTask() {
@@ -40,13 +39,6 @@ function* fetchStudentTaskListSaga() {
     }
   } catch (err) {
     yield put(actions.FetchStudentTaskList(null, 'ERROR'));
-    // try {
-    //   // Toast(err.toString());
-    //   console.log(44, err);
-    // } catch (e) {
-    //   Toast(JSON.stringify(err));
-    //   console.log(47, err);
-    // }
   }
 }
 
@@ -83,9 +75,15 @@ function* getAchievementsBroadcastSaga() {
     const { code, data, message } = res;
     if (code === 0) {
       yield put(actions.GetAchievementsBroadcast(data, 'SUCCESS'));
-      yield put(actions.ChangeAchievementsBroadcastStatus(true));
+
+      if (data.length) {
+        yield put(actions.ChangeAchievementsBroadcastStatus(true));
+      } else {
+        yield put(actions.ChangeHomeGuideStatus(true));
+      }
     } else {
       Toast.fail(message);
+      yield put(actions.ChangeHomeGuideStatus(true));
     }
     console.log(res);
   } catch (e) {

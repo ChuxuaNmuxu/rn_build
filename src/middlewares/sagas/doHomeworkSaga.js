@@ -34,6 +34,8 @@ export default function* doHomeworkSaga() {
   yield takeLatest('DELETE_IMAGEURL_ANSWER', enhanceSaga(deleteImageUrlAnswerSaga));
   // 对已查看的题目增加已读标识
   yield takeLatest('ADD_QUESTION_READ_SIGN', enhanceSaga(addQuestionReadSignSaga));
+  // 应用于多题时多张图片上传oss
+  yield takeLatest('UPLOAD_MULIMAGE_TOOSS', enhanceSaga(uploadMulImageToOssSaga));
 }
 
 // 请求作业数据---optType(操作类型  1:预览 2:作答)
@@ -106,12 +108,12 @@ function* submitMultipleAnswerSaga(action) {
   try {
     const { homeworkId, extraTimeSpent, answerParam } = action.payload;
     const answerParamDto = { answerParam };
-    console.log(111, homeworkId, extraTimeSpent, answerParamDto);
+    console.log(888, homeworkId, extraTimeSpent, answerParamDto);
     const url = `app/api/student/homeworks/${homeworkId}/answer?extraTimeSpent=${extraTimeSpent}`;
     const fetch = (arg, type) => Fetch.put(url, arg, type);
     const res = yield call(fetch, answerParamDto, 'json');
     const { code } = res;
-    console.log(222, res);
+    console.log(9999, res);
     if (code === 0) {
       yield put(actions.submitMultipleAnswerAction(code, 'SUCCESS'));
     } else {
@@ -233,7 +235,7 @@ function* changeNeedExplainStatusSaga(action) {
   }
 }
 
-// 一键上传图片到阿里云
+// 一键上传图片到阿里云---单题上传图片
 function* uploadImageToOssSaga(action) {
   try {
     const { questionId, file, imgName } = action.payload;
@@ -323,5 +325,60 @@ function* addQuestionReadSignSaga(action) {
     yield put(actions.addQuestionReadSignAction(homeworkData, 'SUCCESS'));
   } catch (e) {
     yield put(actions.addQuestionReadSignAction(e, 'ERROR'));
+  }
+}
+
+// 应用于多题时上传图片到oss并改变reducer中的数据
+function* uploadMulImageToOssSaga(action) {
+  try {
+    const { questionList } = action.payload;
+    for (let k = 0; k < questionList.length; k++) {
+      const { imgName } = questionList[k];
+      const imgNameType = imgName ? imgName.substring(imgName.lastIndexOf('.'), imgName.length) : '.png';
+      const url = '/api/oss-upload-parameters';
+      const fetch = (arg, type) => Fetch.post(url, arg, type);
+      const res = yield call(fetch, {}, 'json');
+      const { code, data } = res;
+      if (code === 0) {
+        const formData = new FormData();
+        const i = {
+          key: data.objectKey,
+          OSSAccessKeyId: data.accessId,
+          callback: data.callback,
+          signature: data.signature,
+          success_action_status: 200,
+          policy: data.policy,
+          'x:filename': 9 + imgNameType,
+        };
+        R.forEachObjIndexed((value, key) => {
+          formData.append(key, value);
+        })(i);
+        formData.append('file', { uri: questionList[k].file, type: `image/${imgNameType}`, name: 9 + imgNameType }, 9 + imgNameType);
+        const fetch2 = (arg, type) => Fetch.post(data.uploadUrl, arg, type);
+        const res2 = yield call(fetch2, formData, 'file');
+        const code2 = res2.code;
+        const data2 = res2.data;
+        if (code2 === 0) {
+        // 拿到上传成功后获得的fileId和图片url后去改变redux中的对应题目数据
+          const state = yield select(getStateHomework);
+          const homeworkData = immer(state, (draft) => {
+            for (let j = 0; j < draft.finalQuestionList.length; j++) {
+              if (draft.finalQuestionList[j].id === questionList[k].questionId) {
+                draft.finalQuestionList[j].answered = 1;
+                draft.finalQuestionList[j].answerFileId = data2.fileId;
+                draft.finalQuestionList[j].answerFileUrl = data2.url;
+              }
+            }
+          });
+          yield put(actions.uploadMulImageToOssAction(homeworkData, 'SUCCESS'));
+        } else {
+          yield put(actions.uploadMulImageToOssAction(code2, 'ERROR'));
+        }
+      } else {
+        yield put(actions.uploadMulImageToOssAction(code, 'ERROR'));
+      }
+    }
+  } catch (e) {
+    yield put(actions.uploadMulImageToOssAction(e, 'ERROR'));
   }
 }

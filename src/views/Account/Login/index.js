@@ -104,7 +104,7 @@ class Login extends Component {
           {
             !__DEV__ && (
               <View style={{ alignItems: 'center', marginBottom: 15 }}>
-                <Text style={{ fontSize: 22, color: 'red' }}>V1.0.0</Text>
+                <Text style={{ fontSize: 22, color: 'red' }}>V1.0.0(build 1.0.2)</Text>
               </View>
             )
           }
@@ -120,7 +120,7 @@ class Login extends Component {
                   username: value,
                 });
               }}
-              autoFocus
+              // autoFocus
               placeholder="请输入账号"
               placeholderTextColor="#999999"
               underlineColorAndroid="transparent"

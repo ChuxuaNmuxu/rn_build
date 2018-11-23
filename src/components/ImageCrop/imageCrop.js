@@ -106,8 +106,6 @@ export default class ImageCrop extends React.Component {
     // 先判断是否处于多题裁切状态，是则裁切图片，否则判断是否要展示选择模态层
     if (multipleStatus) {
       // 确定将应用于多题
-      const { cancelCrop } = this.props;
-      cancelCrop();
       this.multipleCropper();
     } else if (isMultipleSelect) {
       this.selectModalStatusFun(true);
@@ -186,6 +184,7 @@ export default class ImageCrop extends React.Component {
     const prevQuestion = this.getTargetQuestionFun(prevId);
     // 克隆未作答的题目列表数据
     const newList = R.clone(unAnswerSubjectiveList);
+    // 设置应用于多题时裁剪框的初始位置
     if (R.isEmpty(getInitCropBox)) {
       const obj = this.imgCrop.getInitialCropBoxData();
       getInitCropBox = {
@@ -202,7 +201,6 @@ export default class ImageCrop extends React.Component {
       left, top, width, height,
     };
     if (!R.equals(prevQuestion.cropBox, cropBox)) {
-      console.log(3444, '切换前的题目裁切框位置改变lallalalalla', prevQuestion.cropBox, cropBox);
       this.imgCrop.crop().then((uri) => {
         for (let i = 0; i < newList.length; i++) {
           if (newList[i].id === prevId) {
@@ -217,16 +215,12 @@ export default class ImageCrop extends React.Component {
           currentQid: e,
           initCropBox: getInitCropBox,
           unAnswerSubjectiveList: newList,
-        }, () => {
-          console.log(456, '原先的未作答题目', unAnswerSubjectiveList);
-          console.log(778, '更改后的题目列表', newList);
         });
         const currentQuestion = this.getTargetQuestionFun(e);
         const croperBoxData = currentQuestion.cropBox || getInitCropBox;
         this.imgCrop.setCropData(croperBoxData);
       });
     } else {
-      console.log(36666, '切换前的题目裁切框位置没有改变', prevQuestion.cropBox, cropBox);
       this.setState({
         currentQid: e,
       });
@@ -240,7 +234,6 @@ export default class ImageCrop extends React.Component {
   multipleCropper = () => {
     // 截取每个图片框
     const { currentQid, unAnswerSubjectiveList } = this.state;
-    const { submitMulImageAnswer, handleSaveMulImage } = this.props;
     const unAnswerList = R.clone(unAnswerSubjectiveList);
     // 先判断当前图片框是否已截取保存
     for (let i = 0; i < unAnswerList.length; i++) {
@@ -257,30 +250,40 @@ export default class ImageCrop extends React.Component {
             unAnswerList[i].answered = 1;
             unAnswerList[i].cropBox = cropBox;
           }).then(() => {
-            Promise.all(unAnswerList.map(v => (v.answered === 1 ? handleSaveMulImage(v, '1.png') : v))).then(() => {
-              submitMulImageAnswer(this.filterAnswerList(unAnswerList));
-            }).catch((err) => {
-              throw new Error(err);
-            });
+            this.mulImageUpload(unAnswerList);
           });
         } else {
-          Promise.all(unAnswerList.map(v => (v.answered === 1 ? handleSaveMulImage(v, '1.png') : v))).then(() => {
-            submitMulImageAnswer(this.filterAnswerList(unAnswerList));
-          }).catch((err) => {
-            throw new Error(err);
-          });
+          this.mulImageUpload(unAnswerList);
         }
         break;
       }
     }
   }
 
-  // 筛选出已裁切过的题目列表
-  filterAnswerList = (list) => {
+  // 应用于多题多张图片上传Oss
+  mulImageUpload = (unAnswerList) => {
+    const { handleSaveMulImage, mulCroppedImage } = this.props;
+    mulCroppedImage();
+    const questionList = [];
+    for (let i = 0; i < unAnswerList.length; i++) {
+      if (unAnswerList[i].answered === 1) {
+        const params = {
+          questionId: unAnswerList[i].id,
+          file: unAnswerList[i].answerFileUrl,
+          imgName: '1.png',
+        };
+        questionList.push(params);
+      }
+    }
+    handleSaveMulImage(questionList, this.filterAnswerIdList(unAnswerList));
+  }
+
+  // 筛选出应用于多题时已保存过cropBox的题目id列表，用于批量答题筛选
+  filterAnswerIdList = (list) => {
     const newList = [];
     for (let i = 0; i < list.length; i++) {
       if (list[i].answered) {
-        newList.push(list[i]);
+        newList.push(list[i].id);
       }
     }
     return newList;
@@ -383,7 +386,7 @@ ImageCrop.propTypes = {
   cancelCrop: PropTypes.func.isRequired,
   mulImageCostTime: PropTypes.func.isRequired,
   handleSaveMulImage: PropTypes.func.isRequired,
-  submitMulImageAnswer: PropTypes.func.isRequired,
+  mulCroppedImage: PropTypes.func.isRequired,
   isMultipleSelect: PropTypes.bool.isRequired,
   currentQid: PropTypes.string.isRequired,
   unAnswerSubjectiveList: PropTypes.array.isRequired,

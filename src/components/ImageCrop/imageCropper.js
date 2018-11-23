@@ -14,7 +14,6 @@ import { captureRef } from 'react-native-view-shot';
 
 export default class ImageCropper extends React.Component {
   constructor(props) {
-    console.log(789, '走了propslallla');
     super(props);
     // 是否拖动裁剪框
     this.dragClipRect = false;
@@ -422,6 +421,8 @@ export default class ImageCropper extends React.Component {
     const {
       top, left, width, height,
     } = croperBoxData;
+    // 为了保证在应用于多题时切换题目getCropData能拿到正确的数据，每次setCropData都应该去更新this._left, this._top, this._width, this._height
+    [this._left, this._top, this._width, this._height] = [left / scale, top / scale, width / scale, height / scale];
     this._animatedLeft.setValue(left / scale);
     this._animatedTop.setValue(top / scale);
     this._animatedWidth.setValue(width / scale);

@@ -182,28 +182,36 @@ class PlanList extends Component {
       planList,
       onChangeLastHandlePeriodIndex,
     } = this.props;
-    const delay = new Promise(resolve => setTimeout(resolve, 500));
 
-    // 将最早有任务的时间段居中
-    const findIndex = planList.findIndex(v => v.data.length);
-    let centerIndex = this.currentPeriodIndex;
-    if (findIndex !== -1) {
-      centerIndex = findIndex;
-    }
+    let timer = null;
 
-    onChangeLastHandlePeriodIndex(centerIndex);
+    timer = setInterval(() => {
+      if (this.flatList) {
+        // 将最早有任务的时间段居中
+        const findIndex = planList.findIndex(v => v.data.length);
+        let centerIndex = this.currentPeriodIndex;
+        if (findIndex !== -1) {
+          centerIndex = findIndex;
+        }
 
-    delay.then(() => {
-      // 将位于指定位置的元素滚动到可视区的指定位置，当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
-      // 如果有展开并且展开的任务
-      this.flatList.scrollToIndex({
-        animated: false,
-        index: centerIndex,
-        viewOffset: (142 - 496) / 2,
-        viewPosition: 0.5,
-      });
-      this.saveListenerRangeToStore();
-    });
+        onChangeLastHandlePeriodIndex(centerIndex);
+
+        /**
+         * 将位于指定位置的元素滚动到可视区的指定位置，
+         * 当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
+         * 如果有展开并且展开的任务
+         */
+
+        this.flatList.scrollToIndex({
+          animated: false,
+          index: centerIndex,
+          viewOffset: (142 - 496) / 2,
+          viewPosition: 0.5,
+        });
+        this.saveListenerRangeToStore();
+      }
+      clearInterval(timer);
+    }, 200);
   }
 
   // 将获取的时间段范围保存在store中
