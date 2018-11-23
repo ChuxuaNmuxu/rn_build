@@ -7,10 +7,10 @@ exec('pwd')
 
 exec('npm i')
 
-// exec('npm run build');
+exec('npm run build');
 
 console.log('build success');
 
-// exec('chmod +x /myrepo/rn_build/android/gradlew')
+exec('chmod +x /myrepo/rn_build/android/gradlew')
 
-// exec('/myrepo/rn_build/android/gradlew clean aR -b /myrepo/rn_build/android/app/build.gradle')
+exec('/myrepo/rn_build/android/gradlew clean aR -b /myrepo/rn_build/android/app/build.gradle')
