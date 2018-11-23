@@ -48,7 +48,7 @@ FROM library/hello-world
 
 COPY deploy.sh /deploy.sh
 
-RUN chmod +x /deploy.sh
+# RUN chmod +x /deploy.sh
 
 WORKDIR /
 
