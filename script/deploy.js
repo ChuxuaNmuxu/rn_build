@@ -9,7 +9,7 @@ exec('pwd')
 
 exec('npm i')
 
-// exec('npm run build');
+exec('npm run build');
 
 console.log('build success');
 
