@@ -86,16 +86,7 @@ class HomeworkTask extends Component {
       achievementsBroadcastStatus, isOpenHomeGuide, isHotUpdating,
     } = this.props;
 
-    // Logger.appendFile('consoleLog.txt',
-    //   Logger.formatConsole('isManualCloseAchievementsBroadcast:', isManualCloseAchievementsBroadcast));
-
-    // Logger.appendFile('consoleLog.txt',
-    //   Logger.formatConsole('achievementsBroadcastStatus:', achievementsBroadcastStatus));
-
-    // Logger.appendFile('consoleLog.txt',
-    //   Logger.formatConsole('isOpenHomeGuide:', isOpenHomeGuide));
-
-    console.log(98, prevProps.achievementsBroadcastStatus, achievementsBroadcastStatus);
+    // console.log(98, prevProps.achievementsBroadcastStatus, achievementsBroadcastStatus);
     if (!isHotUpdating) {
       if (prevProps.achievementsBroadcastStatus !== achievementsBroadcastStatus
         || isOpenHomeGuide) {
