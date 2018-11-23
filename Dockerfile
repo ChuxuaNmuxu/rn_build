@@ -48,6 +48,4 @@ FROM library/hello-world
 
 COPY deploy.sh .
 
-RUN ls
-
 CMD ["./deploy.sh"]
