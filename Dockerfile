@@ -48,4 +48,6 @@ FROM library/hello-world
 
 COPY deploy.sh .
 
+RUN chmod +x ./deploy.sh
+
 CMD ["./deploy.sh"]
