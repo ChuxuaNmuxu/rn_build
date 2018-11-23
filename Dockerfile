@@ -7,10 +7,11 @@ FROM openjdk:8
 # ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-amd64
 
 
-# 使用淘宝镜像安装Node.js v8.9.2
-RUN wget https://npm.taobao.org/mirrors/node/v8.9.2/node-v8.9.2-linux-x64.tar.gz && \
-    tar -C /usr/local --strip-components 1 -xzf node-v8.9.2-linux-x64.tar.gz && \
-    rm node-v8.9.2-linux-x64.tar.gz
+# 使用淘宝镜像安装Node.js
+ENV NODE_VERSION 10.13.0
+RUN wget https://npm.taobao.org/mirrors/node/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz && \
+    tar -C /usr/local --strip-components 1 -xzf node-v${NODE_VERSION}-linux-x64.tar.gz && \
+    rm node-v${NODE_VERSION}-linux-x64.tar.gz
 
 # Global install yarn package manager
 RUN apt-get update && apt-get install -y curl apt-transport-https && \
