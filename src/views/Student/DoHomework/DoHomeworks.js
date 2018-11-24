@@ -44,6 +44,7 @@ class DoHomeworks extends Component {
       showDifficultModalOpt: null, // 触发出现难易程度模态层的操作： commitBtnClick-点击提交按钮，clickQuesOrder-点击题号，clickNextBtn-左滑至下一题
       clickQuesOrderIndex: null, // 点击题号时该题所在列表索引
       imgLoading: false, // 图片上传loading状态
+      mulFilterIdList: false, // 用来暂存应用于多题时已保存过cropBox的题目id列表
     };
     this.tryToUploadImg = false; // 是否上传了图片--防止componentDidUpdate一直执行出现死循环
     this.fetchHomeworkStatus = false; // 刚进入页面时是否请求到作业数据
@@ -86,7 +87,10 @@ class DoHomeworks extends Component {
 
   componentDidUpdate() {
     const { uploadImgSuccess, actions: { updateImageStatusAction } } = this.props;
-    const { uploadImgQuesId, homeworkData } = this.state;
+    const {
+      uploadImgQuesId, homeworkData, mulFilterIdList, homeworkData: { finalQuestionList },
+    } = this.state;
+    // 控制图片正在加载的状态
     if (uploadImgQuesId && this.tryToUploadImg && uploadImgSuccess) {
       this.tryToUploadImg = false;
       // 还原uploadImgSuccess为0
@@ -103,6 +107,7 @@ class DoHomeworks extends Component {
         Toast.fail('上传图片失败，请稍后重试', 2);
       }
     }
+
     // 在页面请求到作业数据后在此判断是否要展示 是否想检查 的模态框
     if (!this.fetchHomeworkStatus && !R.isEmpty(homeworkData)) {
       this.fetchHomeworkStatus = true;
@@ -113,6 +118,26 @@ class DoHomeworks extends Component {
         this.setCheckModalVisibleFun(true);
       }
       this.setBtnText(checkStatus);
+    }
+
+    // 应用于多题批量答题接口请求的时机控制---根据mulFilterIdList的id列表去筛选reducer中的题目数据，如果筛选出的数据answered都为1，
+    // 表明所有该列表所有题目答案上传阿里成功并且reducer中数据更新完成
+    if (mulFilterIdList) {
+      const submitQues = this.filterSubmitQues(mulFilterIdList, finalQuestionList);
+      let canSubmit = true;
+      Promise.all(submitQues.map((v) => {
+        if (!v.answered) {
+          canSubmit = false;
+        }
+        return canSubmit;
+      })).then(() => {
+        // 如果上传图片到oss的reducer数据都更新成功了则进行批量答题
+        if (canSubmit) {
+          this.submitMulImageAnswer(submitQues);
+        }
+      }).catch((err) => {
+        throw new Error(err);
+      });
     }
   }
 
@@ -426,7 +451,7 @@ class DoHomeworks extends Component {
     });
   }
 
-  // 主观题上传答案或者客观题上传解答过程答案的函数
+  // 主观题上传答案或者客观题上传解答过程答案的函数---单题上传图片
   handlePreviewImage = (questionId, e, imgName) => {
     // console.log(33333, questionId, e, imgName);
     this.tryToUploadImg = true;
@@ -455,6 +480,59 @@ class DoHomeworks extends Component {
   mulImageCostTime = (id) => {
     // 先把当前题目提交一次答案保存时间
     this.fetchSaveQuestion(id);
+  }
+
+  // 应用于多题模式下点击 √逐一上传图片数据到阿里云
+  handleSaveMulImage = (questionList, idList) => {
+    this.setState({
+      imgLoading: true,
+    }, () => {
+      const { mulFilterIdList } = this.state;
+      const { actions: { uploadMulImageToOssAction } } = this.props;
+      uploadMulImageToOssAction({ questionList });
+      if (!mulFilterIdList) {
+        this.setState({
+          mulFilterIdList: idList,
+        });
+      }
+    });
+  }
+
+  // 应用于多题模式下上传图片到oss成功后将答案提交给课业接口---批量答题
+  submitMulImageAnswer = (submitQues) => {
+    const { homeworkId, actions: { submitMultipleAnswerAction } } = this.props;
+    const { currentStartTime } = this.state;
+    const extraTimeSpent = Math.floor((new Date() - currentStartTime) / 1000);
+    const answerParam = submitQues.map((v) => {
+      const params = {
+        questionId: v.id,
+        fileId: v.answerFileId,
+        difficultyLevel: v.difficultyLevel,
+        needsExplain: v.needsExplain,
+      };
+      return params;
+    });
+    // 批量答题完成后更新currentStartTime,并还原相应数据
+    this.setState({
+      mulFilterIdList: false,
+      currentStartTime: new Date(),
+      imgLoading: false,
+    }, () => {
+      submitMultipleAnswerAction({ homeworkId, extraTimeSpent, answerParam }, 'REQUEST');
+    });
+  }
+
+  // 筛选reducer中需要的题目数据
+  filterSubmitQues = (mulFilterIdList, finalQuestionList) => {
+    const submitQues = [];
+    for (let i = 0; i < mulFilterIdList.length; i++) {
+      for (let j = 0; j < finalQuestionList.length; j++) {
+        if (mulFilterIdList[i] === finalQuestionList[j].id) {
+          submitQues.push(finalQuestionList[j]);
+        }
+      }
+    }
+    return submitQues;
   }
 
   // 渲染需要展示在扩展列表视图中的组件
@@ -608,6 +686,7 @@ class DoHomeworks extends Component {
                     handleCheckboxChange={this.handleCheckboxChange}
                     deleteImg={this.deleteImg}
                     imgLoading={imgLoading}
+                    handleSaveMulImage={this.handleSaveMulImage}
                   />
                 </ScrollView>
               ))

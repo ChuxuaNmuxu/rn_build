@@ -43,6 +43,7 @@ class AnswerCard extends Component {
   // 图片上传时显示loading状态
   componentDidUpdate = () => {
     const { imgLoading } = this.props;
+    console.log(5678, imgLoading, this.croppedImageStatus);
     if (this.croppedImageStatus && imgLoading) {
       // console.log(80000000000, 'componentDidUpdate---onOppen');
       ModalApi.onOppen('AnimationsModal', this.loadingData);
@@ -103,6 +104,14 @@ class AnswerCard extends Component {
       showCropper: false,
       width,
       height,
+    });
+  }
+
+  // 应用于多题时点击勾裁剪图片
+  mulCroppedImage = () => {
+    this.croppedImageStatus = true;
+    this.setState({
+      showCropper: false,
     });
   }
 
@@ -183,7 +192,7 @@ class AnswerCard extends Component {
   // 图片裁剪模块
   renderCropper = (source) => {
     const {
-      homeworkList, questions, mistakeReform, checkHomework, mulImageCostTime,
+      homeworkList, questions, mistakeReform, checkHomework, mulImageCostTime, handleSaveMulImage,
     } = this.props;
     const unAnswerSubjectiveList = (homeworkList && this.filterUASL(homeworkList)) || [];
     // 主观题支持应用于多题---作业检查或者错题重做页面不需要此功能
@@ -193,10 +202,12 @@ class AnswerCard extends Component {
         isMultipleSelect={isMultipleSelect}
         currentQid={questions.id}
         mulImageCostTime={mulImageCostTime}
+        handleSaveMulImage={handleSaveMulImage}
         unAnswerSubjectiveList={unAnswerSubjectiveList}
         source={source}
         croppedImage={this.croppedImage}
         cancelCrop={this.cancelCrop}
+        mulCroppedImage={this.mulCroppedImage}
       />
     );
   }
@@ -318,6 +329,7 @@ AnswerCard.propTypes = {
   handlePreviewImage: PropTypes.func, // 上传图片后的回调函数
   deleteImg: PropTypes.func, // 删除图片答案的函数
   mulImageCostTime: PropTypes.func, // 点击应用于多题按钮执行的函数
+  handleSaveMulImage: PropTypes.func, // 应用于多题时点击勾确定上传图片
   handleCheckboxChange: PropTypes.func, // 改变不是很懂，请老师解答的复选框
   showDeleteIcon: PropTypes.bool, // 错题重做页面用来标识是否需要展示删除图片的icon
 };
@@ -334,6 +346,7 @@ AnswerCard.defaultProps = {
   handleCheckboxChange: () => {},
   deleteImg: () => {},
   mulImageCostTime: () => {},
+  handleSaveMulImage: () => {},
 };
 
 

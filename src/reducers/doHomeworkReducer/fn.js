@@ -54,3 +54,8 @@ export function updateImageStatus(state, action) {
 export function addQuestionReadSignSuccess(state, action) {
   state.data = action.payload;
 }
+
+// 应用于多题上传多张图片到oss
+export function uploadMulImageToOssSuccess(state, action) {
+  state.data = action.payload;
+}

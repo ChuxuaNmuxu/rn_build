@@ -95,9 +95,6 @@ export default class ImageCrop extends React.Component {
         size: { width: wid, height: heg },
       };
       this.imgCrop.crop().then((uri) => {
-        // Image.getSize(uri, (w, h) => {
-        //   console.log('iamge123', w, h);
-        // });
         ImageEditor.cropImage(uri, cropData, this.success, this.error);
       });
     }
@@ -108,8 +105,8 @@ export default class ImageCrop extends React.Component {
     const { multipleStatus, isMultipleSelect } = this.state;
     // 先判断是否处于多题裁切状态，是则裁切图片，否则判断是否要展示选择模态层
     if (multipleStatus) {
-      // 应用于多题
-      this.selectModalStatusFun(false);
+      // 确定将应用于多题
+      this.multipleCropper();
     } else if (isMultipleSelect) {
       this.selectModalStatusFun(true);
     } else {
@@ -122,9 +119,6 @@ export default class ImageCrop extends React.Component {
     const {
       width, height,
     } = this.imgCrop.getCropData();
-    // this.imgCrop.setCropData({
-    //   top: 100, left: 100, width: 100, height: 100,
-    // });
     const { croppedImage } = this.props;
     croppedImage(uri, width, height);
   }
@@ -190,22 +184,21 @@ export default class ImageCrop extends React.Component {
     const prevQuestion = this.getTargetQuestionFun(prevId);
     // 克隆未作答的题目列表数据
     const newList = R.clone(unAnswerSubjectiveList);
+    // 设置应用于多题时裁剪框的初始位置
+    if (R.isEmpty(getInitCropBox)) {
+      const obj = this.imgCrop.getInitialCropBoxData();
+      getInitCropBox = {
+        left: obj.left,
+        top: obj.top,
+        width: obj.width,
+        height: obj.height,
+      };
+    }
     const {
       width, height, left, top,
     } = this.imgCrop.getCropData();
-    if (R.isEmpty(initCropBox)) {
-      getInitCropBox = {
-        left,
-        top,
-        width,
-        height,
-      };
-    }
     const cropBox = {
-      left,
-      top,
-      width,
-      height,
+      left, top, width, height,
     };
     if (!R.equals(prevQuestion.cropBox, cropBox)) {
       this.imgCrop.crop().then((uri) => {
@@ -220,19 +213,80 @@ export default class ImageCrop extends React.Component {
       }).then(() => {
         this.setState({
           currentQid: e,
-          randomNum: Math.random(),
           initCropBox: getInitCropBox,
           unAnswerSubjectiveList: newList,
-        }, () => {
-          const currentQuestion = this.getTargetQuestionFun(e);
-          const croperBoxData = currentQuestion.cropBox || getInitCropBox;
-          console.log(123, croperBoxData);
-          this.imgCrop.setCropData(croperBoxData);
         });
-        console.log(456, '原先的未作答题目', unAnswerSubjectiveList);
-        console.log(778, '更改后的题目列表', newList);
+        const currentQuestion = this.getTargetQuestionFun(e);
+        const croperBoxData = currentQuestion.cropBox || getInitCropBox;
+        this.imgCrop.setCropData(croperBoxData);
       });
+    } else {
+      this.setState({
+        currentQid: e,
+      });
+      const currentQuestion = this.getTargetQuestionFun(e);
+      const croperBoxData = currentQuestion.cropBox || getInitCropBox;
+      this.imgCrop.setCropData(croperBoxData);
     }
+  }
+
+  // 应用于多题情况下点击 √
+  multipleCropper = () => {
+    // 截取每个图片框
+    const { currentQid, unAnswerSubjectiveList } = this.state;
+    const unAnswerList = R.clone(unAnswerSubjectiveList);
+    // 先判断当前图片框是否已截取保存
+    for (let i = 0; i < unAnswerList.length; i++) {
+      if (unAnswerList[i].id === currentQid) {
+        const {
+          width, height, left, top,
+        } = this.imgCrop.getCropData();
+        const cropBox = {
+          left, top, width, height,
+        };
+        if (!R.equals(unAnswerList[i].cropBox, cropBox)) {
+          this.imgCrop.crop().then((uri) => {
+            unAnswerList[i].answerFileUrl = uri;
+            unAnswerList[i].answered = 1;
+            unAnswerList[i].cropBox = cropBox;
+          }).then(() => {
+            this.mulImageUpload(unAnswerList);
+          });
+        } else {
+          this.mulImageUpload(unAnswerList);
+        }
+        break;
+      }
+    }
+  }
+
+  // 应用于多题多张图片上传Oss
+  mulImageUpload = (unAnswerList) => {
+    const { handleSaveMulImage, mulCroppedImage } = this.props;
+    mulCroppedImage();
+    const questionList = [];
+    for (let i = 0; i < unAnswerList.length; i++) {
+      if (unAnswerList[i].answered === 1) {
+        const params = {
+          questionId: unAnswerList[i].id,
+          file: unAnswerList[i].answerFileUrl,
+          imgName: '1.png',
+        };
+        questionList.push(params);
+      }
+    }
+    handleSaveMulImage(questionList, this.filterAnswerIdList(unAnswerList));
+  }
+
+  // 筛选出应用于多题时已保存过cropBox的题目id列表，用于批量答题筛选
+  filterAnswerIdList = (list) => {
+    const newList = [];
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].answered) {
+        newList.push(list[i].id);
+      }
+    }
+    return newList;
   }
 
   render() {
@@ -331,6 +385,8 @@ ImageCrop.propTypes = {
   croppedImage: PropTypes.any.isRequired,
   cancelCrop: PropTypes.func.isRequired,
   mulImageCostTime: PropTypes.func.isRequired,
+  handleSaveMulImage: PropTypes.func.isRequired,
+  mulCroppedImage: PropTypes.func.isRequired,
   isMultipleSelect: PropTypes.bool.isRequired,
   currentQid: PropTypes.string.isRequired,
   unAnswerSubjectiveList: PropTypes.array.isRequired,

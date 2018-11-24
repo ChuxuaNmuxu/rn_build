@@ -81,6 +81,8 @@ export const UPLOAD_IMAGE_TOOSS = 'UPLOAD_IMAGE_TOOSS';
 export const UPDATE_UPLOAD_IMAGE_STATUS = 'UPDATE_UPLOAD_IMAGE_STATUS';
 // 对已查看的题目增加已读标识
 export const ADD_QUESTION_READ_SIGN = 'ADD_QUESTION_READ_SIGN';
+// 应用于多题时多张图片上传oss
+export const UPLOAD_MULIMAGE_TOOSS = 'UPLOAD_MULIMAGE_TOOSS';
 
 
 /**
