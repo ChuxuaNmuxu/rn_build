@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import R from 'ramda';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -315,18 +316,29 @@ class MistakeReform extends Component {
   }
 
   // 题目作答区域
-  showAnswerCard = ({ item }) => {
-    const { showAll } = item.controlComponent.showSubjectiveInfo;
+  showAnswerCard = ({ item }, i) => {
+    const newItem = R.clone(item);
+    const { showAll } = newItem.controlComponent.showSubjectiveInfo;
     // 0:综合题 1:单选题 2:多选题 3:判断题 4:对应题, 10:填空题 11:主观题
+    const { isRandom } = this.props;
+    const { controlComponent: { objectiveAnswer } } = newItem;
+
+    // 随机复习错题取得是 objectiveAnswer 值，如果是随即复习错题需要将 objectiveAnswer 赋值给 studentAnswer
+    if (isRandom) {
+      newItem.studentAnswer = objectiveAnswer.value;
+    }
+    console.log(329, item, newItem);
     return (
       <AnswerCard
-        questions={item}
+        questions={newItem}
         mistakeReform
         // 是否展示删除图片的按钮图标
         showDeleteIcon={!showAll}
-        handleToClickRadio={(id, value) => this.handleToClickRadio(id, value, item)}
+        handleToClickRadio={(id, value) => this.handleToClickRadio(id, value, newItem)}
         handlePreviewImage={this.handlePreviewImage}
         deleteImg={this.deleteImg}
+        index={i}
+        key={newItem.id}
       />
     );
   }
@@ -469,7 +481,7 @@ class MistakeReform extends Component {
           {
             questions.length !== 0
               ? questions.map((item, i) => (
-                <ScrollView key={i}>
+                <ScrollView key={item.id}>
                   {/* 有材料时要展示材料 */}
                   {
                     item.materialContent && (
@@ -500,7 +512,7 @@ class MistakeReform extends Component {
                   </View>
                   <View style={styles.space} />
                   {/* 错题重做作答区域 */}
-                  {this.showAnswerCard({ item })}
+                  {this.showAnswerCard({ item }, i)}
                   {/* 提交按钮 */}
                   { this.showSubmitBtn({ item, index: i }) }
                   {/* 错误答案信息 */}
