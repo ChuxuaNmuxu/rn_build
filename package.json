@@ -31,11 +31,11 @@
     "stop": "adb shell am force-stop com.cjhms_rn",
     "start-app": "adb shell am start -n com.cjhms_rn/.MainActivity",
     "remove": "adb uninstall com.cjhms_rn",
-    "deploy": "code-push release-react 课业 android -t 1.0.0 --des 2018.11.22-测试热更新模态与指引、战绩播报模态 -d Staging -m false",
-    "deploy-history": "code-push deployment history 课业 Staging",
-    "clear-deploy-history": "code-push deployment clear 课业 Staging",
-    "see-key": "code-push deployment ls 课业 -k",
-    "add-key": "code-push deployment add 课业 Develop"
+    "deploy": "code-push release-react cjhms_app android -t 1.0.0 --des 2018.11.22-测试热更新模态与指引、战绩播报模态 -d Staging -m false",
+    "deploy-history": "code-push deployment history cjhms_app Staging",
+    "clear-deploy-history": "code-push deployment clear cjhms_app Staging",
+    "see-key": "code-push deployment ls cjhms_app -k",
+    "add-key": "code-push deployment add cjhms_app Develop"
   },
   "dependencies": {
     "@cjfed/draftjs-to-html": "^0.7.7",
