@@ -240,7 +240,7 @@ class HomworkRecordDetail extends Component {
     const { screenWidth, imageSize } = this.state;
     const attr = node.attribs;
 
-    console.log(246, attr);
+    // console.log(246, attr);
 
     if (node.name === 'img') {
       const size = imageSize[attr.src];
