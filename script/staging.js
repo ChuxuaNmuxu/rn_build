@@ -13,8 +13,6 @@ program
   .option('-d --des [description]', '项目更新描述')
   .parse(process.argv);
 
-if (!program.args.length) program.help();
-
 const exec = (command) => {
   console.log(`----------${command}----------`);
   const rst = shell.exec(command);
@@ -29,16 +27,26 @@ const rootDir = path.join(__dirname, '..');
 // 获取token
 const server = program.server || '119.23.68.231';
 const serverUrl = `http://${server}:3000`;
-const data = '"account": "admin", "password": "123456"';
-const res = exec(`curl -X POST -d ${data} ${serverUrl}/auth/login`);
+const data = 'account=admin&password=123456';
+const res = exec(`curl -X POST -d '${data}' ${serverUrl}/auth/login`);
+
 console.log(25, res);
-const token = res.results && res.results.tokens;
+if (!res.results) {
+  process.exit(2);
+}
+
+const token = res.results.tokens;
 const accessKeyUrl = `${serverUrl}/accessKeys?access_token=${token}`;
 const timestamp = new Date().getTime();
-const fromData = `createdBy=${timestamp};friendlyName=${timestamp};ttl=2592000000;description=${timestamp};isSession=true`;
-const accessKeyRes = exec(`curl -F ${fromData} ${accessKeyUrl}`);
+const mes = `login-${timestamp}`;
+const fromData = `createdBy=${mes}&friendlyName=${mes}&ttl=2592000000&description=${mes}&isSession=true`;
+const accessKeyRes = exec(`curl -d '${fromData}' ${accessKeyUrl}`);
+
 console.log(40, accessKeyRes);
-const accessKey = accessKeyRes.accessKey && accessKeyRes.accessKey.name;
+if (!accessKeyRes.accessKey) {
+  process.exit(3);
+}
+const accessKey = accessKeyRes.accessKey.name;
 
 // 写入 process.env.LOCALAPPDATA || process.env.HOME/.code-push.config
 const configFilePath = `${process.env.LOCALAPPDATA || process.env.HOME}/.code-push.config`;
