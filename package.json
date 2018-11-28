@@ -40,6 +40,7 @@
   "dependencies": {
     "@cjfed/draftjs-to-html": "^0.7.7",
     "antd-mobile-rn": "^2.2.0",
+    "commander": "^2.19.0",
     "immer": "^1.7.2",
     "md5": "^2.2.1",
     "moment": "^2.22.2",
@@ -82,6 +83,7 @@
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
     "redux-thunk": "^2.3.0",
+    "shelljs": "^0.8.3",
     "victory-native": "^30.6.0"
   },
   "devDependencies": {
