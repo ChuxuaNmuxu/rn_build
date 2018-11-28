@@ -22,29 +22,55 @@ const exec = (command) => {
   return rst;
 };
 
-const rootDir = path.join(__dirname, '..');
+const post = (url, params) => {
+  const stringParams = Object.keys(params).reduce((accu, k) => `${accu}${accu ? '&' : ''}${k}=${params[k]}`, '');
+  const res = exec(`curl -X POST -d '${stringParams}' ${url}`);
 
-// 获取token
+  const rst = res.stdout ? JSON.parse(res.stdout) : {};
+  return rst;
+};
+
+const rootDir = path.join(__dirname, '..');
 const server = program.server || '119.23.68.231';
 const serverUrl = `http://${server}:3000`;
-const data = 'account=admin&password=123456';
-const res = exec(`curl -X POST -d '${data}' ${serverUrl}/auth/login`);
 
-console.log(25, res);
-if (!res.results) {
+// 获取token
+// 登录
+// const data = 'account=admin&password=123456';
+// const res = exec(`curl -X POST -d '${data}' ${serverUrl}/auth/login`);
+
+// res.stdout.on('data', (d) => {
+//   console.log(35, d);
+// });
+
+// if (!res.results) {
+//   process.exit(2);
+// }
+
+const loginUrl = `${serverUrl}/auth/login`;
+const loginRes = post(loginUrl, { account: 'admin', password: '123456' });
+if (loginRes.status !== 'OK') {
   process.exit(2);
 }
+const { tokens } = loginRes.results;
 
-const token = res.results.tokens;
-const accessKeyUrl = `${serverUrl}/accessKeys?access_token=${token}`;
+// 获取accessKey
+const accessKeyUrl = `${serverUrl}/accessKeys?access_token=${tokens}`;
 const timestamp = new Date().getTime();
 const mes = `login-${timestamp}`;
-const fromData = `createdBy=${mes}&friendlyName=${mes}&ttl=2592000000&description=${mes}&isSession=true`;
-const accessKeyRes = exec(`curl -d '${fromData}' ${accessKeyUrl}`);
+// const fromData = `createdBy=${mes}&friendlyName=${mes}&ttl=2592000000&description=${mes}&isSession=true`;
+// const accessKeyRes = exec(`curl -d '${fromData}' ${accessKeyUrl}`);
+const accessKeyRes = post(accessKeyUrl, {
+  createdBy: mes,
+  friendlyName: mes,
+  ttl: '2592000000',
+  description: mes,
+  isSession: 'true',
+});
 
 console.log(40, accessKeyRes);
-if (!accessKeyRes.accessKey) {
-  process.exit(3);
+if (accessKeyRes.status !== 'OK') {
+  process.exit(2);
 }
 const accessKey = accessKeyRes.accessKey.name;
 
