@@ -8,9 +8,9 @@ const fs = require('fs');
 program
   .version('0.1.0')
   .option('-s --server [server]', '服务器地址')
-  .option('-n --name [name]', '项目名称')
-  .option('-v --version [version]', '项目版本号')
-  .option('-d --des [description]', '项目更新描述')
+  .option('-n --appName [name]', '项目名称')
+  .option('-v --appVersion [a]', '项目版本号')
+  .option('-d --appDes [description]', '项目更新描述')
   .parse(process.argv);
 
 const exec = (command) => {
@@ -77,14 +77,16 @@ const accessKey = accessKeyRes.accessKey.name;
 // 写入 process.env.LOCALAPPDATA || process.env.HOME/.code-push.config
 const configFilePath = `${process.env.LOCALAPPDATA || process.env.HOME}/.code-push.config`;
 const configContent = `{"accessKey":"${accessKey}","preserveAccessKeyOnLogout":false,"proxy":null,"noProxy":false,"customServerUrl":"${server}:3000"}`;
+console.log(80, configContent);
 fs.writeFileSync(configFilePath, configContent);
 
 // 推送代码到code-push server
 // code-push release-react cjhms_app android -t 1.0.0 --des 2018.11.22-测试热更新模态与指引、战绩播报模态 -d Staging -m false
-if (program.version || program.name) {
-  const appName = program.name || '课业';
-  const appVersion = program.version || '1.0.0';
-  const appDes = program.description || `热更新-${timestamp}`;
+
+if (program.appVersion || program.appName) {
+  const appName = program.appName || '课业';
+  const appVersion = program.appVersion || '1.0.0';
+  const appDes = program.appDes || `热更新-${timestamp}`;
   exec(`code-push release-react ${appName} android -t ${appVersion}  --des ${appDes} -d Staging`);
 } else {
   exec(`cd ${rootDir}`);
