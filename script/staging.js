@@ -69,7 +69,7 @@ const accessKeyRes = post(accessKeyUrl, {
 });
 
 console.log(40, accessKeyRes);
-if (accessKeyRes.status !== 'OK') {
+if (!accessKeyRes.accessKey) {
   process.exit(2);
 }
 const accessKey = accessKeyRes.accessKey.name;
