@@ -31,7 +31,7 @@ const post = (url, params) => {
 };
 
 const rootDir = path.join(__dirname, '..');
-const server = program.server || '10.0.0.19';
+const server = program.server || '10.0.3.19';
 const serverUrl = `http://${server}:3000`;
 
 // 获取token
