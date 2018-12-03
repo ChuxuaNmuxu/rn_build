@@ -10,7 +10,7 @@ program
   .option('-s --server [server]', '服务器地址')
   .option('-n --appName [name]', '项目名称')
   .option('-v --appVersion [a]', '项目版本号')
-  .option('-d --appDes [description]', '项目更新描述')
+  .option('-m --commit [commit]', '项目更新描述')
   .parse(process.argv);
 
 const exec = (command) => {
@@ -31,22 +31,11 @@ const post = (url, params) => {
 };
 
 const rootDir = path.join(__dirname, '..');
-const server = program.server || '119.23.68.231';
+const server = program.server || '10.0.0.19';
 const serverUrl = `http://${server}:3000`;
 
 // 获取token
 // 登录
-// const data = 'account=admin&password=123456';
-// const res = exec(`curl -X POST -d '${data}' ${serverUrl}/auth/login`);
-
-// res.stdout.on('data', (d) => {
-//   console.log(35, d);
-// });
-
-// if (!res.results) {
-//   process.exit(2);
-// }
-
 const loginUrl = `${serverUrl}/auth/login`;
 const loginRes = post(loginUrl, { account: 'admin', password: '123456' });
 if (loginRes.status !== 'OK') {
@@ -86,7 +75,7 @@ fs.writeFileSync(configFilePath, configContent);
 if (program.appVersion || program.appName) {
   const appName = program.appName || '课业';
   const appVersion = program.appVersion || '1.0.0';
-  const appDes = program.appDes || `热更新-${timestamp}`;
+  const appDes = program.commit || `热更新-${timestamp}`;
   exec(`code-push release-react ${appName} android -t ${appVersion}  --des ${appDes} -d Staging`);
 } else {
   exec(`cd ${rootDir}`);
