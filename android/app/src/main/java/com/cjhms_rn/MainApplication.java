@@ -50,7 +50,7 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
           // 第一个参数是刚刚申请的key（可以根据环境配置）
           // 第四个参数是服务器的URL
-          new CodePush("dXlmnRGGfV1wnOSeUp6GgHgb5cpV4ksvOXqog", getApplicationContext(), BuildConfig.DEBUG, "http://10.0.0.123:3000"),
+          new CodePush("DjRTxC6hSe18WqTXc4rD29Mutt6t4ksvOXqog", getApplicationContext(), BuildConfig.DEBUG, "http://10.0.3.19:3000"),
           new RNViewShotPackage(),
           new PickerPackage(),
           new ImagePickerPackage(),

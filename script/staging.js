@@ -24,7 +24,7 @@ const exec = (command) => {
 
 const post = (url, params) => {
   const stringParams = Object.keys(params).reduce((accu, k) => `${accu}${accu ? '&' : ''}${k}=${params[k]}`, '');
-  const res = exec(`curl -X POST -d '${stringParams}' ${url}`);
+  const res = exec(`curl -X POST -d "${stringParams}" ${url}`);
 
   const rst = res.stdout ? JSON.parse(res.stdout) : {};
   return rst;
@@ -57,7 +57,7 @@ const accessKeyRes = post(accessKeyUrl, {
   isSession: 'true',
 });
 
-console.log(40, accessKeyRes);
+console.log('登录', accessKeyRes);
 if (!accessKeyRes.accessKey) {
   process.exit(2);
 }
@@ -66,14 +66,14 @@ const accessKey = accessKeyRes.accessKey.name;
 // 写入 process.env.LOCALAPPDATA || process.env.HOME/.code-push.config
 const configFilePath = `${process.env.LOCALAPPDATA || process.env.HOME}/.code-push.config`;
 const configContent = `{"accessKey":"${accessKey}","preserveAccessKeyOnLogout":false,"proxy":null,"noProxy":false,"customServerUrl":"${server}:3000"}`;
-console.log(80, configContent);
+console.log('获取accessKey', configContent);
 fs.writeFileSync(configFilePath, configContent);
 
 // 推送代码到code-push server
 // code-push release-react cjhms_app android -t 1.0.0 --des 2018.11.22-测试热更新模态与指引、战绩播报模态 -d Staging -m false
 
+const appName = program.appName || '课业';
 if (program.appVersion || program.appName) {
-  const appName = program.appName || '课业';
   const appVersion = program.appVersion || '1.0.0';
   const appDes = program.commit || `热更新-${timestamp}`;
   exec(`code-push release-react ${appName} android -t ${appVersion}  --des ${appDes} -d Staging`);
@@ -81,5 +81,6 @@ if (program.appVersion || program.appName) {
   exec(`cd ${rootDir}`);
   exec('npm run deploy');
 }
+exec(`code-push deployment history ${appName} Staging`);
 
 console.log('success !');
